@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gift of Gratitude - Taro's Story</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #fef6e4;
+      margin: 0;
+      padding: 0;
+      line-height: 1.8;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e0c097;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #b5673d;
+    }
+    p {
+      text-indent: 40px;
+      margin: 20px 0;
+    }
+    .image {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .image img {
+      max-width: 100%;
+      border-radius: 10px;
+      border: 1px solid #e0c097;
+    }
+    .quiz-section {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    .quiz-section h3 {
+      text-align: center;
+      color: #5a5a5a;
+    }
+    .quiz-section label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .quiz-section input[type="radio"] {
+      margin-right: 10px;
+    }
+    .quiz-section button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #b5673d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .quiz-section button:hover {
+      background-color: #94512d;
+    }
+    .result {
+      text-align: center;
+      font-size: 18px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>The Gift of Gratitude</h1>
+    <h2>A Story About Taro the Squirrel</h2>
+
+		<!-- Paragraphs for Story: The Gift of Gratitude -->
+		<p>Taro ignored Chirpy’s words. “What does Chirpy know about finding the perfect acorn?” Taro thought. He leapt higher and higher into the trees, searching every branch and crevice. His pile of acorns grew larger each day, yet his heart felt no lighter. “Why does it still feel like something is missing?” Taro whispered to himself one evening.</p>
+
+		<!-- Image 1: Taro's Endless Search -->
+		<!-- Place this image after the above paragraph -->
+		<img src="Taro_Endless_Search.jpg" alt="Taro's Endless Search">
+
+		<p>The next morning, while hopping through the forest, Taro saw a glimmer in the sunlight. It was the biggest, shiniest acorn he had ever seen, lying at the base of an old oak tree. “This must be it!” Taro exclaimed, racing toward it. He picked up the golden acorn, admiring its smooth surface. But as he clutched it tightly, a sudden gust of wind swept through the forest. Leaves and twigs danced in the air, and Taro’s carefully stacked pile of acorns scattered in every direction.</p>
+
+		<!-- Image 2: Taro Faces a Storm -->
+		<!-- Place this image after the above paragraph -->
+		<img src="Taro_Faces_Storm.jpg" alt="Taro Faces a Storm">
+
+		<p>Panicked, Taro tried to gather his treasures, but the wind was too strong. He clung to the golden acorn with all his might, watching helplessly as the rest of his collection disappeared into the forest. When the wind finally calmed, Taro stood alone with the single acorn in his paws. His nest was empty, and his heart felt heavier than ever.</p>
+
+		<p>Soon, Ember the robin spotted him sitting under the oak tree, looking forlorn. “What happened, Taro?” she asked, fluttering down beside him.</p>
+
+		<p>“I thought this golden acorn would make me happy,” Taro said, tears welling in his eyes. “But now I’ve lost everything else. It’s all gone.”</p>
+
+		<!-- Image 3: Taro Learns Gratitude -->
+		<!-- Place this image after the above paragraph -->
+		<img src="Taro_Learns_Gratitude.jpg" alt="Taro Learns Gratitude">
+
+		<p>Ember gave him a kind smile. “Sometimes, Taro, we forget to see the value in what we already have. Gratitude isn’t about having more; it’s about appreciating what’s already in your heart.”</p>
+
+		<p>Taro sat quietly, thinking about Ember’s words. He realized how much he had ignored—the comfort of his nest, the laughter of his friends, and even the joy of small, simple acorns. He decided to return home, hoping to find at least a few acorns left.</p>
+
+		<p>To his surprise, Chirpy, Theo, and Skyler were waiting for him. They had gathered some of the scattered acorns and brought them back to his nest. “You didn’t have to do this,” Taro said, his voice trembling with gratitude.</p>
+
+		<p>“That’s what friends are for,” Theo said with a flutter of his wings. “Sometimes, the greatest treasure isn’t what you collect, but the people who care about you.”</p>
+
+		<p>Taro’s eyes sparkled as he looked around. “Thank you, everyone,” he said, smiling. “You’ve taught me the true meaning of happiness.”</p>
+
+		<!-- Image 4: Taro Shares Gratitude -->
+		<!-- Place this image after the above paragraph -->
+		<img src="Taro_Shares_Gratitude.jpg" alt="Taro Shares Gratitude">
+
+
+    <footer>
+      <p><em>The Gift of Gratitude: A Lesson for All</em></p>
+      <p>© 2024 Taro's Story. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <div class="quiz-section">
+    <h3>Quiz: What Did Taro Learn?</h3>
+    <form id="quiz-form">
+      <label><input type="radio" name="q1" value="wrong"> Happiness comes from having more.</label>
+      <label><input type="radio" name="q1" value="correct"> Gratitude brings happiness.</label>
+      <label><input type="radio" name="q1" value="wrong"> Acorns make life perfect.</label>
+      <label><input type="radio" name="q1" value="wrong"> Always keep searching.</label>
+      <button type="button" onclick="checkAnswers()">Submit Answers</button>
+    </form>
+    <div id="result" class="result">Great job, Vedansh the Champion! "Happiness doesn’t depend on what you have, but on how grateful you are!"</div>
+  </div>
+
+  <script>
+    function checkAnswers() {
+      const selected = document.querySelector('input[name="q1"]:checked');
+      if (selected && selected.value === "correct") {
+        document.getElementById('result').style.display = 'block';
+      } else {
+        alert('Try again, Vedansh the Champion!');
+      }
+    }
+  </script>
+</body>
+</html>
