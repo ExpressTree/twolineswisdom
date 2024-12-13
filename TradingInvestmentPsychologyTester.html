@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Psychology Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 1200px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .random-number {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .total-points {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .button {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .buy {
+            background: #28a745;
+        }
+
+        .sell {
+            background: #dc3545;
+        }
+
+        select {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            padding: 10px;
+            width: 60%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .right-column {
+            width: 50%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #007bff;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .buy-price {
+            color: green;
+            font-weight: bold;
+        }
+
+        .sell-price {
+            color: red;
+            font-weight: bold;
+        }
+
+        .profit {
+            color: white;
+            background-color: green;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .loss {
+            color: white;
+            background-color: red;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .hide-column {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="total-points" id="totalPoints">Total Points: 0</div>
+            <div class="random-number" id="randomNumber">0</div>
+            <div class="buttons">
+                <button class="button buy" id="buyButton">Buy</button>
+                <button class="button sell" id="sellButton">Sell</button>
+            </div>
+            <select id="targetPoints"></select>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <button id="toggleProfitLoss">Show/Hide Profit/Loss Amount</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Buy Price</th>
+                        <th>Sell Price</th>
+                        <th>Points Gained/Lost</th>
+                        <th>Profit/Loss</th>
+                        <th class="profit-loss-column">Profit/Loss Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tradeLog"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const randomNumberElement = document.getElementById('randomNumber');
+        const buyButton = document.getElementById('buyButton');
+        const sellButton = document.getElementById('sellButton');
+        const tradeLog = document.getElementById('tradeLog');
+        const targetPoints = document.getElementById('targetPoints');
+        const totalPointsElement = document.getElementById('totalPoints');
+        const toggleProfitLossButton = document.getElementById('toggleProfitLoss');
+
+        let currentNumber = Math.floor(Math.random() * 201) + 500; // Start number between 500 and 700
+        let actionPrice = null; // Store the first action price
+        let actionType = null; // Store whether the first action is Buy or Sell
+        let totalPoints = 0;
+
+        // Populate targetPoints dynamically
+        for (let i = 15; i <= 3000; i += 15) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            targetPoints.appendChild(option);
+        }
+
+        // Function to generate random number
+        function generateRandomNumber() {
+            const change = Math.floor(Math.random() * 9) + 1; // Random number between 1-9
+            currentNumber += Math.random() > 0.5 ? change : -change; // Random increase or decrease
+            currentNumber = Math.max(1, Math.min(currentNumber, 5000)); // Keep number between 1 and 5000
+            randomNumberElement.textContent = currentNumber;
+        }
+
+        // Start generating random numbers
+        const interval = setInterval(generateRandomNumber, 1000);
+
+        // Buy button click event
+        buyButton.addEventListener('click', () => {
+            handleAction('Buy');
+        });
+
+        // Sell button click event
+        sellButton.addEventListener('click', () => {
+            handleAction('Sell');
+        });
+
+        // Function to handle Buy or Sell action
+        function handleAction(action) {
+            if (actionPrice === null) {
+                // First action: store the price and type
+                actionPrice = currentNumber;
+                actionType = action;
+                addLogRow(action === 'Buy' ? actionPrice : null, action === 'Sell' ? actionPrice : null, null, null, null);
+            } else {
+                // Second action: calculate profit/loss and reset
+                const secondPrice = currentNumber;
+                const points = actionType === 'Buy' ? secondPrice - actionPrice : actionPrice - secondPrice;
+                const quantity = parseInt(targetPoints.value, 10);
+                const profitLossAmount = points * quantity;
+                totalPoints += points;
+                totalPointsElement.textContent = `Total Points: ${totalPoints}`;
+                addLogRow(actionType === 'Buy' ? actionPrice : secondPrice, actionType === 'Buy' ? secondPrice : actionPrice, points, points >= 0 ? `+${points}` : `${points}`, profitLossAmount);
+                actionPrice = null;
+                actionType = null;
+            }
+        }
+
+        // Function to add a row to the trade log
+        function addLogRow(buy, sell, points, profitLoss, profitLossAmount) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="buy-price">${buy !== null ? buy : ''}</td>
+                <td class="sell-price">${sell !== null ? sell : ''}</td>
+                <td>${points !== null ? points : ''}</td>
+                <td class="${points >= 0 ? 'profit' : 'loss'}">${profitLoss !== null ? profitLoss : ''}</td>
+                <td class="profit-loss-column">${profitLossAmount !== null ? profitLossAmount : ''}</td>
+            `;
+            tradeLog.appendChild(row);
+        }
+
+        // Show/Hide Profit/Loss Amount column
+        toggleProfitLossButton.addEventListener('click', () => {
+            const profitLossColumns = document.querySelectorAll('.profit-loss-column');
+            profitLossColumns.forEach(column => {
+                column.classList.toggle('hide-column');
+            });
+        });
+
+        // Initialize the starting random number
+        randomNumberElement.textContent = currentNumber;
+    </script>
+</body>
+</html>
