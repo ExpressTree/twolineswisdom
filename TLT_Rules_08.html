@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📈 Trend Score Meter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+      color: #ffcc00;
+      margin-bottom: 1rem;
+    }
+    table {
+      max-width: 700px;
+      width: 100%;
+      border-collapse: collapse;
+      background: #1a1a1a;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      margin-bottom: 2rem;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 0.75rem;
+      text-align: center;
+      color: #fff;
+    }
+    th {
+      background-color: #444;
+      color: #ffcc00;
+    }
+    select {
+      padding: 6px;
+      width: 100%;
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 6px;
+    }
+    .score-display {
+      font-size: 1.7rem;
+      text-align: center;
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      background: #111;
+      border-radius: 10px;
+      color: #ffcc00;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+    }
+    .signal {
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      margin: 0.25rem auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 6px solid #ffcc00;
+      border-radius: 8px;
+      max-width: 600px;
+    }
+    .meter {
+      width: 300px;
+      height: 30px;
+      margin: 1rem auto;
+      background: linear-gradient(to right, red, grey, green);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .needle {
+      height: 30px;
+      width: 6px;
+      background: #fff;
+      position: absolute;
+      top: 0;
+      transition: left 0.3s ease;
+    }
+    .labels {
+      display: flex;
+      justify-content: space-between;
+      width: 300px;
+      font-size: 0.9rem;
+      margin: 0 auto 1rem;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>📈 Trend Score Meter</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Timeframe</th>
+        <th>Trend Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Monthly</td><td><select id="monthly"></select></td></tr>
+      <tr><td>Weekly</td><td><select id="weekly"></select></td></tr>
+      <tr><td>Daily</td><td><select id="daily"></select></td></tr>
+      <tr><td>1-Hour</td><td><select id="hourly"></select></td></tr>
+      <tr><td>15-Min</td><td><select id="min15"></select></td></tr>
+      <tr><td>5-Min</td><td><select id="min5"></select></td></tr>
+      <tr><td>1-Min</td><td><select id="min1"></select></td></tr>
+      <tr><td><strong>Execution Timeframe</strong></td><td><select id="exec"></select></td></tr>
+    </tbody>
+  </table>
+
+  <div class="meter">
+    <div id="needle" class="needle"></div>
+  </div>
+  <div class="labels">
+    <span>📉 Strong Sell</span>
+    <span>🟡 Neutral</span>
+    <span>📈 Strong Buy</span>
+  </div>
+
+  <div class="score-display" id="score">Trend Score: 0</div>
+  <div class="signal" id="signal">🔍 Awaiting Input</div>
+  <div class="signal" id="execution">🚰 Select Execution Timeframe for Rules</div>
+  <script>
+    const weights = {
+      monthly: 7,
+      weekly: 6,
+      daily: 5,
+      hourly: 4,
+      min15: 3,
+      min5: 2,
+      min1: 1
+    };
+
+    const trendMap = {
+  monthly: [
+    "",
+    "U_t58320_r≤19440_A",
+    "U_t58320_r>19440<58320_B",
+    "U_t58320_r=58320_C",
+    "D_t58320_r≤19440_A",
+    "D_t58320_r>19440<58320_B",
+    "D_t58320_r=58320_C"
+  ],
+  weekly: [
+    "",
+    "U_t19440_r≤6480_A",
+    "U_t19440_r>6480<19440_B",
+    "U_t19440_r=19440_C",
+    "D_t19440_r≤6480_A",
+    "D_t19440_r>6480<19440_B",
+    "D_t19440_r=19440_C"
+  ],
+  daily: [
+    "",
+    "U_t6480_r≤2160_A",
+    "U_t6480_r>2160<6480_B",
+    "U_t6480_r=6480_C",
+    "D_t6480_r≤2160_A",
+    "D_t6480_r>2160<6480_B",
+    "D_t6480_r=6480_C"
+  ],
+  hourly: [
+    "",
+    "U_t2160_r≤750_A",
+    "U_t2160_r>750<2160_B",
+    "U_t2160_r=2160_C",
+    "D_t2160_r≤750_A",
+    "D_t2160_r>750<2160_B",
+    "D_t2160_r=2160_C"
+  ],
+  min15: [
+    "",
+    "U_t750_r≤292_A",
+    "U_t750_r>292<750_B",
+    "U_t750_r=750_C",
+    "D_t750_r≤292_A",
+    "D_t750_r>292<750_B",
+    "D_t750_r=750_C"
+  ],
+  min5: [
+    "",
+    "U_t292_r≤0.33%_A",
+    "U_t292_r>0.33%<292_B",
+    "U_t292_r=292_C",
+    "D_t292_r≤0.33%_A",
+    "D_t292_r>0.33%<292_B",
+    "D_t292_r=292_C"
+  ],
+  min1: [
+    "",
+    "U_t0.33%_r≤0.11%_A",
+    "D_t0.33%_r≤0.11%_A"
+  ]
+};
+
+
+    const reversalFactor = { A: 1, B: 0, C: -0.5 };
+
+    const rulesPerTimeframe = {
+    monthly: {
+        "U_t58320_r≤19440_A": "Buy CE if price bounces above +6480 from -19440",
+        "U_t58320_r>19440<58320_B": "Wait until price closes above +19440 to buy CE",
+        "U_t58320_r=58320_C": "Avoid buying, prefer option selling strategies as full pullback to -58320 likely indicates sideways",
+        "D_t58320_r≤19440_A": "Buy PE if price drops again below -6480",
+        "D_t58320_r>19440<58320_B": "Wait until price closes below -19440 to buy PE",
+        "D_t58320_r=58320_C": "Avoid buying, prefer option selling strategies in sideways"
+    },
+    weekly: {
+        "U_t19440_r≤6480_A": "Buy CE if price bounces above +2160 from -6480",
+        "U_t19440_r>6480<19440_B": "Wait until price closes above +6480 to buy CE",
+        "U_t19440_r=19440_C": "Avoid buying, prefer option selling strategies as full pullback to -19440 likely indicates sideways",
+        "D_t19440_r≤6480_A": "Buy PE if price drops again below -2160",
+        "D_t19440_r>6480<19440_B": "Wait until price closes below -6480 to buy PE",
+        "D_t19440_r=19440_C": "Avoid buying, prefer option selling strategies in sideways"
+    },
+    daily: {
+        "U_t6480_r≤2160_A": "Buy CE if price bounces above +750 from -2160",
+        "U_t6480_r>2160<6480_B": "Wait until price closes above +2160 to buy CE",
+        "U_t6480_r=6480_C": "Avoid buying, prefer option selling strategies as full pullback to -6480 likely indicates sideways",
+        "D_t6480_r≤2160_A": "Buy PE if price drops again below -750",
+        "D_t6480_r>2160<6480_B": "Wait until price closes below -2160 to buy PE",
+        "D_t6480_r=6480_C": "Avoid buying, prefer option selling strategies in sideways"
+    },
+    hourly: {
+        "U_t2160_r≤750_A": "Buy CE if price bounces above +292 from -750",
+        "U_t2160_r>750<2160_B": "Wait until price closes above +750 to buy CE",
+        "U_t2160_r=2160_C": "Avoid buying, prefer option selling strategies in sideways",
+        "D_t2160_r≤750_A": "Buy PE if price drops again below -292",
+        "D_t2160_r>750<2160_B": "Wait until price closes below -750 to buy PE",
+        "D_t2160_r=2160_C": "Avoid buying, prefer option selling strategies in sideways"
+    },
+    min15: {
+        "U_t750_r≤292_A": "Buy CE if price bounces above +0.11% from -292",
+        "U_t750_r>292<750_B": "Wait until price closes above +292 to buy CE",
+        "U_t750_r=750_C": "Avoid buying, prefer option selling strategies in sideways",
+        "D_t750_r≤292_A": "Buy PE if price drops again below -292",
+        "D_t750_r>292<750_B": "Wait until price closes below -292 to buy PE",
+        "D_t750_r=750_C": "Avoid buying, prefer option selling strategies in sideways"
+    },
+    min5: {
+        "U_t292_r≤0.33%_A": "Buy CE if price bounces above +0.11% from -0.33%",
+        "U_t292_r>0.33%<292_B": "Wait until price closes above +0.33% to buy CE",
+        "U_t292_r=292_C": "Avoid buying, prefer option selling strategies in sideways",
+        "D_t292_r≤0.33%_A": "Buy PE if price drops again below -0.11%",
+        "D_t292_r>0.33%<292_B": "Wait until price closes below -0.33% to buy PE",
+        "D_t292_r=292_C": "Avoid buying, prefer option selling strategies in sideways"
+    },
+    min1: {
+        "U_t0.33%_r≤0.11%_A": "Scalp CE as micro uptrend emerges with tiny pullback",
+        "D_t0.33%_r≤0.11%_A": "Scalp PE as micro downtrend emerges with tiny bounce"
+    }
+    };
+
+    function getDirectionMultiplier(trend) {
+      return trend.startsWith("U") ? 1 : trend.startsWith("D") ? -1 : 0;
+    }
+
+    function getReversalType(trend) {
+      return trend.split("_").pop();
+    }
+
+    function buildDropdowns() {
+      for (const tf in trendMap) {
+        const select = document.getElementById(tf);
+        trendMap[tf].forEach(opt => {
+          const el = document.createElement("option");
+          el.value = opt;
+          el.textContent = opt;
+          select.appendChild(el);
+        });
+        select.addEventListener("change", calculateScore);
+      }
+
+      const exec = document.getElementById("exec");
+      Object.keys(trendMap).forEach(tf => {
+        const el = document.createElement("option");
+        el.value = tf;
+        el.textContent = tf.charAt(0).toUpperCase() + tf.slice(1);
+        exec.appendChild(el);
+      });
+      exec.addEventListener("change", calculateScore);
+    }
+
+    function calculateScore() {
+      let totalScore = 0;
+      const execTF = document.getElementById("exec").value;
+      const execTrend = document.getElementById(execTF)?.value;
+
+      for (const tf in trendMap) {
+        const trend = document.getElementById(tf)?.value;
+        if (trend) {
+          const dir = getDirectionMultiplier(trend);
+          const rev = getReversalType(trend);
+          const factor = reversalFactor[rev] ?? 0;
+          totalScore += dir * weights[tf] * factor;
+        }
+      }
+
+      const needle = document.getElementById("needle");
+      const meterWidth = 300;
+      const position = ((totalScore + 21) / 42) * meterWidth;
+      needle.style.left = `${Math.max(0, Math.min(meterWidth - 10, position))}px`;
+
+      document.getElementById("score").textContent = `Trend Score: ${totalScore}`;
+      document.getElementById("signal").textContent = totalScore >= 10 ? "🟢 Strong Buy" : totalScore <= -10 ? "🔴 Strong Sell" : totalScore > 0 ? "🟢 Mild Buy" : totalScore < 0 ? "🔴 Mild Sell" : "🔍 Neutral / Wait";
+
+      const rule = rulesPerTimeframe[execTF]?.[execTrend];
+      document.getElementById("execution").textContent = rule ? `💡 ${rule}` : "🛠 No rule defined for selected execution trend";
+    }
+
+    buildDropdowns();
+  </script>
+</body>
+</html>
