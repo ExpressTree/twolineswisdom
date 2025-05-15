@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trader Personality Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e9e9e9, #e8e8e8);
+            color: #1e1e1e;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #101010;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #444;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #00ffc8;
+        }
+
+        .question-container {
+            background: #fefefe;
+            padding: 30px;
+            margin: 20px auto;
+            border-radius: 12px;
+            max-width: 800px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+
+
+        .question {
+            background: #000000;
+            color: #dedede;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 8px rgba(149, 255, 0, 0.2);
+        }
+
+        .question p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .options label {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            margin: 5px;
+            color: #747373;
+            background: #cfcfcf;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .options input[type='radio'] {
+            margin-right: 6px;
+        }
+
+        .options label:hover {
+            background: #444;
+            color: #f3f3f3;
+        }
+
+        button {
+            margin: 30px auto;
+            display: block;
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #00ffc8;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #00e0ae;
+        }
+
+        #result {
+            max-width: 800px;
+            background: #1a1a1a;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+            display: none;
+        }
+
+        #result h2 {
+            color: #00ffc8;
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        #result p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Trader Personality Test</h1>
+    </header>
+    <div class="question-container" id="quiz"></div>
+    <button onclick="calculateResult()">Submit Quiz</button>
+    <div id="result"></div>
+    <script>
+        // Full list of 60 Trader-specific questions and complete trader MBTI personalities
+        const questions = [
+            // E - Extroversion
+            { text: "You often connect with other traders to exchange ideas.", dimension: "E" },
+            { text: "You enjoy discussing trade setups with others in real-time.", dimension: "E" },
+            { text: "You perform better when sharing your ideas in live discussions.", dimension: "E" },
+            { text: "You frequently engage in community forums to refine your strategies.", dimension: "E" },
+
+            // I - Introversion
+            { text: "You prefer trading solo with minimal external input.", dimension: "I" },
+            { text: "You avoid trading groups and prefer quiet analysis.", dimension: "I" },
+            { text: "You do your best work in isolation without distractions.", dimension: "I" },
+            { text: "You reflect privately on your trades rather than seeking external validation.", dimension: "I" },
+
+            // N - Intuition
+            { text: "You are excited by creating new strategies or testing unconventional setups.", dimension: "N" },
+            { text: "You often experiment with niche indicators or new trade techniques.", dimension: "N" },
+            { text: "You naturally anticipate market patterns before they emerge.", dimension: "N" },
+            { text: "You enjoy theorizing possible market manipulations.", dimension: "N" },
+
+            // S - Sensing
+            { text: "You dislike hypothetical or overly abstract trade theories.", dimension: "S" },
+            { text: "You prefer proven strategies over theoretical concepts.", dimension: "S" },
+            { text: "You base trades on hard data, not intuition.", dimension: "S" },
+            { text: "You follow the step-by-step execution over assumptions.", dimension: "S" },
+
+            // F - Feeling
+            { text: "Your trading decisions are often influenced by gut feelings or sentiment.", dimension: "F" },
+            { text: "You enter or exit trades based on how you feel the market is behaving emotionally.", dimension: "F" },
+            { text: "You consider how your trades impact others or the community.", dimension: "F" },
+            { text: "You often find yourself trading based on moods.", dimension: "F" },
+
+            // T - Thinking
+            { text: "You follow your trade plan even if it means upsetting others’ opinions.", dimension: "T" },
+            { text: "You value trade logic more than how someone might feel about it.", dimension: "T" },
+            { text: "You use strict rules when evaluating setups.", dimension: "T" },
+            { text: "You don't let emotions sway you from your strategy.", dimension: "T" },
+
+            // J - Judging
+            { text: "Your charts, watchlists, and logs are highly structured.", dimension: "J" },
+            { text: "You have a detailed checklist before entering any trade.", dimension: "J" },
+            { text: "You always review and close your trades before market hours end.", dimension: "J" },
+            { text: "You organize your trading week in advance.", dimension: "J" },
+
+            // P - Perceiving
+            { text: "You delay trading decisions until the last minute.", dimension: "P" },
+            { text: "You adapt your trades on the fly instead of following a rigid plan.", dimension: "P" },
+            { text: "You sometimes skip journaling or review due to spontaneity.", dimension: "P" },
+            { text: "You prefer reacting to the live market rather than pre-planning.", dimension: "P" },
+
+            // Stable (Emotional Resilience)
+            { text: "You remain composed during volatile market movements.", dimension: "Stable" },
+            { text: "You do not panic when the market moves against you suddenly.", dimension: "Stable" },
+            { text: "You keep a calm mindset regardless of past trade losses.", dimension: "Stable" },
+            { text: "You can emotionally detach from your wins and losses.", dimension: "Stable" },
+
+            // Neurotic (Emotionally Reactive)
+            { text: "You feel anxious when you hold positions overnight.", dimension: "Neurotic" },
+            { text: "You lose sleep after making a big mistake.", dimension: "Neurotic" },
+            { text: "You overthink your trades even after execution.", dimension: "Neurotic" },
+            { text: "You constantly second-guess your judgment during trades.", dimension: "Neurotic" },
+
+            // Mixed balance questions
+            { text: "You stay motivated by setting measurable trade goals.", dimension: "J" },
+            { text: "You thrive in chaotic markets and make quick instinctive moves.", dimension: "P" },
+            { text: "You are energized by being part of trading communities.", dimension: "E" },
+            { text: "You perform best when left to your own strategy without noise.", dimension: "I" },
+            { text: "You enjoy simplifying complex trade setups into stories.", dimension: "F" },
+            { text: "You prefer reviewing spreadsheets over anecdotal trade advice.", dimension: "T" },
+            { text: "You spot visual patterns and act before confirmation.", dimension: "N" },
+            { text: "You wait for confirmation through indicators and signals.", dimension: "S" },
+            { text: "You rely more on instinctive recognition of a trade setup than a checklist.", dimension: "P" },
+            { text: "You need a structured plan before every trade or you feel unprepared.", dimension: "J" },
+            { text: "You get easily influenced by other traders' opinions.", dimension: "F" },
+            { text: "You feel uncomfortable taking trades unless all logical boxes are checked.", dimension: "T" },
+            { text: "You find solace in data during uncertainty.", dimension: "S" },
+            { text: "You enjoy imagining different future scenarios in your trade outcomes.", dimension: "N" },
+            { text: "You prefer listening more than speaking in trading groups.", dimension: "I" },
+            { text: "You take the lead when discussing trade plans in a group.", dimension: "E" },
+            { text: "You tend to hold trades longer than planned due to emotional attachment.", dimension: "Neurotic" },
+            { text: "You often exit trades early out of fear of loss.", dimension: "Neurotic" },
+            { text: "You maintain a balanced emotional state regardless of PnL.", dimension: "Stable" },
+            { text: "You always revisit and document your mistakes constructively.", dimension: "Stable" },
+            { text: "You are easily distracted while trading.", dimension: "Neurotic" },
+            { text: "You enjoy researching past market crashes and behavior shifts.", dimension: "N" },
+            { text: "You tend to execute better when you make the trading environment aesthetic or clean.", dimension: "S" },
+            { text: "You feel strongly connected to trading as a purposeful mission.", dimension: "F" },
+            { text: "You find trading purely logical and mechanical.", dimension: "T" },
+            { text: "You enjoy building and refining your own trading strategy.", dimension: "J" },
+            { text: "You prefer exploring and adapting strategies based on what feels right in the moment.", dimension: "P" },
+            { text: "You rarely talk about your trades unless prompted.", dimension: "I" },
+            { text: "You feel energized when you're part of a fast-paced trading floor or chat.", dimension: "E" }
+        ];
+
+        const dimensionColors = {
+            E: "#204060",
+            I: "#403060",
+            N: "#204030",
+            S: "#303020",
+            T: "#602020",
+            F: "#602040",
+            J: "#204060",
+            P: "#204040",
+            Stable: "#205040",
+            Neurotic: "#602000"
+        };
+
+        
+
+        const scores = { E: 0, I: 0, N: 0, S: 0, T: 0, F: 0, J: 0, P: 0, Stable: 0, Neurotic: 0 };
+        const scaleLabels = ["Strongly Disagree", "Disagree", "Slightly Disagree", "Neutral", "Slightly Agree", "Agree", "Strongly Agree"];
+
+        const quizDiv = document.getElementById("quiz");
+        questions.forEach((q, idx) => {
+            const qDiv = document.createElement("div");
+            qDiv.className = "question";
+            qDiv.style.background = idx % 2 === 0 ? "#2c2c2c" : "#3a3a3a";
+            qDiv.style.background = dimensionColors[q.dimension] || "#2a2a2a";
+            
+            qDiv.innerHTML = `<p><strong>Q${idx + 1}:</strong> ${q.text}</p><div class='options'>${scaleLabels.map((label, i) => `<label><input type='radio' name='q${idx}' value='${i + 1}'>${label}</label>`).join('')}</div>`;
+            quizDiv.appendChild(qDiv);
+        });
+
+
+        function calculateResult() {
+            const answers = document.querySelectorAll("input[type='radio']:checked");
+            if (answers.length < questions.length) {
+                alert("Please answer all questions.");
+                return;
+            }
+
+            answers.forEach((ans, i) => {
+                const q = questions[i];
+                const val = parseInt(ans.value);
+                const score = val - 4;
+                if (["E", "N", "F", "J"].includes(q.dimension)) scores[q.dimension] += score;
+                else if (q.dimension === "Stable") scores.Stable += score; else scores.Neurotic -= score;
+            });
+
+            const type = `${scores.E >= 0 ? 'E' : 'I'}${scores.N >= 0 ? 'N' : 'S'}${scores.F >= 0 ? 'F' : 'T'}${scores.J >= 0 ? 'J' : 'P'}`;
+
+            const personalities = {
+                INTJ: {
+                    title: "📊 The Strategic Algo Master",
+                    strength: "Deep thinker, structured, excels at system building",
+                    risk: "Over-optimization, isolation",
+                    tip: "Backtest deeply, seek feedback loops"
+                },
+                INTP: {
+                    title: "🧠 The Quant Architect",
+                    strength: "Loves building frameworks and coding strategies",
+                    risk: "May overanalyze, avoid execution",
+                    tip: "Pair systems with tight execution rules"
+                },
+                ENTJ: {
+                    title: "🚀 The Market Conqueror",
+                    strength: "Decisive, driven, builds trading empires",
+                    risk: "Can be overly aggressive",
+                    tip: "Control risk, slow down in choppy markets"
+                },
+                ENTP: {
+                    title: "💡 The Opportunistic Innovator",
+                    strength: "Fast, creative, loves trading news and momentum",
+                    risk: "Inconsistent or impulsive",
+                    tip: "Use flexible yet rule-based strategy"
+                },
+                INFJ: {
+                    title: "🔮 The Intuitive Strategist",
+                    strength: "Visionary, pattern-seeking, calm under pressure",
+                    risk: "May ignore hard data",
+                    tip: "Balance intuition with tested logic"
+                },
+                INFP: {
+                    title: "🌊 The Emotionally Aware Trader",
+                    strength: "Emotionally deep, good at understanding sentiment",
+                    risk: "May struggle with detachment",
+                    tip: "Use structured journaling and support tools"
+                },
+                ENFJ: {
+                    title: "🌟 The Motivational Trader",
+                    strength: "Inspires others, good team player",
+                    risk: "Can absorb others’ stress",
+                    tip: "Separate personal emotion from market behavior"
+                },
+                ENFP: {
+                    title: "🔥 The Experimental Trader",
+                    strength: "Excels at trying new tools and styles",
+                    risk: "Scattered focus, lacks follow-through",
+                    tip: "Track progress and use accountability"
+                },
+                ISTJ: {
+                    title: "🧱 The Rule-Based Executor",
+                    strength: "Disciplined, rule-driven",
+                    risk: "Rigid, slow to adapt",
+                    tip: "Periodically reassess strategy assumptions"
+                },
+                ISFJ: {
+                    title: "🛡️ The Risk-Conscious Planner",
+                    strength: "Detail-oriented, avoids major losses",
+                    risk: "Too conservative, may miss opportunities",
+                    tip: "Use data to test new risk limits"
+                },
+                ESTJ: {
+                    title: "📏 The Tactical Leader",
+                    strength: "Commanding, builds order into trading",
+                    risk: "Over-control or too mechanical",
+                    tip: "Blend structure with adaptability"
+                },
+                ESFJ: {
+                    title: "🤝 The Relational Trader",
+                    strength: "Engages well in communities, tracks news well",
+                    risk: "May trade emotionally",
+                    tip: "Use system alerts, minimize news reaction"
+                },
+                ISTP: {
+                    title: "🎯 The Precision Sniper",
+                    strength: "Acts fast, scalps well, independent",
+                    risk: "May avoid planning",
+                    tip: "Set post-trade reflection process"
+                },
+                ISFP: {
+                    title: "🎨 The Creative Flow Trader",
+                    strength: "Adapts easily, responsive to price action",
+                    risk: "Can lack discipline",
+                    tip: "Build structure around your instincts"
+                },
+                ESTP: {
+                    title: "⚡ The Action-Oriented Trader",
+                    strength: "Bold, thrives in fast markets",
+                    risk: "High risk-taking, may overtrade",
+                    tip: "Use hard stop-loss and trade limits"
+                },
+                ESFP: {
+                    title: "🎭 The Sentiment Surfer",
+                    strength: "Good with trends, understands crowd psychology",
+                    risk: "Overconfidence, may skip planning",
+                    tip: "Follow pre-market ritual and review logs"
+                }
+            };
+
+
+            const p = personalities[type] || { title: "Unknown Type", strength: "-", risk: "-", tip: "-" };
+            document.getElementById("result").style.display = "block";
+            //document.getElementById("result").innerHTML = `<h2>Your Type: ${type} - ${p.title}</h2><p><strong>Strength:</strong> ${p.strength}</p><p><strong>Risk:</strong> ${p.risk}</p><p><strong>Tip:</strong> ${p.tip}</p>`;
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            document.getElementById("result").innerHTML = `
+  <h2>Your Type: ${type} - ${p.title}</h2>
+  <p><strong>Strength:</strong> ${p.strength}</p>
+  <p><strong>Risk:</strong> ${p.risk}</p>
+  <p><strong>Tip:</strong> ${p.tip}</p>
+  <p><a href="https://www.16personalities.com/${type.toLowerCase()}-personality" target="_blank">
+    Learn more about the ${type} personality →</a></p>`;
+        }
+    </script>
+</body>
+
+</html>
