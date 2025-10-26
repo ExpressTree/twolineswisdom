@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pearl Mind – Auto Screenshot Loader</title>
+<style>
+:root{
+  --bg:#0c0c0d;--bg1:#121213;--bg2:#18191a;--ink:#fff;--muted:#c0c0c0;
+  --accent:#00ffb3;--line:#242424;--hover:#004f3b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{display:flex;flex-direction:column;min-height:100vh;
+  background:var(--bg);color:var(--ink);
+  font-family:'Segoe UI',Roboto,system-ui,sans-serif;overflow:hidden;}
+header{background:linear-gradient(90deg,#0f2220,#071d1a);
+  padding:14px 16px 12px;box-shadow:0 2px 6px rgba(0,0,0,.4);}
+.header-top{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+h1{font-size:1.6rem;font-weight:800;color:var(--accent);}
+.monthChip{background:rgba(0,255,179,.15);color:#bfffe8;border:1px solid #0b5;border-radius:8px;
+  padding:4px 10px;font-size:.95rem;margin-left:8px;display:inline-block}
+select#monthPicker{background:#0f1514;color:#bfffe8;border:1px solid #0b5;border-radius:8px;
+  padding:6px 10px;font-size:.95rem;outline:none}
+.summaryBox{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;
+  background:#101010;border:1px solid #1d1d1d;border-radius:10px;
+  padding:8px 14px;margin-top:10px}
+.summaryItem{font-size:.92rem;color:var(--muted)}
+.summaryItem b{color:var(--accent)}
+main{flex:1 1 auto;display:flex;min-height:0}
+section{padding:10px;overflow:auto}
+#left{flex:1.1;background:var(--bg1);border-right:1px solid var(--line);
+  position:sticky;top:0;height:calc(100vh - 110px);overflow:auto}
+#center{flex:2.3;background:var(--bg2);text-align:center}
+#right{flex:1.1;background:var(--bg1);border-left:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+thead th{position:sticky;top:0;background:#1e1e1e;color:var(--accent);z-index:1}
+th,td{border-bottom:1px solid var(--line);padding:6px;text-align:center;white-space:nowrap}
+tbody tr{cursor:pointer;transition:background .2s,box-shadow .2s}
+tbody tr:hover{background:var(--hover);box-shadow:inset 0 0 6px var(--accent);}
+.day-section{scroll-margin-top:90px;margin:14px auto 22px;max-width:1200px}
+.day-section h3{font-size:1rem;font-weight:600;color:var(--muted);margin:8px 0}
+img.thumb{max-width:96%;border-radius:8px;box-shadow:0 0 14px rgba(0,255,179,.18);transition:transform .18s}
+img.thumb:hover{transform:scale(1.02);cursor:pointer}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);
+  z-index:999;align-items:center;justify-content:center}
+#modal.open{display:flex}
+#modal img{max-width:92vw;max-height:92vh;border-radius:12px;
+  box-shadow:0 0 30px rgba(0,255,179,.45)}
+#modal .close{position:absolute;top:14px;right:24px;font-size:34px;
+  color:var(--accent);cursor:pointer}
+section::-webkit-scrollbar{width:8px;height:8px}
+section::-webkit-scrollbar-track{background:#0f0f0f}
+section::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,var(--accent),#007757);
+  border-radius:6px}
+section::-webkit-scrollbar-thumb:hover{background:#00d29c}
+@media(max-width:1000px){
+  main{flex-direction:column}
+  #left,#center,#right{border:none;position:static;height:auto}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div><h1>Pearl Mind</h1><span class="monthChip" id="monthChip">Select Month</span></div>
+    <div>
+      <label for="monthPicker" style="color:#bfffe8;margin-right:6px">Month:</label>
+      <select id="monthPicker"></select>
+    </div>
+  </div>
+  <div class="summaryBox" id="summaryBox"></div>
+</header>
+
+<main>
+  <section id="left">
+    <table id="tradeTable">
+      <thead><tr>
+        <th>Trade</th><th>Day</th><th>Date</th>
+        <th>Trade 01</th><th>Trade 02</th><th>Trade 03</th><th>Trade 04</th><th>Total</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+  <section id="center"><div id="charts"></div></section>
+  <section id="right"><div id="results"></div></section>
+</main>
+
+<div id="modal"><span class="close" onclick="closeModal()">&times;</span>
+  <img id="modalImg" alt="Preview"></div>
+
+<!-- JSON -->
+<script id="tradeData" type="application/json">
+{
+"2025-10":[
+{"n":1,"day":"WED","date":"01-10-2025","t1":639,"t2":null,"t3":null,"t4":null,"total":639},
+{"n":2,"day":"THU","date":"02-10-2025","t1":null,"t2":null,"t3":null,"t4":null,"total":0},
+{"n":3,"day":"FRI","date":"03-10-2025","t1":211,"t2":null,"t3":null,"t4":null,"total":211},
+{"n":6,"day":"MON","date":"06-10-2025","t1":290,"t2":null,"t3":null,"t4":null,"total":290},
+{"n":7,"day":"TUE","date":"07-10-2025","t1":370,"t2":64,"t3":null,"t4":null,"total":434},
+{"n":8,"day":"WED","date":"08-10-2025","t1":360,"t2":61,"t3":78,"t4":null,"total":499},
+{"n":9,"day":"THU","date":"09-10-2025","t1":109,"t2":183,"t3":null,"t4":null,"total":292},
+{"n":10,"day":"FRI","date":"10-10-2025","t1":312,"t2":null,"t3":null,"t4":null,"total":312},
+{"n":13,"day":"MON","date":"13-10-2025","t1":110,"t2":132,"t3":null,"t4":null,"total":242},
+{"n":15,"day":"WED","date":"15-10-2025","t1":274,"t2":null,"t3":null,"t4":null,"total":274},
+{"n":16,"day":"THU","date":"16-10-2025","t1":395,"t2":null,"t3":null,"t4":null,"total":395},
+{"n":17,"day":"FRI","date":"17-10-2025","t1":393,"t2":34,"t3":110,"t4":null,"total":537},
+{"n":20,"day":"MON","date":"20-10-2025","t1":216,"t2":7,"t3":null,"t4":null,"total":223},
+{"n":23,"day":"THU","date":"23-10-2025","t1":273,"t2":321,"t3":null,"t4":null,"total":594},
+{"n":24,"day":"FRI","date":"24-10-2025","t1":516,"t2":null,"t3":null,"t4":null,"total":516}
+]
+}
+</script>
+
+<script>
+const picker=document.getElementById('monthPicker');
+const chip=document.getElementById('monthChip');
+const tbody=document.querySelector('#tradeTable tbody');
+const charts=document.getElementById('charts');
+const results=document.getElementById('results');
+const summary=document.getElementById('summaryBox');
+const modal=document.getElementById('modal'),modalImg=document.getElementById('modalImg');
+function openModal(src){modal.classList.add('open');modalImg.src=src;}
+function closeModal(){modal.classList.remove('open');modalImg.src='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+
+const monthLabels=["January","February","March","April","May","June","July","August","September","October","November","December"];
+for(let i=0;i<12;i++){
+  const m=(i+1).toString().padStart(2,'0');
+  const opt=document.createElement('option');
+  opt.value=`2025-${m}`;
+  opt.textContent=`${monthLabels[i]} 2025`;
+  picker.appendChild(opt);
+}
+picker.value='2025-10';
+
+const tradeData=JSON.parse(document.getElementById("tradeData").textContent);
+
+function render(monthKey){
+  const trades=tradeData[monthKey]||[];
+  chip.textContent=monthLabels[parseInt(monthKey.split('-')[1])-1]+" 2025";
+  tbody.innerHTML='';charts.innerHTML='';results.innerHTML='';
+
+  let pos=0,neg=0,pointsTotal=0,indivTrades=0;
+
+  trades.forEach(d=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${d.n}</td><td>${d.day}</td><td>${d.date}</td>
+      <td>${d.t1??''}</td><td>${d.t2??''}</td><td>${d.t3??''}</td><td>${d.t4??''}</td><td>${d.total}</td>`;
+    tr.onclick=()=>{
+      document.getElementById('chart-'+d.date)?.scrollIntoView({behavior:'smooth'});
+      document.getElementById('result-'+d.date)?.scrollIntoView({behavior:'smooth'});
+    };
+    tbody.appendChild(tr);
+
+    const vals=[d.t1,d.t2,d.t3,d.t4].filter(v=>v!=null);
+    vals.forEach(v=>{
+      indivTrades++;
+      if(v>=80) pos++; else if(v>0 && v<80) neg++;
+      pointsTotal+=v;
+    });
+
+    // chart placeholder
+    const c=document.createElement('div');
+    c.className='day-section';c.id='chart-'+d.date;
+    c.innerHTML=`<h3>${d.date} Chart</h3><img class="thumb" src="images/${d.date.split('-').reverse().join('-')}-chart.jpg" onclick="openModal(this.src)">`;
+    charts.appendChild(c);
+    // result placeholder
+    const r=document.createElement('div');
+    r.className='day-section';r.id='result-'+d.date;
+    r.innerHTML=`<h3>${d.date} Result</h3><img class="thumb" src="images/${d.date.split('-').reverse().join('-')}-result.jpg" onclick="openModal(this.src)">`;
+    results.appendChild(r);
+  });
+
+  summary.innerHTML=`<div class="summaryItem">📅 Month <b>${chip.textContent}</b></div>
+    <div class="summaryItem">📊 Individual Trades <b>${indivTrades}</b></div>
+    <div class="summaryItem">✅ 40+ Candidates <b>${pos}</b></div>
+    <div class="summaryItem">⚠️ -40 Candidates <b>${neg}</b></div>
+    <div class="summaryItem">💰 Total Points <b>${pointsTotal}</b></div>`;
+}
+picker.onchange=e=>render(e.target.value);
+render(picker.value);
+</script>
+</body>
+</html>
