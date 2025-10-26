@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Pearl Mind – Auto Screenshot Loader</title>
+<title>Pearl Mind – Monthly Dashboard</title>
 <style>
 :root{
   --bg:#0c0c0d;--bg1:#121213;--bg2:#18191a;--ink:#fff;--muted:#c0c0c0;
@@ -31,17 +31,19 @@ main{flex:1 1 auto;display:flex;min-height:0}
 section{padding:10px;overflow:auto}
 #left{flex:1.1;background:var(--bg1);border-right:1px solid var(--line);
   position:sticky;top:0;height:calc(100vh - 110px);overflow:auto}
-#center{flex:2.3;background:var(--bg2);text-align:center}
-#right{flex:1.1;background:var(--bg1);border-left:1px solid var(--line)}
+#center{flex:2.3;background:var(--bg2);display:flex;flex-direction:column;
+  align-items:center;gap:14px;overflow-y:auto;overflow-x:hidden;}
+#right{flex:1.1;background:var(--bg1);border-left:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-content:flex-start;}
 table{width:100%;border-collapse:collapse;font-size:.8rem}
 thead th{position:sticky;top:0;background:#1e1e1e;color:var(--accent);z-index:1}
 th,td{border-bottom:1px solid var(--line);padding:6px;text-align:center;white-space:nowrap}
 tbody tr{cursor:pointer;transition:background .2s,box-shadow .2s}
 tbody tr:hover{background:var(--hover);box-shadow:inset 0 0 6px var(--accent);}
-.day-section{scroll-margin-top:90px;margin:14px auto 22px;max-width:1200px}
-.day-section h3{font-size:1rem;font-weight:600;color:var(--muted);margin:8px 0}
-img.thumb{max-width:96%;border-radius:8px;box-shadow:0 0 14px rgba(0,255,179,.18);transition:transform .18s}
+img.thumb{border-radius:8px;box-shadow:0 0 14px rgba(0,255,179,.18);transition:transform .18s}
 img.thumb:hover{transform:scale(1.02);cursor:pointer}
+.chart-img{max-width:95%;height:auto;margin:5px auto;}
+.result-img{height:160px;width:auto;object-fit:cover;}
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);
   z-index:999;align-items:center;justify-content:center}
 #modal.open{display:flex}
@@ -84,13 +86,14 @@ section::-webkit-scrollbar-thumb:hover{background:#00d29c}
       <tbody></tbody>
     </table>
   </section>
-  <section id="center"><div id="charts"></div></section>
-  <section id="right"><div id="results"></div></section>
+  <section id="center"></section>
+  <section id="right"></section>
 </main>
 
 <div id="modal"><span class="close" onclick="closeModal()">&times;</span>
   <img id="modalImg" alt="Preview"></div>
 
+<!-- JSON data -->
 <script id="tradeData" type="application/json">
 {
 "2025-10":[
@@ -113,14 +116,43 @@ section::-webkit-scrollbar-thumb:hover{background:#00d29c}
 }
 </script>
 
+<script id="resultsList" type="application/json">
+[
+ "2025-10-01-results.jpg","2025-10-02-results.jpg","2025-10-03-results.jpg",
+ "2025-10-04-results.jpg","2025-10-05-results.jpg","2025-10-06-results.jpg",
+ "2025-10-07-results.jpg","2025-10-08-results.jpg","2025-10-09-results.jpg",
+ "2025-10-10-results.jpg","2025-10-11-results.jpg","2025-10-12-results.jpg",
+ "2025-10-13-results.jpg","2025-10-14-results.jpg","2025-10-15-results.jpg",
+ "2025-10-16-results.jpg","2025-10-17-results.jpg","2025-10-18-results.jpg",
+ "2025-10-19-results.jpg","2025-10-20-results.jpg","2025-10-21-results.jpg",
+ "2025-10-22-results.jpg"
+]
+</script>
+
+<script id="chartsList" type="application/json">
+[
+ "2025-10-01-chart.jpg","2025-10-02-chart.jpg","2025-10-03-chart.jpg",
+ "2025-10-04-chart.jpg","2025-10-05-chart.jpg","2025-10-06-chart.jpg",
+ "2025-10-07-chart.jpg","2025-10-08-chart.jpg","2025-10-09-chart.jpg",
+ "2025-10-10-chart.jpg","2025-10-11-chart.jpg","2025-10-12-chart.jpg",
+ "2025-10-13-chart.jpg","2025-10-14-chart.jpg","2025-10-15-chart.jpg",
+ "2025-10-16-chart.jpg","2025-10-17-chart.jpg","2025-10-18-chart.jpg",
+ "2025-10-19-chart.jpg","2025-10-20-chart.jpg","2025-10-21-chart.jpg",
+ "2025-10-22-chart.jpg","2025-10-23-chart.jpg","2025-10-24-chart.jpg",
+ "2025-10-25-chart.jpg","2025-10-26-chart.jpg","2025-10-27-chart.jpg",
+ "2025-10-28-chart.jpg","2025-10-29-chart.jpg","2025-10-30-chart.jpg","2025-10-31-chart.jpg"
+]
+</script>
+
 <script>
 const picker=document.getElementById('monthPicker');
 const chip=document.getElementById('monthChip');
 const tbody=document.querySelector('#tradeTable tbody');
-const charts=document.getElementById('charts');
-const results=document.getElementById('results');
+const charts=document.getElementById('center');
+const results=document.getElementById('right');
 const summary=document.getElementById('summaryBox');
 const modal=document.getElementById('modal'),modalImg=document.getElementById('modalImg');
+
 function openModal(src){modal.classList.add('open');modalImg.src=src;}
 function closeModal(){modal.classList.remove('open');modalImg.src='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
@@ -137,6 +169,8 @@ for(let i=0;i<12;i++){
 picker.value='2025-10';
 
 const tradeData=JSON.parse(document.getElementById("tradeData").textContent);
+const allResults=JSON.parse(document.getElementById("resultsList").textContent);
+const allCharts=JSON.parse(document.getElementById("chartsList").textContent);
 
 function render(monthKey){
   const trades=tradeData[monthKey]||[];
@@ -149,10 +183,7 @@ function render(monthKey){
     const tr=document.createElement('tr');
     tr.innerHTML=`<td>${d.n}</td><td>${d.day}</td><td>${d.date}</td>
       <td>${d.t1??''}</td><td>${d.t2??''}</td><td>${d.t3??''}</td><td>${d.t4??''}</td><td>${d.total}</td>`;
-    tr.onclick=()=>{
-      document.getElementById('chart-'+d.date)?.scrollIntoView({behavior:'smooth'});
-      document.getElementById('result-'+d.date)?.scrollIntoView({behavior:'smooth'});
-    };
+    tr.onclick=()=>{document.getElementById('chart-'+d.date)?.scrollIntoView({behavior:'smooth'})};
     tbody.appendChild(tr);
 
     const vals=[d.t1,d.t2,d.t3,d.t4].filter(v=>v!=null);
@@ -162,23 +193,30 @@ function render(monthKey){
       pointsTotal+=v;
     });
 
-    const c=document.createElement('div');
-    c.className='day-section';c.id='chart-'+d.date;
-    c.innerHTML=`<h3>${d.date} Chart</h3><img class="thumb" src="${d.date.split('-').reverse().join('-')}-chart.jpg" onclick="openModal(this.src)">`;
-    charts.appendChild(c);
+    const fname=d.date.split('-').reverse().join('-')+'-chart.jpg';
+    const img=document.createElement('img');
+    img.src=fname;img.className='thumb chart-img';img.title=d.date;img.id='chart-'+d.date;
+    img.onclick=()=>openModal(fname);
+    charts.appendChild(img);
+  });
 
-    const r=document.createElement('div');
-    r.className='day-section';r.id='result-'+d.date;
-    r.innerHTML=`<h3>${d.date} Result</h3><img class="thumb" src="${d.date.split('-').reverse().join('-')}-result.jpg" onclick="openModal(this.src)">`;
-    results.appendChild(r);
+  const monthResults=allResults.filter(f=>f.startsWith(monthKey));
+  monthResults.forEach((file,i)=>{
+    const img=document.createElement('img');
+    img.src=file;img.className='thumb result-img';img.title=`Result ${i+1}`;
+    img.onclick=()=>openModal(file);
+    results.appendChild(img);
   });
 
   summary.innerHTML=`<div class="summaryItem">📅 Month <b>${chip.textContent}</b></div>
-    <div class="summaryItem">📊 Individual Trades <b>${indivTrades}</b></div>
-    <div class="summaryItem">✅ 40+ Candidates <b>${pos}</b></div>
-    <div class="summaryItem">⚠️ -40 Candidates <b>${neg}</b></div>
-    <div class="summaryItem">💰 Total Points <b>${pointsTotal}</b></div>`;
+    <div class="summaryItem">📊 Trades <b>${indivTrades}</b></div>
+    <div class="summaryItem">✅ 40+ <b>${pos}</b></div>
+    <div class="summaryItem">⚠️ -40 <b>${neg}</b></div>
+    <div class="summaryItem">💰 Points <b>${pointsTotal}</b></div>
+    <div class="summaryItem">🖼️ Charts <b>${allCharts.filter(f=>f.startsWith(monthKey)).length}</b></div>
+    <div class="summaryItem">📲 Results <b>${monthResults.length}</b></div>`;
 }
+
 picker.onchange=e=>render(e.target.value);
 render(picker.value);
 </script>
