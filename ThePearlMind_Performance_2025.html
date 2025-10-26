@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title> The Pearl Mind – Monthly Dashboard</title>
+<title>The Pearl Mind – Monthly Dashboard</title>
 <style>
 :root{
   --bg:#0c0c0d;--bg1:#121213;--bg2:#18191a;--ink:#fff;--muted:#c0c0c0;
@@ -51,6 +51,11 @@ img.thumb:hover{transform:scale(1.02);cursor:pointer}
   box-shadow:0 0 30px rgba(0,255,179,.45)}
 #modal .close{position:absolute;top:14px;right:24px;font-size:34px;
   color:var(--accent);cursor:pointer}
+.navBtn{position:absolute;top:50%;font-size:48px;color:var(--accent);
+  cursor:pointer;user-select:none;transform:translateY(-50%);
+  padding:10px;z-index:1000;transition:color .2s;}
+#prevBtn{left:40px;} #nextBtn{right:40px;}
+.navBtn:hover{color:#00ffb3;}
 section::-webkit-scrollbar{width:8px;height:8px}
 section::-webkit-scrollbar-track{background:#0f0f0f}
 section::-webkit-scrollbar-thumb{
@@ -67,7 +72,7 @@ section::-webkit-scrollbar-thumb:hover{background:#00d29c}
 
 <header>
   <div class="header-top">
-    <div><h1> The Pearl Mind</h1><span class="monthChip" id="monthChip">Select Month</span></div>
+    <div><h1>The Pearl Mind</h1><span class="monthChip" id="monthChip">Select Month</span></div>
     <div>
       <label for="monthPicker" style="color:#bfffe8;margin-right:6px">Month:</label>
       <select id="monthPicker"></select>
@@ -90,8 +95,13 @@ section::-webkit-scrollbar-thumb:hover{background:#00d29c}
   <section id="right"></section>
 </main>
 
-<div id="modal"><span class="close" onclick="closeModal()">&times;</span>
-  <img id="modalImg" alt="Preview"></div>
+<!-- Modal -->
+<div id="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <span id="prevBtn" class="navBtn">&#10094;</span>
+  <img id="modalImg" alt="Preview">
+  <span id="nextBtn" class="navBtn">&#10095;</span>
+</div>
 
 <!-- JSON data -->
 <script id="tradeData" type="application/json">
@@ -156,12 +166,37 @@ const charts=document.getElementById('center');
 const results=document.getElementById('right');
 const summary=document.getElementById('summaryBox');
 const modal=document.getElementById('modal'),modalImg=document.getElementById('modalImg');
+const prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
 
-function openModal(src){modal.classList.add('open');modalImg.src=src;}
+let chartImages=[],resultImages=[],activeList=[],currentIndex=0;
+
+// 🟢 Modal controls
+function openModal(src,type){
+  modal.classList.add('open');
+  modalImg.src=src;
+  activeList = (type==='chart'? chartImages : resultImages);
+  currentIndex = activeList.indexOf(src);
+}
 function closeModal(){modal.classList.remove('open');modalImg.src='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function showImage(i){
+  if(i<0)i=activeList.length-1;
+  if(i>=activeList.length)i=0;
+  currentIndex=i;
+  modalImg.src=activeList[i];
+}
+prevBtn.onclick=()=>showImage(currentIndex-1);
+nextBtn.onclick=()=>showImage(currentIndex+1);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+  if(modal.classList.contains('open')){
+    if(e.key==='ArrowLeft')showImage(currentIndex-1);
+    if(e.key==='ArrowRight')showImage(currentIndex+1);
+  }
+});
 modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
 
+// 🟢 Month setup
 const monthLabels=["January","February","March","April","May","June","July","August","September","October","November","December"];
 for(let i=0;i<12;i++){
   const m=(i+1).toString().padStart(2,'0');
@@ -180,6 +215,7 @@ function render(monthKey){
   const trades=tradeData[monthKey]||[];
   chip.textContent=monthLabels[parseInt(monthKey.split('-')[1])-1]+" 2025";
   tbody.innerHTML='';charts.innerHTML='';results.innerHTML='';
+  chartImages=[];resultImages=[];
 
   let pos=0,neg=0,pointsTotal=0,indivTrades=0;
 
@@ -200,16 +236,18 @@ function render(monthKey){
     const fname=d.date.split('-').reverse().join('-')+'-chart.jpg';
     const img=document.createElement('img');
     img.src=fname;img.className='thumb chart-img';img.title=d.date;img.id='chart-'+d.date;
-    img.onclick=()=>openModal(fname);
+    img.onclick=()=>openModal(fname,'chart');
     charts.appendChild(img);
+    chartImages.push(fname);
   });
 
   const monthResults=allResults.filter(f=>f.startsWith(monthKey));
   monthResults.forEach((file,i)=>{
     const img=document.createElement('img');
     img.src=file;img.className='thumb result-img';img.title=`Result ${i+1}`;
-    img.onclick=()=>openModal(file);
+    img.onclick=()=>openModal(file,'result');
     results.appendChild(img);
+    resultImages.push(file);
   });
 
   summary.innerHTML=`<div class="summaryItem">📅 Month <b>${chip.textContent}</b></div>
@@ -217,13 +255,14 @@ function render(monthKey){
     <div class="summaryItem">✅ 40+ <b>${pos}</b></div>
     <div class="summaryItem">⚠️ -40 <b>${neg}</b></div>
     <div class="summaryItem">💰 Points <b>${pointsTotal}</b></div>
-    <div class="summaryItem">🖼️ Charts <b>${allCharts.filter(f=>f.startsWith(monthKey)).length}</b></div>
-    <div class="summaryItem">📲 Results <b>${monthResults.length}</b></div>`;
+    <div class="summaryItem">🖼️ Charts <b>${chartImages.length}</b></div>
+    <div class="summaryItem">📲 Results <b>${resultImages.length}</b></div>`;
 }
 
 picker.onchange=e=>render(e.target.value);
 render(picker.value);
 </script>
+
 <!-- ======= Trader Community Join Section ======= -->
 <div style="text-align:center;margin-top:50px;">
   <h2 style="color:#00ffb3;font-family:Arial,Helvetica,sans-serif;">
@@ -232,33 +271,25 @@ render(picker.value);
   <p style="color:#c0c0c0;font-size:15px;">
     Connect with elite traders, share insights, and grow together.
   </p>
-
-  <!-- WhatsApp Button -->
   <a href="https://chat.whatsapp.com/Gaf44p2ZuqQ6ZkgabSn9qO" target="_blank"
      style="display:inline-flex;align-items:center;gap:8px;
             background-color:#25D366;color:#fff;
             text-decoration:none;font-weight:bold;
-            padding:12px 20px;margin:10px;border-radius:50px;
-            font-family:Arial,Helvetica,sans-serif;">
+            padding:12px 20px;margin:10px;border-radius:50px;">
     <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" 
          alt="WhatsApp" style="width:22px;height:22px;filter:invert(1);">
     Join WhatsApp Group
   </a>
-
-  <!-- Twitter Button -->
   <a href="https://x.com/TwoLinesClub" target="_blank"
      style="display:inline-flex;align-items:center;gap:8px;
             background-color:#1DA1F2;color:#fff;
             text-decoration:none;font-weight:bold;
-            padding:12px 20px;margin:10px;border-radius:50px;
-            font-family:Arial,Helvetica,sans-serif;">
+            padding:12px 20px;margin:10px;border-radius:50px;">
     <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg"
          alt="Twitter" style="width:22px;height:22px;filter:invert(1);">
     Follow on Twitter
   </a>
 </div>
 
-
 </body>
 </html>
-
