@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pearl Mind – Visiting Card</title>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    background: #000;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    overflow: hidden;
+  }
+
+  .frame {
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    border-radius: 26px;
+    padding: 18px 16px;
+    background: radial-gradient(circle at top, #1b1b1b 0%, #050505 55%, #000 100%);
+    border: 1px solid rgba(255, 215, 128, 0.25);
+    box-shadow: 0 0 28px rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* header strip */
+  .brand {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #f8e6a2;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .brand-left {
+    font-weight: 700;
+  }
+  .brand-right {
+    font-size: 10px;
+    color: #b1944a;
+  }
+
+  /* top: photo + name block */
+  .top-block {
+    display: flex;
+    margin-top: 10px;
+    gap: 12px;
+  }
+  .photo-box {
+    flex: 0 0 120px;
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    border: 2px solid #f0d27a;
+    overflow: hidden;
+    background: #141414;
+    box-shadow: 0 0 18px rgba(0,0,0,0.8);
+    cursor: pointer;
+  }
+  .photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #photoInput { display: none; }
+
+  .id-info {
+    flex: 1;
+    color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .name-line {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .sub-line {
+    font-size: 11px;
+    color: #d2b76a;
+    margin-top: 4px;
+  }
+  .rank-line {
+    font-size: 18px;
+    margin-top: 6px;
+    color: #e7e7e7;
+  }
+  .rank-line span {
+    font-weight: 500;
+  }
+
+  .batch-row {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .batch-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #111;
+    object-fit: contain;
+  }
+  .batch-text {
+    font-size: 11px;
+    color: #f3f3f3;
+  }
+  .batch-sub {
+    font-size: 9px;
+    color: #8e8e8e;
+  }
+
+  .editable {
+    outline: none;
+    border: none;
+    display: inline-block;
+  }
+
+  /* divider */
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
+    background: linear-gradient(to right, transparent, rgba(255, 215, 128, 0.6), transparent);
+  }
+
+  /* trades box */
+  .trades-box {
+    padding: 10px 10px 6px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .trades-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #c8aa63;
+    margin-bottom: 4px;
+  }
+
+  .trade-row {
+    display: grid;
+    grid-template-columns: 0.5fr 3.5fr 0.9fr 1.1fr;
+    gap: 4px;
+    align-items: center;
+    padding: 2px 0;
+    font-size: 12px;
+    color: #ddd;
+  }
+
+  .trade-label {
+    color: #8f8f8f;
+  }
+
+  .trade-edit {
+    outline: none;
+    font-size: 14px;
+    color: #fefefe;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .trade-points,
+  .trade-count {
+    text-align: right;
+    font-size: 16px;
+  }
+  .trade-points {
+    color: #e0e0e0;
+  }
+  .trade-count {
+    color: #c2a45d;
+  }
+
+  /* PnL box */
+  .pnl-box {
+    margin-top: 8px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 215, 128, 0.35);
+    background: radial-gradient(circle at top, #111 0%, #050505 60%, #000 100%);
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .pnl-placeholder {
+    font-size: 11px;
+    color: #d6b96c;
+    text-align: center;
+    padding: 0 12px;
+    line-height: 1.4;
+  }
+  .pnl-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* allow any ratio */
+    display: none;
+  }
+  #pnlInput { display: none; }
+
+  /* bottom summary */
+  .bottom-block {
+    margin-top: 8px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    color: #f3d98b;
+  }
+
+  .summary-row span.value {
+    font-weight: 600;
+  }
+
+  .pearls-row {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pearls-label {
+    font-size: 10px;
+    color: #a7a7a7;
+  }
+  .pearls-track {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    max-width: 220px;
+  }
+  .pearl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff9da 0%, #f3d68b 40%, #c59b40 80%, #7a5b1c 100%);
+    box-shadow: 0 0 4px rgba(255,215,128,0.8);
+  }
+
+  .buttons-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+  }
+  .btn {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .btn-primary {
+    background: #f0d27a;
+    color: #000;
+  }
+  .btn-ghost {
+    background: #141414;
+    color: #d4d4d4;
+    border: 1px solid #333;
+  }
+  .save-hint {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 9px;
+    color: #777;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div id="captureArea" class="card">
+
+    <!-- top brand strip -->
+    <div class="brand">
+      <div class="brand-left">THE PEARL MIND</div>
+      <div class="brand-right">Trader Progress Tracker • </div>
+    </div>
+
+    <!-- top block -->
+    <div class="top-block">
+      <div class="photo-box" onclick="document.getElementById('photoInput').click()">
+        <img id="photoPreview" src="">
+      </div>
+      <input type="file" id="photoInput" accept="image/*">
+
+      <div class="id-info">
+        <div class="name-line editable" id="name" contenteditable="true">Your Name</div>
+        <div class="sub-line editable" id="month" contenteditable="true">Month: Oct 2025</div>
+        <div class="rank-line">
+          Rank <span id="rankOld" class="editable" contenteditable="true">136</span>
+          →
+          <span id="rankNew" class="editable" contenteditable="true">127</span>
+        </div>
+
+        <div class="batch-row">
+          <img id="batchIcon" class="batch-icon" src="">
+          <div>
+            <div id="batchName" class="batch-text">Batch will auto-select</div>
+            <div class="batch-sub">Based on your new rank</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- trades box -->
+    <div class="trades-box">
+      <div class="trades-header">
+        <div>Weekly Trades</div>
+        <div>Pts / Pearls (±40)</div>
+      </div>
+
+      <div class="trade-row">
+        <div class="trade-label">W1</div>
+        <div id="t1" class="trade-edit editable" contenteditable="true">+40, +38, -25, +40</div>
+        <div id="p1" class="trade-points"></div>
+        <div id="c1" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-label">W2</div>
+        <div id="t2" class="trade-edit editable" contenteditable="true">—, +45, +43, -40</div>
+        <div id="p2" class="trade-points"></div>
+        <div id="c2" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-label">W3</div>
+        <div id="t3" class="trade-edit editable" contenteditable="true"></div>
+        <div id="p3" class="trade-points"></div>
+        <div id="c3" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-label">W4</div>
+        <div id="t4" class="trade-edit editable" contenteditable="true"></div>
+        <div id="p4" class="trade-points"></div>
+        <div id="c4" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-label">W5</div>
+        <div id="t5" class="trade-edit editable" contenteditable="true"></div>
+        <div id="p5" class="trade-points"></div>
+        <div id="c5" class="trade-count"></div>
+      </div>
+
+      <!-- PnL Upload Box -->
+      <div class="pnl-box" onclick="document.getElementById('pnlInput').click()">
+        <div id="pnlPlaceholder" class="pnl-placeholder">
+          Upload Real Monthly PnL Screenshot from Broker
+        </div>
+        <img id="pnlPreview" src="">
+      </div>
+      <input type="file" id="pnlInput" accept="image/*">
+
+    </div>
+
+    <!-- bottom -->
+    <div class="bottom-block">
+      <div class="summary-row">
+        <div>Total Points: <span id="totalPoints" class="value">0</span></div>
+        <div>Pearls (±40): <span id="totalPearls" class="value">0</span></div>
+      </div>
+
+      <div class="pearls-row">
+        <div class="pearls-label">Pearl Line:</div>
+        <div id="pearlsTrack" class="pearls-track"></div>
+      </div>
+
+      <div class="buttons-row">
+        <button class="btn btn-ghost" onclick="resetData()">Reset</button>
+        <button class="btn btn-primary" onclick="calculateAll()">Update</button>
+        <button class="btn btn-primary" onclick="shareCard()">Share</button>
+      </div>
+      <div class="save-hint">Data is stored only on this device (local).</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+  /* ===== Batch Logic (rank → batch) ===== */
+  const batches = [
+    { maxRank: 1,  name: "Black Pearl Elite",   icon: "batch_black_pearl_elite.png" },
+    { maxRank: 10,  name: "Captain’s Circle",    icon: "batch_captains_circle.png" },
+    { maxRank: 30,  name: "Wave Riders",         icon: "batch_wave_riders.png" },
+    { maxRank: 60,  name: "Pointsmiths",         icon: "batch_pointsmiths.png" },
+    { maxRank: 100, name: "Compass Keepers",     icon: "batch_compass_keepers.png" },
+    { maxRank: 109, name: "Deck Apprentices",    icon: "batch_deck_apprentices.png" },
+    { maxRank: 118, name: "Harbour Watchers",    icon: "batch_harbour_watchers.png" },
+    { maxRank: 127, name: "Silent Raiders",      icon: "batch_silent_raiders.png" },
+    { maxRank: 136,name: "Outer Rim Sailors",   icon: "batch_outer_rim_sailors.png" }
+  ];
+
+  function updateBatch() {
+    const rankNewText = document.getElementById("rankNew").innerText.trim();
+    const newRank = parseInt(rankNewText, 10);
+    const batchNameEl = document.getElementById("batchName");
+    const batchIconEl = document.getElementById("batchIcon");
+
+    if (isNaN(newRank)) {
+      batchNameEl.textContent = "Batch will auto-select";
+      batchIconEl.src = "";
+      return;
+    }
+    const selected = batches.find(b => newRank <= b.maxRank) || batches[batches.length - 1];
+    batchNameEl.textContent = selected.name;
+    batchIconEl.src = selected.icon; // make sure these files exist
+  }
+
+  /* ===== Photo Upload ===== */
+  const photoInput = document.getElementById('photoInput');
+  const photoPreview = document.getElementById('photoPreview');
+
+  photoInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      photoPreview.src = e.target.result;
+      localStorage.setItem("pm_card_photo", e.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const savedPhoto = localStorage.getItem("pm_card_photo");
+  if (savedPhoto) photoPreview.src = savedPhoto;
+
+  /* ===== PnL Upload ===== */
+  const pnlInput = document.getElementById('pnlInput');
+  const pnlPreview = document.getElementById('pnlPreview');
+  const pnlPlaceholder = document.getElementById('pnlPlaceholder');
+
+  pnlInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      pnlPreview.src = e.target.result;
+      pnlPreview.style.display = "block";
+      pnlPlaceholder.style.display = "none";
+      localStorage.setItem("pm_card_pnl", e.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const savedPnl = localStorage.getItem("pm_card_pnl");
+  if (savedPnl) {
+    pnlPreview.src = savedPnl;
+    pnlPreview.style.display = "block";
+    pnlPlaceholder.style.display = "none";
+  }
+
+  /* ===== Trade Parsing & Pearl Logic =====
+     +40 Pearl: num between 40 and 55 (inclusive)
+     -40 Pearl: num between -25 and -55 (inclusive)
+  */
+  function parseTrades(str) {
+    if (!str) return { points: 0, pearls: 0 };
+    const parts = str.split(",").map(s => s.trim()).filter(s => s && s !== "—" && s !== "-");
+    let points = 0;
+    let pearls = 0;
+
+    parts.forEach(v => {
+      const num = parseInt(v, 10);
+      if (!isNaN(num)) {
+        points += num;
+        if (num >= 40 && num <= 10000) pearls++;
+        else if (num <= -25 && num >= -55) pearls++;
+      }
+    });
+
+    return { points, pearls };
+  }
+
+  function calculateAll() {
+    let totalPoints = 0;
+    let totalPearls = 0;
+
+    for (let i = 1; i <= 5; i++) {
+      const tEl = document.getElementById("t" + i);
+      const pEl = document.getElementById("p" + i);
+      const cEl = document.getElementById("c" + i);
+      const text = tEl.innerText.trim();
+
+      const { points, pearls } = parseTrades(text);
+      totalPoints += points;
+      totalPearls += pearls;
+
+      pEl.textContent = points ? points : "";
+      cEl.textContent = pearls ? pearls : "";
+    }
+
+    document.getElementById("totalPoints").textContent = totalPoints;
+    document.getElementById("totalPearls").textContent = totalPearls;
+
+    renderPearls(totalPearls);
+    updateBatch();
+    saveData();
+  }
+
+  function renderPearls(count) {
+    const track = document.getElementById("pearlsTrack");
+    track.innerHTML = "";
+    const maxDots = Math.min(count, 20);
+    for (let i = 0; i < maxDots; i++) {
+      const dot = document.createElement("div");
+      dot.className = "pearl-dot";
+      track.appendChild(dot);
+    }
+  }
+
+  /* ===== Save & Load ===== */
+  function saveData() {
+    const data = {
+      name: document.getElementById("name").innerText,
+      month: document.getElementById("month").innerText,
+      rankOld: document.getElementById("rankOld").innerText,
+      rankNew: document.getElementById("rankNew").innerText,
+      t1: document.getElementById("t1").innerText,
+      t2: document.getElementById("t2").innerText,
+      t3: document.getElementById("t3").innerText,
+      t4: document.getElementById("t4").innerText,
+      t5: document.getElementById("t5").innerText
+    };
+    localStorage.setItem("pearlmind_card_v3", JSON.stringify(data));
+  }
+
+  function loadData() {
+    const raw = localStorage.getItem("pearlmind_card_v3");
+    if (!raw) {
+      calculateAll();
+      return;
+    }
+    try {
+      const d = JSON.parse(raw);
+      document.getElementById("name").innerText = d.name || "Your Name";
+      document.getElementById("month").innerText = d.month || "Month: Oct 2025";
+      document.getElementById("rankOld").innerText = d.rankOld || "136";
+      document.getElementById("rankNew").innerText = d.rankNew || "127";
+      document.getElementById("t1").innerText = d.t1 || "";
+      document.getElementById("t2").innerText = d.t2 || "";
+      document.getElementById("t3").innerText = d.t3 || "";
+      document.getElementById("t4").innerText = d.t4 || "";
+      document.getElementById("t5").innerText = d.t5 || "";
+      calculateAll();
+    } catch (e) {
+      console.error(e);
+      calculateAll();
+    }
+  }
+
+  function resetData() {
+    if (!confirm("Clear this card on this device?")) return;
+    localStorage.removeItem("pearlmind_card_v3");
+    localStorage.removeItem("pm_card_photo");
+    localStorage.removeItem("pm_card_pnl");
+    location.reload();
+  }
+
+  ["name","month","rankOld","rankNew","t1","t2","t3","t4","t5"].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => {
+      if (id.startsWith("t")) {
+        calculateAll();
+      } else {
+        updateBatch();
+        saveData();
+      }
+    });
+  });
+
+  loadData();
+
+  /* ===== Share as Image ===== */
+  async function shareCard() {
+    const node = document.getElementById("captureArea");
+    const canvas = await html2canvas(node, { scale: 2 });
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], "pearlmind_card.png", { type: "image/png" });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "My Pearl Mind Trader Card",
+            text: "Here is my Pearl Mind monthly trading card."
+          });
+        } catch (e) {
+          console.log("Share cancelled", e);
+        }
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "pearlmind_card.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
