@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pearl Mind – Hall of Fame</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    html, body {
+        height: 100%;
+        background: #000;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+        color: #fff;
+        overflow: hidden; /* avoid scrolling */
+    }
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .container {
+        width: 100%;
+        max-width: 420px;
+        height: 100vh;               /* full screen */
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .card {
+        width: 100%;
+        height: 100%;
+        background: #101010;
+        border-radius: 18px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.06);
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: #D8C27A;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 11px;
+        color: #aaa;
+        margin-bottom: 6px;
+    }
+
+    /* Layout: top / mid / bottom */
+    .top {
+        flex: 0 0 26%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .mid {
+        flex: 0 0 52%;
+        margin-top: 4px;
+    }
+
+    .bottom {
+        flex: 0 0 22%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-top: 6px;
+    }
+
+    /* Photo + Info */
+    .photo-box {
+        flex: 0 0 70px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #222;
+        border: 2px solid #D8C27A;
+        overflow: hidden;
+    }
+    .photo-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    #photoInput {
+        display: none;
+    }
+    .photo-label {
+        font-size: 10px;
+        color: #888;
+        text-align: center;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+    .info {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 4px;
+        font-size: 11px;
+    }
+    .field-label {
+        font-size: 10px;
+        color: #D8C27A;
+    }
+    .field-input {
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #181818;
+        color: #fff;
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+    .field-input:focus {
+        outline: none;
+        border-color: #D8C27A;
+    }
+
+    .batch-display {
+        grid-column: 1 / span 2;
+    }
+
+    /* Weekly log */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10px;
+    }
+    th, td {
+        padding: 3px 2px;
+        text-align: center;
+    }
+    th {
+        color: #D8C27A;
+        font-weight: 600;
+        border-bottom: 1px solid #333;
+    }
+    td {
+        border-bottom: 1px solid #222;
+    }
+    .trade-input {
+        width: 100%;
+        border-radius: 4px;
+        border: 1px solid #252525;
+        background: #161616;
+        color: #fff;
+        font-size: 10px;
+        padding: 3px 4px;
+    }
+    .trade-input:focus {
+        outline: none;
+        border-color: #555;
+    }
+
+    .summary-row {
+        font-size: 11px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+    }
+
+    .summary-row span {
+        color: #D8C27A;
+    }
+
+    .emotion-input {
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #171717;
+        color: #fff;
+        font-size: 11px;
+        padding: 4px 6px;
+        resize: none;
+        height: 40px;
+    }
+    .emotion-input:focus {
+        outline: none;
+        border-color: #D8C27A;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    .btn {
+        flex: 1;
+        padding: 7px 0;
+        border-radius: 8px;
+        border: none;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .btn-primary {
+        background: #D8C27A;
+        color: #000;
+    }
+    .btn-ghost {
+        background: #1A1A1A;
+        color: #ccc;
+        border: 1px solid #333;
+    }
+
+    .save-note {
+        font-size: 9px;
+        color: #777;
+        text-align: center;
+        margin-top: 2px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <div>
+            <div class="title">⚓ PEARL MIND – HALL OF FAME</div>
+            <div class="subtitle">“Each day you trade with clarity, you add another Pearl to your Compass.”</div>
+        </div>
+
+        <!-- TOP SECTION -->
+        <div class="top">
+            <div>
+                <div class="photo-box" id="photoPreview"></div>
+                <label for="photoInput" class="photo-label">Tap to add photo</label>
+                <input type="file" id="photoInput" accept="image/*" />
+            </div>
+
+            <div class="info">
+                <div>
+                    <div class="field-label">Name</div>
+                    <input id="name" class="field-input" placeholder="Your Name" />
+                </div>
+                <div>
+                    <div class="field-label">Week</div>
+                    <input id="week" class="field-input" placeholder="e.g. 40" />
+                </div>
+                <div>
+                    <div class="field-label">Prev Rank</div>
+                    <input id="prevRank" class="field-input" placeholder="e.g. 136" />
+                </div>
+                <div>
+                    <div class="field-label">New Rank</div>
+                    <input id="newRank" class="field-input" placeholder="e.g. 127" />
+                </div>
+                <div class="batch-display">
+                    <div class="field-label">Batch</div>
+                    <input id="batch" class="field-input" readonly placeholder="Auto-picked from rank" />
+                </div>
+            </div>
+        </div>
+
+        <!-- MIDDLE SECTION -->
+        <div class="mid">
+            <table>
+                <tr>
+                    <th>Wk</th>
+                    <th>Trades (comma separated)</th>
+                    <th>Pts</th>
+                    <th>±40</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><input id="t1" class="trade-input" placeholder="+40, -25, +38" /></td>
+                    <td id="p1"></td>
+                    <td id="c1"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input id="t2" class="trade-input" /></td>
+                    <td id="p2"></td>
+                    <td id="c2"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input id="t3" class="trade-input" /></td>
+                    <td id="p3"></td>
+                    <td id="c3"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><input id="t4" class="trade-input" /></td>
+                    <td id="p4"></td>
+                    <td id="c4"></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><input id="t5" class="trade-input" /></td>
+                    <td id="p5"></td>
+                    <td id="c5"></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- BOTTOM SECTION -->
+        <div class="bottom">
+            <div>
+                <div class="summary-row">
+                    <div>Total Points: <span id="totalPoints">0</span></div>
+                    <div>Total Pearls (±40): <span id="totalPearls">0</span></div>
+                </div>
+                <textarea id="emotion" class="emotion-input" placeholder="Emotion / Remark (optional)"></textarea>
+            </div>
+
+            <div>
+                <div class="button-row">
+                    <button class="btn btn-ghost" onclick="resetData()">Reset</button>
+                    <button class="btn btn-primary" onclick="calculateAll()">Update</button>
+                </div>
+                <div class="save-note">Your Hall of Fame card is saved locally on this device.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ---------- Batch logic based on new rank ----------
+    function getBatchFromRank(rank) {
+        const r = parseInt(rank);
+        if (isNaN(r)) return "";
+        // You can adjust these ranges & names to your 9-batch system
+        if (r <= 20)  return "Black Pearl Elite";
+        if (r <= 50)  return "Captain’s Circle";
+        if (r <= 80)  return "Wave Riders";
+        if (r <= 120) return "Pointsmiths";
+        return "Deck Apprentices";
+    }
+
+    // ---------- Photo upload + save ----------
+    const photoInput = document.getElementById("photoInput");
+    const photoPreview = document.getElementById("photoPreview");
+
+    photoInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            photoPreview.innerHTML = "";
+            photoPreview.appendChild(img);
+            localStorage.setItem("pm_photo", e.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Load saved photo
+    const savedPhoto = localStorage.getItem("pm_photo");
+    if (savedPhoto) {
+        const img = document.createElement("img");
+        img.src = savedPhoto;
+        photoPreview.appendChild(img);
+    }
+
+    // ---------- Trade calculation ----------
+    function parseTrades(str) {
+        if (!str) return { points: 0, count40: 0 };
+        const parts = str.split(",").map(s => s.trim()).filter(x => x.length > 0);
+        let points = 0;
+        let count40 = 0;
+        parts.forEach(v => {
+            const num = parseInt(v, 10);
+            if (!isNaN(num)) {
+                points += num;
+                if (Math.abs(num) >= 40) count40++;
+            }
+        });
+        return { points, count40 };
+    }
+
+    function calculateAll() {
+        let totalPoints = 0;
+        let totalPearls = 0;
+
+        for (let i = 1; i <= 5; i++) {
+            const input = document.getElementById("t" + i);
+            const trades = input.value;
+            const { points, count40 } = parseTrades(trades);
+            totalPoints += points;
+            totalPearls += count40;
+            document.getElementById("p" + i).innerText = points || "";
+            document.getElementById("c" + i).innerText = count40 || "";
+        }
+
+        document.getElementById("totalPoints").innerText = totalPoints;
+        document.getElementById("totalPearls").innerText = totalPearls;
+
+        saveData();
+    }
+
+    // ---------- Save + Load data ----------
+    const fields = ["name", "week", "prevRank", "newRank", "batch", "t1", "t2", "t3", "t4", "t5", "emotion"];
+
+    function saveData() {
+        const data = {};
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) data[id] = el.value;
+        });
+        localStorage.setItem("pearlmind_hof", JSON.stringify(data));
+    }
+
+    function loadData() {
+        const raw = localStorage.getItem("pearlmind_hof");
+        if (!raw) return;
+        try {
+            const data = JSON.parse(raw);
+            fields.forEach(id => {
+                if (data[id] !== undefined) {
+                    const el = document.getElementById(id);
+                    if (el) el.value = data[id];
+                }
+            });
+            // Refresh batch and summary
+            const newRank = document.getElementById("newRank").value;
+            document.getElementById("batch").value = getBatchFromRank(newRank);
+            calculateAll();
+        } catch (e) {
+            console.error("Error loading saved data", e);
+        }
+    }
+
+    function resetData() {
+        if (!confirm("Clear this Hall of Fame card from this device?")) return;
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = "";
+        });
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById("p" + i).innerText = "";
+            document.getElementById("c" + i).innerText = "";
+        }
+        document.getElementById("totalPoints").innerText = "0";
+        document.getElementById("totalPearls").innerText = "0";
+        localStorage.removeItem("pearlmind_hof");
+    }
+
+    // Auto batch when new rank changes
+    document.getElementById("newRank").addEventListener("input", function () {
+        document.getElementById("batch").value = getBatchFromRank(this.value);
+        saveData();
+    });
+
+    // Save on input changes
+    ["name","week","prevRank","t1","t2","t3","t4","t5","emotion"].forEach(id => {
+        const el = document.getElementById(id);
+        el.addEventListener("input", () => {
+            if (id.startsWith("t")) {
+                // if trades changed, recalc
+                calculateAll();
+            } else {
+                saveData();
+            }
+        });
+    });
+
+    // Initial load
+    loadData();
+</script>
+
+</body>
+</html>
