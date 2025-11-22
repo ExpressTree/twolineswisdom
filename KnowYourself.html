@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Calm Trader – Sacred -40 Mindset Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Inter",sans-serif;
+    background:#050505;
+    color:#f5f5f5;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:16px;
+  }
+  .app{
+    width:100%;
+    max-width:960px;
+    background:radial-gradient(circle at top,#1b1b1b 0%,#050505 55%,#000 100%);
+    border-radius:20px;
+    border:1px solid rgba(255,215,128,0.25);
+    box-shadow:0 0 35px rgba(0,0,0,0.9);
+    padding:18px 18px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .app-header{
+    text-align:center;
+    margin-bottom:4px;
+  }
+  .title{
+    font-size:22px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-weight:700;
+    background:linear-gradient(to right,#ffe9a6,#f0d27a,#d29b3b);
+    -webkit-background-clip:text;
+    color:transparent;
+  }
+  .subtitle{
+    font-size:12px;
+    color:#c9b275;
+    margin-top:4px;
+  }
+  .section-title{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+    color:#f0d27a;
+    margin-bottom:6px;
+  }
+  .section{
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.02);
+    padding:12px;
+  }
+
+  /* Profile section */
+  .profile-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .photo-wrapper{
+    display:flex;
+    justify-content:center;
+    flex:0 0 120px;
+  }
+  .photo-box{
+    width:120px;
+    height:120px;
+    border-radius:16px; /* square with round corners */
+    border:2px solid #f0d27a;
+    overflow:hidden;
+    background:#111;
+    cursor:pointer;
+    box-shadow:0 0 20px rgba(255,215,128,0.25);
+  }
+  .photo-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  #photoInput{display:none;}
+
+  .profile-fields{
+    flex:1;
+    min-width:200px;
+    padding:4px 4px 4px 0;
+  }
+
+  .name-display{
+    font-size:26px;
+    font-weight:800;
+    background:linear-gradient(to right,#ffe9a6,#f4d37a,#cc9432);
+    -webkit-background-clip:text;
+    color:transparent;
+    margin-bottom:6px;
+  }
+  .profile-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    font-size:12px;
+    color:#e7e7e7;
+  }
+  .profile-col{
+    min-width:140px;
+  }
+  .label{
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    color:#a89a64;
+    margin-bottom:2px;
+  }
+  .input-line{
+    border:none;
+    border-bottom:1px dashed rgba(240,210,122,0.4);
+    background:transparent;
+    color:#f5f5f5;
+    font-size:12px;
+    padding:2px 0;
+    width:100%;
+    outline:none;
+  }
+  select.input-line{
+    padding-right:16px;
+  }
+
+  /* Questions */
+  .questions-intro{
+    font-size:11px;
+    color:#d1c086;
+    margin-bottom:8px;
+    line-height:1.5;
+  }
+  .question{
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.06);
+    padding:8px 8px 6px;
+    margin-bottom:8px;
+    background:rgba(0,0,0,0.35);
+  }
+  .q-text{
+    font-size:12px;
+    margin-bottom:6px;
+  }
+  .scale-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+  }
+  .scale-label{
+    font-size:10px;
+    color:#a19c84;
+    white-space:nowrap;
+  }
+  .scale-options{
+    display:flex;
+    gap:4px;
+    flex:1;
+    justify-content:space-between;
+  }
+  .scale-options label{
+    font-size:10px;
+    color:#cfcfcf;
+    text-align:center;
+    flex:1;
+    cursor:pointer;
+  }
+  .scale-options input{
+    margin-bottom:2px;
+  }
+
+  .btn-main{
+    margin-top:8px;
+    width:100%;
+    padding:10px 0;
+    border-radius:999px;
+    border:none;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+    background:linear-gradient(135deg,#f0d27a,#d29b3b);
+    color:#000;
+    cursor:pointer;
+  }
+
+  /* Results */
+  #resultsSection{
+    display:none;
+  }
+  .result-card{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .result-header{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .result-photo{
+    width:80px;
+    height:80px;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid #f0d27a;
+    background:#111;
+  }
+  .result-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .result-main{
+    flex:1;
+    min-width:200px;
+  }
+  .result-name{
+    font-size:20px;
+    font-weight:700;
+    background:linear-gradient(to right,#ffe9a6,#f4d37a,#cc9432);
+    -webkit-background-clip:text;
+    color:transparent;
+  }
+  .result-sub{
+    font-size:11px;
+    color:#cbb573;
+    margin-top:2px;
+  }
+  .readiness-pill{
+    display:inline-block;
+    margin-top:6px;
+    padding:3px 8px;
+    border-radius:999px;
+    background:rgba(240,210,122,0.1);
+    border:1px solid rgba(240,210,122,0.6);
+    font-size:10px;
+    color:#f0d27a;
+  }
+  .readiness-score{
+    font-size:26px;
+    font-weight:700;
+    margin-top:2px;
+  }
+  .readiness-bar{
+    width:100%;
+    height:6px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.08);
+    overflow:hidden;
+    margin-top:4px;
+  }
+  .readiness-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg,#ffea9d,#f0d27a,#d29b3b);
+    width:0%;
+  }
+  .readiness-text{
+    font-size:11px;
+    margin-top:6px;
+    color:#e8e0ba;
+    line-height:1.5;
+  }
+
+  .dimension-grid{
+    margin-top:10px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:6px;
+  }
+  .dimension-card{
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.08);
+    padding:6px;
+    background:rgba(0,0,0,0.35);
+    font-size:11px;
+  }
+  .dim-name{
+    font-weight:600;
+    color:#f0d27a;
+    margin-bottom:2px;
+  }
+  .dim-score-line{
+    font-size:11px;
+    color:#ddd;
+  }
+  .dim-tag{
+    font-size:10px;
+    color:#b69a5c;
+    margin-top:2px;
+  }
+
+  .leaks-block,.edges-block{
+    margin-top:8px;
+    font-size:11px;
+    line-height:1.5;
+  }
+  .leaks-block ul,.edges-block ul{
+    margin-top:4px;
+    padding-left:16px;
+  }
+
+  .forty-conclusion{
+    margin-top:10px;
+    font-size:11px;
+    color:#f3e4b0;
+    border-radius:10px;
+    border:1px solid rgba(240,210,122,0.6);
+    background:rgba(240,210,122,0.08);
+    padding:8px;
+  }
+
+  .footer-note{
+    margin-top:6px;
+    font-size:10px;
+    color:#8f8f8f;
+  }
+
+  @media (max-width:600px){
+    .app{
+      padding:14px 12px 18px;
+      border-radius:16px;
+    }
+    .title{font-size:18px;}
+    .name-display{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="app-header">
+    <div class="title">The Calm Trader</div>
+    <div class="subtitle">Sacred -40 Mindset Test • Discover if your mind is ready to make -40 your identity</div>
+  </div>
+
+  <!-- SECTION 1: Profile -->
+  <div class="section">
+    <div class="section-title">Step 1 — Your Profile</div>
+    <div class="profile-row">
+      <div class="photo-wrapper">
+        <div class="photo-box" onclick="document.getElementById('photoInput').click()">
+          <img id="photoPreview" alt="">
+        </div>
+        <input type="file" id="photoInput" accept="image/*">
+      </div>
+      <div class="profile-fields">
+        <div class="name-display" id="nameDisplay">Your Name</div>
+        <div class="profile-grid">
+          <div class="profile-col">
+            <div class="label">Full Name</div>
+            <input id="nameInput" class="input-line" placeholder="Type your trading name...">
+          </div>
+          <div class="profile-col">
+            <div class="label">Experience Level</div>
+            <select id="experienceInput" class="input-line">
+              <option value="New / Learning">New / Learning</option>
+              <option value="Intermediate / Building Consistency">Intermediate / Building Consistency</option>
+              <option value="Advanced / Full-Time Mindset">Advanced / Full-Time Mindset</option>
+            </select>
+          </div>
+          <div class="profile-col">
+            <div class="label">Primary Style</div>
+            <select id="styleInput" class="input-line">
+              <option value="Intraday Index">Intraday Index</option>
+              <option value="Intraday Stocks">Intraday Stocks</option>
+              <option value="Swing / Positional">Swing / Positional</option>
+              <option value="Options / Strategies">Options / Strategies</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Questions -->
+  <div class="section">
+    <div class="section-title">Step 2 — Answer Honestly</div>
+    <div class="questions-intro">
+      Rate each statement from <b>1 (Never)</b> to <b>7 (Always)</b>.<br>
+      There are no right answers. We are measuring your <b>real behavior under pressure</b>, not your ideal self.
+    </div>
+    <div id="questions"></div>
+    <button class="btn-main" onclick="generateReport()">Generate My Mindset Report</button>
+  </div>
+
+  <!-- SECTION 3: Results -->
+  <div id="resultsSection" class="section">
+    <div class="section-title">Your -40 Mindset Profile</div>
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-photo"><img id="resultPhoto" alt=""></div>
+        <div class="result-main">
+          <div class="result-name" id="resultName">Trader Name</div>
+          <div class="result-sub" id="resultSummary">Profile summary will appear here.</div>
+          <div class="readiness-pill" id="readinessLabel">–40 Readiness: Pending</div>
+          <div class="readiness-score" id="readinessScore">0%</div>
+          <div class="readiness-bar">
+            <div class="readiness-bar-fill" id="readinessBarFill"></div>
+          </div>
+          <div class="readiness-text" id="readinessText"></div>
+        </div>
+      </div>
+
+      <div class="dimension-grid" id="dimensionGrid"></div>
+
+      <div class="edges-block">
+        <b>Your Natural Edges</b>
+        <ul id="edgesList"></ul>
+      </div>
+
+      <div class="leaks-block">
+        <b>Your Hidden Leaks</b>
+        <ul id="leaksList"></ul>
+      </div>
+
+      <div class="forty-conclusion" id="fortyConclusion"></div>
+
+      <div class="footer-note">
+        This result is an awareness tool, not financial advice.<br>
+        If you choose to adopt a fixed -40 stop, do it with capital you can truly afford to train with.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===========================
+   QUESTIONS & DIMENSIONS
+   =========================== */
+
+const dimensions = {
+  clarity:   { label: "🪶 Clarity",    desc: "Stop chasing indicators and start trusting price" },
+  courage:   { label: "🔥 Courage",    desc: "Enter trades without fear or hesitation" },
+  harmony:   { label: "⚖️ Harmony",    desc: "Balance routine with flexibility" },
+  awareness: { label: "🌿 Awareness",  desc: "Read market sentiment like a second language" },
+  resilience:{ label: "🪨 Resilience", desc: "Recover fast from losses without emotional drift" },
+  ease:      { label: "🌊 Ease",       desc: "Flow with the market instead of forcing outcome" },
+  discipline:{ label: "🏹 Discipline", desc: "Build repetition, not regret" },
+  attention: { label: "⏳ Attention",  desc: "Train your mind for focused execution" },
+  patience:  { label: "🌱 Patience",   desc: "Grow slow, grow strong, grow unshakeable" }
+};
+
+const questions = [
+  // Clarity
+  { id:"q1", dim:"clarity", polarity:"-", text:"I keep adding more indicators when I feel uncertain." },
+  { id:"q2", dim:"clarity", polarity:"+", text:"I can skip a trade even if it “looks tempting” but doesn’t match my plan." },
+
+  // Courage
+  { id:"q3", dim:"courage", polarity:"-", text:"I often hesitate and miss the entry even when my setup is clear." },
+  { id:"q4", dim:"courage", polarity:"+", text:"Once my rules are met, I can click the order without overthinking." },
+
+  // Harmony
+  { id:"q5", dim:"harmony", polarity:"-", text:"I trade even when I’m tired, angry, or emotionally charged." },
+  { id:"q6", dim:"harmony", polarity:"+", text:"I stop trading when my body or mind feels off, even if the market is moving." },
+
+  // Awareness
+  { id:"q7", dim:"awareness", polarity:"+", text:"I try to understand who is likely on the other side of the move (smart vs panicked money)." },
+  { id:"q8", dim:"awareness", polarity:"-", text:"I chase fast candles without checking the bigger-timeframe context." },
+
+  // Resilience
+  { id:"q9", dim:"resilience", polarity:"-", text:"After a loss, I feel a strong urge to immediately win it back." },
+  { id:"q10", dim:"resilience", polarity:"+", text:"I can close the platform for the day after my planned stop is hit." },
+
+  // Ease
+  { id:"q11", dim:"ease", polarity:"-", text:"I feel frustrated when the market doesn’t move the way I want." },
+  { id:"q12", dim:"ease", polarity:"+", text:"I’m okay with the market doing nothing; I don’t need to force a trade." },
+
+  // Discipline
+  { id:"q13", dim:"discipline", polarity:"+", text:"I can follow a fixed stop-loss level without adjusting it during the trade." },
+  { id:"q14", dim:"discipline", polarity:"-", text:"I move my stop-loss further away once price comes close to it." },
+
+  // Attention
+  { id:"q15", dim:"attention", polarity:"-", text:"I keep switching between charts, social media, and news while in a trade." },
+  { id:"q16", dim:"attention", polarity:"+", text:"During live entries, I can ignore all distractions and stay with the chart." },
+
+  // Patience
+  { id:"q17", dim:"patience", polarity:"-", text:"I feel uncomfortable sitting on the sidelines for multiple days." },
+  { id:"q18", dim:"patience", polarity:"+", text:"I’m okay taking fewer trades if they’re high-quality trades." }
+];
+
+/* ===========================
+   BUILD QUESTIONS UI
+   =========================== */
+const questionsContainer = document.getElementById("questions");
+
+questions.forEach((q, idx)=>{
+  const qDiv = document.createElement("div");
+  qDiv.className = "question";
+  const num = idx+1;
+  qDiv.innerHTML = `
+    <div class="q-text"><b>Q${num}.</b> ${q.text}</div>
+    <div class="scale-row">
+      <div class="scale-label">1 = Never</div>
+      <div class="scale-options">
+        ${[1,2,3,4,5,6,7].map(v=>`
+          <label>
+            <input type="radio" name="${q.id}" value="${v}">
+            ${v}
+          </label>
+        `).join("")}
+      </div>
+      <div class="scale-label">7 = Always</div>
+    </div>
+  `;
+  questionsContainer.appendChild(qDiv);
+});
+
+/* ===========================
+   VARIATION POOLS
+   =========================== */
+const readinessLabels = {
+  low: [
+    "–40 Readiness: Not Ready",
+    "–40 Frame: Foundation Still Fragile",
+    "Risk Spine: Needs Reinforcement"
+  ],
+  mid: [
+    "–40 Readiness: On the Path",
+    "–40 Frame: Forming",
+    "Risk Spine: Almost Stable"
+  ],
+  high: [
+    "–40 Readiness: Ready to Anchor",
+    "–40 Frame: Strong",
+    "Risk Spine: Built for Scale"
+  ]
+};
+
+const readinessExplLow = [
+  "Until your losses become predictable, your wins will stay random. Your first task is not to earn more, but to break less.",
+  "You are still negotiating with losses. Masters don’t negotiate; they execute. Build one thing now: the ability to stop without bargaining.",
+  "Emotional extension after a loss is your biggest leak. Fix that, and half your future pain disappears."
+];
+
+const readinessExplMid = [
+  "Your discipline is rising, but volatility still pulls your hand. One more layer of boundary will transform your curve.",
+  "You are building a stable base. Lock your maximum loss per trade, and your nervous system will start trusting you.",
+  "You’re almost there — your mind understands risk, but your behavior still bends under pressure. Train the stop, not the result."
+];
+
+const readinessExplHigh = [
+  "Your risk boundaries are becoming reliable. This is the first real requirement before scaling size safely.",
+  "You’re trading like a professional in the making — calm in loss, patient in profit. Now turn this into a 151-week identity.",
+  "Your system can finally protect you instead of punish you. From here, growth is math, not emotion."
+];
+
+const dimTagStrong = [
+  "A visible strength — keep it polished.",
+  "This is your natural advantage.",
+  "You operate with clarity here.",
+  "This area supports your trading backbone."
+];
+const dimTagStable = [
+  "Stable and supportive. Maintain this muscle.",
+  "Reliable enough to lean on.",
+  "This keeps you centered when the market moves.",
+  "No major leak here — just refine."
+];
+const dimTagWeak = [
+  "Some friction appears under stress. Smooth this edge.",
+  "You wobble here when volatility increases.",
+  "A small leak now can become a flood later.",
+  "This is where doubt and noise sneak in."
+];
+const dimTagCritical = [
+  "This is burning more energy and capital than you notice.",
+  "Many of your spirals start from this weakness.",
+  "Your biggest emotional swings originate here.",
+  "Address this now — everything else depends on it."
+];
+
+const edgesLines = [
+  "Use these strengths as anchors when the market tests you.",
+  "These traits are already working for you — protect them.",
+  "Build your trading system around these natural edges.",
+  "These are the qualities that separate you from random traders."
+];
+
+const leaksLines = [
+  "These leaks quietly tax your P&L and your energy.",
+  "Most of your avoidable losses are born here.",
+  "If you fix just these leaks, your future equity curve changes shape.",
+  "Treat these as your top 90-day training priorities."
+];
+
+const fortyConclusionPool = [
+  "For you, -40 is not a punishment. It is a safety rail that protects your nervous system while you practice execution.",
+  "If you adopt a fixed -40 stop, you remove negotiation, drama, and slow bleeding. The market becomes a training ground, not a battlefield.",
+  "Your next evolution is simple: accept -40 as the tuition cost of trading. Pay it cleanly, without story — and let +40 handle the upside.",
+  "Every professional has a hard floor. For you, that floor can be -40. Once that is non-negotiable, your mind is finally free to focus on entries."
+];
+
+/* Utility for random pick */
+function pickRandom(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+/* ===========================
+   SCORING LOGIC
+   =========================== */
+
+function generateReport(){
+  // Read answers
+  const scoresByDim = {};
+  const countsByDim = {};
+  let answeredCount = 0;
+
+  questions.forEach(q=>{
+    const radios = document.querySelectorAll(`input[name="${q.id}"]`);
+    let val = null;
+    radios.forEach(r=>{ if(r.checked) val = parseInt(r.value,10); });
+    if(!val) return; // unanswered
+    answeredCount++;
+
+    // polarity adjustment -> higher is always "better"
+    let adj;
+    if(q.polarity === "+"){
+      adj = val; // 1–7
+    }else{
+      adj = 8 - val; // invert 1–7 -> 7–1
+    }
+
+    scoresByDim[q.dim] = (scoresByDim[q.dim] || 0) + adj;
+    countsByDim[q.dim] = (countsByDim[q.dim] || 0) + 1;
+  });
+
+  if(answeredCount < questions.length){
+    alert("Please answer all questions before generating your report.");
+    return;
+  }
+
+  // compute dimension averages
+  const dimArray = [];
+  for(const key in dimensions){
+    const total = scoresByDim[key] || 0;
+    const count = countsByDim[key] || 1;
+    const avg = total / count; // 1–7
+    dimArray.push({
+      key,
+      label: dimensions[key].label,
+      desc: dimensions[key].desc,
+      avg
+    });
+  }
+
+  // overall readiness index (percent)
+  const overallAvg = dimArray.reduce((s,d)=>s+d.avg,0)/dimArray.length; // 1–7
+  const readinessPercent = Math.round((overallAvg - 1)/6 * 100);
+
+  // categorize
+  let band, labelArr, explArr;
+  if(readinessPercent < 40){
+    band = "low";
+    labelArr = readinessLabels.low;
+    explArr = readinessExplLow;
+  }else if(readinessPercent < 75){
+    band = "mid";
+    labelArr = readinessLabels.mid;
+    explArr = readinessExplMid;
+  }else{
+    band = "high";
+    labelArr = readinessLabels.high;
+    explArr = readinessExplHigh;
+  }
+
+  // sort dimensions (high to low)
+  dimArray.sort((a,b)=>b.avg - a.avg);
+
+  // top edges & leaks
+  const topEdges = dimArray.slice(0,3);
+  const topLeaks = dimArray.slice(-3);
+
+  // UPDATE UI
+  const resultsSection = document.getElementById("resultsSection");
+  resultsSection.style.display = "block";
+
+  // photo & name
+  const name = document.getElementById("nameInput").value.trim() || "Calm Trader";
+  document.getElementById("resultName").textContent = name;
+  document.getElementById("nameDisplay").textContent = name;
+  const photoPreview = document.getElementById("photoPreview");
+  const resultPhoto = document.getElementById("resultPhoto");
+  if(photoPreview.src){
+    resultPhoto.src = photoPreview.src;
+  }
+
+  // summary line
+  const exp = document.getElementById("experienceInput").value;
+  const style = document.getElementById("styleInput").value;
+  document.getElementById("resultSummary").textContent =
+    `${exp} • ${style} • Sacred -40 Mindset Snapshot`;
+
+  // readiness
+  document.getElementById("readinessLabel").textContent = pickRandom(labelArr);
+  document.getElementById("readinessScore").textContent = readinessPercent + "%";
+  document.getElementById("readinessBarFill").style.width = readinessPercent + "%";
+  document.getElementById("readinessText").textContent = pickRandom(explArr);
+
+  // dimension grid
+  const grid = document.getElementById("dimensionGrid");
+  grid.innerHTML = "";
+  dimArray.forEach(d=>{
+    const pct = Math.round((d.avg -1)/6 * 100);
+    let tagSet;
+    if(pct >= 80) tagSet = dimTagStrong;
+    else if(pct >= 60) tagSet = dimTagStable;
+    else if(pct >= 40) tagSet = dimTagWeak;
+    else tagSet = dimTagCritical;
+
+    const card = document.createElement("div");
+    card.className = "dimension-card";
+    card.innerHTML = `
+      <div class="dim-name">${d.label}</div>
+      <div class="dim-score-line">${pct}% • ${d.desc}</div>
+      <div class="dim-tag">${pickRandom(tagSet)}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // edges list
+  const edgesList = document.getElementById("edgesList");
+  edgesList.innerHTML = "";
+  topEdges.forEach(d=>{
+    const li = document.createElement("li");
+    li.textContent = `${d.label.split(" ").slice(0,2).join(" ")} — this is already working for you. Trade from this state.`;
+    edgesList.appendChild(li);
+  });
+  const edgesExtra = document.createElement("li");
+  edgesExtra.textContent = pickRandom(edgesLines);
+  edgesList.appendChild(edgesExtra);
+
+  // leaks list
+  const leaksList = document.getElementById("leaksList");
+  leaksList.innerHTML = "";
+  topLeaks.forEach(d=>{
+    const li = document.createElement("li");
+    li.textContent = `${d.label.split(" ").slice(0,2).join(" ")} — this is where most of your avoidable pain begins. Train this area deliberately.`;
+    leaksList.appendChild(li);
+  });
+  const leaksExtra = document.createElement("li");
+  leaksExtra.textContent = pickRandom(leaksLines);
+  leaksList.appendChild(leaksExtra);
+
+  // -40 conclusion
+  const forty = document.getElementById("fortyConclusion");
+  forty.textContent = pickRandom(fortyConclusionPool);
+
+  saveState();
+}
+
+/* ===========================
+   PHOTO & STATE SAVE
+   =========================== */
+
+const photoInput = document.getElementById("photoInput");
+const photoPreview = document.getElementById("photoPreview");
+
+photoInput.addEventListener("change", e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    photoPreview.src = ev.target.result;
+    saveState();
+  };
+  reader.readAsDataURL(file);
+});
+
+function saveState(){
+  const data = {
+    name: document.getElementById("nameInput").value,
+    exp: document.getElementById("experienceInput").value,
+    style: document.getElementById("styleInput").value,
+    photo: photoPreview.src || ""
+  };
+  localStorage.setItem("calm_trader_40test_state", JSON.stringify(data));
+}
+
+function loadState(){
+  const raw = localStorage.getItem("calm_trader_40test_state");
+  if(!raw) return;
+  try{
+    const d = JSON.parse(raw);
+    if(d.name){
+      document.getElementById("nameInput").value = d.name;
+      document.getElementById("nameDisplay").textContent = d.name;
+    }
+    if(d.exp) document.getElementById("experienceInput").value = d.exp;
+    if(d.style) document.getElementById("styleInput").value = d.style;
+    if(d.photo){
+      photoPreview.src = d.photo;
+      document.getElementById("resultPhoto").src = d.photo;
+    }
+  }catch(e){
+    console.warn("State load error", e);
+  }
+}
+
+// Live name sync
+document.getElementById("nameInput").addEventListener("input", e=>{
+  const v = e.target.value.trim() || "Your Name";
+  document.getElementById("nameDisplay").textContent = v;
+  saveState();
+});
+document.getElementById("experienceInput").addEventListener("change", saveState);
+document.getElementById("styleInput").addEventListener("change", saveState);
+
+loadState();
+</script>
+
+</body>
+</html>
