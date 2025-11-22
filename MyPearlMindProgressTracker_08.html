@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pearl Mind – Trader Card V5</title>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    background: #000;
+    font-family: "Inter", system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  .frame {
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    padding: 14px;
+    background: radial-gradient(circle at top, #262626 0%, #050505 55%, #000 100%);
+    border: 1px solid rgba(255,215,128,0.35);
+    box-shadow: 0 0 35px rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Brand strip */
+  .brand {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #f5e1a0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .brand-left { font-weight: 700; }
+  .brand-right { color: #b7943f; font-size: 10px; }
+
+  /* PHOTO CENTER */
+  .photo-block {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .photo-box {
+    width: 120px;
+    height: 120px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid #f9d777;
+    background: #111;
+    cursor: pointer;
+    box-shadow: 0 0 24px rgba(255,215,128,0.35);
+  }
+  .photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #photoInput { display: none; }
+
+  /* Rank & Month–Name–Total */
+  .info-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr;
+    gap: 12px;
+    color: #f6e7b4;
+  }
+
+  .rank-box {
+    text-align: left;
+    font-size: 13px;
+    color: #cbb37d;
+  }
+  .rank-label {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11px;
+  }
+  .rank-big {
+    margin-top: 4px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #f9e4a6;
+  }
+  .rank-big span {
+    display: inline-block;
+    min-width: 28px;
+  }
+
+  .right-box {
+    text-align: right;
+    font-size: 13px;
+    color: #e9ddaa;
+  }
+  .month-text {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .name-text {
+    margin-top: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fdf2c0;
+  }
+  .total-text {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #c3aa65;
+  }
+  .editable {
+    outline: none;
+    border: none;
+  }
+
+  /* Horizontal Batch Banner */
+  .batch-banner-row {
+    margin-top: 10px;
+  }
+  .batch-banner-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8e7a40;
+    margin-bottom: 4px;
+  }
+  .batch-banner-box {
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,215,128,0.4);
+    background: linear-gradient(90deg, #3a2b10, #17120a, #3a2b10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .batch-banner-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none; /* hidden until set */
+  }
+  .batch-banner-text {
+    position: absolute;
+    z-index: 2;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(to bottom, #ffeeb7, #d7a745);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,215,128,0.6), transparent);
+    margin: 10px 0;
+  }
+
+  /* Weekly box */
+  .trades-box {
+    border-radius: 18px;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.35);
+  }
+
+  .trades-header {
+    display: grid;
+    grid-template-columns: 0.6fr 3.2fr 0.9fr 1.3fr;
+    color: #c8aa63;
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+  .trade-row {
+    display: grid;
+    grid-template-columns: 0.6fr 3.2fr 0.9fr 1.3fr;
+    color: #fdfbf0;
+    font-size: 12px;
+    padding: 3px 0;
+    align-items: center;
+  }
+  .trade-row:nth-child(odd + 1) {
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+  }
+  .trade-week {
+    color: #a18c4c;
+    font-size: 11px;
+  }
+  .trade-edit {
+    outline: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1px 0;
+  }
+  .trade-points {
+    text-align: right;
+    font-size: 13px;
+    color: #f1ddb1;
+  }
+  .trade-count {
+    text-align: right;
+    font-size: 11px;
+    color: #d9b561;
+  }
+
+  /* PnL box */
+  .pnl-box {
+    margin-top: 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,215,128,0.35);
+    background: #111;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .pnl-box img {
+    width: 100%;
+    height: 100%;
+    display: none;
+    object-fit: contain;
+    background: #000;
+  }
+  .pnl-placeholder {
+    color: #d6b96c;
+    font-size: 11px;
+    padding: 10px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  #pnlInput { display: none; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 0;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .btn-primary {
+    background: #f3d477;
+    color: #000;
+  }
+  .btn-ghost {
+    background: #222;
+    color: #f5f5f5;
+  }
+
+  .hint {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 9px;
+    color: #777;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div id="captureArea" class="card">
+
+    <!-- BRAND -->
+    <div class="brand">
+      <div class="brand-left">THE PEARL MIND</div>
+      <div class="brand-right">Trader Identity • Monthly Card</div>
+    </div>
+
+    <!-- PHOTO -->
+    <div class="photo-block">
+      <div class="photo-box" onclick="document.getElementById('photoInput').click()">
+        <img id="photoPreview" alt="">
+      </div>
+      <input type="file" id="photoInput" accept="image/*">
+    </div>
+
+    <!-- Rank & Month–Name–Total -->
+    <div class="info-grid">
+      <div class="rank-box">
+        <div class="rank-label">Rank</div>
+        <div class="rank-big">
+          <span id="rankOld" class="editable" contenteditable="true">136</span>
+          &nbsp;→&nbsp;
+          <span id="rankNew" class="editable" contenteditable="true">127</span>
+        </div>
+      </div>
+      <div class="right-box">
+        <div class="month-text editable" id="month" contenteditable="true">Oct 2025</div>
+        <div class="name-text editable" id="name" contenteditable="true">Your Name</div>
+        <div class="total-text">Total: <span id="totalPoints">0</span> pts</div>
+      </div>
+    </div>
+
+    <!-- Batch Banner -->
+    <div class="batch-banner-row">
+      <div class="batch-banner-label">Level</div>
+      <div class="batch-banner-box">
+        <img id="batchBannerImg" src="" alt="">
+        <div id="batchBannerText" class="batch-banner-text">BATCH NAME</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Weekly Breakdown -->
+    <div class="trades-box">
+      <div class="trades-header">
+        <div>Wk</div>
+        <div>Trades</div>
+        <div>Pts</div>
+        <div>+40 / -40</div>
+      </div>
+
+      <div class="trade-row">
+        <div class="trade-week">1</div>
+        <div id="t1" class="trade-edit editable" contenteditable="true">+40, +38, -25, +40</div>
+        <div id="p1" class="trade-points"></div>
+        <div id="c1" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-week">2</div>
+        <div id="t2" class="trade-edit editable" contenteditable="true">—, +45, +43, -40</div>
+        <div id="p2" class="trade-points"></div>
+        <div id="c2" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-week">3</div>
+        <div id="t3" class="trade-edit editable" contenteditable="true"></div>
+        <div id="p3" class="trade-points"></div>
+        <div id="c3" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-week">4</div>
+        <div id="t4" class="trade-edit editable" contenteditable="true"></div>
+        <div id="p4" class="trade-points"></div>
+        <div id="c4" class="trade-count"></div>
+      </div>
+      <div class="trade-row">
+        <div class="trade-week">5</div>
+        <div id="t5" class="trade-edit editable" contenteditable="true"></div>
+        <div id="p5" class="trade-points"></div>
+        <div id="c5" class="trade-count"></div>
+      </div>
+
+      <!-- PnL Upload -->
+      <div class="pnl-box" onclick="document.getElementById('pnlInput').click()">
+        <div id="pnlPlaceholder" class="pnl-placeholder">
+          Upload Real Monthly PnL Screenshot from Broker
+        </div>
+        <img id="pnlPreview" alt="">
+      </div>
+      <input type="file" id="pnlInput" accept="image/*">
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="resetData()">Reset</button>
+      <button class="btn btn-primary" onclick="calculateAll()">Update</button>
+      <button class="btn btn-primary" onclick="shareCard()">Share</button>
+    </div>
+    <div class="hint">All data & images are stored locally on this device only.</div>
+
+  </div>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+  // ------- ELEMENT REFERENCES -------
+  const elName        = document.getElementById("name");
+  const elMonth       = document.getElementById("month");
+  const elRankOld     = document.getElementById("rankOld");
+  const elRankNew     = document.getElementById("rankNew");
+  const elTotalPoints = document.getElementById("totalPoints");
+
+  const tEls = [
+    document.getElementById("t1"),
+    document.getElementById("t2"),
+    document.getElementById("t3"),
+    document.getElementById("t4"),
+    document.getElementById("t5"),
+  ];
+  const pEls = [
+    document.getElementById("p1"),
+    document.getElementById("p2"),
+    document.getElementById("p3"),
+    document.getElementById("p4"),
+    document.getElementById("p5"),
+  ];
+  const cEls = [
+    document.getElementById("c1"),
+    document.getElementById("c2"),
+    document.getElementById("c3"),
+    document.getElementById("c4"),
+    document.getElementById("c5"),
+  ];
+
+  const photoInput    = document.getElementById("photoInput");
+  const photoPreview  = document.getElementById("photoPreview");
+  const pnlInput      = document.getElementById("pnlInput");
+  const pnlPreview    = document.getElementById("pnlPreview");
+  const pnlPlaceholder= document.getElementById("pnlPlaceholder");
+
+  const batchBannerImg   = document.getElementById("batchBannerImg");
+  const batchBannerText  = document.getElementById("batchBannerText");
+
+  // ------- BATCH LEVELS (9 Levels) -------
+  const batchLevels = [
+    { maxRank: 1,   name: "BLACK PEARL ELITE",  banner: "banner_black_pearl_elite.png" },
+    { maxRank: 10,  name: "CAPTAIN'S CIRCLE",   banner: "banner_captains_circle.png" },
+    { maxRank: 30,  name: "WAVE RIDERS",        banner: "banner_wave_riders.png" },
+    { maxRank: 60,  name: "POINTSMITHS",        banner: "banner_pointsmiths.png" },
+    { maxRank: 90,  name: "COMPASS KEEPERS",    banner: "banner_compass_keepers.png" },
+    { maxRank: 110, name: "DECK APPRENTICES",   banner: "banner_deck_apprentices.png" },
+    { maxRank: 120, name: "HARBOUR WATCHERS",   banner: "banner_harbour_watchers.png" },
+    { maxRank: 128, name: "SILENT RAIDERS",     banner: "banner_silent_raiders.png" },
+    { maxRank: 136, name: "OUTER RIM SAILORS",  banner: "banner_outer_rim_sailors.png" }
+  ];
+
+  function updateBatch() {
+    const r = parseInt(elRankNew.innerText.trim(), 10);
+    if (isNaN(r)) {
+      batchBannerText.textContent = "BATCH NAME";
+      batchBannerImg.style.display = "none";
+      return;
+    }
+    const b = batchLevels.find(x => r <= x.maxRank) || batchLevels[batchLevels.length - 1];
+    batchBannerText.textContent = b.name;
+    if (b.banner) {
+      batchBannerImg.src = b.banner; // you provide these files
+      batchBannerImg.style.display = "block";
+    } else {
+      batchBannerImg.style.display = "none";
+    }
+  }
+
+  // ------- TRADE PARSER (±40 LOGIC) -------
+  // +40 trade: value between 25 and +∞
+  // -40 trade: value between 0 and -55
+  function parseTrades(str) {
+    if (!str) return { points: 0, pos40: 0, neg40: 0 };
+    const parts = str
+      .split(",")
+      .map(s => s.trim())
+      .filter(s => s && s !== "—" && s !== "-");
+
+    let points = 0;
+    let pos40 = 0;
+    let neg40 = 0;
+
+    parts.forEach(v => {
+      const n = parseFloat(v);
+      if (isNaN(n)) return;
+      points += n;
+
+      if (n >= 25) pos40++;
+      else if (n <= 0 && n >= -55) neg40++;
+    });
+
+    return { points, pos40, neg40 };
+  }
+
+  function calculateAll() {
+    let total = 0;
+
+    for (let i = 0; i < 5; i++) {
+      const txt = tEls[i].innerText.trim();
+      const out = parseTrades(txt);
+      total += out.points;
+      pEls[i].innerText = out.points ? out.points : "";
+      cEls[i].innerText = (out.pos40 || out.neg40) ? (out.pos40 + " / " + out.neg40) : "";
+    }
+
+    elTotalPoints.innerText = total;
+    saveData();
+    updateBatch();
+  }
+
+  // ------- PHOTO UPLOAD -------
+  photoInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      photoPreview.src = ev.target.result;
+      localStorage.setItem("pm_photo_v5", ev.target.result);
+    };
+    r.readAsDataURL(file);
+  });
+
+  // ------- PNL UPLOAD -------
+  pnlInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      pnlPreview.src = ev.target.result;
+      pnlPreview.style.display = "block";
+      pnlPlaceholder.style.display = "none";
+      localStorage.setItem("pm_pnl_v5", ev.target.result);
+    };
+    r.readAsDataURL(file);
+  });
+
+  // ------- SAVE & LOAD -------
+  function saveData() {
+    const data = {
+      name:    elName.innerText,
+      month:   elMonth.innerText,
+      rankOld: elRankOld.innerText,
+      rankNew: elRankNew.innerText,
+      t1: tEls[0].innerText,
+      t2: tEls[1].innerText,
+      t3: tEls[2].innerText,
+      t4: tEls[3].innerText,
+      t5: tEls[4].innerText
+    };
+    localStorage.setItem("pm_card_v5", JSON.stringify(data));
+  }
+
+  function loadData() {
+    const raw = localStorage.getItem("pm_card_v5");
+    if (raw) {
+      try {
+        const d = JSON.parse(raw);
+        elName.innerText    = d.name    || "Your Name";
+        elMonth.innerText   = d.month   || "Oct 2025";
+        elRankOld.innerText = d.rankOld || "136";
+        elRankNew.innerText = d.rankNew || "127";
+        tEls[0].innerText   = d.t1 || "";
+        tEls[1].innerText   = d.t2 || "";
+        tEls[2].innerText   = d.t3 || "";
+        tEls[3].innerText   = d.t4 || "";
+        tEls[4].innerText   = d.t5 || "";
+      } catch(e) {
+        console.error("Load error:", e);
+      }
+    }
+    // images
+    const savedPhoto = localStorage.getItem("pm_photo_v5");
+    if (savedPhoto) photoPreview.src = savedPhoto;
+
+    const savedPnl = localStorage.getItem("pm_pnl_v5");
+    if (savedPnl) {
+      pnlPreview.src = savedPnl;
+      pnlPreview.style.display = "block";
+      pnlPlaceholder.style.display = "none";
+    }
+
+    calculateAll();
+  }
+
+  // attach input listeners
+  function attachListeners() {
+    [elName, elMonth, elRankOld, elRankNew, ...tEls].forEach(el => {
+      el.addEventListener("input", () => {
+        if (tEls.includes(el)) {
+          calculateAll();
+        } else {
+          saveData();
+          updateBatch();
+        }
+      });
+    });
+  }
+
+  function resetData() {
+    if (!confirm("Clear card data on this device?")) return;
+    localStorage.removeItem("pm_card_v5");
+    localStorage.removeItem("pm_photo_v5");
+    localStorage.removeItem("pm_pnl_v5");
+    location.reload();
+  }
+
+  async function shareCard() {
+    const node = document.getElementById("captureArea");
+    const canvas = await html2canvas(node, { scale: 2 });
+    canvas.toBlob(async blob => {
+      const file = new File([blob], "pearlmind_card.png", { type: "image/png" });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Pearl Mind – Trader Card",
+            text: "My monthly Pearl Mind trader card."
+          });
+        } catch(e) {
+          console.log("Share cancelled", e);
+        }
+      } else {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "pearlmind_card.png";
+        a.click();
+      }
+    });
+  }
+
+  // expose to HTML buttons
+  window.calculateAll = calculateAll;
+  window.resetData = resetData;
+  window.shareCard = shareCard;
+
+  // init
+  attachListeners();
+  loadData();
+</script>
+</body>
+</html>
