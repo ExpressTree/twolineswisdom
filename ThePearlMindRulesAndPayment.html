@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Pearl Mind™ – 40/40 Blueprint Rules & Subscription</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Aptos fallback (browser will gracefully use system sans-serif if not available) -->
+  <link href="https://fonts.googleapis.com/css2?family=Aptos:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050608;
+      --bg-soft: #0c0f16;
+      --surface: rgba(16, 18, 27, 0.96);
+      --border-soft: rgba(255, 255, 255, 0.14);
+      --border-strong: rgba(255, 215, 101, 0.6);
+      --text: #f6f7fb;
+      --muted: #c6cad8;
+      --muted-soft: #9ca3b8;
+      --gold-start: #FFD765;   /* metallic edge gold */
+      --gold-end: #E0A93F;
+      --accent: #7FF5FF;
+      --danger: #ff6b6b;
+      --success: #48ffb8;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.55);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Aptos", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #15192a 0, transparent 60%),
+        radial-gradient(circle at bottom right, #111827 0, #050608 55%);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background-image: conic-gradient(from 210deg, #18181b, #FFD765, #E0A93F, #111827);
+      box-shadow: 0 0 18px rgba(255, 215, 101, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 0, rgba(255,255,255,0.32), transparent 55%);
+      opacity: 0.7;
+    }
+
+    .brand-text h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .brand-text span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .top-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill-label {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: var(--muted-soft);
+      background: rgba(12, 15, 22, 0.9);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-image: linear-gradient(135deg, var(--gold-start), var(--gold-end));
+      color: #111111;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+      filter: brightness(1.04);
+    }
+
+    .btn-outline {
+      border-color: rgba(255, 215, 101, 0.6);
+      color: var(--gold-start);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 215, 101, 0.08);
+    }
+
+    .btn[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.05fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 32px;
+    }
+
+    .hero-main {
+      padding: 22px 22px 20px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 0 0, rgba(255,215,101,0.13), transparent 55%),
+                  radial-gradient(circle at 100% 100%, rgba(22,163,74,0.13), transparent 60%),
+                  linear-gradient(145deg, rgba(15,23,42,0.9), rgba(9,9,11,0.98));
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 10px;
+    }
+
+    .hero-tag span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+
+    .hero-title {
+      font-size: 26px;
+      margin: 6px 0 8px;
+      font-weight: 700;
+    }
+
+    .hero-title span.highlight {
+      background-image: linear-gradient(120deg, var(--gold-start), var(--gold-end));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 540px;
+    }
+
+    .hero-bullets {
+      margin: 16px 0 18px;
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero-bullets span.icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(34,197,94,0.08);
+      color: var(--success);
+      font-size: 11px;
+      margin-right: 6px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .hero-meta {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .hero-meta span.badge {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(34,197,94,0.09);
+      color: var(--success);
+      border: 1px solid rgba(34,197,94,0.4);
+      font-weight: 500;
+    }
+
+    /* 40/40 card + timer */
+    .hero-side {
+      position: relative;
+    }
+
+    .timer-pill {
+        /*position: absolute;*/
+        top: -10px;
+        right: 2px;
+        z-index: 2;
+        padding: 5px 10px;
+        border-radius: var(--radius-pill);
+        background: radial-gradient(circle at 0 0, rgb(214 159 4 / 60%), rgb(255 215 101 / 95%));
+        color: rgb(10 19 9 / 98%);
+        font-size: 18px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.85);
+    }
+
+    .timer-pill span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 9px rgba(248,113,113,0.9);
+    }
+
+    .timer-count {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 20px 18px 18px;
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at 0 0, rgba(255,215,101,0.2), transparent 60%),
+        radial-gradient(circle at 100% 120%, rgba(56,189,248,0.1), transparent 60%),
+        linear-gradient(145deg, rgba(9,9,11,0.98), rgba(15,23,42,0.96));
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: var(--shadow-soft);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-card-header {
+      margin-bottom: 10px;
+    }
+
+    .hero-card-kicker {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted-soft);
+    }
+
+    .hero-card-title {
+      margin: 4px 0 4px;
+      font-size: 18px;
+      font-weight: 700;
+      background-image: linear-gradient(135deg, var(--gold-start), var(--accent));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-card-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-card-metrics {
+      margin: 10px 0 12px;
+      padding: 10px 10px 8px;
+      border-radius: var(--radius-md);
+      background: rgba(15,23,42,0.92);
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 11px;
+      color: var(--muted);
+      display: grid;
+      gap: 4px;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .metric-label {
+      color: var(--muted-soft);
+    }
+
+    .metric-value {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .hero-card-note {
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .hero-card-footer {
+      margin-top: 10px;
+    }
+
+    /* Story + gallery */
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--muted-soft);
+      max-width: 680px;
+    }
+
+    .section-title span.gold {
+      background-image: linear-gradient(135deg, var(--gold-start), var(--gold-end));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: 22px;
+      margin-top: 16px;
+    }
+
+    .story-card {
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .story-card strong {
+      color: var(--text);
+    }
+
+    .gallery-card {
+      padding: 14px 14px 10px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, rgba(15,23,42,0.94), rgba(9,9,11,0.98));
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .gallery-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .gallery-sub {
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .wa-gallery {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .wa-gallery::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .wa-gallery::-webkit-scrollbar-track {
+      background: rgba(15,23,42,0.8);
+    }
+
+    .wa-gallery::-webkit-scrollbar-thumb {
+      background: rgba(148,163,184,0.7);
+      border-radius: 999px;
+    }
+
+    .wa-slot {
+      min-width: 150px;
+      height: 90px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 0 0, rgba(255,215,101,0.2), rgba(15,23,42,0.95));
+      border: 1px dashed rgba(148,163,184,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted-soft);
+      font-size: 11px;
+      text-align: center;
+      padding: 6px;
+    }
+
+    /* Accordion (Rules) */
+    .rules-section {
+      margin-top: 26px;
+    }
+
+    .rules-header {
+      padding: 14px 16px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(17,24,39,0.96), rgba(15,23,42,0.96));
+      border: 1px solid rgba(148,163,184,0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rules-header-main {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .rules-header-title {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .rules-header-sub {
+      font-size: 12px;
+      color: var(--muted-soft);
+    }
+
+    .rules-chip-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .chip {
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.95);
+    }
+
+    .accordion-group {
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      background: rgba(9,9,11,0.96);
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .accordion-item + .accordion-item {
+      border-top: 1px solid rgba(30,41,59,0.9);
+    }
+
+    .accordion-header {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: radial-gradient(circle at 0 0, rgba(255,215,101,0.16), transparent 60%);
+    }
+
+    .accordion-header-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .accordion-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .accordion-subtitle {
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .accordion-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.24s ease;
+      background: rgba(15,23,42,0.96);
+    }
+
+    .accordion-inner {
+      padding: 10px 14px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      display: grid;
+      gap: 8px;
+    }
+
+    .rule-block-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .rule-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .rule-list li {
+      margin-bottom: 4px;
+    }
+
+    .note {
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .note strong {
+      color: var(--text);
+    }
+
+    /* Row 2: performance + form */
+    .row2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .card {
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background: rgba(9,9,11,0.96);
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      background-image: linear-gradient(135deg, var(--gold-start), var(--gold-end));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--muted-soft);
+      margin-bottom: 10px;
+    }
+
+    .policy-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+    }
+
+    .policy-list li {
+      margin-bottom: 6px;
+    }
+
+    .policy-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(34,197,94,0.7);
+      color: var(--success);
+      background: rgba(22,163,74,0.08);
+      margin-bottom: 6px;
+    }
+
+    .form-field {
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+      color: var(--muted-soft);
+    }
+
+    .input, .textarea {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.9);
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .input:focus, .textarea:focus {
+      border-color: var(--gold-start);
+      box-shadow: 0 0 0 1px rgba(255,215,101,0.6);
+      background: rgba(15,23,42,1);
+    }
+
+    .textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .agree-row {
+      margin: 8px 0 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    .agree-row input[type="checkbox"] {
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .screenshot-note {
+      font-size: 11px;
+      color: var(--muted-soft);
+      margin-top: 6px;
+    }
+
+    .razorpay-link {
+      font-size: 11px;
+      margin-top: 6px;
+      color: var(--muted-soft);
+    }
+
+    .razorpay-link a {
+      color: var(--accent);
+    }
+
+    .razorpay-link span {
+      color: var(--muted-soft);
+    }
+
+    .small-hint {
+      font-size: 10px;
+      color: var(--muted-soft);
+      margin-top: 4px;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(30,41,59,0.9);
+      font-size: 11px;
+      color: var(--muted-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-side {
+        margin-top: 20px;
+      }
+      .timer-pill {
+        right: 6px;
+      }
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .row2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 18px 14px 26px;
+      }
+      .hero-main {
+        padding: 18px 14px 14px;
+      }
+      .hero-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Top brand / mini-nav -->
+  <header class="page-header">
+    <div class="brand">
+      <div class="brand-logo"></div>
+      <div class="brand-text">
+        <h1>The Pearl Mind™</h1>
+        <span>40 / 40 Blueprint • Semi-Automatic Index Trading Companion</span>
+      </div>
+    </div>
+    <div class="top-cta">
+      <span class="pill-label">Batch: Dec 2025 • BankNifty ATM CE/PE</span>
+      <button class="btn btn-outline" onclick="document.getElementById('rules').scrollIntoView({behavior:'smooth'})">
+        View Rules
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-main">
+      <div class="hero-tag">
+        <span class="dot"></span>
+        Live System • Limited Monthly Access • Cult-Level Discipline
+      </div>
+      <h2 class="hero-title">
+        Trade Like a Calm Monk In a Chaotic Market<br>
+        With a <span class="highlight">Simple 40 / 40 Rulebook</span>.
+      </h2>
+      <p class="hero-sub">
+        The Pearl Mind™ is a semi-automatic indicator that helps you <strong>catch +40 points with –40 risk</strong>,
+        again and again — without chasing jackpots, guessing direction, or staring at 20 indicators.
+      </p>
+      <div class="hero-bullets">
+        <div><span class="icon">✓</span> Built for <strong>normal traders</strong> – not full-time quants.</div>
+        <div><span class="icon">✓</span> You follow the <strong>rules</strong>, the indicator handles the <strong>timing</strong>.</div>
+        <div><span class="icon">✓</span> Catch just <strong>3 trades/week</strong> to build a sustainable PnL story.</div>
+      </div>
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="document.getElementById('subscribe').scrollIntoView({behavior:'smooth'})">
+          I Want To Subscribe For Dec 2025
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('rules').scrollIntoView({behavior:'smooth'})">
+          Read The 12 Universal Rules
+        </button>
+      </div>
+      <div class="hero-meta">
+        <span class="badge">Beginners & Experienced Traders – Both Welcome</span>
+        <span>Designed for BankNifty ATM CE/PE • Options Buying</span>
+      </div>
+    </div>
+
+    <aside class="hero-side">
+      <div class="timer-pill">
+        <span class="dot"></span>
+        <span>Subscription window closes in:</span>
+        <span class="timer-count" id="countdown">--d --h --m --s</span>
+      </div>
+      <div class="hero-card">
+        <div>
+          <div class="hero-card-header">
+            <div class="hero-card-kicker">The 40 / 40 Blueprint</div>
+            <div class="hero-card-title">3 Trades a Week. 120 Points. Peace of Mind.</div>
+            <div class="hero-card-sub">
+              One indicator, one simple rule: <strong>aim for +40, risk –40</strong>. Forget jackpot chasing — focus on
+              controlled outcomes that can be repeated for months and years.
+            </div>
+          </div>
+          <div class="hero-card-metrics">
+            <div class="metric-row">
+              <span class="metric-label">Per-trade target</span>
+              <span class="metric-value">+40 points</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Max allowed loss</span>
+              <span class="metric-value">–40 points</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Weekly residue goal</span>
+              <span class="metric-value">≥ 120 points</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Monthly possibility (disciplined)</span>
+              <span class="metric-value">~16% or more</span>
+            </div>
+          </div>
+          <p class="hero-card-note">
+            The Pearl Mind™ doesn’t promise certainty. It gives <strong>clarity</strong>:
+            when to act, when to wait, and when to simply protect your capital.
+          </p>
+        </div>
+        <div class="hero-card-footer">
+          <button class="btn btn-primary" style="width:100%;" onclick="document.getElementById('subscribe').scrollIntoView({behavior:'smooth'})">
+            Yes, I Want December 2025 Access
+          </button>
+          <div class="small-hint">
+            <strong>Note:</strong> Subscription is open only for traders willing to follow all rules for 1 full month.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- Story + Gallery -->
+  <section class="section">
+    <h3 class="section-title"><span class="gold">Why The Pearl Mind™ Exists</span></h3>
+    <p class="section-sub">
+      Most traders don’t lose because they are “dumb”. They lose because they are <strong>alone with their thoughts</strong>
+      in a market driven by FIIs, leverage and traps. The Pearl Mind™ is a disciplined companion that removes guesswork and
+      converts chaos into a repeatable 40/40 framework.
+    </p>
+
+    <div class="two-col">
+      <div class="story-card">
+        <p>
+          <strong>The old way:</strong> draw random levels, jump between indicators, mix news, OI, option chain and panic-based entries.
+          One big loss wipes out five good days.
+        </p>
+        <p>
+          <strong>The Pearl Mind way:</strong> you only trade when the indicator speaks. You know the direction, the ATM strike,
+          and the maximum damage (–40). You stop trying to be a hero, and start behaving like a <strong>calm, consistent point-collector</strong>.
+        </p>
+        <p>
+          This page is not marketing. It is a <strong>contract</strong> between you and your future self.
+          If you agree to follow the rules, the system agrees to serve you with clarity.
+        </p>
+      </div>
+      <div class="gallery-card">
+        <div class="gallery-header">
+          <div>
+            <div class="gallery-title">WhatsApp Proof Wall (Scroll)</div>
+            <div class="gallery-sub">Use this strip to showcase real PnL & feedback screenshots from The Pearl Mind™ community.</div>
+          </div>
+        </div>
+        <div class="wa-gallery">
+          <div class="wa-slot">Drop Screenshot #1<br>(Green PnL +40 / +80)</div>
+          <div class="wa-slot">Drop Screenshot #2<br>(Trader Feedback)</div>
+          <div class="wa-slot">Drop Screenshot #3<br>(120 pts / week)</div>
+          <div class="wa-slot">Drop Screenshot #4<br>(Non-trending month result)</div>
+          <div class="wa-slot">Drop Screenshot #5<br>(Long-term equity curve)</div>
+        </div>
+        <div class="small-hint">
+          Replace each placeholder with real screenshots. This strip is your social proof gallery.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules -->
+  <section class="section rules-section" id="rules">
+    <div class="rules-header">
+      <div class="rules-header-main">
+        <div class="rules-header-title">The 12 Universal Rules – Collapsed For Easy Reading</div>
+        <div class="rules-header-sub">
+          Designed so even a layman trader can understand what to do, when to do it, and when to stop.
+        </div>
+        <div class="rules-chip-row">
+          <span class="chip">No Jargon</span>
+          <span class="chip">BankNifty ATM CE/PE</span>
+          <span class="chip">Options Buying Only</span>
+          <span class="chip">+40 / –40 Framework</span>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="toggleAllAccordions()">
+        Expand / Collapse All
+      </button>
+    </div>
+
+    <div class="accordion-group">
+      <!-- Section 1 -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-header-main">
+            <div class="accordion-title">Section 1 – The 3 Important Rules</div>
+            <div class="accordion-subtitle">When to trade, how much to expect, and how many trades are enough.</div>
+          </div>
+          <div class="accordion-icon">+</div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div>
+              <div class="rule-block-title">Rule 1: Trade Only When The Indicator Talks</div>
+              <ul class="rule-list">
+                <li>If The Pearl Mind™ shows a clear signal/direction → <strong>then</strong> you take the trade.</li>
+                <li>Green candle = upward direction. Red candle = downward direction.</li>
+                <li>Blue candle = both sides are fighting. Direction is unclear. Pearl Mind™ deliberately ignores such days.</li>
+                <li>On blue days, even 3–4 trades can end with 0 or 1 positive outcome → Over-trading trap avoided.</li>
+                <li><strong>No signal = no trade.</strong> Sometimes, no trade is the best trade for your mind & account.</li>
+                <li>Trade only after the movement of the label stops. Trend distance counter starts only for valid trades and
+                    counts points only when the move is in the trend direction.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 2: You Aim For +40, You Risk –40</div>
+              <ul class="rule-list">
+                <li>The Pearl Mind™ is built on <strong>controlled outcomes</strong>, tested for highest probability in both
+                    trending and non-trending markets.</li>
+                <li>Your profit target = <strong>+40 points</strong>. Your maximum loss = <strong>–40 points</strong>.</li>
+                <li>Big jackpots are random; Pearl Mind™ focuses on consistency.</li>
+                <li>Making one big loss like –140 or –240 in a single trade is not allowed. –40 is acceptable, –140 is a disaster.</li>
+                <li>After you earn <strong>1600+ points</strong>, you become eligible for trailing SL training.</li>
+                <li>In trending markets: ~<strong>82%</strong> of trades can hit +40, ~18% may hit –40.</li>
+                <li>In non-trending markets: ~<strong>55%</strong> can hit +40, ~45% may hit –40.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 3: 3 Trades Per Week = Enough</div>
+              <ul class="rule-list">
+                <li>The indicator can give 5–15 chances/week, but you only need the <strong>residue of three +40 trades</strong>.</li>
+                <li>Goal: 120+ points/week → 480+ points/month → around 16% monthly (when discipline is followed).</li>
+                <li>Trending months: results may vary from 7% to 16%+.</li>
+                <li>Non-trending months: may range from –5% to +6% → yet overall year remains profitable if rules are followed.</li>
+                <li>To truly test outcomes, execute <strong>all trades for 6 continuous months</strong> as per rules.</li>
+                <li>Reason: market cycles between trending (2–4 weeks) and non-trending (3–5 weeks). Starting in a bad phase
+                    can give wrong impressions if you judge too early.</li>
+                <li>Example: Oct 2025 → +7% to +37% results achieved. Nov 2025 → –2% to +6% achieved by some traders.</li>
+                <li>Normal traders earn in a trending month and give back profits in the next month. Pearl Mind™ protects you
+                    from this exact trap.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-header-main">
+            <div class="accordion-title">Section 2 – Entry Rules</div>
+            <div class="accordion-subtitle">When to enter, which strike to choose, and what counts as a “fresh” signal.</div>
+          </div>
+          <div class="accordion-icon">+</div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div>
+              <div class="rule-block-title">Rule 4: Enter Only On Clear Arrow + ATM Highlight</div>
+              <ul class="rule-list">
+                <li>If <strong>arrow + confirmation line + ATM highlight appear and then stabilise</strong> → you enter.</li>
+                <li>No second guessing. No “let me quickly check RSI / TwoLines / Dow / other charts”.</li>
+                <li>Indicator triggers → you follow. That’s the contract.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 5: Enter Only On Fresh Signal</div>
+              <ul class="rule-list">
+                <li>Never enter in the middle of a move.</li>
+                <li>Never enter after 30–40 points are already gone.</li>
+                <li>Never re-enter on the same exhausted signal.</li>
+                <li>First signal in a move has highest reliability; each re-entry reduces probability (100% → 75% → 50% → 25%).</li>
+                <li>Enter only <strong>after 3 minutes</strong> of signal appearance:
+                  <ul class="rule-list">
+                    <li>ATM strike appears</li>
+                    <li>Time stamp visible</li>
+                    <li>Candle colour: green = upside, red = downside, blue = sit and relax</li>
+                  </ul>
+                </li>
+                <li>Three minutes are enough to:
+                  <ul class="rule-list">
+                    <li>Understand direction</li>
+                    <li>Confirm strike</li>
+                    <li>Set default parameters</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 6: Enter Exactly At ATM (Premium ~700–800)</div>
+              <ul class="rule-list">
+                <li>Use ATM options where premium ≈ 700–800.</li>
+                <li>Why? Because a 5% halt / pullback on 700–800 premium = 35–40 points, within our –40 risk framework.</li>
+                <li>ITM/OTM options are more unpredictable and theta-sensitive. We avoid them.</li>
+                <li>OTM options are the slow death of the small trader (premium decay transfers your capital to writers).</li>
+                <li><strong>Expiry rule:</strong>
+                  <ul class="rule-list">
+                    <li>From 1st to 19th of the month → use current month expiry.</li>
+                    <li>From 20th to 31st → use next month expiry.</li>
+                  </ul>
+                </li>
+                <li>These expiries are more immune to theta decay; others can damage your result.</li>
+                <li>The Pearl Mind™ is fully optimised for <strong>ATM premiums in the 700–800 range</strong>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-header-main">
+            <div class="accordion-title">Section 3 – Exit Rules</div>
+            <div class="accordion-subtitle">How to book peaceful profit and peaceful loss.</div>
+          </div>
+          <div class="accordion-icon">+</div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div>
+              <div class="rule-block-title">Rule 7: Exit At +40 (Peaceful Profit)</div>
+              <ul class="rule-list">
+                <li>The system is designed to catch <strong>controlled +40 moves</strong> again and again.</li>
+                <li>Exit with:
+                  <ul class="rule-list">
+                    <li>No greed (no “what if it goes to +140?”)</li>
+                    <li>No heroism</li>
+                    <li>No fear of missing the bigger move</li>
+                  </ul>
+                </li>
+                <li>Consistency > complexity. Repetition of +40 is the edge.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 8: Exit At –40 (Peaceful Loss)</div>
+              <ul class="rule-list">
+                <li>–40 is a <strong>controlled loss</strong>. It keeps you alive.</li>
+                <li>–140 / –240 in a single trade is capital suicide.</li>
+                <li>When –40 hits, the blessing is → you are free for the <strong>next clean signal</strong> with full clarity.</li>
+                <li>A controlled trader is an unstoppable trader.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-header-main">
+            <div class="accordion-title">Section 4 – Avoid Rules (Non-Negotiable)</div>
+            <div class="accordion-subtitle">What you stop doing is as important as what you start doing.</div>
+          </div>
+          <div class="accordion-icon">+</div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div>
+              <div class="rule-block-title">Rule 9: Avoid These Market Conditions</div>
+              <ul class="rule-list">
+                <li>Never trade on the very first candle of the day (Pearl Mind™ is blue initially for a reason).</li>
+                <li>Never trade after 15:20 IST.</li>
+                <li>Never trade 1 lot of BankNifty with less than ₹1,00,000 capital.</li>
+                <li>Never trade with “cut to cut” capital. With ~₹30,000 cost per 800-premium strike, one loss can force you into bad strikes.</li>
+                <li>Never trade if signal is not there.</li>
+                <li>Never mix other indicators, tools, OI, option chain etc. with Pearl Mind™. It will only confuse and dilute the edge.</li>
+                <li>Never jump SL. –40 is final.</li>
+                <li>Never trade in hurry.</li>
+                <li>Never increase lot size randomly. Add <strong>1 lot only after every ₹1,00,000 of profit</strong>.</li>
+                <li>Never break these rules. If you break, you will eventually be forced to restart from zero.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 10: Avoid Taking Trades From Your Mind</div>
+              <ul class="rule-list">
+                <li>After 1–2 losses, recovery mode activates → mind wants to prove itself right.</li>
+                <li>But when there is no movement in the market, no thought in your mind can create that movement.</li>
+                <li>In this game, <strong>money is the ink</strong>. FIIs control ink flow; Pearl Mind™ reads it.</li>
+                <li>One trade at a time → book profit or loss → wait for next signal → repeat Step 1.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 11: Avoid Revenge Trades</div>
+              <ul class="rule-list">
+                <li>The indicator has no emotions. You do.</li>
+                <li>That’s exactly why you follow it, not your anger, fear, or ego.</li>
+                <li>Neutral / blue phase = no-man’s land. You don’t live there. You observe and wait.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-header-main">
+            <div class="accordion-title">Section 5 – Position & Scaling Rules</div>
+            <div class="accordion-subtitle">Lot size, scaling, and what to do when signal turns neutral.</div>
+          </div>
+          <div class="accordion-icon">+</div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div>
+              <div class="rule-block-title">Rule 12: Stick To Same Lot Size Until +₹1,00,000 Profit</div>
+              <ul class="rule-list">
+                <li>No sudden jumps in quantity after 1–2 good trades.</li>
+                <li>Scale only after you have <strong>earned +₹1,00,000 profit</strong> using +40/–40 rules.</li>
+                <li>Then and only then, add +1 lot. Repeat process.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 13: Don’t Panic When Signal Turns Neutral / Blue</div>
+              <ul class="rule-list">
+                <li>If signal neutralises after entry → allow either SL or TP to hit based on rules.</li>
+                <li>This prevents unwanted manual exits and getting trapped in tiny noise.</li>
+                <li>Neutral = “sit tight” zone, not “do something” zone.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Mindset & Community -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-header-main">
+            <div class="accordion-title">Section 6 – Mindset, Community & PnL Sharing</div>
+            <div class="accordion-subtitle">How we think, how we grow, and how results are tracked.</div>
+          </div>
+          <div class="accordion-icon">+</div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div>
+              <div class="rule-block-title">Rule 14: Do Not Expect Certainty, Only Clarity</div>
+              <ul class="rule-list">
+                <li>The Pearl Mind™ gives you <strong>clarity</strong>, not guarantees.</li>
+                <li>With clarity, you can act. With guarantees, you only dream.</li>
+                <li>Not every signal will hit +40, but statistically +40 has higher probability than –40 when rules are followed.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 15: You Trade Only 3 Days, You Win 36 Months</div>
+              <ul class="rule-list">
+                <li>Few trades, few decisions, zero drama, zero complexity.</li>
+                <li>Simplify → Follow → Repeat → Scale Gradually → Grow Exponentially.</li>
+                <li>This is the Pearl Mind™ way.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="rule-block-title">Rule 16: PnL Sharing & Community Proof</div>
+              <ul class="rule-list">
+                <li>As a community member, you agree that:
+                  <ul class="rule-list">
+                    <li>Your PnL screenshots may be <strong>requested periodically</strong> to track progress.</li>
+                    <li>Aggregated, anonymised results (identity protected) may be used to showcase outcomes on social platforms.</li>
+                    <li>Your written feedback may be shared publicly as testimonials (with your name only if you permit).</li>
+                  </ul>
+                </li>
+                <li>Purpose: to build a transparent culture where <strong>results speak louder than marketing.</strong></li>
+              </ul>
+              <p class="note">
+                <strong>Note:</strong> Your identity will be protected whenever we share community-level results. Numbers tell the
+                story; your privacy stays intact.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 2: Performance policy + Subscribe -->
+  <section class="row2" id="subscribe">
+    <!-- Performance / Offers -->
+    <div class="card">
+      <div class="card-title">📜 Performance, Offers & Reward Policy</div>
+      <div class="card-sub">This policy is valid only for traders who execute <strong>all eligible trades</strong> as per the rules.</div>
+
+      <span class="policy-tag">Performance-Linked Subscription</span>
+
+      <ul class="policy-list">
+        <li><strong>If you execute all trades as per the rules</strong> (no skipping, no personal filters), you will be
+            eligible for <strong>offers, discounts and rewards</strong> from The Pearl Mind™ community.</li>
+        <li>If The Pearl Mind™ cannot generate at least <strong>5 more +40 trades than –40 trades in a month</strong>,
+            your <strong>next month’s subscription will be provided free of charge.</strong></li>
+        <li>If you <strong>cannot take all trades</strong> as per the rules (due to timing, fear, bias, or skipping),
+            then your result will <strong>not</strong> be considered valid for carry-forward offers.</li>
+        <li>This safety net is not a guarantee of profit; it is a <strong>commitment to fairness</strong>:
+            if the system under-delivers despite you following rules, we share the responsibility.</li>
+        <li>All calculations are based on <strong>points</strong>, not rupees – so that capital size does not create
+            emotional distortion in evaluation.</li>
+      </ul>
+
+      <p class="note">
+        <strong>Simple summary:</strong> You bring discipline and honesty. The Pearl Mind™ brings structure and edge.
+        If both are present and the system still fails to outperform, you don’t pay for the next month.
+      </p>
+    </div>
+
+    <!-- Subscribe / I agree -->
+    <div class="card">
+      <div class="card-title">✅ I Have Read & I Want To Subscribe</div>
+      <div class="card-sub">
+        Fill this, tick the box, take a screenshot, and <strong>then</strong> complete the payment. This is your personal
+        contract with The Pearl Mind™.
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="trader-name">Trader Name (as per WhatsApp group)</label>
+        <input class="input" id="trader-name" type="text" placeholder="e.g. Rahul S. / Kavya P." oninput="updateStatement()">
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="month">Subscription Month & Year</label>
+        <input class="input" id="month" type="text" value="Dec 2025" oninput="updateStatement()">
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="statement">Declaration</label>
+        <textarea class="textarea" id="statement">
+I confirm that I have carefully read and understood all 12 Universal Rules of The Pearl Mind™ 40 / 40 Blueprint. I agree to follow these rules with full discipline for my Dec 2025 subscription and accept that my performance, offers and rewards will be evaluated based on these rules and my ability to execute all eligible trades.
+        </textarea>
+        <div class="small-hint">
+          You may adjust wording slightly, but the core meaning must remain the same.
+        </div>
+      </div>
+
+      <div class="agree-row">
+        <input type="checkbox" id="agree-checkbox" onchange="onAgreeChange()">
+        <label for="agree-checkbox">
+          I have read and understood all rules, including the Performance & Reward Policy and PnL sharing guidelines.
+          I will take a screenshot of this filled form and share it on WhatsApp before or immediately after payment.
+        </label>
+      </div>
+
+      <button id="pay-btn" class="btn btn-primary" style="width:100%;" disabled>
+        Proceed to Razorpay Subscription Payment
+      </button>
+
+      <p class="screenshot-note">
+        📸 <strong>Important:</strong> Before clicking Pay, take a clear screenshot of:
+        <br>1) Your Name • 2) Subscription Month • 3) Declaration • 4) “I Agree” ticked.
+        <br>Then share the screenshot + payment proof in the Pearl Mind group or to the designated admin.
+      </p>
+
+      <p class="razorpay-link">
+        Payment link (auto-filled amount):<br>
+        <a id="rzp-link" href="https://razorpay.me/@blackpearlstrategictechnosolu?amount=sQmzytfbZhX6mm30bytWGw%3D%3D" target="_blank" rel="noopener noreferrer">
+          https://razorpay.me/@blackpearlstrategictechnosolu
+        </a>
+        <span> – this will open Razorpay. Enabled only after you tick “I Agree”.</span>
+      </p>
+
+      <p class="small-hint">
+        By paying, you acknowledge that this is an educational tool, not a tips service, and there are no guaranteed returns.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2025 • The Pearl Mind™ • Black Pearl Strategic Techno Solutions</div>
+    <div>For support, contact your Pearl Mind admin on WhatsApp.</div>
+  </footer>
+</div>
+
+<script>
+  // Countdown to 30 Nov 2025, 12:30 PM IST
+  (function(){
+    const target = new Date("2025-11-30T12:30:00+05:30").getTime();
+    const el = document.getElementById("countdown");
+    if (!el) return;
+    function update() {
+      const now = new Date().getTime();
+      const diff = target - now;
+      if (diff <= 0) {
+        el.textContent = "Closed";
+        return;
+      }
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff / (1000*60*60)) % 24);
+      const m = Math.floor((diff / (1000*60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      el.textContent = d + "d " + h + "h " + m + "m " + s + "s";
+    }
+    update();
+    setInterval(update, 1000);
+  })();
+
+  // Accordion logic
+  function toggleAccordion(headerEl) {
+    const item = headerEl.parentElement;
+    const content = item.querySelector(".accordion-content");
+    const icon = item.querySelector(".accordion-icon");
+    const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+
+    if (isOpen) {
+      content.style.maxHeight = "0px";
+      icon.textContent = "+";
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      icon.textContent = "–";
+    }
+  }
+
+  function toggleAllAccordions() {
+    const items = document.querySelectorAll(".accordion-item");
+    let anyClosed = false;
+    items.forEach(item => {
+      const content = item.querySelector(".accordion-content");
+      if (!content.style.maxHeight || content.style.maxHeight === "0px") {
+        anyClosed = true;
+      }
+    });
+    items.forEach(item => {
+      const content = item.querySelector(".accordion-content");
+      const icon = item.querySelector(".accordion-icon");
+      if (anyClosed) {
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.textContent = "–";
+      } else {
+        content.style.maxHeight = "0px";
+        icon.textContent = "+";
+      }
+    });
+  }
+
+  // Agree + pay button
+  function onAgreeChange() {
+    const checkbox = document.getElementById("agree-checkbox");
+    const btn = document.getElementById("pay-btn");
+    if (!checkbox || !btn) return;
+    btn.disabled = !checkbox.checked;
+    if (checkbox.checked) {
+      btn.onclick = function() {
+        const link = document.getElementById("rzp-link");
+        if (link) {
+          window.open(link.href, "_blank", "noopener,noreferrer");
+        }
+      };
+    } else {
+      btn.onclick = null;
+    }
+  }
+
+  function updateStatement() {
+    // Placeholder in case later you want dynamic text injection
+  }
+
+  // Ensure accordions are initially collapsed but sized correctly when opened
+  window.addEventListener("load", function() {
+    const contents = document.querySelectorAll(".accordion-content");
+    contents.forEach(c => c.style.maxHeight = "0px");
+  });
+</script>
+</body>
+</html>
