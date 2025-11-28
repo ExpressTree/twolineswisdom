@@ -291,11 +291,31 @@
     }
 
     .timer-pill span.dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #ef4444;
-      box-shadow: 0 0 9px rgba(248,113,113,0.9);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #ef4444;
+        box-shadow: 0 0 12px rgba(255, 82, 82, 0.9);
+        animation: pulseBeat 1.15s infinite ease-in-out;
+    }
+
+
+    @keyframes pulseDot {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(248,113,113,0.8);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.35);
+        box-shadow: 0 0 18px rgba(248,113,113,1);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(248,113,113,0.8);
+        opacity: 1;
+      }
     }
 
     .timer-count {
@@ -377,6 +397,82 @@
 
     .hero-card-footer {
       margin-top: 10px;
+    }
+
+    /* Proof strip – full-width infinite scroll */
+    .proof-strip {
+      margin-bottom: 28px;
+    }
+
+    .proof-inner {
+      padding: 16px 18px 16px;
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at 0 0, rgba(255,215,101,0.15), transparent 60%),
+        radial-gradient(circle at 100% 120%, rgba(56,189,248,0.12), transparent 60%),
+        linear-gradient(135deg, rgba(9,9,11,0.98), rgba(15,23,42,0.96));
+      border: 1px solid rgba(148,163,184,0.65);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .proof-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .proof-title {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .proof-sub {
+      font-size: 12px;
+      color: var(--muted-soft);
+      max-width: 520px;
+    }
+
+    .infinite-scroller {
+      position: relative;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .scroller-track {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: scrollTrack 45s linear infinite;
+      will-change: transform;
+    }
+
+    .scroller-track img {
+      flex: 0 0 auto;
+      width: 190px;
+      height: 110px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: radial-gradient(circle at 0 0, rgba(255,215,101,0.18), rgba(9,9,11,0.95));
+      box-shadow: 0 10px 24px rgba(0,0,0,0.6);
+    }
+
+    .proof-hint {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted-soft);
+    }
+
+    @keyframes scrollTrack {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
     }
 
     /* Story + gallery */
@@ -781,6 +877,10 @@
       .row2 {
         grid-template-columns: minmax(0, 1fr);
       }
+      .proof-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
     @media (max-width: 640px) {
@@ -792,6 +892,10 @@
       }
       .hero-title {
         font-size: 22px;
+      }
+      .scroller-track img {
+        width: 160px;
+        height: 95px;
       }
     }
   </style>
@@ -901,6 +1005,28 @@
     </aside>
   </section>
 
+  <!-- Full-width Infinite Proof Strip -->
+  <section class="proof-strip" id="proof">
+    <div class="proof-inner">
+      <div class="proof-header">
+        <div class="proof-title">📸 Pearl Mind™ Proof Wall — Real Traders, Real Points</div>
+        <div class="proof-sub">
+          Live market outcomes from The Pearl Mind™ community — scrolling forever. Replace these placeholders with
+          your own WhatsApp PnL screenshots, feedbacks, and 40 / 40 streaks.
+        </div>
+      </div>
+      <div class="infinite-scroller">
+        <div class="scroller-track" id="proofTrack">
+          <!-- Images will be injected here from JSON -->
+        </div>
+      </div>
+      <div class="proof-hint">
+        Hint: host your screenshots in <code>/img/</code> or any CDN, update the JSON below, and this wall will keep looping
+        endlessly — like an ocean of proof under The Pearl Mind™.
+      </div>
+    </div>
+  </section>
+
   <!-- Story + Gallery -->
   <section class="section">
     <h3 class="section-title"><span class="gold">Why The Pearl Mind™ Exists</span></h3>
@@ -928,8 +1054,8 @@
       <div class="gallery-card">
         <div class="gallery-header">
           <div>
-            <div class="gallery-title">WhatsApp Proof Wall (Scroll)</div>
-            <div class="gallery-sub">Use this strip to showcase real PnL & feedback screenshots from The Pearl Mind™ community.</div>
+            <div class="gallery-title">WhatsApp Proof Wall (Manual Strip)</div>
+            <div class="gallery-sub">Use this as a secondary strip to highlight very specific screenshots if you like.</div>
           </div>
         </div>
         <div class="wa-gallery">
@@ -940,7 +1066,7 @@
           <div class="wa-slot">Drop Screenshot #5<br>(Long-term equity curve)</div>
         </div>
         <div class="small-hint">
-          Replace each placeholder with real screenshots. This strip is your social proof gallery.
+          Optional: keep this for curated highlights while the main infinite strip above shows continuous community flow.
         </div>
       </div>
     </div>
@@ -1432,6 +1558,51 @@ I confirm that I have carefully read and understood all 12 Universal Rules of Th
   window.addEventListener("load", function() {
     const contents = document.querySelectorAll(".accordion-content");
     contents.forEach(c => c.style.maxHeight = "0px");
+  });
+
+  // ============================
+  // Infinite Proof Wall – JSON
+  // ============================
+  // Inline JSON
+    const screenshotsData = {
+    screenshots: [
+    "2025-10-01-results.jpg",
+    "2025-10-02-results.jpg",
+    "2025-10-03-results.jpg",
+    "2025-10-04-results.jpg",
+    "2025-10-05-results.jpg",
+    "2025-10-06-results.jpg",
+    "2025-10-07-results.jpg",
+    "2025-10-08-results.jpg",
+    "2025-10-09-results.jpg",
+    "2025-10-10-results.jpg",
+    "2025-10-11-results.jpg",
+    "2025-10-12-results.jpg",
+    "2025-10-13-results.jpg",
+    "2025-10-14-results.jpg",
+    "2025-10-15-results.jpg",
+    "2025-10-16-results.jpg",
+    "2025-10-17-results.jpg",
+    "2025-10-18-results.jpg",
+    "2025-10-19-results.jpg",
+    "2025-10-20-results.jpg"
+    ]
+    };
+
+  // Build infinite scroll track from JSON
+  window.addEventListener("load", function() {
+    const track = document.getElementById("proofTrack");
+    if (!track || !screenshotsData || !Array.isArray(screenshotsData.screenshots)) return;
+
+    const imgs = screenshotsData.screenshots;
+    const all = imgs.concat(imgs); // duplicate to fake infinity
+
+    all.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "Pearl Mind™ Result Screenshot";
+      track.appendChild(img);
+    });
   });
 </script>
 </body>
