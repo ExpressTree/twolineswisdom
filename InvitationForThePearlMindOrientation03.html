@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pearl Mind Orientation</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top, #0d1117, #000000);
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(0,255,204,0.08);
+    backdrop-filter: blur(8px);
+  }
+
+  .title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #00ffe7, #00b8ff);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .time {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 25px;
+    color: #9ddfff;
+    font-weight: 600;
+  }
+
+  .btn {
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+    padding: 15px 25px;
+    background: linear-gradient(90deg, #00ffe7, #00b8ff);
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 0 20px rgba(0,255,204,0.4);
+  }
+
+  .section-title {
+    font-size: 21px;
+    font-weight: 700;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #7fd7f5;
+    text-align: center;
+    opacity: 0.8;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  li {
+    font-size: 16px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.05);
+    padding: 10px 15px;
+    border-radius: 8px;
+    border-left: 4px solid #00d9ff;
+  }
+
+  /* Highlighted quote */
+  .highlight-quote {
+    font-size: 18px;
+    margin-top: 25px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: 700;
+    background: linear-gradient(90deg, #00ffe7, #00b8ff);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .mentor-box {
+    margin-top: 35px;
+    background: rgba(255,255,255,0.06);
+    padding: 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .mentor-box img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00eaff;
+  }
+
+  .mentor-box .name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #00d9ff;
+  }
+  .mentor-box .role {
+    font-size: 14px;
+    color: #e0e0e0;
+  }
+
+  /* Screenshot scroller */
+  .strip {
+    margin-top: 25px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .strip img {
+    width: 180px;
+    height: 110px;
+    object-fit: cover;
+    margin-right: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+  }
+  .track {
+    display: inline-flex;
+    animation: scroll 22s linear infinite;
+  }
+
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* FULLSCREEN VIEWER */
+  #viewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  #viewer img {
+    max-width: 96%;
+    max-height: 92%;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0,255,255,0.3);
+  }
+  #closeBtn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 22px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="viewer">
+  <span id="closeBtn">✕</span>
+  <img id="viewerImg" src="">
+</div>
+
+<div class="wrap">
+  <div class="glass">
+
+    <div class="title">🔥 Pearl Mind™ Orientation</div>
+    <div class="time">Today • 4:00–5:00 PM</div>
+
+    <a class="btn" href="https://us02web.zoom.us/j/83417261776?pwd=eAiWzpVKwherDgL3xfz0JuDVKgmeHE.1" target="_blank">
+      JOIN LIVE ON ZOOM
+    </a>
+
+    <h3 class="section-title">Why This Session Is Unmissable</h3>
+
+    <ul>
+      <li>🟢 You don’t predict the market</li>
+      <li>🔴 You don’t analyse 20 indicators</li>
+      <li>🟢 No opinions, no confusion</li>
+      <li>🔴 No technical, fundamentals, news</li>
+      <li>🟢 Just “Red Light / Green Light” signals</li>
+    </ul>
+
+    <p class="highlight-quote">
+      “Grow Your Capital… Without Growing Your Stress?”
+    </p>
+
+    <h3 class="section-title" style="opacity:0.6;">📸 Past 30 Days – Real Results</h3>
+
+    <div class="strip">
+      <div class="track" id="scrollImgs"></div>
+    </div>
+
+    <ul style="margin-top:20px;">
+      <li>📉 When NOT to trade</li>
+      <li>📈 How +40/–40 becomes a machine</li>
+      <li>⚙️ Why the system ignores your brain</li>
+      <li>🧘 Zero emotion. Zero prediction. Pure execution.</li>
+    </ul>
+
+    <div class="mentor-box">
+      <img src="mentor.jpg" alt="Mentor">
+      <div>
+        <div class="name">Sanjay Kadam</div>
+        <div class="role">Creator of The Pearl Mind™<br>Index Trader • Pattern Researcher</div>
+      </div>
+    </div>
+
+    <a class="btn" href="https://us02web.zoom.us/j/83417261776?pwd=eAiWzpVKwherDgL3xfz0JuDVKgmeHE.1" target="_blank">
+      JOIN SESSION NOW
+    </a>
+
+  </div>
+</div>
+
+<script>
+const imgs = [
+  "01.jpg","02.jpg","03.jpg","04.jpg","05.jpg",
+  "06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"
+];
+
+window.onload = function() {
+  let track = document.getElementById("scrollImgs");
+
+  // Load images twice for infinite scroll
+  imgs.concat(imgs).forEach(src => {
+    let img = document.createElement("img");
+    img.src = src;
+    img.onclick = () => openViewer(src);
+    track.appendChild(img);
+  });
+};
+
+// FULLSCREEN VIEWER
+function openViewer(src) {
+  document.getElementById("viewerImg").src = src;
+  document.getElementById("viewer").style.display = "flex";
+}
+
+document.getElementById("closeBtn").onclick = function() {
+  document.getElementById("viewer").style.display = "none";
+};
+</script>
+
+</body>
+</html>
