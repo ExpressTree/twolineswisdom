@@ -1,934 +1,1093 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pearl Mind – Trader Card (Gold A2)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl Mind – Trader Card (Gold A2)</title>
 
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  html, body {
-    height: 100%;
-    background: #050505;
-    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    overflow: hidden;
-    color: #f7f2df;
-  }
+        html,
+        body {
+            height: 100%;
+            background: #050505;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden;
+            color: #f7f2df;
+        }
 
-  .frame {
-    width: 100%;
-    max-width: 420px;
-    height: 100vh;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+        .frame {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-  .card {
-    width: 100%;
-    height: 100%;
-    border-radius: 24px;
-    padding: 14px 14px 12px;
-    background: radial-gradient(circle at top, #2a2318 0%, #12100b 45%, #050403 100%);
-    border: 1px solid rgba(240,214,150,0.7);
-    box-shadow:
-      0 0 40px rgba(0,0,0,0.95),
-      0 0 0 1px rgba(0,0,0,0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+        .card {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            padding: 14px 14px 12px;
+            background: radial-gradient(circle at top, #2a2318 0%, #12100b 45%, #050403 100%);
+            border: 1px solid rgba(240, 214, 150, 0.7);
+            box-shadow:
+                0 0 40px rgba(0, 0, 0, 0.95),
+                0 0 0 1px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-  /* Brand strip */
-  .brand {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: #f4ddb0;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-  }
-  .brand-left {
-    font-weight: 700;
-  }
-  .brand-right {
-    color: #c5a45a;
-    font-size: 10px;
-    opacity: 0.9;
-  }
+        /* Brand strip */
+        .brand {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #f4ddb0;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
 
-  /* PHOTO CENTER */
-  .photo-block {
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-  }
-  .photo-box {
-    width: 120px;
-    height: 120px;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(240,214,150,0.85);
-    background: radial-gradient(circle, #1b1812 0%, #050403 70%);
-    cursor: pointer;
-    box-shadow:
-      0 0 28px rgba(240,214,150,0.55),
-      0 0 0 1px rgba(0,0,0,0.9);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .photo-box:hover {
-    transform: translateY(-1px);
-    box-shadow:
-      0 0 36px rgba(240,214,150,0.7),
-      0 0 0 1px rgba(0,0,0,1);
-  }
-  .photo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  #photoInput { display: none; }
+        .brand-left {
+            font-weight: 700;
+        }
 
-  .editable {
-    outline: none;
-    border: none;
-  }
+        .brand-right {
+            color: #c5a45a;
+            font-size: 10px;
+            opacity: 0.9;
+        }
 
-  /* RANK / NAME / MOM / PROGRESS GRID */
-  .rank-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    column-gap: 12px;
-    row-gap: 4px;
-    margin-top: 12px;
-  }
+        /* PHOTO CENTER */
+        .photo-block {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+        }
 
-  /* Row 1 - Rank (left) */
-  .rank-box {
-    grid-column: 1;
-    grid-row: 1;
-    font-size: 13px;
-    color: #d8be7a;
-  }
-  .rank-label {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 11px;
-    color: #b89b5c;
-  }
-  .rank-big {
-    margin-top: 4px;
-    font-size: 24px;
-    font-weight: 700;
-    color: #f4e0a9;
-    position: relative;
-    transition: text-shadow 0.3s ease;
-  }
-  .rank-big span {
-    display: inline-block;
-    min-width: 28px;
-  }
+        .photo-box {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(240, 214, 150, 0.85);
+            background: radial-gradient(circle, #1b1812 0%, #050403 70%);
+            cursor: pointer;
+            box-shadow:
+                0 0 28px rgba(240, 214, 150, 0.55),
+                0 0 0 1px rgba(0, 0, 0, 0.9);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-  /* Row 1 - Right: Month / Name / Total */
-  .right-box {
-    grid-column: 2;
-    grid-row: 1;
-    text-align: right;
-    font-size: 13px;
-    color: #f0e3ba;
-  }
-  .month-text {
-    font-size: 13px;
-    font-weight: 500;
-    color: #ebd7a5;
-  }
-  .name-text {
-    margin-top: 2px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #fff5ce;
-  }
-  .total-text {
-    margin-top: 2px;
-    font-size: 12px;
-    color: #cfb36c;
-  }
+        .photo-box:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                0 0 36px rgba(240, 214, 150, 0.7),
+                0 0 0 1px rgba(0, 0, 0, 1);
+        }
 
-  /* Row 2 - MoM Points (below Rank) */
-  .mom-box {
-    grid-column: 1;
-    grid-row: 2;
-    text-align: left;
-    font-size: 12px;
-    color: #d2b870;
-    margin-top: 4px;
-  }
-  .mom-box label {
-    font-weight: 500;
-  }
-  .mom-help {
-    font-size: 10px;
-    color: #8f7a46;
-    margin-top: 1px;
-  }
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-  /* Row 2 - Rank Progress text (below right) */
-  .rank-progress {
-    grid-column: 2;
-    grid-row: 2;
-    text-align: right;
-    font-size: 11px;
-    color: #bfa05d;
-    margin-top: 4px;
-  }
-  .rank-status-text {
-    font-size: 11px;
-  }
-  .rank-next-text {
-    font-size: 10px;
-    margin-top: 2px;
-    color: #937c44;
-  }
+        #photoInput {
+            display: none;
+        }
 
-  /* Row 3 - Full-width progress bar */
-  .progress-container {
-    grid-column: 1 / span 2;
-    grid-row: 3;
-    width: 100%;
-    margin-top: 4px;
-  }
-  .progress-bar {
-    width: 100%;
-    height: 4px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.06);
-    overflow: hidden;
-    box-shadow: inset 0 0 2px rgba(0,0,0,0.6);
-  }
-  .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #f7e1a9, #c9963c);
-    transition: width 0.3s ease;
-  }
+        .editable {
+            outline: none;
+            border: none;
+        }
 
-  /* Rank glow animations */
-  .rank-big.rank-up {
-    animation: rankGlowUp 0.8s ease-out;
-  }
-  .rank-big.rank-down {
-    animation: rankGlowDown 0.8s ease-out;
-  }
+        /* RANK / NAME / MOM / PROGRESS GRID */
+        .rank-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            column-gap: 12px;
+            row-gap: 4px;
+            margin-top: 12px;
+        }
 
-  @keyframes rankGlowUp {
-    0% { text-shadow: 0 0 0 rgba(72,255,155,0); }
-    50% { text-shadow: 0 0 18px rgba(72,255,155,0.9); }
-    100% { text-shadow: 0 0 0 rgba(72,255,155,0); }
-  }
-  @keyframes rankGlowDown {
-    0% { text-shadow: 0 0 0 rgba(255,80,80,0); }
-    50% { text-shadow: 0 0 18px rgba(255,80,80,0.9); }
-    100% { text-shadow: 0 0 0 rgba(255,80,80,0); }
-  }
+        /* Row 1 - Rank (left) */
+        .rank-box {
+            grid-column: 1;
+            grid-row: 1;
+            font-size: 13px;
+            color: #d8be7a;
+        }
 
-  /* Batch banner */
-  .batch-banner-row {
-    margin-top: 10px;
-  }
-  .batch-banner-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #a18444;
-    margin-bottom: 4px;
-  }
-  .batch-banner-box {
-    width: 100%;
-    height: 40px;
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid rgba(240,214,150,0.65);
-    background: linear-gradient(90deg, #302316, #15100b, #302316);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 0 18px rgba(0,0,0,0.9);
-  }
-  .batch-banner-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
-  }
-  .batch-banner-text {
-    position: absolute;
-    z-index: 2;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: linear-gradient(to bottom, #fff1c3, #e4b95a);
-    -webkit-background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 8px rgba(0,0,0,0.7);
-  }
+        .rank-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 11px;
+            color: #b89b5c;
+        }
 
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(240,214,150,0.75), transparent);
-    margin: 10px 0;
-    opacity: 0.85;
-  }
+        .rank-big {
+            margin-top: 4px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #f4e0a9;
+            position: relative;
+            transition: text-shadow 0.3s ease;
+        }
 
-  /* Weekly breakdown */
-  .trades-box {
-    border-radius: 18px;
-    padding: 10px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(5,5,5,0.5);
-    box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
-  }
-  .trades-header {
-    display: grid;
-    grid-template-columns: 0.6fr 3.2fr 0.9fr 1.3fr;
-    color: #cfb36c;
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-  .trade-row {
-    display: grid;
-    grid-template-columns: 0.6fr 3.2fr 0.9fr 1.3fr;
-    color: #fdfbf3;
-    font-size: 12px;
-    padding: 3px 0;
-    align-items: center;
-  }
-  .trade-row:nth-child(odd + 1) {
-    background: rgba(255,255,255,0.02);
-    border-radius: 10px;
-  }
-  .trade-week {
-    color: #b79e5f;
-    font-size: 11px;
-  }
-  .trade-edit {
-    outline: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 1px 0;
-  }
-  .trade-points {
-    text-align: right;
-    font-size: 13px;
-    color: #f3dfb0;
-  }
-  .trade-count {
-    text-align: right;
-    font-size: 11px;
-    color: #dbbc70;
-  }
+        .rank-big span {
+            display: inline-block;
+            min-width: 28px;
+        }
 
-  /* PnL box */
-  .pnl-box {
-    margin-top: 10px;
-    border-radius: 16px;
-    border: 1px solid rgba(240,214,150,0.7);
-    background: #100e09;
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-      0 0 22px rgba(0,0,0,0.9),
-      inset 0 0 10px rgba(0,0,0,0.8);
-  }
-  .pnl-box img {
-    width: 100%;
-    height: 100%;
-    display: none;
-    object-fit: contain;
-    background: #000;
-  }
-  .pnl-placeholder {
-    color: #dcc079;
-    font-size: 11px;
-    padding: 10px;
-    text-align: center;
-    line-height: 1.4;
-  }
-  #pnlInput { display: none; }
+        /* Row 1 - Right: Month / Name / Total */
+        .right-box {
+            grid-column: 2;
+            grid-row: 1;
+            text-align: right;
+            font-size: 13px;
+            color: #f0e3ba;
+        }
 
-  /* Buttons */
-  .btn-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  .btn {
-    flex: 1;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 0;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 11px;
-    letter-spacing: 0.4px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, #f3d477, #e1b75d);
-    color: #000;
-    box-shadow:
-      0 4px 10px rgba(0,0,0,0.7),
-      0 0 0 1px rgba(0,0,0,0.8);
-  }
-  .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow:
-      0 6px 14px rgba(0,0,0,0.9),
-      0 0 0 1px rgba(255,255,255,0.1);
-  }
-  .btn-ghost {
-    background: #1b1811;
-    color: #f9e5b3;
-    border: 1px solid rgba(240,214,150,0.35);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.7);
-  }
-  .btn-ghost:hover {
-    background: #242016;
-    transform: translateY(-1px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.9);
-  }
+        .month-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: #ebd7a5;
+        }
 
-  .hint {
-    margin-top: 4px;
-    text-align: center;
-    font-size: 9px;
-    color: #8a7a55;
-  }
+        .name-text {
+            margin-top: 2px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff5ce;
+        }
 
-  /* Responsive tweak */
-  @media (max-width: 380px) {
-    .card {
-      border-radius: 18px;
-      padding: 10px;
-    }
-    .rank-big {
-      font-size: 22px;
-    }
-    .name-text {
-      font-size: 14px;
-    }
-  }
-</style>
+        .total-text {
+            margin-top: 2px;
+            font-size: 12px;
+            color: #cfb36c;
+        }
+
+        /* Row 2 - MoM Points (below Rank) */
+        .mom-box {
+            grid-column: 1;
+            grid-row: 2;
+            text-align: left;
+            font-size: 12px;
+            color: #d2b870;
+            margin-top: 4px;
+        }
+
+        .mom-box label {
+            font-weight: 500;
+        }
+
+        .mom-help {
+            font-size: 10px;
+            color: #8f7a46;
+            margin-top: 1px;
+        }
+
+        /* Row 2 - Rank Progress text (below right) */
+        .rank-progress {
+            grid-column: 2;
+            grid-row: 2;
+            text-align: right;
+            font-size: 11px;
+            color: #bfa05d;
+            margin-top: 4px;
+        }
+
+        .rank-status-text {
+            font-size: 11px;
+        }
+
+        .rank-next-text {
+            font-size: 10px;
+            margin-top: 2px;
+            color: #937c44;
+        }
+
+        /* Row 3 - Full-width progress bar */
+        .progress-container {
+            grid-column: 1 / span 2;
+            grid-row: 3;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f7e1a9, #c9963c);
+            transition: width 0.3s ease;
+        }
+
+        /* Rank glow animations */
+        .rank-big.rank-up {
+            animation: rankGlowUp 0.8s ease-out;
+        }
+
+        .rank-big.rank-down {
+            animation: rankGlowDown 0.8s ease-out;
+        }
+
+        @keyframes rankGlowUp {
+            0% {
+                text-shadow: 0 0 0 rgba(72, 255, 155, 0);
+            }
+
+            50% {
+                text-shadow: 0 0 18px rgba(72, 255, 155, 0.9);
+            }
+
+            100% {
+                text-shadow: 0 0 0 rgba(72, 255, 155, 0);
+            }
+        }
+
+        @keyframes rankGlowDown {
+            0% {
+                text-shadow: 0 0 0 rgba(255, 80, 80, 0);
+            }
+
+            50% {
+                text-shadow: 0 0 18px rgba(255, 80, 80, 0.9);
+            }
+
+            100% {
+                text-shadow: 0 0 0 rgba(255, 80, 80, 0);
+            }
+        }
+
+        /* Batch banner */
+        .batch-banner-row {
+            margin-top: 10px;
+        }
+
+        .batch-banner-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a18444;
+            margin-bottom: 4px;
+        }
+
+        .batch-banner-box {
+            width: 100%;
+            height: 40px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(240, 214, 150, 0.65);
+            background: linear-gradient(90deg, #302316, #15100b, #302316);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.9);
+        }
+
+        .batch-banner-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .batch-banner-text {
+            position: absolute;
+            z-index: 2;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff1c3, #e4b95a);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(240, 214, 150, 0.75), transparent);
+            margin: 10px 0;
+            opacity: 0.85;
+        }
+
+        /* Weekly breakdown */
+        .trades-box {
+            border-radius: 18px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(5, 5, 5, 0.5);
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .trades-header {
+            display: grid;
+            grid-template-columns: 0.6fr 3.2fr 0.9fr 1.3fr;
+            color: #cfb36c;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .trade-row {
+            display: grid;
+            grid-template-columns: 0.6fr 3.2fr 0.9fr 1.3fr;
+            color: #fdfbf3;
+            font-size: 12px;
+            padding: 3px 0;
+            align-items: center;
+        }
+
+        .trade-row:nth-child(odd + 1) {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+
+        .trade-week {
+            color: #b79e5f;
+            font-size: 11px;
+        }
+
+        .trade-edit {
+            outline: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 1px 0;
+        }
+
+        .trade-points {
+            text-align: right;
+            font-size: 13px;
+            color: #f3dfb0;
+        }
+
+        .trade-count {
+            text-align: right;
+            font-size: 11px;
+            color: #dbbc70;
+        }
+
+        /* PnL box */
+        .pnl-box {
+            margin-top: 10px;
+            border-radius: 16px;
+            border: 1px solid rgba(240, 214, 150, 0.7);
+            background: #100e09;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 0 22px rgba(0, 0, 0, 0.9),
+                inset 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .pnl-box img {
+            width: 100%;
+            height: 100%;
+            display: none;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .pnl-placeholder {
+            color: #dcc079;
+            font-size: 11px;
+            padding: 10px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        #pnlInput {
+            display: none;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 0;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 11px;
+            letter-spacing: 0.4px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f3d477, #e1b75d);
+            color: #000;
+            box-shadow:
+                0 4px 10px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(0, 0, 0, 0.8);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                0 6px 14px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-ghost {
+            background: #1b1811;
+            color: #f9e5b3;
+            border: 1px solid rgba(240, 214, 150, 0.35);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn-ghost:hover {
+            background: #242016;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.9);
+        }
+
+        .hint {
+            margin-top: 4px;
+            text-align: center;
+            font-size: 9px;
+            color: #8a7a55;
+        }
+
+        /* Responsive tweak */
+        @media (max-width: 380px) {
+            .card {
+                border-radius: 18px;
+                padding: 10px;
+            }
+
+            .rank-big {
+                font-size: 22px;
+            }
+
+            .name-text {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="frame">
-  <div id="captureArea" class="card">
+    <div class="frame">
+        <div id="captureArea" class="card">
 
-    <!-- BRAND -->
-    <div class="brand">
-      <div class="brand-left">THE PEARL MIND</div>
-      <div class="brand-right">Trader Identity • Monthly Card</div>
-    </div>
+            <!-- BRAND -->
+            <div class="brand">
+                <div class="brand-left">THE PEARL MIND</div>
+                <div class="brand-right">Trader Identity • Monthly Card</div>
+            </div>
 
-    <!-- PHOTO -->
-    <div class="photo-block">
-      <div class="photo-box" onclick="document.getElementById('photoInput').click()">
-        <img id="photoPreview" alt="">
-      </div>
-      <input type="file" id="photoInput" accept="image/*">
-    </div>
+            <!-- PHOTO -->
+            <div class="photo-block">
+                <div class="photo-box" onclick="document.getElementById('photoInput').click()">
+                    <img id="photoPreview" alt="">
+                </div>
+                <input type="file" id="photoInput" accept="image">
+            </div>
 
-    <!-- RANK + NAME + MOM + PROGRESS (3-row grid) -->
-    <div class="rank-grid">
-      <!-- Row 1: Rank (left) -->
-      <div class="rank-box">
-        <div class="rank-label">Rank</div>
-        <div class="rank-big">
-          <span id="rankOld" class="editable" contenteditable="true">136</span>
-          &nbsp;→&nbsp;
-          <span id="rankNew" class="editable" contenteditable="true">136</span>
+            <!-- CENTRAL PROFIT DISPLAY -->
+            <div id="centralProfit" style="
+                margin-top:14px;
+                text-align:center;
+                font-size:36px;
+                letter-spacing:0.5px;
+                font-family: 'Inter', system-ui;
+                text-shadow: 0 0 12px rgba(0,0,0,0.75);
+                "></div>
+            <div id="profitError" style="
+                margin-top:4px;
+                text-align:center;
+                font-size:11px;
+                color:#ff4c4c;
+                font-weight:600;
+                display:none;
+                font-family:'Inter',sans-serif;
+                "></div>
+
+
+            <!-- RANK + NAME + MOM + PROGRESS (3-row grid) -->
+            <div class="rank-grid">
+                <!-- Row 1: Rank (left) -->
+                <div class="rank-box">
+                    <div class="rank-label">Rank</div>
+                    <div class="rank-big">
+                        <span id="rankOld" class="editable" contenteditable="true">136</span>
+                        &nbsp;→&nbsp;
+                        <span id="rankNew" class="editable" contenteditable="true">136</span>
+                    </div>
+                </div>
+
+                <!-- Row 1: Right - Month / Name / Total -->
+                <div class="right-box">
+                    <div class="month-text editable" id="month" contenteditable="true">Oct 2025</div>
+                    <div class="name-text editable" id="name" contenteditable="true">Your Name</div>
+                    <div class="total-text">
+                        Total: <span id="totalPoints">0</span> pts
+                    </div>
+                </div>
+
+                <!-- Row 2: Left - MoM Points -->
+                <div class="mom-box">
+                    <label>MoM Points:</label>
+                    <span id="momPoints" class="editable" contenteditable="true">320, 410</span>
+                    <div class="mom-help">Enter comma-separated monthly totals.</div>
+                </div>
+
+                <!-- Row 2: Right - Rank Progress text -->
+                <div class="rank-progress">
+                    <div id="rankStatus" class="rank-status-text">No rank change yet.</div>
+                    <div id="nextRank" class="rank-next-text">Next rank in 120 pts.</div>
+                </div>
+
+                <!-- Row 3: Full-width progress bar -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Banner -->
+            <div class="batch-banner-row">
+                <div class="batch-banner-label">Level</div>
+                <div class="batch-banner-box">
+                    <img id="batchBannerImg" src="" alt="">
+                    <div id="batchBannerText" class="batch-banner-text">BATCH NAME</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Weekly Breakdown -->
+            <div class="trades-box">
+                <div class="trades-header">
+                    <div>Wk</div>
+                    <div>Trades</div>
+                    <div>Pts</div>
+                    <div>+40 / -40</div>
+                </div>
+
+                <div class="trade-row">
+                    <div class="trade-week">1</div>
+                    <div id="t1" class="trade-edit editable" contenteditable="true">+40, +38, -25, +40</div>
+                    <div id="p1" class="trade-points"></div>
+                    <div id="c1" class="trade-count"></div>
+                </div>
+                <div class="trade-row">
+                    <div class="trade-week">2</div>
+                    <div id="t2" class="trade-edit editable" contenteditable="true">—, +45, +43, -40</div>
+                    <div id="p2" class="trade-points"></div>
+                    <div id="c2" class="trade-count"></div>
+                </div>
+                <div class="trade-row">
+                    <div class="trade-week">3</div>
+                    <div id="t3" class="trade-edit editable" contenteditable="true"></div>
+                    <div id="p3" class="trade-points"></div>
+                    <div id="c3" class="trade-count"></div>
+                </div>
+                <div class="trade-row">
+                    <div class="trade-week">4</div>
+                    <div id="t4" class="trade-edit editable" contenteditable="true"></div>
+                    <div id="p4" class="trade-points"></div>
+                    <div id="c4" class="trade-count"></div>
+                </div>
+                <div class="trade-row">
+                    <div class="trade-week">5</div>
+                    <div id="t5" class="trade-edit editable" contenteditable="true"></div>
+                    <div id="p5" class="trade-points"></div>
+                    <div id="c5" class="trade-count"></div>
+                </div>
+
+                <!-- PnL Upload -->
+                <div class="pnl-box" onclick="document.getElementById('pnlInput').click()">
+                    <div id="pnlPlaceholder" class="pnl-placeholder">
+                        Upload Real Monthly PnL Screenshot from Broker
+                    </div>
+                    <img id="pnlPreview" alt="">
+                </div>
+                <input type="file" id="pnlInput" accept="image/*">
+            </div>
+
+            <!-- Buttons -->
+            <div class="btn-row">
+                <button class="btn btn-ghost" onclick="resetData()">Reset</button>
+                <button class="btn btn-primary" onclick="calculateAll()">Update</button>
+                <button class="btn btn-primary" onclick="shareCard()">Share</button>
+            </div>
+            <div class="hint">All data & images are stored locally on this device only.</div>
+
         </div>
-      </div>
-
-      <!-- Row 1: Right - Month / Name / Total -->
-      <div class="right-box">
-        <div class="month-text editable" id="month" contenteditable="true">Oct 2025</div>
-        <div class="name-text editable" id="name" contenteditable="true">Your Name</div>
-        <div class="total-text">
-          Total: <span id="totalPoints">0</span> pts
-        </div>
-      </div>
-
-      <!-- Row 2: Left - MoM Points -->
-      <div class="mom-box">
-        <label>MoM Points:</label>
-        <span id="momPoints" class="editable" contenteditable="true">320, 410</span>
-        <div class="mom-help">Enter comma-separated monthly totals.</div>
-      </div>
-
-      <!-- Row 2: Right - Rank Progress text -->
-      <div class="rank-progress">
-        <div id="rankStatus" class="rank-status-text">No rank change yet.</div>
-        <div id="nextRank" class="rank-next-text">Next rank in 120 pts.</div>
-      </div>
-
-      <!-- Row 3: Full-width progress bar -->
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-      </div>
     </div>
 
-    <!-- Batch Banner -->
-    <div class="batch-banner-row">
-      <div class="batch-banner-label">Level</div>
-      <div class="batch-banner-box">
-        <img id="batchBannerImg" src="" alt="">
-        <div id="batchBannerText" class="batch-banner-text">BATCH NAME</div>
-      </div>
-    </div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // ------- ELEMENT REFERENCES -------
+        const elName = document.getElementById("name");
+        const elMonth = document.getElementById("month");
+        const elRankOld = document.getElementById("rankOld");
+        const elRankNew = document.getElementById("rankNew");
+        const elTotalPoints = document.getElementById("totalPoints");
 
-    <div class="divider"></div>
+        const elMomPoints = document.getElementById("momPoints");
+        const elRankStatus = document.getElementById("rankStatus");
+        const elNextRank = document.getElementById("nextRank");
+        const elProgressFill = document.getElementById("progressFill");
+        const elRankBig = document.querySelector(".rank-big");
 
-    <!-- Weekly Breakdown -->
-    <div class="trades-box">
-      <div class="trades-header">
-        <div>Wk</div>
-        <div>Trades</div>
-        <div>Pts</div>
-        <div>+40 / -40</div>
-      </div>
+        const tEls = [
+            document.getElementById("t1"),
+            document.getElementById("t2"),
+            document.getElementById("t3"),
+            document.getElementById("t4"),
+            document.getElementById("t5"),
+        ];
+        const pEls = [
+            document.getElementById("p1"),
+            document.getElementById("p2"),
+            document.getElementById("p3"),
+            document.getElementById("p4"),
+            document.getElementById("p5"),
+        ];
+        const cEls = [
+            document.getElementById("c1"),
+            document.getElementById("c2"),
+            document.getElementById("c3"),
+            document.getElementById("c4"),
+            document.getElementById("c5"),
+        ];
 
-      <div class="trade-row">
-        <div class="trade-week">1</div>
-        <div id="t1" class="trade-edit editable" contenteditable="true">+40, +38, -25, +40</div>
-        <div id="p1" class="trade-points"></div>
-        <div id="c1" class="trade-count"></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-week">2</div>
-        <div id="t2" class="trade-edit editable" contenteditable="true">—, +45, +43, -40</div>
-        <div id="p2" class="trade-points"></div>
-        <div id="c2" class="trade-count"></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-week">3</div>
-        <div id="t3" class="trade-edit editable" contenteditable="true"></div>
-        <div id="p3" class="trade-points"></div>
-        <div id="c3" class="trade-count"></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-week">4</div>
-        <div id="t4" class="trade-edit editable" contenteditable="true"></div>
-        <div id="p4" class="trade-points"></div>
-        <div id="c4" class="trade-count"></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-week">5</div>
-        <div id="t5" class="trade-edit editable" contenteditable="true"></div>
-        <div id="p5" class="trade-points"></div>
-        <div id="c5" class="trade-count"></div>
-      </div>
+        const photoInput = document.getElementById("photoInput");
+        const photoPreview = document.getElementById("photoPreview");
+        const pnlInput = document.getElementById("pnlInput");
+        const pnlPreview = document.getElementById("pnlPreview");
+        const pnlPlaceholder = document.getElementById("pnlPlaceholder");
 
-      <!-- PnL Upload -->
-      <div class="pnl-box" onclick="document.getElementById('pnlInput').click()">
-        <div id="pnlPlaceholder" class="pnl-placeholder">
-          Upload Real Monthly PnL Screenshot from Broker
-        </div>
-        <img id="pnlPreview" alt="">
-      </div>
-      <input type="file" id="pnlInput" accept="image/*">
-    </div>
+        const batchBannerImg = document.getElementById("batchBannerImg");
+        const batchBannerText = document.getElementById("batchBannerText");
 
-    <!-- Buttons -->
-    <div class="btn-row">
-      <button class="btn btn-ghost" onclick="resetData()">Reset</button>
-      <button class="btn btn-primary" onclick="calculateAll()">Update</button>
-      <button class="btn btn-primary" onclick="shareCard()">Share</button>
-    </div>
-    <div class="hint">All data & images are stored locally on this device only.</div>
+        // ------- BATCH LEVELS (9 Levels) -------
+        const batchLevels = [
+            { maxRank: 1, name: "BLACK PEARL ELITE", banner: "banner_black_pearl_elite.png" },
+            { maxRank: 10, name: "CAPTAIN'S CIRCLE", banner: "banner_captains_circle.png" },
+            { maxRank: 30, name: "WAVE RIDERS", banner: "banner_wave_riders.png" },
+            { maxRank: 60, name: "POINTSMITHS", banner: "banner_pointsmiths.png" },
+            { maxRank: 90, name: "COMPASS KEEPERS", banner: "banner_compass_keepers.png" },
+            { maxRank: 110, name: "DECK APPRENTICES", banner: "banner_deck_apprentices.png" },
+            { maxRank: 120, name: "HARBOUR WATCHERS", banner: "banner_harbour_watchers.png" },
+            { maxRank: 128, name: "SILENT RAIDERS", banner: "banner_silent_raiders.png" },
+            { maxRank: 136, name: "OUTER RIM SAILORS", banner: "banner_outer_rim_sailors.png" }
+        ];
 
-  </div>
-</div>
-
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script>
-  // ------- ELEMENT REFERENCES -------
-  const elName        = document.getElementById("name");
-  const elMonth       = document.getElementById("month");
-  const elRankOld     = document.getElementById("rankOld");
-  const elRankNew     = document.getElementById("rankNew");
-  const elTotalPoints = document.getElementById("totalPoints");
-
-  const elMomPoints   = document.getElementById("momPoints");
-  const elRankStatus  = document.getElementById("rankStatus");
-  const elNextRank    = document.getElementById("nextRank");
-  const elProgressFill= document.getElementById("progressFill");
-  const elRankBig     = document.querySelector(".rank-big");
-
-  const tEls = [
-    document.getElementById("t1"),
-    document.getElementById("t2"),
-    document.getElementById("t3"),
-    document.getElementById("t4"),
-    document.getElementById("t5"),
-  ];
-  const pEls = [
-    document.getElementById("p1"),
-    document.getElementById("p2"),
-    document.getElementById("p3"),
-    document.getElementById("p4"),
-    document.getElementById("p5"),
-  ];
-  const cEls = [
-    document.getElementById("c1"),
-    document.getElementById("c2"),
-    document.getElementById("c3"),
-    document.getElementById("c4"),
-    document.getElementById("c5"),
-  ];
-
-  const photoInput    = document.getElementById("photoInput");
-  const photoPreview  = document.getElementById("photoPreview");
-  const pnlInput      = document.getElementById("pnlInput");
-  const pnlPreview    = document.getElementById("pnlPreview");
-  const pnlPlaceholder= document.getElementById("pnlPlaceholder");
-
-  const batchBannerImg   = document.getElementById("batchBannerImg");
-  const batchBannerText  = document.getElementById("batchBannerText");
-
-  // ------- BATCH LEVELS (9 Levels) -------
-  const batchLevels = [
-    { maxRank: 1,   name: "BLACK PEARL ELITE",  banner: "banner_black_pearl_elite.png" },
-    { maxRank: 10,  name: "CAPTAIN'S CIRCLE",   banner: "banner_captains_circle.png" },
-    { maxRank: 30,  name: "WAVE RIDERS",        banner: "banner_wave_riders.png" },
-    { maxRank: 60,  name: "POINTSMITHS",        banner: "banner_pointsmiths.png" },
-    { maxRank: 90,  name: "COMPASS KEEPERS",    banner: "banner_compass_keepers.png" },
-    { maxRank: 110, name: "DECK APPRENTICES",   banner: "banner_deck_apprentices.png" },
-    { maxRank: 120, name: "HARBOUR WATCHERS",   banner: "banner_harbour_watchers.png" },
-    { maxRank: 128, name: "SILENT RAIDERS",     banner: "banner_silent_raiders.png" },
-    { maxRank: 136, name: "OUTER RIM SAILORS",  banner: "banner_outer_rim_sailors.png" }
-  ];
-
-  function updateBatch() {
-    const r = parseInt(elRankNew.innerText.trim(), 10);
-    if (isNaN(r)) {
-      batchBannerText.textContent = "BATCH NAME";
-      batchBannerImg.style.display = "none";
-      return;
-    }
-    const b = batchLevels.find(x => r <= x.maxRank) || batchLevels[batchLevels.length - 1];
-    batchBannerText.textContent = b.name;
-    if (b.banner) {
-      batchBannerImg.src = b.banner; // provide these files if you want images
-      batchBannerImg.style.display = "block";
-    } else {
-      batchBannerImg.style.display = "none";
-    }
-  }
-
-  // ------- TRADE PARSER (±40 LOGIC) -------
-  // +40 trade: value between 25 and +∞
-  // -40 trade: value between 0 and -55
-  function parseTrades(str) {
-    if (!str) return { points: 0, pos40: 0, neg40: 0 };
-    const parts = str
-      .split(",")
-      .map(s => s.trim())
-      .filter(s => s && s !== "—" && s !== "-");
-
-    let points = 0;
-    let pos40 = 0;
-    let neg40 = 0;
-
-    parts.forEach(v => {
-      const n = parseFloat(v);
-      if (isNaN(n)) return;
-      points += n;
-
-      if (n >= 25) pos40++;
-      else if (n <= 0 && n >= -55) neg40++;
-    });
-
-    return { points, pos40, neg40 };
-  }
-
-  // ------- RANK & PROGRESS FROM MoM -------
-  function computeMoMAndRank() {
-    const momStr = elMomPoints.innerText.trim();
-    let totalMoM = 0;
-
-    if (momStr) {
-      momStr.split(",").forEach(v => {
-        const n = parseFloat(v.trim());
-        if (!isNaN(n)) totalMoM += n;
-      });
-    }
-
-    // ceiling value based on MoM totals
-    let ceilVal = Math.ceil(totalMoM / 120);
-    if (!isFinite(ceilVal) || totalMoM <= 0) ceilVal = 0;
-
-    let newRank = 136 - ceilVal;
-    if (newRank < 1) newRank = 1;
-    if (newRank > 136) newRank = 136;
-
-    const oldRank = parseInt(elRankOld.innerText.trim(), 10) || 136;
-    const prevNew = parseInt(elRankNew.innerText.trim(), 10);
-
-    // animate rank number
-    animateRankNumber(prevNew, newRank);
-
-    // rank status text
-    const diff = oldRank - newRank; // positive => improved (smaller number is better)
-    let statusMsg = "No rank change yet.";
-    elRankBig.classList.remove("rank-up", "rank-down");
-
-    if (diff > 0) {
-      statusMsg = `Improved by ${diff} rank${diff > 1 ? "s" : ""}.`;
-      elRankBig.classList.add("rank-up");
-    } else if (diff < 0) {
-      const d = Math.abs(diff);
-      statusMsg = `Dropped by ${d} rank${d > 1 ? "s" : ""}.`;
-      elRankBig.classList.add("rank-down");
-    }
-
-    elRankStatus.innerText = statusMsg;
-
-    // next rank / progress bar
-    if (newRank <= 1) {
-      elNextRank.innerText = "Top rank reached.";
-      elProgressFill.style.width = "100%";
-    } else {
-      const targetCeil = ceilVal + 1;
-      const sumNeeded = targetCeil * 120;
-      let remaining = sumNeeded - totalMoM;
-      if (remaining < 0) remaining = 0;
-
-      elNextRank.innerText = `Next rank in ${remaining.toFixed(0)} pts.`;
-
-      // progress within current 120-pt segment
-      let pct = 0;
-      if (ceilVal <= 0) {
-        // first segment (0 to 120)
-        pct = (totalMoM / 120) * 100;
-      } else {
-        const lower = (ceilVal - 1) * 120;
-        const upper = ceilVal * 120;
-        pct = ((totalMoM - lower) / (upper - lower)) * 100;
-      }
-      if (pct < 0) pct = 0;
-      if (pct > 100) pct = 100;
-      elProgressFill.style.width = pct + "%";
-    }
-
-    updateBatch();
-  }
-
-  function animateRankNumber(fromVal, toVal) {
-    if (isNaN(fromVal)) {
-      elRankNew.innerText = toVal;
-      return;
-    }
-    const duration = 400;
-    const start = performance.now();
-
-    function frame(now) {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = t * (2 - t); // ease-out
-      const current = Math.round(fromVal + (toVal - fromVal) * eased);
-      elRankNew.innerText = current;
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        elRankNew.innerText = toVal;
-      }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  function calculateAll() {
-    let total = 0;
-
-    for (let i = 0; i < 5; i++) {
-      const txt = tEls[i].innerText.trim();
-      const out = parseTrades(txt);
-      total += out.points;
-      pEls[i].innerText = out.points ? out.points : "";
-      cEls[i].innerText = (out.pos40 || out.neg40) ? (out.pos40 + " / " + out.neg40) : "";
-    }
-
-    elTotalPoints.innerText = total;
-
-    // Use MoM totals (comma-separated) to determine rank & progress
-    computeMoMAndRank();
-
-    saveData();
-  }
-
-  // ------- PHOTO UPLOAD -------
-  photoInput.addEventListener("change", e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const r = new FileReader();
-    r.onload = ev => {
-      photoPreview.src = ev.target.result;
-      localStorage.setItem("pm_photo_v5", ev.target.result);
-    };
-    r.readAsDataURL(file);
-  });
-
-  // ------- PNL UPLOAD -------
-  pnlInput.addEventListener("change", e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const r = new FileReader();
-    r.onload = ev => {
-      pnlPreview.src = ev.target.result;
-      pnlPreview.style.display = "block";
-      pnlPlaceholder.style.display = "none";
-      localStorage.setItem("pm_pnl_v5", ev.target.result);
-    };
-    r.readAsDataURL(file);
-  });
-
-  // ------- SAVE & LOAD -------
-  function saveData() {
-    const data = {
-      name:       elName.innerText,
-      month:      elMonth.innerText,
-      rankOld:    elRankOld.innerText,
-      rankNew:    elRankNew.innerText,
-      momPoints:  elMomPoints.innerText,
-      t1: tEls[0].innerText,
-      t2: tEls[1].innerText,
-      t3: tEls[2].innerText,
-      t4: tEls[3].innerText,
-      t5: tEls[4].innerText
-    };
-    localStorage.setItem("pm_card_v5", JSON.stringify(data));
-  }
-
-  function loadData() {
-    const raw = localStorage.getItem("pm_card_v5");
-    if (raw) {
-      try {
-        const d = JSON.parse(raw);
-        elName.innerText       = d.name      || "Your Name";
-        elMonth.innerText      = d.month     || "Oct 2025";
-        elRankOld.innerText    = d.rankOld   || "136";
-        elRankNew.innerText    = d.rankNew   || "136";
-        elMomPoints.innerText  = d.momPoints || "320, 410";
-        tEls[0].innerText      = d.t1 || "";
-        tEls[1].innerText      = d.t2 || "";
-        tEls[2].innerText      = d.t3 || "";
-        tEls[3].innerText      = d.t4 || "";
-        tEls[4].innerText      = d.t5 || "";
-      } catch(e) {
-        console.error("Load error:", e);
-      }
-    }
-    // images
-    const savedPhoto = localStorage.getItem("pm_photo_v5");
-    if (savedPhoto) photoPreview.src = savedPhoto;
-
-    const savedPnl = localStorage.getItem("pm_pnl_v5");
-    if (savedPnl) {
-      pnlPreview.src = savedPnl;
-      pnlPreview.style.display = "block";
-      pnlPlaceholder.style.display = "none";
-    }
-
-    calculateAll();
-  }
-
-  // attach input listeners
-  function attachListeners() {
-    [elName, elMonth].forEach(el => {
-      el.addEventListener("input", () => {
-        saveData();
-      });
-    });
-
-    elRankOld.addEventListener("input", () => {
-      computeMoMAndRank();
-      saveData();
-    });
-
-    // allow manual override of new rank if needed (but no progress change)
-    elRankNew.addEventListener("input", () => {
-      saveData();
-      updateBatch();
-    });
-
-    tEls.forEach(el => {
-      el.addEventListener("input", () => {
-        calculateAll();
-      });
-    });
-
-    elMomPoints.addEventListener("input", () => {
-      computeMoMAndRank();
-      saveData();
-    });
-  }
-
-  function resetData() {
-    if (!confirm("Clear card data on this device?")) return;
-    localStorage.removeItem("pm_card_v5");
-    localStorage.removeItem("pm_photo_v5");
-    localStorage.removeItem("pm_pnl_v5");
-    location.reload();
-  }
-
-  async function shareCard() {
-    const node = document.getElementById("captureArea");
-    const canvas = await html2canvas(node, { scale: 2 });
-    canvas.toBlob(async blob => {
-      const file = new File([blob], "pearlmind_card.png", { type: "image/png" });
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: "Pearl Mind – Trader Card",
-            text: "My monthly Pearl Mind trader card."
-          });
-        } catch(e) {
-          console.log("Share cancelled", e);
+        function updateBatch() {
+            const r = parseInt(elRankNew.innerText.trim(), 10);
+            if (isNaN(r)) {
+                batchBannerText.textContent = "BATCH NAME";
+                batchBannerImg.style.display = "none";
+                return;
+            }
+            const b = batchLevels.find(x => r <= x.maxRank) || batchLevels[batchLevels.length - 1];
+            batchBannerText.textContent = b.name;
+            if (b.banner) {
+                batchBannerImg.src = b.banner; // provide these files if you want images
+                batchBannerImg.style.display = "block";
+            } else {
+                batchBannerImg.style.display = "none";
+            }
         }
-      } else {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "pearlmind_card.png";
-        a.click();
-      }
-    });
-  }
 
-  // expose to HTML buttons
-  window.calculateAll = calculateAll;
-  window.resetData = resetData;
-  window.shareCard = shareCard;
+        // ------- TRADE PARSER (±40 LOGIC) -------
+        // +40 trade: value between 25 and +∞
+        // -40 trade: value between 0 and -55
+        function parseTrades(str) {
+            if (!str) return { points: 0, pos40: 0, neg40: 0 };
+            const parts = str
+                .split(",")
+                .map(s => s.trim())
+                .filter(s => s && s !== "—" && s !== "-");
 
-  // init
-  attachListeners();
-  loadData();
-</script>
+            let points = 0;
+            let pos40 = 0;
+            let neg40 = 0;
+
+            parts.forEach(v => {
+                const n = parseFloat(v);
+                if (isNaN(n)) return;
+                points += n;
+
+                if (n >= 25) pos40++;
+                else if (n <= 0 && n >= -55) neg40++;
+            });
+
+            return { points, pos40, neg40 };
+        }
+
+        // ------- RANK & PROGRESS FROM MoM -------
+        function computeMoMAndRank() {
+            const momStr = elMomPoints.innerText.trim();
+            let totalMoM = 0;
+
+            if (momStr) {
+                momStr.split(",").forEach(v => {
+                    const n = parseFloat(v.trim());
+                    if (!isNaN(n)) totalMoM += n;
+                });
+            }
+
+            // ceiling value based on MoM totals
+            let ceilVal = Math.ceil(totalMoM / 120);
+            if (!isFinite(ceilVal) || totalMoM <= 0) ceilVal = 0;
+
+            let newRank = 136 - ceilVal;
+            if (newRank < 1) newRank = 1;
+            if (newRank > 136) newRank = 136;
+
+            const oldRank = parseInt(elRankOld.innerText.trim(), 10) || 136;
+            const prevNew = parseInt(elRankNew.innerText.trim(), 10);
+
+            // animate rank number
+            animateRankNumber(prevNew, newRank);
+
+            // rank status text
+            const diff = oldRank - newRank; // positive => improved (smaller number is better)
+            let statusMsg = "No rank change yet.";
+            elRankBig.classList.remove("rank-up", "rank-down");
+
+            if (diff > 0) {
+                statusMsg = `Improved by ${diff} rank${diff > 1 ? "s" : ""}.`;
+                elRankBig.classList.add("rank-up");
+            } else if (diff < 0) {
+                const d = Math.abs(diff);
+                statusMsg = `Dropped by ${d} rank${d > 1 ? "s" : ""}.`;
+                elRankBig.classList.add("rank-down");
+            }
+
+            elRankStatus.innerText = statusMsg;
+
+            // next rank / progress bar
+            if (newRank <= 1) {
+                elNextRank.innerText = "Top rank reached.";
+                elProgressFill.style.width = "100%";
+            } else {
+                const targetCeil = ceilVal + 1;
+                const sumNeeded = targetCeil * 120;
+                let remaining = sumNeeded - totalMoM;
+                if (remaining < 0) remaining = 0;
+
+                elNextRank.innerText = `Next rank in ${remaining.toFixed(0)} pts.`;
+
+                // progress within current 120-pt segment
+                let pct = 0;
+                if (ceilVal <= 0) {
+                    // first segment (0 to 120)
+                    pct = (totalMoM / 120) * 100;
+                } else {
+                    const lower = (ceilVal - 1) * 120;
+                    const upper = ceilVal * 120;
+                    pct = ((totalMoM - lower) / (upper - lower)) * 100;
+                }
+                if (pct < 0) pct = 0;
+                if (pct > 100) pct = 100;
+                elProgressFill.style.width = pct + "%";
+            }
+
+            updateBatch();
+            updateCentralProfit();
+
+        }
+
+        function animateRankNumber(fromVal, toVal) {
+            if (isNaN(fromVal)) {
+                elRankNew.innerText = toVal;
+                return;
+            }
+            const duration = 400;
+            const start = performance.now();
+
+            function frame(now) {
+                const t = Math.min(1, (now - start) / duration);
+                const eased = t * (2 - t); // ease-out
+                const current = Math.round(fromVal + (toVal - fromVal) * eased);
+                elRankNew.innerText = current;
+                if (t < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    elRankNew.innerText = toVal;
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function updateCentralProfit() {
+
+        const momStr = elMomPoints.innerText.trim();
+        const el = document.getElementById("centralProfit");
+        const err = document.getElementById("profitError");
+
+        // VALIDATION RULE: Only numbers, commas, minus allowed
+        if (!/^[0-9,\-\s]*$/.test(momStr)) {
+            el.innerHTML = "";
+            err.style.display = "block";
+            err.innerHTML = "❌ Invalid characters in MoM. Use only numbers and commas.";
+            return;
+        }
+
+        err.style.display = "none";
+
+        let sum = 0;
+        if (momStr) {
+            momStr.split(",").forEach(v => {
+            const n = parseFloat(v.trim());
+            if (!isNaN(n)) sum += n;
+            });
+        }
+
+        const qty = 35;
+        const totalProfit = sum * qty;
+
+        const formatted = totalProfit.toLocaleString("en-IN");
+
+        // POSITIVE → GOLD
+        if (totalProfit >= 0) {
+            el.style.background = "linear-gradient(rgb(255, 249, 214), rgb(146 245 111), rgb(47 212 13))";
+            el.style.webkitBackgroundClip = "text";
+            el.style.color = "transparent";
+            el.style.fontWeight = "900";
+            el.style.textShadow = "0 0 8px rgba(255,218,120,0.35)";
+        }
+        // NEGATIVE → RED
+        else {
+            el.style.background = "";
+            el.style.color = "#ff5c5c";
+            el.style.fontWeight = "700";
+            el.style.textShadow = "0 0 6px rgba(255,50,50,0.4)";
+        }
+
+        el.innerHTML = `₹ ${formatted}`;
+        }
+
+
+
+
+        function calculateAll() {
+            let total = 0;
+
+            for (let i = 0; i < 5; i++) {
+                const txt = tEls[i].innerText.trim();
+                const out = parseTrades(txt);
+                total += out.points;
+                pEls[i].innerText = out.points ? out.points : "";
+                cEls[i].innerText = (out.pos40 || out.neg40) ? (out.pos40 + " / " + out.neg40) : "";
+            }
+
+            elTotalPoints.innerText = total;
+
+            // Use MoM totals (comma-separated) to determine rank & progress
+            computeMoMAndRank();
+            updateCentralProfit();
+            saveData();
+        }
+
+        // ------- PHOTO UPLOAD -------
+        photoInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                photoPreview.src = ev.target.result;
+                localStorage.setItem("pm_photo_v5", ev.target.result);
+            };
+            r.readAsDataURL(file);
+        });
+
+        // ------- PNL UPLOAD -------
+        pnlInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                pnlPreview.src = ev.target.result;
+                pnlPreview.style.display = "block";
+                pnlPlaceholder.style.display = "none";
+                localStorage.setItem("pm_pnl_v5", ev.target.result);
+            };
+            r.readAsDataURL(file);
+        });
+
+        // ------- SAVE & LOAD -------
+        function saveData() {
+            const data = {
+                name: elName.innerText,
+                month: elMonth.innerText,
+                rankOld: elRankOld.innerText,
+                rankNew: elRankNew.innerText,
+                momPoints: elMomPoints.innerText,
+                t1: tEls[0].innerText,
+                t2: tEls[1].innerText,
+                t3: tEls[2].innerText,
+                t4: tEls[3].innerText,
+                t5: tEls[4].innerText
+            };
+            localStorage.setItem("pm_card_v5", JSON.stringify(data));
+        }
+
+        function loadData() {
+            const raw = localStorage.getItem("pm_card_v5");
+            if (raw) {
+                try {
+                    const d = JSON.parse(raw);
+                    elName.innerText = d.name || "Your Name";
+                    elMonth.innerText = d.month || "Oct 2025";
+                    elRankOld.innerText = d.rankOld || "136";
+                    elRankNew.innerText = d.rankNew || "136";
+                    elMomPoints.innerText = d.momPoints || "320, 410";
+                    tEls[0].innerText = d.t1 || "";
+                    tEls[1].innerText = d.t2 || "";
+                    tEls[2].innerText = d.t3 || "";
+                    tEls[3].innerText = d.t4 || "";
+                    tEls[4].innerText = d.t5 || "";
+                } catch (e) {
+                    console.error("Load error:", e);
+                }
+            }
+            // images
+            const savedPhoto = localStorage.getItem("pm_photo_v5");
+            if (savedPhoto) photoPreview.src = savedPhoto;
+
+            const savedPnl = localStorage.getItem("pm_pnl_v5");
+            if (savedPnl) {
+                pnlPreview.src = savedPnl;
+                pnlPreview.style.display = "block";
+                pnlPlaceholder.style.display = "none";
+            }
+
+            calculateAll();
+            updateCentralProfit();
+
+        }
+
+        // attach input listeners
+        function attachListeners() {
+            [elName, elMonth].forEach(el => {
+                el.addEventListener("input", () => {
+                    saveData();
+                });
+            });
+
+            elRankOld.addEventListener("input", () => {
+                computeMoMAndRank();
+                saveData();
+            });
+
+            // allow manual override of new rank if needed (but no progress change)
+            elRankNew.addEventListener("input", () => {
+                saveData();
+                updateBatch();
+            });
+
+            tEls.forEach(el => {
+                el.addEventListener("input", () => {
+                    calculateAll();
+                });
+            });
+
+            elMomPoints.addEventListener("input", () => {
+                computeMoMAndRank();
+                saveData();
+            });
+        }
+
+        function resetData() {
+            if (!confirm("Clear card data on this device?")) return;
+            localStorage.removeItem("pm_card_v5");
+            localStorage.removeItem("pm_photo_v5");
+            localStorage.removeItem("pm_pnl_v5");
+            location.reload();
+        }
+
+        async function shareCard() {
+            const node = document.getElementById("captureArea");
+            const canvas = await html2canvas(node, { scale: 2 });
+            canvas.toBlob(async blob => {
+                const file = new File([blob], "pearlmind_card.png", { type: "image/png" });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: "Pearl Mind – Trader Card",
+                            text: "My monthly Pearl Mind trader card."
+                        });
+                    } catch (e) {
+                        console.log("Share cancelled", e);
+                    }
+                } else {
+                    const a = document.createElement("a");
+                    a.href = URL.createObjectURL(blob);
+                    a.download = "pearlmind_card.png";
+                    a.click();
+                }
+            });
+        }
+
+        // expose to HTML buttons
+        window.calculateAll = calculateAll;
+        window.resetData = resetData;
+        window.shareCard = shareCard;
+
+        // init
+        attachListeners();
+        elMomPoints.addEventListener("input", () => {
+        updateCentralProfit();
+        });
+
+        tEls.forEach(el => {
+        el.addEventListener("input", () => {
+            updateCentralProfit();
+        });
+        });
+
+        elTotalPoints.addEventListener("input", () => {
+        updateCentralProfit();
+        });
+
+
+        loadData(); 
+    </script>
 </body>
+
 </html>
