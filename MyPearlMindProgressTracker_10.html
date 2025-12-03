@@ -394,7 +394,7 @@
 
         /* PnL box */
         .pnl-box {
-            margin-top: 10px;
+            margin-top: 0px;
             border-radius: 16px;
             border: 1px solid rgba(240, 214, 150, 0.7);
             background: #100e09;
@@ -434,7 +434,7 @@
         .btn-row {
             display: flex;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: -15px;
         }
 
         .btn {
@@ -484,6 +484,16 @@
             color: #8a7a55;
         }
 
+        .toggle-switch input:checked+.toggle-slider {
+            background: linear-gradient(180deg, #b58f38, #e1be65, #fff3c8);
+            border-color: rgba(255, 230, 160, 0.7);
+        }
+
+        .toggle-switch input:checked~.toggle-knob {
+            transform: translateX(34px);
+        }
+
+
         /* Responsive tweak */
         @media (max-width: 380px) {
             .card {
@@ -521,24 +531,70 @@
                 <input type="file" id="photoInput" accept="image/*">
             </div>
 
-            <!-- CENTRAL PROFIT DISPLAY -->
-            <div id="centralProfit" style="
-                margin-top:14px;
-                text-align:center;
-                font-size:36px;
+            <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:14px;">
+
+                <!-- Profit Display -->
+                <div id="centralProfit" style="
+                font-size:22px;
+                font-weight:900;
                 letter-spacing:0.5px;
-                font-family: 'Inter', system-ui;
-                text-shadow: 0 0 12px rgba(0,0,0,0.75);
-                "></div>
+                font-family: 'Poppins','Inter',sans-serif;
+                text-shadow:0 0 12px rgba(0,0,0,0.75);
+                min-width:130px;
+                text-align:right;
+            "></div>
+
+                <!-- Premium Toggle -->
+                <label class="toggle-switch" style="
+                position: relative; 
+                display: inline-block; 
+                width: 74px; 
+                height: 32px;
+                cursor:pointer;
+            ">
+                    <input type="checkbox" id="profitToggle" style="display:none;">
+
+                    <!-- Background Slider -->
+                    <span class="toggle-slider" style="
+                position:absolute;
+                top:0; left:0; right:0; bottom:0;
+                background:linear-gradient(180deg,#1c1a14,#0e0c08);
+                border:1px solid rgba(240,214,150,0.35);
+                border-radius:40px;
+                transition:0.3s;
+                "></span>
+
+                    <!-- Moving Knob WITH TEXT -->
+                    <span id="toggleKnob" class="toggle-knob" style="
+                position:absolute;
+                height:26px; width:34px;
+                left:3px; top:3px;
+                background:linear-gradient(180deg,#fff3c8,#e1be65,#b58f38);
+                border-radius:20px;
+                transition:0.3s;
+                box-shadow:0 0 8px rgba(255,228,140,0.4);
+                display:flex; align-items:center; justify-content:center;
+                font-size:10px;
+                font-weight:700;
+                font-family:'Poppins','Inter',sans-serif;
+                color:#3a2d12;
+                ">₹</span>
+
+                </label>
+
+            </div>
+
             <div id="profitError" style="
-                margin-top:4px;
-                text-align:center;
-                font-size:11px;
-                color:#ff4c4c;
-                font-weight:600;
-                display:none;
-                font-family:'Inter',sans-serif;
-                "></div>
+            margin-top:4px;
+            text-align:center;
+            font-size:11px;
+            color:#ff4c4c;
+            font-weight:600;
+            display:none;
+            "></div>
+
+
+
 
 
             <!-- RANK + NAME + MOM + PROGRESS (3-row grid) -->
@@ -854,15 +910,19 @@
         }
 
 
-
+        // - "linear-gradient(rgb(255, 249, 214), rgb(146 245 111), rgb(47 212 13))";
 
         function updateCentralProfit() {
+
+            const toggle = document.getElementById("profitToggle").checked;
+            const mode = toggle ? "points" : "money";
+            const knob = document.getElementById("toggleKnob");
 
             const momStr = elMomPoints.innerText.trim();
             const el = document.getElementById("centralProfit");
             const err = document.getElementById("profitError");
 
-            // VALIDATION: Only digits, commas, minus sign allowed
+            // VALIDATION
             if (!/^[0-9,\-\s]*$/.test(momStr)) {
                 el.innerHTML = "";
                 err.style.display = "block";
@@ -872,7 +932,7 @@
 
             err.style.display = "none";
 
-            // ---- STEP 1: Calculate MoM Total ----
+            // ---- 1) MoM Total ----
             let momTotal = 0;
             if (momStr) {
                 momStr.split(",").forEach(v => {
@@ -881,21 +941,35 @@
                 });
             }
 
-            // ---- STEP 2: Get Current Month Total Points ----
+            // ---- 2) Current Month Total ----
             let currMonthTotal = parseFloat(elTotalPoints.innerText.trim());
             if (isNaN(currMonthTotal)) currMonthTotal = 0;
 
-            // ---- STEP 3: Combined Total ----
-            const combined = momTotal + currMonthTotal;
+            // ---- 3) Combined Points ----
+            const combinedPoints = momTotal + currMonthTotal;
 
-            // ---- STEP 4: Multiply by Lot Size (35) ----
+            // ---- 4) Final Profit in Rupees ----
             const qty = 35;
-            const finalProfit = combined * qty;
+            const finalMoney = combinedPoints * qty;
 
-            const formatted = finalProfit.toLocaleString("en-IN");
+            const moneyFormatted = finalMoney.toLocaleString("en-IN");
+            const pointsFormatted = combinedPoints.toLocaleString("en-IN");
 
-            // ---- STEP 5: Apply Gold or Red Theme ----
-            if (finalProfit >= 0) {
+            // ---- 5) Update knob text ----
+            knob.innerText = mode === "money" ? "₹" : "PTS";
+
+            // ---- 6) Apply Display Mode ----
+            let displayValue = "";
+            let isPositive = finalMoney >= 0;
+
+            if (mode === "money") {
+                displayValue = `₹ ${moneyFormatted}`;
+            } else {
+                displayValue = `${pointsFormatted} pts`;
+            }
+
+            // ---- 7) Styling ----
+            if (isPositive) {
                 el.style.background = "linear-gradient(rgb(255, 249, 214), rgb(146 245 111), rgb(47 212 13))";
                 el.style.webkitBackgroundClip = "text";
                 el.style.color = "transparent";
@@ -908,8 +982,9 @@
                 el.style.textShadow = "0 0 6px rgba(255,50,50,0.4)";
             }
 
-            el.innerHTML = `₹ ${formatted}`;
+            el.innerHTML = displayValue;
         }
+
 
 
 
@@ -1039,6 +1114,13 @@
                 computeMoMAndRank();
                 saveData();
             });
+
+            document.getElementById("profitToggle").addEventListener("change", () => {
+                updateCentralProfit();
+            });
+
+
+
         }
 
         function resetData() {
