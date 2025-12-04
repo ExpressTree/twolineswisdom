@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pearl Mind Comic – Episode 01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Comic Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #fef9e7;
+        font-family: 'Comic Neue', cursive;
+    }
+
+    .page {
+        max-width: 960px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-family: 'Bangers', cursive;
+        font-size: 48px;
+        color: #ff6f00;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px #ffcc80;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 20px;
+        color: #444;
+        margin-bottom: 25px;
+    }
+
+    /* Comic Panel */
+    .panel {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        position: relative;
+        border: 3px solid #000;
+    }
+
+    /* Character Row Layout */
+    .row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .row.reverse {
+        flex-direction: row-reverse;
+    }
+
+    /* Avatar Circle */
+    .avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        font-family: 'Bangers';
+        font-size: 32px;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 3px solid #000;
+    }
+
+    .parivartan {
+        background: #ffca28;
+        color: #000;
+    }
+
+    .moksha {
+        background: #81d4fa;
+        color: #003b57;
+    }
+
+    /* Speech Bubble */
+    .bubble {
+        background: #fff;
+        border-radius: 18px;
+        padding: 16px 20px;
+        border: 3px solid #000;
+        font-size: 18px;
+        max-width: 70%;
+        position: relative;
+    }
+
+    /* Speech bubble arrows */
+    .left .bubble:before {
+        content: "";
+        position: absolute;
+        left: -20px;
+        top: 20px;
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 20px solid #fff;
+        filter: drop-shadow(-3px 0px 0px #000);
+    }
+
+    .right .bubble:before {
+        content: "";
+        position: absolute;
+        right: -20px;
+        top: 20px;
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 20px solid #fff;
+        filter: drop-shadow(3px 0px 0px #000);
+    }
+
+    /* Comic Images */
+    .comic-img {
+        width: 100%;
+        border-radius: 16px;
+        border: 3px solid #000;
+        margin: 20px 0;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+
+    /* Moral Section */
+    .moral {
+        background: #fff3cd;
+        border: 3px solid #000;
+        border-radius: 20px;
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .moral-title {
+        font-family: 'Bangers';
+        font-size: 32px;
+        color: #d84315;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .moral p {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .moral ul {
+        font-size: 18px;
+        padding-left: 20px;
+    }
+
+    .moral ul li {
+        margin-bottom: 6px;
+    }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+    <h1>THE PEARL MIND – COMIC #1</h1>
+    <div class="subtitle">Parivartan Breaks a Rule — Moksha Responds</div>
+
+    <!-- IMAGE 1 -->
+    <img src="story0101.webp" class="comic-img" alt="Comic Image 1">
+
+    <!-- PANEL 1 -->
+    <div class="panel left">
+        <div class="row">
+            <div class="avatar parivartan">P</div>
+            <div class="bubble">
+                Moksha… what if one day… just one day… I break a rule?<br>
+                Maybe the market looks perfect… maybe I feel confident…<br>
+                What harm can come from bending a rule once?
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 2 -->
+    <div class="panel right">
+        <div class="row reverse">
+            <div class="avatar moksha">M</div>
+            <div class="bubble">
+                The harm begins the moment you ask that question, child.<br>
+                The rule is not protecting the market from you.<br>
+                It is protecting <b>you</b> from yourself.
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE 2 -->
+    <img src="story0102.webp" class="comic-img" alt="Comic Image 2">
+
+    <!-- PANEL 3 -->
+    <div class="panel left">
+        <div class="row">
+            <div class="avatar parivartan">P</div>
+            <div class="bubble">
+                But what if the setup looks strong?<br>
+                What if I <i>feel</i> it will work?
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 4 -->
+    <div class="panel right">
+        <div class="row reverse">
+            <div class="avatar moksha">M</div>
+            <div class="bubble">
+                Feelings are wind.<br>
+                Rules are anchors.<br><br>
+                You do not win because you feel right.<br>
+                You win because your losses never grow beyond –40.
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 5 -->
+    <div class="panel left">
+        <div class="row">
+            <div class="avatar parivartan">P</div>
+            <div class="bubble">
+                So breaking the rule makes me wrong?
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 6 -->
+    <div class="panel right">
+        <div class="row reverse">
+            <div class="avatar moksha">M</div>
+            <div class="bubble">
+                Right and wrong are not defined by what you missed…<br>
+                but by what you accept.<br><br>
+                Accept +40 or –40 only. Anything else is illusion.
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE 3 -->
+    <img src="story0103.webp" class="comic-img" alt="Comic Image 3">
+
+    <!-- PANEL 7 -->
+    <div class="panel left">
+        <div class="row">
+            <div class="avatar parivartan">P</div>
+            <div class="bubble">
+                So the rule is the lifeboat… and breaking it is stepping into the ocean?
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 8 -->
+    <div class="panel right">
+        <div class="row reverse">
+            <div class="avatar moksha">M</div>
+            <div class="bubble">
+                Exactly.<br>
+                Follow the rules and you float.<br>
+                Break them and you sink instantly.
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 9 -->
+    <div class="panel left">
+        <div class="row">
+            <div   class="avatar parivartan">P</div>
+            <div class="bubble">
+                I will honor –40.<br>
+                I will honor +40.<br>
+                Nothing more. Nothing less.
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 10 -->
+    <div class="panel right">
+        <div class="row reverse">
+            <div class="avatar moksha">M</div>
+            <div class="bubble">
+                Good. When a warrior accepts discipline,<br>
+                victory becomes a habit.
+            </div>
+        </div>
+    </div>
+
+    <!-- MORAL -->
+    <div class="moral">
+        <div class="moral-title">MORAL OF THE STORY</div>
+        <p><b>The rule is not a cage — it's your lifeboat.</b></p>
+        <ul>
+            <li>Feelings are wind. They change quickly.</li>
+            <li>Rules are anchors. They save you.</li>
+            <li>Accept only –40 or +40. Nothing else.</li>
+            <li>The market has no mercy — Moksha does.</li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
