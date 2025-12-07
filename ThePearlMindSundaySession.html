@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pearl Mind – Sunday Review Session Script</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Optional: Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-alt: #0b0f1f;
+      --card-bg: rgba(14, 19, 40, 0.96);
+      --accent: #e5b76b;
+      --accent-soft: rgba(229, 183, 107, 0.2);
+      --accent-strong: #ffdd8a;
+      --text-main: #f7f4ff;
+      --text-soft: #c4c7dd;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.65);
+      --radius-lg: 18px;
+      --radius-full: 999px;
+      --transition-fast: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, #20104a 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, #1a214f 0, transparent 55%),
+        radial-gradient(circle at 50% 100%, #281445 0, #050712 60%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 24px 12px 40px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 980px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 26px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    .shell-inner {
+      background: radial-gradient(circle at top, rgba(229,183,107,0.07), transparent 55%),
+                  radial-gradient(circle at bottom, rgba(146,120,255,0.07), transparent 60%),
+                  var(--bg-alt);
+      border-radius: 20px;
+      padding: 26px 20px 28px;
+    }
+
+    @media (min-width: 720px) {
+      .shell-inner {
+        padding: 32px 32px 30px;
+      }
+    }
+
+    header.page-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(229,183,107,0.65);
+      background: radial-gradient(circle at top left, rgba(229,183,107,0.2), transparent 65%);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      margin-bottom: 10px;
+    }
+
+    .eyebrow span.icon {
+      font-size: 16px;
+    }
+
+    h1.title {
+      font-size: clamp(1.9rem, 3vw, 2.3rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .meta span {
+      opacity: 0.96;
+    }
+
+    .meta-label {
+      color: var(--accent-strong);
+      font-weight: 500;
+    }
+
+    .divider {
+      margin: 20px auto 18px;
+      max-width: 420px;
+      height: 1px;
+      position: relative;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+    }
+
+    .divider::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 6px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #ffdd8a, #f9b585, #d29aff);
+      box-shadow: 0 0 16px rgba(255, 215, 130, 0.7);
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+    }
+
+    .hint span {
+      color: var(--accent-strong);
+      font-weight: 500;
+    }
+
+    .slides {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .slide-card {
+      border-radius: var(--radius-lg);
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.6);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background 0.25s ease;
+    }
+
+    .slide-card.open {
+      border-color: rgba(229,183,107,0.75);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.85);
+      background: radial-gradient(circle at top left, rgba(229,183,107,0.12), transparent 60%), var(--card-bg);
+    }
+
+    .slide-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px 12px 16px;
+      cursor: pointer;
+    }
+
+    .slide-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .slide-pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(229,183,107,0.16);
+      color: var(--accent-strong);
+      border: 1px solid rgba(229,183,107,0.55);
+      white-space: nowrap;
+    }
+
+    .slide-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .slide-time {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-left: 6px;
+      white-space: nowrap;
+    }
+
+    .slide-toggle {
+      margin-left: 8px;
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: var(--accent-strong);
+      background: radial-gradient(circle at top, rgba(229,183,107,0.3), transparent 70%);
+      transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .slide-card.open .slide-toggle {
+      transform: rotate(90deg);
+      border-color: rgba(229,183,107,0.75);
+      background: radial-gradient(circle at top, rgba(229,183,107,0.6), transparent 70%);
+    }
+
+    .slide-body {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 16px;
+      transition: max-height 0.35s ease, padding-bottom 0.25s ease;
+    }
+
+    .slide-card.open .slide-body {
+      padding-bottom: 14px;
+    }
+
+    .slide-content {
+      font-size: 0.92rem;
+      color: var(--text-soft);
+      padding-top: 4px;
+      line-height: 1.6;
+    }
+
+    .slide-content p {
+      margin-bottom: 8px;
+    }
+
+    .slide-content p.script {
+      font-style: italic;
+      color: #f7f2ff;
+    }
+
+    .script-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(229,183,107,0.9);
+      margin-bottom: 3px;
+    }
+
+    .bullet-list {
+      margin: 2px 0 6px 16px;
+      padding-left: 2px;
+    }
+
+    .bullet-list li {
+      margin-bottom: 4px;
+    }
+
+    .note {
+      margin-top: 4px;
+      font-size: 0.82rem;
+      color: rgba(196,199,221,0.85);
+      opacity: 0.95;
+    }
+
+    .note strong {
+      color: var(--accent-strong);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.85rem;
+      text-align: center;
+      color: rgba(196,199,221,0.86);
+    }
+
+    .footer-note span {
+      color: var(--accent-strong);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="shell-inner">
+      <header class="page-header">
+        <div class="eyebrow">
+          <span class="icon">🌊</span>
+          <span>PEARL MIND™ – SUNDAY REVIEW SESSION</span>
+        </div>
+        <h1 class="title">45-Minute Host Script (Word-by-Word)</h1>
+        <p class="subtitle">
+          A presentation-style flow to guide your weekly compass session.
+        </p>
+        <div class="meta">
+          <span><span class="meta-label">Prepared for:</span> 07 December 2025</span>
+          <span><span class="meta-label">Founder Voice:</span> Sanjay Kadam</span>
+          <span><span class="meta-label">Format:</span> 45 min Script + 15 min Q&amp;A</span>
+        </div>
+      </header>
+
+      <div class="divider"></div>
+      <p class="hint">
+        Tap on each <span>slide section</span> to expand or collapse the script during your live session.
+      </p>
+
+      <section class="slides">
+
+        <!-- Slide 1: Opening -->
+        <article class="slide-card open">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 1</span>
+              <div>
+                <div class="slide-title">Opening</div>
+                <div class="slide-time">(00:00 – 01:00)</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “Good evening everyone…<br />
+                Welcome to the Pearl Mind™ Sunday Review Session.
+              </p>
+              <p class="script">
+                This one hour is the most important investment you make in your trading week.
+              </p>
+              <p class="script">
+                Our only intention today is simple:<br />
+                To walk into Monday with clarity — and not confusion.”
+              </p>
+              <p class="note">
+                (brief pause)
+              </p>
+              <p class="script">
+                “Let’s begin.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 2: Weekly Market Recap -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 2</span>
+              <div>
+                <div class="slide-title">Weekly Market Recap</div>
+                <div class="slide-time">(01:00 – 11:00) • 10 mins</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “Before we start thinking about next week, we must understand one thing clearly:<br />
+                What did the market try to do this week?<br />
+                Not just what it did — but what it intended.”
+              </p>
+              <p class="note">
+                (show weekly chart)
+              </p>
+              <p class="script">
+                “This week, Bank Nifty behaved in three phases:
+              </p>
+              <ul class="bullet-list">
+                <li><strong>Phase 1:</strong> Early strength and range expansion</li>
+                <li><strong>Phase 2:</strong> Compression near the 0.11/0.33 structure</li>
+                <li><strong>Phase 3:</strong> A controlled trending move created by FIIs</li>
+              </ul>
+              <p class="script">
+                Every high and low this week was not random.<br />
+                It followed the same logic we study every day in Pearl Mind™.”
+              </p>
+              <p class="note">(pause)</p>
+              <p class="script">
+                “Where were the clean opportunities?
+              </p>
+              <ul class="bullet-list">
+                <li>A +40 window opened right after the compression broke</li>
+                <li>The cleanest trade was the first entry of the day — as always</li>
+                <li>After that, price danced in structure exactly as expected</li>
+              </ul>
+              <p class="script">
+                Our job is not to predict.<br />
+                Our job is to recognise intention and only step in when there is clarity.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 3: Pearl Mind Observations -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 3</span>
+              <div>
+                <div class="slide-title">Pearl Mind™ Observations</div>
+                <div class="slide-time">(11:00 – 19:00) • 8 mins</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="note">(show visualiser screenshots)</p>
+              <p class="script">
+                “This is where the Pearl Mind™ helped us this week.
+              </p>
+              <p class="script">
+                Look at these zones…
+              </p>
+              <p class="script">
+                You’ll notice three important things:
+              </p>
+              <ol class="bullet-list">
+                <li><strong>Pearl Mind™ stayed silent in the trap zones.</strong><br />This is not a mistake — it is protection.</li>
+                <li><strong>Pearl Mind™ lit up exactly when structure aligned.</strong><br />These were your +40 windows.</li>
+                <li><strong>The tool behaved like a ‘Trading Assistant’, not a signal generator.</strong><br />It observed intention… and filtered out noise.</li>
+              </ol>
+              <p class="script">
+                Your job as a trader is simple:<br />
+                Follow the silence. Follow the structure. Follow the clarity.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 4: Key Learnings -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 4</span>
+              <div>
+                <div class="slide-title">Key Learnings</div>
+                <div class="slide-time">(19:00 – 26:00) • 7 mins</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “Here are the top learnings from this week.<br />
+                If you only take these four learnings into next week, your trading will become lighter.”
+              </p>
+              <p class="note">(share each one clearly)</p>
+
+              <p><strong>Learning 1:</strong><br />
+                <span class="script">“The first entry is always the cleanest. Later entries are for ego.”</span>
+              </p>
+
+              <p><strong>Learning 2:</strong><br />
+                <span class="script">“0.33% compression is not sideways — it is the preparation for a move.”</span>
+              </p>
+
+              <p><strong>Learning 3:</strong><br />
+                <span class="script">“When Pearl Mind™ is silent, YOU must be silent.”</span>
+              </p>
+
+              <p><strong>Learning 4:</strong><br />
+                <span class="script">“Price does not trap you. Your impatience traps you.”</span>
+              </p>
+
+              <p class="note">(brief pause)</p>
+
+              <p class="script">
+                “Remember…<br />
+                Trading is not about how fast you act.<br />
+                It is about how long you wait for clarity.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 5: Common Mistakes -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 5</span>
+              <div>
+                <div class="slide-title">Common Mistakes</div>
+                <div class="slide-time">(26:00 – 31:00) • 5 mins</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “These were the common mistakes across the group this week:
+              </p>
+              <ul class="bullet-list">
+                <li>Entering before the structure was ready</li>
+                <li>Breaking the +40 / –40 rule</li>
+                <li>Taking random re-entries</li>
+                <li>Trading during uncertain timing windows</li>
+                <li>Acting out of excitement on Mondays</li>
+              </ul>
+              <p class="script">
+                These mistakes don’t show lack of skill.<br />
+                They show lack of respect for rules.
+              </p>
+              <p class="script">
+                Pearl Mind™ makes the path simple.<br />
+                Our job is to stay inside that simplicity.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 6: Structure for the Coming Week -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 6</span>
+              <div>
+                <div class="slide-title">Structure for the Coming Week</div>
+                <div class="slide-time">(31:00 – 39:00) • 8 mins</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “Let’s now look ahead.
+              </p>
+              <p class="script">
+                Next week, the broad structure suggests one thing:
+              </p>
+              <p class="script"><strong>Patience early in the week, opportunity later.</strong></p>
+              <p class="script">
+                Here’s the simple action plan:
+              </p>
+
+              <p><strong>On Monday:</strong><br />
+                <span class="script">Observe. Do not attack.<br />
+                Let the market show intention first.</span>
+              </p>
+
+              <p><strong>On Tuesday &amp; Wednesday:</strong><br />
+                <span class="script">These may give the cleanest +40 windows.<br />
+                Watch for the first strong break from compression.</span>
+              </p>
+
+              <p><strong>On Thursday:</strong><br />
+                <span class="script">Expect possible traps — FIIs often rebalance.</span>
+              </p>
+
+              <p><strong>On Friday:</strong><br />
+                <span class="script">Trade only if structure is extremely clear.</span>
+              </p>
+
+              <p class="script">
+                And one powerful reminder for next week:
+              </p>
+
+              <p class="script">
+                Your job is not to trade every day.<br />
+                Your job is to trade when structure allows you to take +40 with peace.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 7: Announcements -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 7</span>
+              <div>
+                <div class="slide-title">Announcements</div>
+                <div class="slide-time">(39:00 – 41:00) • 2 mins</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “We have two important announcements:
+              </p>
+
+              <p>
+                <strong>1. New Batch Orientation</strong><br />
+                <span class="script">Scheduled for Tuesday/Wednesday.<br />
+                If you want to help someone enter trading the right way, invite them.</span>
+              </p>
+
+              <p>
+                <strong>2. Support System Expansion</strong><br />
+                <span class="script">We now have two official team members:</span>
+              </p>
+
+              <p>
+                <strong>Bhavesh – Support Lead</strong><br />
+                <span class="script">He will handle onboarding, daily reporting, and trading queries.</span>
+              </p>
+
+              <p>
+                <strong>Aparna – Training Lead</strong><br />
+                <span class="script">She will handle new batch training and structured learning.</span>
+              </p>
+
+              <p class="script">
+                Please reach out to them for standard queries.<br />
+                Save my time for development and progress work.”
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 8: Closing Message -->
+        <article class="slide-card">
+          <div class="slide-header">
+            <div class="slide-main">
+              <span class="slide-pill">Slide 8</span>
+              <div>
+                <div class="slide-title">Closing Message</div>
+                <div class="slide-time">(41:00 – 45:00)</div>
+              </div>
+            </div>
+            <button class="slide-toggle" aria-label="Toggle section">➤</button>
+          </div>
+          <div class="slide-body">
+            <div class="slide-content">
+              <span class="script-label">Script</span>
+              <p class="script">
+                “We now enter a new week.
+              </p>
+              <p class="script">
+                Do not carry your last week’s emotions.<br />
+                Carry only your learnings.
+              </p>
+              <p class="script">
+                Remember one thing:
+              </p>
+              <p class="script">
+                Pearl Mind™ does not measure your success by how many trades you take.<br />
+                It measures your success by how deeply you follow your rules.
+              </p>
+              <p class="script">
+                Trade with presence.<br />
+                Trade with peace.<br />
+                And stay inside your +40 / –40 circle.”
+              </p>
+              <p class="note">(pause)</p>
+              <p class="script">
+                “Let’s begin the Q&amp;A.”
+              </p>
+              <p class="note">
+                ⭐ PERFECT 45-MINUTE SESSION COMPLETE – now you can run a 15-minute Q&amp;A as planned.
+              </p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <p class="footer-note">
+        Designed as a single-page <span>live cue sheet</span> to keep you calm, clear and on-time during every Sunday Pearl Mind™ session.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Simple accordion for slide cards
+    document.querySelectorAll('.slide-card').forEach(function(card) {
+      const header = card.querySelector('.slide-header');
+      const body = card.querySelector('.slide-body');
+
+      function setBodyHeight(open) {
+        if (open) {
+          body.style.maxHeight = body.scrollHeight + 'px';
+        } else {
+          body.style.maxHeight = '0';
+        }
+      }
+
+      // Initialize heights based on 'open' class
+      setBodyHeight(card.classList.contains('open'));
+
+      header.addEventListener('click', function() {
+        const isOpen = card.classList.contains('open');
+        card.classList.toggle('open', !isOpen);
+        setBodyHeight(!isOpen);
+      });
+
+      // Recalculate on window resize
+      window.addEventListener('resize', function() {
+        if (card.classList.contains('open')) {
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
