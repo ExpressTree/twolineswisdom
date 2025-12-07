@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Pearl Mind – 40/40 Educational Rulebook (Kindle Mode)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Kindle Reading Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ----------------------------------------------
+       KINDLE CLEAN MODE — Global Overrides
+    ---------------------------------------------- */
+
+        :root {
+            --bg: #fafafa;
+            --bg-alt: #ffffff;
+            --card-bg: #ffffff;
+            --accent-strong: #c47a00;
+            /* warm Kindle gold */
+            --accent-soft: #ffecd2;
+            /* pale warm highlight */
+            --text-main: #1a1a1a;
+            /* charcoal black */
+            --text-soft: #4b4b4b;
+            /* reading grey */
+            --border-subtle: #e6e6e6;
+            --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --radius-lg: 16px;
+            --radius-full: 999px;
+            --transition-fast: 0.2s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: "Merriweather", serif;
+            font-size: 17px;
+            line-height: 1.68;
+            padding: 24px 12px 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .shell {
+            width: 100%;
+            max-width: 900px;
+            background: var(--bg-alt);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid #ddd;
+        }
+
+        .shell-inner {
+            background: var(--bg-alt);
+            padding: 28px 26px;
+            border-radius: 20px;
+        }
+
+        /* ----------------------------------------------
+       Typography & Sections
+    ---------------------------------------------- */
+
+        header.page-header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--accent-strong);
+            background: var(--accent-soft);
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent-strong);
+            margin-bottom: 10px;
+        }
+
+        h1.title {
+            font-size: clamp(1.7rem, 3vw, 2.2rem);
+            font-weight: 700;
+            line-height: 1.35;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-soft);
+            margin-top: 8px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .meta {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            margin-top: 4px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-label {
+            color: var(--accent-strong);
+            font-weight: 600;
+        }
+
+        .divider {
+            margin: 22px auto;
+            max-width: 420px;
+            height: 2px;
+            background: #ddd;
+        }
+
+        /* ----------------------------------------------
+       Disclaimer Box
+    ---------------------------------------------- */
+
+        .disclaimer-box {
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-strong);
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.65;
+        }
+
+        .disclaimer-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent-strong);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        /* ----------------------------------------------
+       Slide Cards (Accordion)
+    ---------------------------------------------- */
+
+        .slides {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .slide-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            transition: 0.25s ease;
+        }
+
+        .slide-card.open {
+            background: #fff8e6;
+            border-color: #ffcc80;
+            box-shadow: 0px 6px 22px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-header {
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .slide-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-pill {
+            background: var(--accent-soft);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--accent-strong);
+            color: var(--accent-strong);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .slide-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: .5px;
+        }
+
+        .slide-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            color: var(--accent-strong);
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .slide-card.open .slide-toggle {
+            transform: rotate(90deg);
+            border-color: var(--accent-strong);
+        }
+
+        /* Body hidden/visible animation */
+        .slide-body {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 18px;
+            transition: max-height 0.35s ease, padding-bottom 0.25s ease;
+        }
+
+        .slide-card.open .slide-body {
+            padding-bottom: 16px;
+        }
+
+        .slide-content {
+            padding-top: 10px;
+            font-size: 1rem;
+            color: var(--text-main);
+            line-height: 1.65;
+        }
+
+        .slide-content .script-label {
+            color: var(--accent-strong);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .slide-content .script {
+            font-style: italic;
+            color: #333;
+        }
+
+        .bullet-list li {
+            margin-bottom: 8px;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 8px;
+            margin-bottom: 6px;
+        }
+
+        .footer-note {
+            margin-top: 26px;
+            font-size: 0.85rem;
+            text-align: center;
+            color: #555;
+        }
+
+        .footer-note span {
+            color: var(--accent-strong);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <div class="shell-inner">
+
+            <!-- Header -->
+            <header class="page-header">
+                <div class="eyebrow">
+                    <span>🌊 PEARL MIND™</span>
+                </div>
+                <h1 class="title">The 40/40 Educational Rulebook</h1>
+                <p class="subtitle">
+                    A Kindle-style clean reading version of the Pearl Mind™ 40/40 Blueprint — structured for clarity,
+                    calmness, and educational training.
+                </p>
+                <div class="meta">
+                    <span><span class="meta-label">Prepared for:</span> Dec 2025 Batch</span>
+                    <span><span class="meta-label">Format:</span> Collapsible Rulebook</span>
+                </div>
+            </header>
+
+            <div class="divider"></div>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer-box">
+                <div class="disclaimer-title">Educational Notice</div>
+                The Pearl Mind™ framework teaches <strong>discipline, clarity and structured decision-making</strong>.
+                It is not financial advice, not a tip system, and not a SEBI-registered advisory.
+                Participants remain fully responsible for their own trading decisions.
+            </div>
+
+            <!-- Slides Begin -->
+            <section class="slides">
+
+                <!-- -------------------------------------------- -->
+                <!-- SECTION 1 -->
+                <!-- -------------------------------------------- -->
+                <article class="slide-card open">
+                    <div class="slide-header">
+                        <div class="slide-main">
+                            <span class="slide-pill">Section 1</span>
+                            <div class="slide-title">Core Trading Principles (40/40 Framework)</div>
+                        </div>
+                        <div class="slide-toggle">➤</div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="slide-content">
+                            <span class="script-label">Intent</span>
+                            <p class="script">
+                                “These principles are the foundation of the Pearl Mind™ model —
+                                teaching discipline, not prediction.”
+                            </p>
+
+                            <p><strong>Principle 1 — Act Only When the Model Speaks</strong></p>
+                            <ul class="bullet-list">
+                                <li>Model conditions ≠ tips. They are clarity signals.</li>
+                                <li>Neutral/blue window = observe, not act.</li>
+                                <li>No condition = no action. This protects your mind.</li>
+                            </ul>
+
+                            <p><strong>Principle 2 — Use the +40/–40 Template</strong></p>
+                            <ul class="bullet-list">
+                                <li>+40 = peaceful profit practice.</li>
+                                <li>–40 = controlled loss practice.</li>
+                                <li>No jackpot chasing. No oversized losses.</li>
+                            </ul>
+
+                            <p><strong>Principle 3 — Low Frequency, High Clarity</strong></p>
+                            <ul class="bullet-list">
+                                <li>Aim to understand how 3 clean windows/week shape the mind.</li>
+                                <li>Outcome is measured in points, not rupees.</li>
+                                <li>You learn patience, not prediction.</li>
+                            </ul>
+
+                            <p class="note">Clarity > activity.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Remaining sections will follow the same pattern -->
+                <!-- SECTION 2 -->
+                <!-- -------------------------------------------- -->
+                <!-- SECTION 2 – ENTRY PRINCIPLES -->
+                <!-- -------------------------------------------- -->
+
+                <article class="slide-card">
+                    <div class="slide-header">
+                        <div class="slide-main">
+                            <span class="slide-pill">Section 2</span>
+                            <div class="slide-title">Entry Principles — When & How You Begin</div>
+                        </div>
+                        <div class="slide-toggle">➤</div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="slide-content">
+
+                            <span class="script-label">Intent</span>
+                            <p class="script">
+                                “Entry is not about catching tops or bottoms —
+                                it is about entering with <strong>calm confirmation</strong>.”
+                            </p>
+
+                            <p><strong>Principle 4 — Enter Only on Fresh, Clear Conditions</strong></p>
+                            <ul class="bullet-list">
+                                <li>The model must show a <strong>stable condition</strong> before any action.</li>
+                                <li>A fresh condition means:
+                                    <ul class="bullet-list">
+                                        <li>Arrow appears</li>
+                                        <li>Confirmation line stabilises</li>
+                                        <li>ATM highlight appears</li>
+                                    </ul>
+                                </li>
+                                <li>No action is taken during unstable or uncertain moments.</li>
+                                <li>You avoid entering midway after large moves — no “chasing.”</li>
+                            </ul>
+
+                            <p><strong>Principle 5 — The Three-Minute Calm Window</strong></p>
+                            <ul class="bullet-list">
+                                <li>Observe the condition for ~3 minutes to:
+                                    <ul class="bullet-list">
+                                        <li>Confirm direction (green = up, red = down, blue = neutral)</li>
+                                        <li>Check ATM strike</li>
+                                        <li>Check emotional stability before acting</li>
+                                    </ul>
+                                </li>
+                                <li>This builds **response over reaction**, the heart of Pearl Mind™.</li>
+                            </ul>
+
+                            <p><strong>Principle 6 — ATM Options for Educational Stability</strong></p>
+                            <ul class="bullet-list">
+                                <li>ATM (premium ~₹700–₹800) is used purely for **learning consistency**.</li>
+                                <li>OTM decays faster → used to teach why emotional traders lose.</li>
+                                <li>Expiry selection guideline:
+                                    <ul class="bullet-list">
+                                        <li>1st–19th → current month</li>
+                                        <li>20th–month-end → next month</li>
+                                    </ul>
+                                </li>
+                                <li>This is not advice; it is a learning stability principle.</li>
+                            </ul>
+
+                            <p class="note">
+                                Calmness before entry is the most underrated trading edge.
+                            </p>
+
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- SECTION 3 -->
+                <!-- -------------------------------------------- -->
+                <!-- SECTION 3 – EXIT PRINCIPLES -->
+                <!-- -------------------------------------------- -->
+
+                <article class="slide-card">
+                    <div class="slide-header">
+                        <div class="slide-main">
+                            <span class="slide-pill">Section 3</span>
+                            <div class="slide-title">Exit Principles — Peaceful Profit & Loss</div>
+                        </div>
+                        <div class="slide-toggle">➤</div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="slide-content">
+
+                            <span class="script-label">Intent</span>
+                            <p class="script">
+                                “Great traders aren’t known by their entries.
+                                They are known by how gracefully they exit.”
+                            </p>
+
+                            <p><strong>Principle 7 — Exit at +40: Peaceful Profit</strong></p>
+                            <ul class="bullet-list">
+                                <li>The +40 target teaches:
+                                    <ul class="bullet-list">
+                                        <li>Letting go of greed</li>
+                                        <li>Stability over thrill</li>
+                                        <li>Repeatable, predictable outcomes</li>
+                                    </ul>
+                                </li>
+                                <li>No extending targets due to excitement.</li>
+                                <li>Profit is booked with discipline, not hope.</li>
+                            </ul>
+
+                            <p><strong>Principle 8 — Exit at –40: Peaceful Loss</strong></p>
+                            <ul class="bullet-list">
+                                <li>–40 is the educational “maximum loss per decision.”</li>
+                                <li>No widening of stop-loss — ever.</li>
+                                <li>Oversized losses (–140/–240) teach one thing:
+                                    <br><strong>“You broke your own rule, not the model.”</strong>
+                                </li>
+                                <li>Peaceful loss keeps you alive for the next window.</li>
+                            </ul>
+
+                            <p class="note">
+                                The goal is not to avoid losses, but to avoid <strong>large</strong> losses.
+                            </p>
+
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- SECTION 4 -->
+                <!-- -------------------------------------------- -->
+                <!-- SECTION 4 – AVOID PRINCIPLES -->
+                <!-- -------------------------------------------- -->
+
+                <article class="slide-card">
+                    <div class="slide-header">
+                        <div class="slide-main">
+                            <span class="slide-pill">Section 4</span>
+                            <div class="slide-title">Avoid Principles — What Not to Do</div>
+                        </div>
+                        <div class="slide-toggle">➤</div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="slide-content">
+
+                            <span class="script-label">Intent</span>
+                            <p class="script">
+                                “Trading is often lost not because of what you do —
+                                but because of what you refuse to avoid.”
+                            </p>
+
+                            <p><strong>Principle 9 — Avoid Unfavourable Conditions</strong></p>
+                            <ul class="bullet-list">
+                                <li>No first-candle actions — volatility is unstable.</li>
+                                <li>No trades after 15:20 IST — structure weakens.</li>
+                                <li>Avoid trading with “cut-to-cut capital.”</li>
+                                <li>No action when the model is silent — silence is safety.</li>
+                                <li>No mixing Pearl Mind™ with extra indicators mid-session.</li>
+                            </ul>
+
+                            <p><strong>Principle 10 — Avoid Mind-Driven or Revenge Actions</strong></p>
+                            <ul class="bullet-list">
+                                <li>After a loss, your mind wants to “recover.”</li>
+                                <li>This is when maximum damage happens.</li>
+                                <li>No thought or emotion can create market movement.</li>
+                                <li>Neutral zone = sit tight, not “do something.”</li>
+                            </ul>
+
+                            <p><strong>Principle 11 — Avoid Jumping Stops or Random Scaling</strong></p>
+                            <ul class="bullet-list">
+                                <li>Never move SL further away — that is ego.</li>
+                                <li>No sudden increase in lot sizes.</li>
+                                <li>Scaling must be earned, not forced.</li>
+                            </ul>
+
+                            <p class="note">
+                                Rules save you from yourself.
+                                Avoiding your weak moments is 80% of trading mastery.
+                            </p>
+
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- SECTION 5 -->
+                <!-- -------------------------------------------- -->
+                <!-- SECTION 5 – SCALING PRINCIPLES -->
+                <!-- -------------------------------------------- -->
+
+                <article class="slide-card">
+                    <div class="slide-header">
+                        <div class="slide-main">
+                            <span class="slide-pill">Section 5</span>
+                            <div class="slide-title">Position Sizing & Scaling Discipline</div>
+                        </div>
+                        <div class="slide-toggle">➤</div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="slide-content">
+
+                            <span class="script-label">Intent</span>
+                            <p class="script">
+                                “Scaling is not a celebration — it is a responsibility.”
+                            </p>
+
+                            <p><strong>Principle 12 — One Lot Until Discipline Proves Itself</strong></p>
+                            <ul class="bullet-list">
+                                <li>Start with 1 lot until you complete a full discipline cycle.</li>
+                                <li>Only after earning ~₹1,00,000 through **consistent 40/40 behaviour** may scaling be
+                                    considered.</li>
+                                <li>Scaling is not emotional — it is earned.</li>
+                            </ul>
+
+                            <p><strong>Principle 13 — When Signal Turns Neutral Mid-Trade</strong></p>
+                            <ul class="bullet-list">
+                                <li>If you entered correctly, trust the rule.</li>
+                                <li>Let TP or SL hit — no mid-way panic exits.</li>
+                                <li>This prevents “death by tiny decisions.”</li>
+                            </ul>
+
+                            <p class="note">
+                                Lot size is not a mood.
+                                Lot size is a reflection of <strong>your past behaviour</strong>.
+                            </p>
+
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- SECTION 6 -->
+                <!-- -------------------------------------------- -->
+                <!-- SECTION 6 – MINDSET PRINCIPLES -->
+                <!-- -------------------------------------------- -->
+
+                <article class="slide-card">
+                    <div class="slide-header">
+                        <div class="slide-main">
+                            <span class="slide-pill">Section 6</span>
+                            <div class="slide-title">Mindset, Clarity & Community</div>
+                        </div>
+                        <div class="slide-toggle">➤</div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="slide-content">
+
+                            <span class="script-label">Intent</span>
+                            <p class="script">
+                                “The Pearl Mind™ is a mirror.
+                                It shows how you behave under structure.”
+                            </p>
+
+                            <p><strong>Principle 14 — Expect Clarity, Not Certainty</strong></p>
+                            <ul class="bullet-list">
+                                <li>The model gives clarity windows — not guarantees.</li>
+                                <li>Every window can be +40 or –40.</li>
+                                <li>The lesson is in the behaviour, not the outcome.</li>
+                            </ul>
+
+                            <p><strong>Principle 15 — Fewer Decisions = Greater Stability</strong></p>
+                            <ul class="bullet-list">
+                                <li>Your identity becomes calmer with fewer, cleaner decisions.</li>
+                                <li>Consistency builds when noise is removed.</li>
+                                <li>Small effort, long horizon = transformation.</li>
+                            </ul>
+
+                            <p><strong>Principle 16 — PnL Sharing, Offers & Transparency</strong></p>
+                            <ul class="bullet-list">
+                                <li>PnL sharing is a self-audit tool — optional and voluntary.</li>
+                                <li>Community-level results are anonymised.</li>
+                                <li>Performance-linked offers are fairness mechanisms, not promises.</li>
+                                <li>All decisions rest entirely with participants — never with the tool.</li>
+                            </ul>
+
+                            <p class="note">
+                                The Pearl Mind™ does not change your life.
+                                <br><strong>You change your life when you follow rules.</strong>
+                            </p>
+
+                        </div>
+                    </div>
+                </article>
+
+                <!-- I will continue generating them if you say “Continue Kindle Mode” -->
+
+            </section>
+
+            <p class="footer-note">
+                Pearl Mind™ Rulebook • Designed for <span>calm, deep reading</span>.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.slide-card').forEach(function (card) {
+            const header = card.querySelector('.slide-header');
+            const body = card.querySelector('.slide-body');
+
+            function setBodyHeight(open) {
+                body.style.maxHeight = open ? body.scrollHeight + 'px' : '0';
+            }
+
+            setBodyHeight(card.classList.contains('open'));
+
+            header.addEventListener('click', () => {
+                card.classList.toggle('open');
+                setBodyHeight(card.classList.contains('open'));
+            });
+
+            window.addEventListener('resize', () => {
+                if (card.classList.contains('open')) {
+                    setBodyHeight(true);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
