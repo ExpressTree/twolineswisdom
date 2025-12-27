@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pearl Mind — Chapters 1–10 Word Cloud Mentor</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+:root{
+  --bg:#0b0f14; --bg2:#070a0e; --card:#0c1422; --card2:#0b1320; --text:#e7eefc; --muted:#8fa1c4;
+  --border:#22314a; --pill:#1a2435; --pillOn:#2a3a56; --accent:#3b82f6; --dim:.23;
+}
+body{background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text)}
+a{color:inherit;text-decoration:none}
+
+/* App layout */
+.app{height:100vh;display:grid;grid-template-columns:300px 1fr;gap:12px;padding:12px}
+.sidebar{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.main{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;display:grid;grid-template-rows:auto auto 1fr;gap:10px;overflow:hidden}
+
+/* Sidebar */
+.brand{display:flex;flex-direction:column;gap:6px}
+.brand h1{margin:0;font-size:14px;letter-spacing:.2px}
+.brand p{margin:0;font-size:12px;color:var(--muted);line-height:1.35}
+.chapterList{display:grid;gap:8px;overflow:auto;padding-right:6px}
+.chapterBtn{
+  border:1px solid var(--border);background:var(--pill);color:var(--text);
+  padding:10px 10px;border-radius:14px;cursor:pointer;
+  display:grid;gap:4px;transition:transform .08s ease,background .12s ease
+}
+.chapterBtn:hover{transform:translateY(-1px)}
+.chapterBtn.active{background:rgba(59,130,246,.18);border-color:rgba(59,130,246,.55)}
+.chapterBtn b{font-size:12px}
+.chapterBtn small{color:var(--muted);font-size:11px;line-height:1.3}
+.footerNote{margin-top:auto;color:var(--muted);font-size:11px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+
+/* Main header */
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.titleBox{display:grid;gap:4px;min-width:220px}
+.titleBox h2{margin:0;font-size:14px}
+.titleBox p{margin:0;font-size:12px;color:var(--muted);line-height:1.35}
+
+/* Controls (filters + search) */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{
+  cursor:pointer;user-select:none;border:1px solid var(--border);
+  background:var(--pill);color:var(--text);padding:7px 10px;border-radius:999px;font-size:12px;line-height:1;
+  transition:transform .08s ease,background .12s ease
+}
+.chip:hover{transform:translateY(-1px)}
+.chip.active{background:var(--pillOn);border-color:#3a5682}
+.rightTools{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type="search"]{
+  background:#0d1420;border:1px solid var(--border);color:var(--text);
+  border-radius:999px;padding:8px 12px;font-size:12px;min-width:240px;outline:none
+}
+.kpi{color:var(--muted);font-size:12px}
+
+/* Cloud area */
+.cloudWrap{
+  background:#0d1420;border:1px dashed #22314a;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative
+}
+.cloud{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
+  transform-origin:center; padding:10px;
+}
+.word{
+  display:inline-block;padding:6px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  transition:opacity .15s ease,filter .15s ease,transform .12s ease,background .12s ease,color .12s ease;
+  cursor:pointer;user-select:none;
+}
+.word:hover{transform:translateY(-1px)}
+.word.dim{opacity:var(--dim);filter:grayscale(1)}
+.word.hide{display:none}
+.word.active{background:#fff;color:#000}
+
+/* Tooltip */
+.tip{
+  position:absolute;pointer-events:none;opacity:0;
+  background:rgba(17,24,39,.95);border:1px solid rgba(148,163,184,.25);
+  color:#e5e7eb;border-radius:12px;padding:8px 10px;font-size:12px;
+  transform:translate(-50%,-120%);max-width:340px;line-height:1.35;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)
+}
+.tip b{color:#fff}
+.tip small{color:#9ca3af}
+
+/* Bottom hints */
+.hints{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+.hints span{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px}
+
+/* Responsive */
+@media(max-width:980px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .sidebar{height:34vh}
+  .chapterList{max-height:22vh}
+  input[type="search"]{min-width:160px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <!-- LEFT: Chapters -->
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Pearl Mind — Chapter Navigator</h1>
+      <p>Pick a chapter. Filters update automatically. Word cloud fills the whole right side.</p>
+    </div>
+    <div class="chapterList" id="chapterList"></div>
+    <div class="footerNote">
+      Tip: Click a <b>word</b> to spotlight it. Click again to reset. Search works with any filter.
+    </div>
+  </aside>
+
+  <!-- RIGHT: Filters + Cloud -->
+  <main class="main">
+    <div class="top">
+      <div class="titleBox">
+        <h2 id="chapterTitle">—</h2>
+        <p id="chapterSub">—</p>
+      </div>
+      <div class="rightTools">
+        <input id="q" type="search" placeholder="Search any term… (works across filters)" />
+        <span class="kpi">Words: <b id="cnt">0</b></span>
+      </div>
+    </div>
+
+    <div class="controls" id="chips"></div>
+
+    <section class="cloudWrap" id="cloudWrap" aria-label="Word cloud area">
+      <div class="cloud" id="cloud"></div>
+      <div class="tip" id="tip"></div>
+    </section>
+
+    <div class="hints">
+      <span>Click <b>All</b> to reset filter</span>
+      <span>Search hides non-matching words</span>
+      <span>Hover shows chapter + filters</span>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   DATA MODEL
+   Each chapter:
+   - id, title, subtitle
+   - filters: [{id,label}]
+   - words: [{t,w,c:[filterIds]}]
+   IMPORTANT: Chapter 1 includes the full content you provided.
+============================================================ */
+
+/* ---------- CHAPTER 1: FULL (your recent page content) ---------- */
+const CH1_FILTERS = [
+  {id:"all", label:"All"},
+  {id:"fundamental", label:"1) Fundamental Analysis"},
+  {id:"macro", label:"2) Macro / Top-Down"},
+  {id:"technical", label:"3) Technical Analysis"},
+  {id:"profile", label:"4) Volume/Market Profile"},
+  {id:"wyckoff", label:"5) Wyckoff"},
+  {id:"elliott", label:"6) Elliott Wave"},
+  {id:"fibonacci", label:"7) Fibonacci"},
+  {id:"gann", label:"8) Gann"},
+  {id:"options", label:"9) Options Analysis"},
+  {id:"futures", label:"10) Futures Analysis"},
+  {id:"smc", label:"11) Smart Money / ICT"},
+  {id:"sentiment", label:"12) Sentiment & Positioning"},
+  {id:"event", label:"13) Event / News"},
+  {id:"quant", label:"14) Quant / Systematic"},
+  {id:"intermarket", label:"15) Intermarket"},
+  {id:"seasonality", label:"16) Seasonality / Time Cycles"},
+  {id:"microstructure", label:"17) Microstructure / Execution"},
+  {id:"risk", label:"18) Risk & Trade Management"},
+  {id:"tools", label:"19) Tools & Platforms (India)"}
+];
+
+const CH1_WORDS = [
+  /* 1) Fundamental */
+  {t:"Financial Statements", w:6, c:["fundamental"]},{t:"Balance Sheet", w:5, c:["fundamental"]},{t:"P&L", w:5, c:["fundamental"]},{t:"Cash Flow", w:6, c:["fundamental"]},
+  {t:"ROE", w:6, c:["fundamental"]},{t:"ROCE", w:7, c:["fundamental"]},{t:"Moat", w:5, c:["fundamental"]},{t:"Management Quality", w:5, c:["fundamental"]},
+  {t:"DCF Valuation", w:6, c:["fundamental"]},{t:"Relative Valuation", w:5, c:["fundamental"]},{t:"SOTP", w:4, c:["fundamental"]},{t:"Earnings Growth", w:5, c:["fundamental"]},
+  {t:"Margin Analysis", w:5, c:["fundamental"]},{t:"Debt Profile", w:5, c:["fundamental"]},{t:"Cash Conversion", w:4, c:["fundamental"]},{t:"Peer Comparison", w:4, c:["fundamental"]},
+
+  /* 2) Macro */
+  {t:"RBI Policy", w:6, c:["macro"]},{t:"Interest Rates", w:5, c:["macro"]},{t:"Liquidity", w:5, c:["macro","microstructure"]},{t:"CPI / Inflation", w:5, c:["macro"]},
+  {t:"GDP / Growth", w:4, c:["macro"]},{t:"Crude Oil", w:6, c:["macro","intermarket"]},{t:"INR", w:5, c:["macro","intermarket"]},{t:"Fed Decisions", w:4, c:["macro"]},
+  {t:"Risk-On / Risk-Off", w:4, c:["macro","sentiment"]},{t:"Budget", w:4, c:["macro","event"]},{t:"Sector Rotation", w:5, c:["macro","intermarket"]},
+
+  /* 3) Technical */
+  {t:"Dow Theory", w:6, c:["technical"]},{t:"Market Structure (HH/HL)", w:6, c:["technical","smc"]},{t:"Support & Resistance", w:7, c:["technical"]},{t:"Trendlines", w:5, c:["technical"]},
+  {t:"Breakout & Retest", w:6, c:["technical"]},{t:"Range Trading", w:5, c:["technical"]},{t:"Mean Reversion", w:5, c:["technical","quant"]},
+  {t:"Chart Patterns", w:7, c:["technical"]},{t:"Candlestick Patterns", w:7, c:["technical"]},
+  {t:"RSI", w:8, c:["technical"]},{t:"MACD", w:7, c:["technical"]},{t:"Stochastic", w:6, c:["technical"]},{t:"Moving Averages", w:7, c:["technical"]},
+  {t:"Supertrend", w:6, c:["technical"]},{t:"Ichimoku", w:5, c:["technical"]},{t:"ADX / DMI", w:5, c:["technical"]},
+  {t:"Bollinger Bands", w:6, c:["technical","quant"]},{t:"ATR", w:6, c:["technical","risk"]},{t:"VWAP", w:7, c:["technical","microstructure"]},
+  {t:"OBV", w:4, c:["technical"]},{t:"MFI", w:4, c:["technical"]},{t:"Donchian Channels", w:4, c:["technical","quant"]},
+
+  /* 4) Profile */
+  {t:"Volume Profile (VPVR)", w:7, c:["profile"]},{t:"Market Profile (TPO)", w:6, c:["profile"]},{t:"POC", w:5, c:["profile"]},{t:"Value Area", w:5, c:["profile"]},
+  {t:"HVN / LVN", w:5, c:["profile"]},{t:"Acceptance / Rejection", w:5, c:["profile","microstructure"]},{t:"Balance / Imbalance", w:5, c:["profile"]},
+
+  /* 5) Wyckoff */
+  {t:"Accumulation", w:6, c:["wyckoff"]},{t:"Distribution", w:6, c:["wyckoff"]},{t:"Spring / Upthrust", w:5, c:["wyckoff"]},{t:"Effort vs Result", w:5, c:["wyckoff"]},
+  {t:"Composite Operator", w:4, c:["wyckoff","smc"]},
+
+  /* 6) Elliott */
+  {t:"Impulse Waves", w:5, c:["elliott"]},{t:"Corrective Waves", w:5, c:["elliott"]},{t:"Wave Counts", w:5, c:["elliott"]},{t:"Extensions", w:4, c:["elliott"]},
+  {t:"Zigzag / Flat / Triangle", w:4, c:["elliott"]},{t:"WXY Combinations", w:3, c:["elliott"]},
+
+  /* 7) Fibonacci */
+  {t:"Fib Retracement", w:6, c:["fibonacci"]},{t:"Fib Extension", w:5, c:["fibonacci"]},{t:"Fib Projection", w:4, c:["fibonacci"]},{t:"Fib Time Zones", w:3, c:["fibonacci"]},
+  {t:"Fib Channel", w:3, c:["fibonacci"]},{t:"Golden Ratio (0.618)", w:4, c:["fibonacci"]},
+
+  /* 8) Gann */
+  {t:"Gann Angles", w:5, c:["gann"]},{t:"Square of 9", w:4, c:["gann"]},{t:"Time Cycles (Gann)", w:4, c:["gann","seasonality"]},{t:"Price-Time Squaring", w:3, c:["gann"]},
+
+  /* 9) Options */
+  {t:"Option Chain", w:8, c:["options","tools"]},{t:"Open Interest (OI)", w:8, c:["options","futures","sentiment"]},{t:"PCR", w:6, c:["options","sentiment"]},{t:"Max Pain", w:5, c:["options"]},
+  {t:"Implied Volatility (IV)", w:7, c:["options","sentiment"]},{t:"IV Rank", w:5, c:["options"]},{t:"Greeks", w:7, c:["options"]},
+  {t:"Delta", w:6, c:["options"]},{t:"Gamma", w:6, c:["options"]},{t:"Theta", w:6, c:["options"]},{t:"Vega", w:5, c:["options"]},
+  {t:"Skew", w:4, c:["options"]},{t:"Straddle", w:5, c:["options"]},{t:"Strangle", w:5, c:["options"]},{t:"Spreads", w:5, c:["options"]},
+  {t:"Iron Condor", w:4, c:["options"]},{t:"Hedging", w:5, c:["options","risk"]},{t:"Expiry Effects", w:4, c:["options","seasonality"]},
+
+  /* 10) Futures */
+  {t:"Futures OI", w:6, c:["futures","sentiment"]},{t:"Rollover Analysis", w:5, c:["futures","seasonality"]},{t:"Basis", w:4, c:["futures"]},{t:"Contango/Backwardation", w:4, c:["futures","intermarket"]},
+  {t:"Fair Value", w:4, c:["futures"]},
+
+  /* 11) SMC / ICT */
+  {t:"Liquidity Pools", w:6, c:["smc"]},{t:"Stop Hunts", w:6, c:["smc"]},{t:"Order Blocks", w:6, c:["smc"]},{t:"Fair Value Gaps (FVG)", w:5, c:["smc"]},
+  {t:"Imbalance", w:5, c:["smc","profile"]},{t:"CHOCH", w:4, c:["smc","technical"]},{t:"BOS", w:4, c:["smc"]},
+
+  /* 12) Sentiment & Positioning */
+  {t:"FII/DII Flows", w:6, c:["sentiment","tools"]},{t:"India VIX", w:6, c:["sentiment","options"]},{t:"Put/Call OI Distribution", w:5, c:["sentiment","options"]},
+  {t:"Client vs Pro Positioning", w:4, c:["sentiment"]},{t:"Risk Sentiment", w:4, c:["sentiment","macro"]},
+
+  /* 13) Event / News */
+  {t:"Earnings", w:5, c:["event"]},{t:"RBI Day Volatility", w:4, c:["event","macro"]},{t:"Budget Volatility", w:4, c:["event","macro"]},
+  {t:"Breaking News", w:4, c:["event"]},{t:"Corporate Actions", w:3, c:["event"]},{t:"Geopolitics", w:3, c:["event","macro"]},
+
+  /* 14) Quant / Systematic */
+  {t:"Backtesting", w:6, c:["quant","tools"]},{t:"Expectancy", w:5, c:["quant","risk"]},{t:"Probability", w:5, c:["quant"]},{t:"Regime Detection", w:4, c:["quant"]},
+  {t:"Trend Following Systems", w:5, c:["quant","technical"]},{t:"Statistical Arbitrage", w:3, c:["quant"]},{t:"Machine Learning", w:4, c:["quant"]},
+
+  /* 15) Intermarket */
+  {t:"Correlation", w:4, c:["intermarket","quant"]},{t:"Relative Strength", w:5, c:["intermarket","technical"]},{t:"US Yields", w:4, c:["intermarket","macro"]},
+  {t:"DXY", w:3, c:["intermarket","macro"]},{t:"Sector vs Index", w:4, c:["intermarket"]},
+
+  /* 16) Seasonality / Time Cycles */
+  {t:"Expiry Week Behavior", w:5, c:["seasonality","options"]},{t:"Day-of-Week Effect", w:3, c:["seasonality"]},{t:"Month-End Flows", w:3, c:["seasonality"]},
+  {t:"Quarter-End Effects", w:3, c:["seasonality"]},{t:"Holiday Liquidity", w:3, c:["seasonality","microstructure"]},
+
+  /* 17) Microstructure / Execution */
+  {t:"Spread & Slippage", w:5, c:["microstructure","risk"]},{t:"Liquidity", w:5, c:["microstructure","macro"]},{t:"Order Types", w:4, c:["microstructure"]},
+  {t:"Opening Range", w:4, c:["microstructure","technical"]},{t:"Tape Reading", w:3, c:["microstructure"]},
+
+  /* 18) Risk & Trade Management */
+  {t:"Position Sizing", w:7, c:["risk"]},{t:"Stop-Loss Frameworks", w:7, c:["risk"]},{t:"Max Daily Loss", w:6, c:["risk"]},
+  {t:"R-Multiple", w:5, c:["risk","quant"]},{t:"Risk:Reward", w:6, c:["risk"]},{t:"Drawdown Control", w:5, c:["risk"]},{t:"Portfolio Risk", w:4, c:["risk"]},
+
+  /* 19) Tools & Platforms (India) */
+  {t:"TradingView", w:6, c:["tools"]},{t:"Broker Terminal", w:5, c:["tools"]},{t:"NSE Data / Bhavcopy", w:4, c:["tools"]},{t:"Screeners", w:4, c:["tools","fundamental"]},
+  {t:"Excel Journaling", w:4, c:["tools","risk"]},{t:"Python", w:4, c:["tools","quant"]},{t:"Telegram Signals", w:3, c:["tools"]},{t:"YouTube Education", w:3, c:["tools"]}
+];
+
+/* ---------- Chapters 2–10: included with professional structure (can expand anytime) ---------- */
+const Chapters = [
+  {
+    id:"ch1",
+    title:"Chapter 1 — Transformation of Information to Mastery",
+    subtitle:"Overview of how markets are studied. Distill → apply → repeat.",
+    filters: CH1_FILTERS,
+    words: CH1_WORDS
+  },
+  {
+    id:"ch2",
+    title:"Chapter 2 — Controlled and Uncontrolled Outcomes",
+    subtitle:"Choose manageable risk. Avoid chaos disguised as opportunity.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"controlled",label:"Controlled (Good Challenges)"},
+      {id:"uncontrolled",label:"Uncontrolled (Chaos Traps)"},
+      {id:"risk",label:"Risk Leaks"},
+      {id:"mind",label:"Mind Triggers"},
+      {id:"process",label:"Process Gaps"},
+      {id:"capital",label:"Capital & Sizing"}
+    ],
+    words:[
+      {t:"Defined Max Loss",w:7,c:["controlled","risk","process"]},
+      {t:"Position Sizing Rule",w:7,c:["controlled","risk","capital"]},
+      {t:"Stop Trading After Rule Break",w:6,c:["controlled","process","mind"]},
+      {t:"A+ Setup Only",w:6,c:["controlled","process"]},
+      {t:"No Revenge Trading",w:7,c:["controlled","mind"]},
+      {t:"No FOMO Entries",w:6,c:["controlled","mind"]},
+      {t:"Overtrading Spiral",w:8,c:["uncontrolled","mind"]},
+      {t:"Martingale / Doubling",w:8,c:["uncontrolled","capital","risk"]},
+      {t:"Chasing Breakouts",w:7,c:["uncontrolled","mind"]},
+      {t:"Ignoring Volatility Regime",w:6,c:["uncontrolled","risk"]},
+      {t:"Trading Without Stop",w:8,c:["uncontrolled","risk"]},
+      {t:"News Shock Trades",w:6,c:["uncontrolled"]},
+      {t:"Debt Pressure",w:7,c:["uncontrolled","capital","mind"]},
+      {t:"Lack of Plan",w:7,c:["uncontrolled","process"]},
+      {t:"Risk per Trade Drift",w:6,c:["risk"]},
+      {t:"Daily Loss Limit Missing",w:7,c:["risk"]},
+      {t:"Inconsistent Execution",w:6,c:["process"]},
+      {t:"No Journal Feedback",w:5,c:["process","mind"]}
+    ]
+  },
+  {
+    id:"ch3",
+    title:"Chapter 3 — Finding Comfort on the Spectrum of Choices",
+    subtitle:"Know your natural style: structure vs adjustment. Confidence comes from fit.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"north",label:"North Pole (Structure / Buyer)"},
+      {id:"south",label:"South Pole (Adjustment / Seller)"},
+      {id:"conflict",label:"Conflict Zone"},
+      {id:"entries",label:"Entry / Exit Friction"},
+      {id:"capital",label:"Capital Fit"},
+      {id:"emotion",label:"Psychology"}
+    ],
+    words:[
+      {t:"Needs Clean Structure",w:7,c:["north"]},
+      {t:"Edge Depends on Timing",w:7,c:["north","entries"]},
+      {t:"Stops Must Be Precise",w:6,c:["north","entries"]},
+      {t:"Hates Sideways Chop",w:6,c:["north"]},
+      {t:"Masters Adjustment",w:7,c:["south"]},
+      {t:"Comfort With Range",w:6,c:["south"]},
+      {t:"Hedge & Manage Risk",w:6,c:["south","entries"]},
+      {t:"Theta Discipline",w:6,c:["south"]},
+      {t:"Switching Styles Daily",w:8,c:["conflict","emotion"]},
+      {t:"Copying Others",w:7,c:["conflict","emotion"]},
+      {t:"Wrong Instrument Choice",w:6,c:["conflict"]},
+      {t:"Entry Hesitation",w:7,c:["entries","emotion"]},
+      {t:"Early Exit Regret",w:6,c:["entries","emotion"]},
+      {t:"Late Exit Hope",w:6,c:["entries","emotion"]},
+      {t:"Capital Too Small for Selling",w:7,c:["capital","south"]},
+      {t:"Capital Too Large for Random Buying",w:6,c:["capital","north"]}
+    ]
+  },
+  {
+    id:"ch4",
+    title:"Chapter 4 — Deciphering Market Sentiment Through Observing Nature",
+    subtitle:"Subtle signals precede shifts. Understand participants & intention.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"institutions",label:"Institutions"},
+      {id:"retail",label:"Retail Forces"},
+      {id:"news",label:"News Driven"},
+      {id:"tech",label:"Technical Crowd"},
+      {id:"fund",label:"Fundamental Crowd"},
+      {id:"deriv",label:"Derivatives / OI"},
+      {id:"algo",label:"Algos / HFT"}
+    ],
+    words:[
+      {t:"FII",w:8,c:["institutions"]},{t:"DII",w:7,c:["institutions"]},{t:"Pro Desks",w:6,c:["institutions"]},{t:"Market Makers",w:7,c:["institutions","deriv"]},
+      {t:"Retail Traders",w:6,c:["retail"]},{t:"Influencers",w:5,c:["retail"]},{t:"Telegram Crowd",w:5,c:["retail"]},
+      {t:"Breaking News",w:6,c:["news"]},{t:"Policy Events",w:5,c:["news"]},{t:"Earnings Season",w:5,c:["news","fund"]},
+      {t:"Indicator Followers",w:6,c:["tech"]},{t:"Chart Pattern Traders",w:6,c:["tech"]},{t:"SMC / ICT Crowd",w:5,c:["tech"]},
+      {t:"Value Investors",w:5,c:["fund"]},{t:"Long-Term Funds",w:5,c:["fund","institutions"]},
+      {t:"Option Writers",w:7,c:["deriv"]},{t:"Option Buyers",w:6,c:["deriv"]},{t:"OI Builders",w:6,c:["deriv"]},
+      {t:"Arbitrage",w:5,c:["algo","institutions"]},{t:"HFT",w:6,c:["algo"]},{t:"Liquidity Sweep",w:6,c:["algo","tech"]}
+    ]
+  },
+  {
+    id:"ch5",
+    title:"Chapter 5 — Identifying Personal Break-Even Points & Building Resilience",
+    subtitle:"Sustainable progress requires knowing true limits, not testing them daily.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"money",label:"Capital / Debt Reality"},
+      {id:"mind",label:"Psychological Load"},
+      {id:"life",label:"Environment / Lifestyle"},
+      {id:"energy",label:"Health / Energy"},
+      {id:"system",label:"System & Boundaries"}
+    ],
+    words:[
+      {t:"Debt Burden Pressure",w:8,c:["money","mind"]},
+      {t:"Low Capital Fragility",w:7,c:["money"]},
+      {t:"Family Responsibility",w:6,c:["life","mind"]},
+      {t:"Sleep Deficit",w:7,c:["energy","mind"]},
+      {t:"Job Stress Spillover",w:6,c:["life","mind"]},
+      {t:"Need to Prove Myself",w:7,c:["mind"]},
+      {t:"Fear of Missing Income",w:7,c:["mind","money"]},
+      {t:"No Daily Stop Rule",w:8,c:["system"]},
+      {t:"No Recovery Plan",w:7,c:["system"]},
+      {t:"Emotional Flood After Loss",w:8,c:["mind"]},
+      {t:"Confidence Crash",w:6,c:["mind"]},
+      {t:"Overworking Without Rest",w:6,c:["energy","life"]},
+      {t:"Boundary Setting Failure",w:7,c:["system","life"]}
+    ]
+  },
+  {
+    id:"ch6",
+    title:"Chapter 6 — Aligning Limits with Nature’s Minimum Movement",
+    subtitle:"Efficiency comes from aligning action with momentum, not fighting it.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"expect",label:"Expectation Mismatch"},
+      {id:"range",label:"Minimum Movement / Range"},
+      {id:"timing",label:"Timing & Patience"},
+      {id:"risk",label:"Risk Misalignment"},
+      {id:"emotion",label:"Satisfaction / Frustration"}
+    ],
+    words:[
+      {t:"Expecting Big Move Daily",w:8,c:["expect","emotion"]},
+      {t:"Unsatisfied With Small Wins",w:7,c:["emotion","expect"]},
+      {t:"Forcing Trades in Chop",w:8,c:["range","timing"]},
+      {t:"Ignoring Market Rhythm",w:7,c:["range"]},
+      {t:"Holding for Home Run",w:7,c:["expect","risk"]},
+      {t:"Cutting Winners Too Early",w:6,c:["timing","emotion"]},
+      {t:"Late Entry After Move",w:7,c:["timing","risk"]},
+      {t:"Stop Too Tight for Volatility",w:7,c:["risk","range"]},
+      {t:"Target Too Far for Day",w:7,c:["expect","range"]},
+      {t:"Impatience During Consolidation",w:7,c:["timing","emotion"]}
+    ]
+  },
+  {
+    id:"ch7",
+    title:"Chapter 7 — Practicing for Mastery: Repetition Sharpens Skill",
+    subtitle:"Repetition transforms conscious effort into unconscious excellence.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"notSure",label:"Don’t Know What to Repeat"},
+      {id:"reliability",label:"Not Reliable Across Markets"},
+      {id:"discipline",label:"Can’t Repeat Consistently"},
+      {id:"execution",label:"Execution Friction"},
+      {id:"review",label:"Feedback & Review"}
+    ],
+    words:[
+      {t:"Too Many Strategies",w:8,c:["notSure"]},
+      {t:"No Single Setup Chosen",w:7,c:["notSure"]},
+      {t:"Works Only in Trending",w:7,c:["reliability"]},
+      {t:"Fails in Sideways",w:7,c:["reliability"]},
+      {t:"Instrument Mismatch",w:6,c:["reliability"]},
+      {t:"Rule Switching After Loss",w:8,c:["discipline"]},
+      {t:"Skipping A+ Criteria",w:7,c:["execution","discipline"]},
+      {t:"Late Entry Habit",w:7,c:["execution"]},
+      {t:"Hesitation Habit",w:6,c:["execution"]},
+      {t:"No Review Loop",w:7,c:["review"]},
+      {t:"No Mistake Catalog",w:6,c:["review"]}
+    ]
+  },
+  {
+    id:"ch8",
+    title:"Chapter 8 — The 84-Day Discipline of Focus",
+    subtitle:"Mindfulness is trained through disciplined repetition (not taught).",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"mind",label:"Mind & Emotion"},
+      {id:"process",label:"Routine & Systems"},
+      {id:"market",label:"Market Triggers"},
+      {id:"health",label:"Sleep / Energy"},
+      {id:"env",label:"Environment / Life"},
+      {id:"tools",label:"Notifications / Platforms"},
+      {id:"social",label:"Community / Comparison"},
+      {id:"style",label:"Scalper / Intraday / Swing / Positional"}
+    ],
+    words:[
+      {t:"Revenge Trading",w:9,c:["mind"]},{t:"FOMO",w:8,c:["mind"]},{t:"Boredom Trades",w:8,c:["mind","style"]},{t:"Overconfidence After Win",w:7,c:["mind"]},
+      {t:"No Pre-Market Plan",w:7,c:["process"]},{t:"No Daily Stop",w:9,c:["process","mind"]},{t:"Skipping Journal",w:6,c:["process"]},
+      {t:"Chop Day Frustration",w:7,c:["market","style"]},{t:"Gap Open Panic",w:7,c:["market"]},{t:"Volatility Spike",w:7,c:["market"]},
+      {t:"Sleep Debt",w:8,c:["health","mind"]},{t:"Low Energy Day",w:6,c:["health"]},
+      {t:"Work Stress Spill",w:7,c:["env","mind"]},{t:"Family Interruptions",w:5,c:["env"]},
+      {t:"Phone Notifications",w:7,c:["tools"]},{t:"Chart Watching Addiction",w:8,c:["tools","mind"]},
+      {t:"Comparison Anxiety",w:7,c:["social","mind"]},{t:"Signal Groups",w:6,c:["social","tools"]},
+      {t:"Scalper: Impulse Click",w:7,c:["style"]},{t:"Intraday: Late Recovery Trade",w:7,c:["style"]},{t:"Swing: Early Exit",w:6,c:["style"]},{t:"Positional: News Fear",w:6,c:["style"]}
+    ]
+  },
+  {
+    id:"ch9",
+    title:"Chapter 9 — Gradual Scaling & the Power of Compounding",
+    subtitle:"Small correct actions repeated over time outperform intensity without continuity.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"scale",label:"Scaling Errors"},
+      {id:"system",label:"System Not Scalable"},
+      {id:"risk",label:"Risk Growth"},
+      {id:"mind",label:"Mind Leaks"},
+      {id:"life",label:"Lifestyle Dilution"},
+      {id:"style",label:"Style-Specific"}
+    ],
+    words:[
+      {t:"Scaling Too Early",w:9,c:["scale","risk"]},
+      {t:"No Scale-Down Rule",w:9,c:["scale","risk"]},
+      {t:"Lot Size Jumps",w:8,c:["scale"]},
+      {t:"Compounding a Weak Edge",w:9,c:["system","scale"]},
+      {t:"Strategy Works Only Small Size",w:8,c:["system"]},
+      {t:"Slippage Eats Edge",w:7,c:["system","risk"]},
+      {t:"Revenge After Drawdown",w:8,c:["mind","risk"]},
+      {t:"Confidence > Skill",w:8,c:["mind","scale"]},
+      {t:"Lifestyle Inflation",w:8,c:["life"]},
+      {t:"Inconsistent Routine Breaks Continuity",w:7,c:["life","mind"]},
+      {t:"Scalper: Overtrade to Compound",w:7,c:["style","mind"]},
+      {t:"Swing: Holding Losers Longer",w:7,c:["style","risk"]},
+      {t:"Positional: Ignoring Portfolio Risk",w:6,c:["style","risk"]}
+    ]
+  },
+  {
+    id:"ch10",
+    title:"Chapter 10 — The Value of Mentorship",
+    subtitle:"Mastery completes when wisdom is transferred forward.",
+    filters:[
+      {id:"all",label:"All"},
+      {id:"dir",label:"No Direction / Clarity"},
+      {id:"learn",label:"Broken Learning Loop"},
+      {id:"risk",label:"Risk Damage"},
+      {id:"psy",label:"Psychological Chaos"},
+      {id:"social",label:"Noise / Wrong Influence"},
+      {id:"style",label:"Style-Specific"},
+      {id:"scale",label:"Compounding Without Mentor"}
+    ],
+    words:[
+      {t:"No Clear Path or Roadmap",w:9,c:["dir"]},{t:"Confusing Activity with Progress",w:8,c:["dir"]},{t:"No One to Validate Decisions",w:8,c:["dir"]},{t:"Unclear What to Practice Daily",w:9,c:["dir"]},{t:"No Accountability",w:8,c:["dir"]},
+      {t:"Repeating Same Mistakes",w:9,c:["learn"]},{t:"No Feedback on Journal",w:8,c:["learn"]},{t:"Wrong Conclusions from Losses",w:9,c:["learn"]},
+      {t:"Oversizing to Learn Faster",w:9,c:["risk"]},{t:"No Drawdown Recovery Plan",w:8,c:["risk"]},{t:"Risk Compounds Faster than Skill",w:9,c:["risk"]},
+      {t:"Revenge Trading Spirals",w:9,c:["psy"]},{t:"Burnout from Decision Fatigue",w:8,c:["psy"]},{t:"Isolation & Emotional Load",w:7,c:["psy"]},
+      {t:"Telegram Signal Dependency",w:9,c:["social"]},{t:"Copy Trading Without Context",w:9,c:["social"]},{t:"Influencer Confusion",w:8,c:["social"]},
+      {t:"Intraday: Overtrading During Chop",w:9,c:["style"]},{t:"Swing: Exiting Too Early",w:8,c:["style"]},{t:"Positional: News Fear While Holding",w:7,c:["style"]},
+      {t:"Scaling Without a Formula",w:9,c:["scale"]},{t:"Increasing Lots Too Early",w:9,c:["scale"]},{t:"No Scale-Down Rule After Loss",w:9,c:["scale"]},{t:"Compounding a Weak Edge",w:9,c:["scale"]}
+    ]
+  }
+];
+
+/* ============================================================
+   APP STATE
+============================================================ */
+let activeChapterId = "ch1";
+let activeFilterId = "all";
+let searchTerm = "";
+let activeWordEl = null;
+
+/* Elements */
+const chapterListEl = document.getElementById("chapterList");
+const chipsEl = document.getElementById("chips");
+const cloudEl = document.getElementById("cloud");
+const qEl = document.getElementById("q");
+const cntEl = document.getElementById("cnt");
+const titleEl = document.getElementById("chapterTitle");
+const subEl = document.getElementById("chapterSub");
+const cloudWrap = document.getElementById("cloudWrap");
+const tipEl = document.getElementById("tip");
+
+/* Helpers */
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+function sizeFor(w){ // 1..9
+  const min=12,max=34;
+  return Math.round(min + (w-1)*(max-min)/8);
+}
+function getChapter(){
+  return Chapters.find(c=>c.id===activeChapterId) || Chapters[0];
+}
+
+/* ============================================================
+   RENDER: Sidebar chapters
+============================================================ */
+function renderChapters(){
+  chapterListEl.innerHTML="";
+  Chapters.forEach(ch=>{
+    const b=document.createElement("div");
+    b.className="chapterBtn"+(ch.id===activeChapterId?" active":"");
+    b.dataset.ch=ch.id;
+    b.innerHTML=`<b>${ch.title}</b><small>${ch.subtitle}</small>`;
+    b.onclick=()=>{
+      activeChapterId = ch.id;
+      activeFilterId = "all";
+      activeWordEl = null;
+      qEl.value="";
+      searchTerm="";
+      renderAll();
+    };
+    chapterListEl.appendChild(b);
+  });
+}
+
+/* ============================================================
+   RENDER: Filters
+============================================================ */
+function renderFilters(){
+  const ch=getChapter();
+  chipsEl.innerHTML="";
+  ch.filters.forEach(f=>{
+    const s=document.createElement("span");
+    s.className="chip"+(f.id===activeFilterId?" active":"");
+    s.textContent=f.label;
+    s.dataset.f=f.id;
+    s.onclick=()=>{
+      activeFilterId=f.id;
+      activeWordEl=null;
+      renderFilters();
+      applyFilter();
+    };
+    chipsEl.appendChild(s);
+  });
+}
+
+/* ============================================================
+   RENDER: Cloud
+============================================================ */
+function renderCloud(){
+  const ch=getChapter();
+  titleEl.textContent = ch.title;
+  subEl.textContent = ch.subtitle;
+
+  cloudEl.innerHTML="";
+  ch.words.forEach((x,i)=>{
+    const el=document.createElement("span");
+    el.className="word";
+    el.style.fontSize = sizeFor(clamp(x.w||4,1,9))+"px";
+    el.textContent = x.t;
+    el.dataset.text = (x.t||"").toLowerCase();
+    el.dataset.cats = (x.c||[]).join(",");
+    el.dataset.word = x.t;
+    el.dataset.chapter = ch.title;
+    el.dataset.filters = (x.c||[]).map(id=>{
+      const f=ch.filters.find(ff=>ff.id===id);
+      return f?f.label.replace(/^\d+\)\s*/,""):id;
+    }).join(", ");
+
+    el.onclick=()=>{
+      if(activeWordEl===el){ activeWordEl=null; applyFilter(); return; }
+      activeWordEl=el;
+      spotlightWord(el);
+    };
+
+    el.onmousemove=(e)=>showTip(e, el);
+    el.onmouseleave=hideTip;
+
+    cloudEl.appendChild(el);
+  });
+
+  applyFilter();
+  fitCloud();
+}
+
+/* ============================================================
+   FILTER LOGIC
+============================================================ */
+function matchesFilter(el){
+  if(activeFilterId==="all") return true;
+  const cats=(el.dataset.cats||"").split(",").filter(Boolean);
+  return cats.includes(activeFilterId);
+}
+function matchesSearch(el){
+  if(!searchTerm) return true;
+  return (el.dataset.text||"").includes(searchTerm);
+}
+
+function applyFilter(){
+  const words=[...cloudEl.querySelectorAll(".word")];
+  let visibleCount=0;
+
+  words.forEach(el=>{
+    const okSearch=matchesSearch(el);
+    const okFilter=matchesFilter(el);
+
+    // hide by search
+    el.classList.toggle("hide", !okSearch);
+
+    // dim by filter (soft)
+    if(okSearch){
+      visibleCount++;
+      el.classList.toggle("dim", !okFilter);
+    }else{
+      el.classList.remove("dim");
+    }
+
+    // reset active style if needed
+    if(activeWordEl!==el) el.classList.remove("active");
+  });
+
+  cntEl.textContent = visibleCount;
+  fitCloud();
+}
+
+function spotlightWord(sel){
+  const words=[...cloudEl.querySelectorAll(".word")];
+  words.forEach(el=>{
+    el.classList.remove("active");
+    el.classList.toggle("dim", el!==sel);
+    el.classList.remove("hide"); // keep visible during spotlight
+  });
+  sel.classList.add("active");
+  cntEl.textContent = words.length;
+  fitCloud();
+}
+
+/* ============================================================
+   Search
+============================================================ */
+qEl.addEventListener("input", (e)=>{
+  searchTerm=(e.target.value||"").trim().toLowerCase();
+  activeWordEl=null;
+  applyFilter();
+});
+
+/* ============================================================
+   Tooltip
+============================================================ */
+function showTip(e, el){
+  const rect=cloudWrap.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+
+  tipEl.style.left = x+"px";
+  tipEl.style.top  = y+"px";
+  tipEl.style.opacity = 1;
+
+  tipEl.innerHTML = `
+    <b>${escapeHTML(el.dataset.word||"")}</b><br>
+    <small>${escapeHTML(el.dataset.chapter||"")}</small><br>
+    <small>Tags: ${escapeHTML(el.dataset.filters||"All")}</small>
+  `;
+}
+function hideTip(){ tipEl.style.opacity = 0; }
+
+function escapeHTML(s){
+  return String(s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+}
+
+/* ============================================================
+   Fit cloud to available space (one view)
+============================================================ */
+function fitCloud(){
+  // reset
+  cloudEl.style.transform="scale(1)";
+  // compute scale
+  const wrap=cloudWrap;
+  const cw=cloudEl.scrollWidth;
+  const ch=cloudEl.scrollHeight;
+  if(!cw || !ch) return;
+  const s = Math.min(wrap.clientWidth / cw, wrap.clientHeight / ch, 1);
+  cloudEl.style.transform = "scale("+s.toFixed(4)+")";
+}
+
+/* ============================================================
+   Render all
+============================================================ */
+function renderAll(){
+  renderChapters();
+  renderFilters();
+  renderCloud();
+}
+
+/* Events */
+window.addEventListener("resize", ()=>{ fitCloud(); });
+
+/* Init */
+renderAll();
+</script>
+</body>
+</html>
