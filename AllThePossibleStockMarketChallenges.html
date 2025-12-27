@@ -3,146 +3,226 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Pearl Mind — Chapters 1–10 Word Cloud Mentor</title>
+<title>Pearl Mind — All Chapters Mentor Dashboard</title>
+
 <style>
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+
+/* THEME */
 :root{
-  --bg:#0b0f14; --bg2:#070a0e; --card:#0c1422; --card2:#0b1320; --text:#e7eefc; --muted:#8fa1c4;
-  --border:#22314a; --pill:#1a2435; --pillOn:#2a3a56; --accent:#3b82f6; --dim:.23;
+  --bg:#0b0f14; --bg2:#070a0e; --card:#0c1422;
+  --text:#e7eefc; --muted:#8fa1c4;
+  --border:#22314a; --pill:#1a2435; --pillOn:#2a3a56;
+  --accent:#3b82f6; --dim:.25;
 }
 body{background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text)}
-a{color:inherit;text-decoration:none}
 
-/* App layout */
-.app{height:100vh;display:grid;grid-template-columns:300px 1fr;gap:12px;padding:12px}
-.sidebar{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
-.main{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;display:grid;grid-template-rows:auto auto 1fr;gap:10px;overflow:hidden}
+/* ===== APP LAYOUT ===== */
+.app{
+  height:100vh;
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:12px;
+  padding:12px;
+}
 
-/* Sidebar */
-.brand{display:flex;flex-direction:column;gap:6px}
-.brand h1{margin:0;font-size:14px;letter-spacing:.2px}
-.brand p{margin:0;font-size:12px;color:var(--muted);line-height:1.35}
-.chapterList{display:grid;gap:8px;overflow:auto;padding-right:6px}
+/* ===== SIDEBAR (DESKTOP) ===== */
+.sidebar{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.brand h1{margin:0;font-size:14px}
+.brand p{margin:4px 0 0;font-size:12px;color:var(--muted)}
+
+.chapterList{display:grid;gap:8px;overflow:auto}
 .chapterBtn{
-  border:1px solid var(--border);background:var(--pill);color:var(--text);
-  padding:10px 10px;border-radius:14px;cursor:pointer;
-  display:grid;gap:4px;transition:transform .08s ease,background .12s ease
+  background:var(--pill);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px;
+  cursor:pointer;
 }
-.chapterBtn:hover{transform:translateY(-1px)}
-.chapterBtn.active{background:rgba(59,130,246,.18);border-color:rgba(59,130,246,.55)}
+.chapterBtn.active{
+  background:rgba(59,130,246,.2);
+  border-color:var(--accent);
+}
 .chapterBtn b{font-size:12px}
-.chapterBtn small{color:var(--muted);font-size:11px;line-height:1.3}
-.footerNote{margin-top:auto;color:var(--muted);font-size:11px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+.chapterBtn small{display:block;font-size:11px;color:var(--muted)}
 
-/* Main header */
-.top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.titleBox{display:grid;gap:4px;min-width:220px}
+/* ===== MOBILE CHAPTER BAR ===== */
+.mobileChapters{
+  display:none;
+  gap:8px;
+  overflow-x:auto;
+  padding:8px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+.mobileChapters .chapterBtn{
+  min-width:220px;
+  white-space:nowrap;
+}
+
+/* ===== MAIN PANEL ===== */
+.main{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px;
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  gap:10px;
+}
+
+/* HEADER */
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
 .titleBox h2{margin:0;font-size:14px}
-.titleBox p{margin:0;font-size:12px;color:var(--muted);line-height:1.35}
+.titleBox p{margin:4px 0 0;font-size:12px;color:var(--muted)}
 
-/* Controls (filters + search) */
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.chip{
-  cursor:pointer;user-select:none;border:1px solid var(--border);
-  background:var(--pill);color:var(--text);padding:7px 10px;border-radius:999px;font-size:12px;line-height:1;
-  transition:transform .08s ease,background .12s ease
+.rightTools{
+  display:flex;
+  gap:8px;
+  align-items:center;
 }
-.chip:hover{transform:translateY(-1px)}
-.chip.active{background:var(--pillOn);border-color:#3a5682}
-.rightTools{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 input[type="search"]{
-  background:#0d1420;border:1px solid var(--border);color:var(--text);
-  border-radius:999px;padding:8px 12px;font-size:12px;min-width:240px;outline:none
+  background:#0d1420;
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
 }
-.kpi{color:var(--muted);font-size:12px}
 
-/* Cloud area */
+/* FILTERS */
+.controls{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:4px;
+}
+.controls::-webkit-scrollbar{height:6px}
+.controls::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.15);
+  border-radius:6px;
+}
+.chip{
+  background:var(--pill);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:12px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.chip.active{
+  background:var(--pillOn);
+  border-color:#3a5682;
+}
+
+/* WORD CLOUD */
 .cloudWrap{
-  background:#0d1420;border:1px dashed #22314a;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative
+  background:#0d1420;
+  border:1px dashed var(--border);
+  border-radius:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
 }
 .cloud{
-  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
-  transform-origin:center; padding:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  transform-origin:center;
 }
 .word{
-  display:inline-block;padding:6px 12px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.08);
+  padding:6px 12px;
+  border-radius:999px;
   background:rgba(255,255,255,.03);
-  transition:opacity .15s ease,filter .15s ease,transform .12s ease,background .12s ease,color .12s ease;
-  cursor:pointer;user-select:none;
+  border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;
+  transition:.15s;
 }
-.word:hover{transform:translateY(-1px)}
 .word.dim{opacity:var(--dim);filter:grayscale(1)}
-.word.hide{display:none}
 .word.active{background:#fff;color:#000}
 
-/* Tooltip */
-.tip{
-  position:absolute;pointer-events:none;opacity:0;
-  background:rgba(17,24,39,.95);border:1px solid rgba(148,163,184,.25);
-  color:#e5e7eb;border-radius:12px;padding:8px 10px;font-size:12px;
-  transform:translate(-50%,-120%);max-width:340px;line-height:1.35;
-  box-shadow:0 10px 30px rgba(0,0,0,.35)
+/* FOOTER */
+.hints{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  font-size:12px;
+  color:var(--muted);
 }
-.tip b{color:#fff}
-.tip small{color:#9ca3af}
 
-/* Bottom hints */
-.hints{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px}
-.hints span{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px}
-
-/* Responsive */
-@media(max-width:980px){
-  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
-  .sidebar{height:34vh}
-  .chapterList{max-height:22vh}
-  input[type="search"]{min-width:160px}
+/* ===== MOBILE MODE ===== */
+@media(max-width:1024px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
+  .sidebar{display:none}
+  .mobileChapters{display:flex}
+  .word{font-size:12px!important;padding:5px 10px}
 }
 </style>
 </head>
 
 <body>
 <div class="app">
-  <!-- LEFT: Chapters -->
-  <aside class="sidebar">
-    <div class="brand">
-      <h1>Pearl Mind — Chapter Navigator</h1>
-      <p>Pick a chapter. Filters update automatically. Word cloud fills the whole right side.</p>
-    </div>
-    <div class="chapterList" id="chapterList"></div>
-    <div class="footerNote">
-      Tip: Click a <b>word</b> to spotlight it. Click again to reset. Search works with any filter.
-    </div>
-  </aside>
 
-  <!-- RIGHT: Filters + Cloud -->
-  <main class="main">
-    <div class="top">
-      <div class="titleBox">
-        <h2 id="chapterTitle">—</h2>
-        <p id="chapterSub">—</p>
-      </div>
-      <div class="rightTools">
-        <input id="q" type="search" placeholder="Search any term… (works across filters)" />
-        <span class="kpi">Words: <b id="cnt">0</b></span>
-      </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="brand">
+    <h1>Pearl Mind</h1>
+    <p>9 Holes → 9 Chapter Fix System</p>
+  </div>
+  <div class="chapterList" id="chapterList"></div>
+</aside>
+
+<!-- MOBILE CHAPTER BAR -->
+<div class="mobileChapters" id="mobileChapters"></div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="top">
+    <div class="titleBox">
+      <h2 id="chapterTitle"></h2>
+      <p id="chapterSub"></p>
     </div>
-
-    <div class="controls" id="chips"></div>
-
-    <section class="cloudWrap" id="cloudWrap" aria-label="Word cloud area">
-      <div class="cloud" id="cloud"></div>
-      <div class="tip" id="tip"></div>
-    </section>
-
-    <div class="hints">
-      <span>Click <b>All</b> to reset filter</span>
-      <span>Search hides non-matching words</span>
-      <span>Hover shows chapter + filters</span>
+    <div class="rightTools">
+      <input id="q" type="search" placeholder="Search term…" />
+      <span class="kpi">Words: <b id="cnt">0</b></span>
     </div>
-  </main>
+  </div>
+
+  <div class="controls" id="chips"></div>
+
+  <div class="cloudWrap">
+    <div class="cloud" id="cloud"></div>
+  </div>
+
+  <div class="hints">
+    <span>Click word to focus</span>
+    <span>Filters adapt per chapter</span>
+    <span>Search works everywhere</span>
+  </div>
+</main>
+
 </div>
 
 <script>
@@ -526,231 +606,112 @@ const Chapters = [
   }
 ];
 
-/* ============================================================
-   APP STATE
-============================================================ */
-let activeChapterId = "ch1";
-let activeFilterId = "all";
-let searchTerm = "";
-let activeWordEl = null;
 
-/* Elements */
-const chapterListEl = document.getElementById("chapterList");
-const chipsEl = document.getElementById("chips");
-const cloudEl = document.getElementById("cloud");
-const qEl = document.getElementById("q");
-const cntEl = document.getElementById("cnt");
-const titleEl = document.getElementById("chapterTitle");
-const subEl = document.getElementById("chapterSub");
-const cloudWrap = document.getElementById("cloudWrap");
-const tipEl = document.getElementById("tip");
+/* ===== STATE ===== */
+let activeChapterId="ch1",activeFilterId="all",searchTerm="",activeWord=null;
 
-/* Helpers */
-const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-function sizeFor(w){ // 1..9
-  const min=12,max=34;
-  return Math.round(min + (w-1)*(max-min)/8);
-}
-function getChapter(){
-  return Chapters.find(c=>c.id===activeChapterId) || Chapters[0];
-}
+/* ===== ELEMENTS ===== */
+const chapterList=document.getElementById("chapterList");
+const mobileChapters=document.getElementById("mobileChapters");
+const chips=document.getElementById("chips");
+const cloud=document.getElementById("cloud");
+const q=document.getElementById("q");
+const cnt=document.getElementById("cnt");
+const chapterTitle=document.getElementById("chapterTitle");
+const chapterSub=document.getElementById("chapterSub");
 
-/* ============================================================
-   RENDER: Sidebar chapters
-============================================================ */
+/* ===== HELPERS ===== */
+function sizeFor(w){return 12+(w||4)*2}
+function currentChapter(){return Chapters.find(c=>c.id===activeChapterId)}
+
+/* ===== RENDER ===== */
 function renderChapters(){
-  chapterListEl.innerHTML="";
+  chapterList.innerHTML="";
+  mobileChapters.innerHTML="";
   Chapters.forEach(ch=>{
-    const b=document.createElement("div");
-    b.className="chapterBtn"+(ch.id===activeChapterId?" active":"");
-    b.dataset.ch=ch.id;
-    b.innerHTML=`<b>${ch.title}</b><small>${ch.subtitle}</small>`;
-    b.onclick=()=>{
-      activeChapterId = ch.id;
-      activeFilterId = "all";
-      activeWordEl = null;
-      qEl.value="";
-      searchTerm="";
-      renderAll();
-    };
-    chapterListEl.appendChild(b);
+    const btn=document.createElement("div");
+    btn.className="chapterBtn"+(ch.id===activeChapterId?" active":"");
+    btn.innerHTML=`<b>${ch.title}</b><small>${ch.subtitle}</small>`;
+    btn.onclick=()=>{selectChapter(ch.id)};
+    chapterList.appendChild(btn);
+
+    const mbtn=btn.cloneNode(true);
+    mbtn.onclick=()=>{selectChapter(ch.id)};
+    mobileChapters.appendChild(mbtn);
   });
 }
 
-/* ============================================================
-   RENDER: Filters
-============================================================ */
+function selectChapter(id){
+  activeChapterId=id;
+  activeFilterId="all";
+  searchTerm="";
+  q.value="";
+  activeWord=null;
+  //renderAll();
+  if(typeof renderAll === "function") renderAll();
+
+}
+
 function renderFilters(){
-  const ch=getChapter();
-  chipsEl.innerHTML="";
+  const ch=currentChapter();
+  chips.innerHTML="";
   ch.filters.forEach(f=>{
-    const s=document.createElement("span");
-    s.className="chip"+(f.id===activeFilterId?" active":"");
-    s.textContent=f.label;
-    s.dataset.f=f.id;
-    s.onclick=()=>{
-      activeFilterId=f.id;
-      activeWordEl=null;
-      renderFilters();
-      applyFilter();
-    };
-    chipsEl.appendChild(s);
+    const c=document.createElement("span");
+    c.className="chip"+(f.id===activeFilterId?" active":"");
+    c.textContent=f.label;
+    c.onclick=()=>{activeFilterId=f.id;activeWord=null;renderFilters();applyFilter()};
+    chips.appendChild(c);
   });
 }
 
-/* ============================================================
-   RENDER: Cloud
-============================================================ */
 function renderCloud(){
-  const ch=getChapter();
-  titleEl.textContent = ch.title;
-  subEl.textContent = ch.subtitle;
-
-  cloudEl.innerHTML="";
-  ch.words.forEach((x,i)=>{
+  const ch=currentChapter();
+  chapterTitle.textContent=ch.title;
+  chapterSub.textContent=ch.subtitle;
+  cloud.innerHTML="";
+  ch.words.forEach(w=>{
     const el=document.createElement("span");
     el.className="word";
-    el.style.fontSize = sizeFor(clamp(x.w||4,1,9))+"px";
-    el.textContent = x.t;
-    el.dataset.text = (x.t||"").toLowerCase();
-    el.dataset.cats = (x.c||[]).join(",");
-    el.dataset.word = x.t;
-    el.dataset.chapter = ch.title;
-    el.dataset.filters = (x.c||[]).map(id=>{
-      const f=ch.filters.find(ff=>ff.id===id);
-      return f?f.label.replace(/^\d+\)\s*/,""):id;
-    }).join(", ");
-
+    el.textContent=w.t;
+    el.style.fontSize=sizeFor(w.w)+"px";
+    el.dataset.cats=w.c.join(",");
+    el.dataset.text=w.t.toLowerCase();
     el.onclick=()=>{
-      if(activeWordEl===el){ activeWordEl=null; applyFilter(); return; }
-      activeWordEl=el;
-      spotlightWord(el);
+      activeWord=activeWord===el?null:el;
+      applyFilter();
     };
-
-    el.onmousemove=(e)=>showTip(e, el);
-    el.onmouseleave=hideTip;
-
-    cloudEl.appendChild(el);
+    cloud.appendChild(el);
   });
-
   applyFilter();
-  fitCloud();
-}
-
-/* ============================================================
-   FILTER LOGIC
-============================================================ */
-function matchesFilter(el){
-  if(activeFilterId==="all") return true;
-  const cats=(el.dataset.cats||"").split(",").filter(Boolean);
-  return cats.includes(activeFilterId);
-}
-function matchesSearch(el){
-  if(!searchTerm) return true;
-  return (el.dataset.text||"").includes(searchTerm);
 }
 
 function applyFilter(){
-  const words=[...cloudEl.querySelectorAll(".word")];
-  let visibleCount=0;
-
-  words.forEach(el=>{
-    const okSearch=matchesSearch(el);
-    const okFilter=matchesFilter(el);
-
-    // hide by search
-    el.classList.toggle("hide", !okSearch);
-
-    // dim by filter (soft)
-    if(okSearch){
-      visibleCount++;
-      el.classList.toggle("dim", !okFilter);
-    }else{
-      el.classList.remove("dim");
-    }
-
-    // reset active style if needed
-    if(activeWordEl!==el) el.classList.remove("active");
+  let visible=0;
+  cloud.querySelectorAll(".word").forEach(w=>{
+    const okSearch=!searchTerm||w.dataset.text.includes(searchTerm);
+    const okFilter=activeFilterId==="all"||w.dataset.cats.includes(activeFilterId);
+    w.classList.toggle("dim",activeWord? w!==activeWord: !okFilter);
+    w.style.display=okSearch?"inline-block":"none";
+    if(okSearch) visible++;
+    w.classList.toggle("active",w===activeWord);
   });
-
-  cntEl.textContent = visibleCount;
-  fitCloud();
+  cnt.textContent=visible;
 }
 
-function spotlightWord(sel){
-  const words=[...cloudEl.querySelectorAll(".word")];
-  words.forEach(el=>{
-    el.classList.remove("active");
-    el.classList.toggle("dim", el!==sel);
-    el.classList.remove("hide"); // keep visible during spotlight
-  });
-  sel.classList.add("active");
-  cntEl.textContent = words.length;
-  fitCloud();
-}
+/* ===== EVENTS ===== */
+q.oninput=e=>{searchTerm=e.target.value.toLowerCase();applyFilter()};
 
-/* ============================================================
-   Search
-============================================================ */
-qEl.addEventListener("input", (e)=>{
-  searchTerm=(e.target.value||"").trim().toLowerCase();
-  activeWordEl=null;
-  applyFilter();
-});
+/* ===== INIT ===== */
 
-/* ============================================================
-   Tooltip
-============================================================ */
-function showTip(e, el){
-  const rect=cloudWrap.getBoundingClientRect();
-  const x=e.clientX-rect.left;
-  const y=e.clientY-rect.top;
-
-  tipEl.style.left = x+"px";
-  tipEl.style.top  = y+"px";
-  tipEl.style.opacity = 1;
-
-  tipEl.innerHTML = `
-    <b>${escapeHTML(el.dataset.word||"")}</b><br>
-    <small>${escapeHTML(el.dataset.chapter||"")}</small><br>
-    <small>Tags: ${escapeHTML(el.dataset.filters||"All")}</small>
-  `;
-}
-function hideTip(){ tipEl.style.opacity = 0; }
-
-function escapeHTML(s){
-  return String(s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-}
-
-/* ============================================================
-   Fit cloud to available space (one view)
-============================================================ */
-function fitCloud(){
-  // reset
-  cloudEl.style.transform="scale(1)";
-  // compute scale
-  const wrap=cloudWrap;
-  const cw=cloudEl.scrollWidth;
-  const ch=cloudEl.scrollHeight;
-  if(!cw || !ch) return;
-  const s = Math.min(wrap.clientWidth / cw, wrap.clientHeight / ch, 1);
-  cloudEl.style.transform = "scale("+s.toFixed(4)+")";
-}
-
-/* ============================================================
-   Render all
-============================================================ */
 function renderAll(){
   renderChapters();
   renderFilters();
   renderCloud();
 }
 
-/* Events */
-window.addEventListener("resize", ()=>{ fitCloud(); });
-
-/* Init */
-renderAll();
+renderChapters();
+renderFilters();
+renderCloud();
 </script>
 </body>
 </html>
