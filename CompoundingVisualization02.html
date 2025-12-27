@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Pearl Mind — Compounding Dashboard</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --panel:#111522;
+      --border:#1f2637;
+      --text:#e9eefc;
+      --muted:#9aa7c0;
+      --accent:#35d0ba;
+      --accent2:#ffb020;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, #121a2e 0%, var(--bg) 55%);
+      color:var(--text);
+      height:100vh;
+      overflow:hidden;
+    }
+    .wrap{
+      height:100vh;
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:14px;
+      padding:14px;
+    }
+
+    .controls{
+      background: linear-gradient(180deg, rgba(17,21,34,.9), rgba(15,19,32,.9));
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 12px 10px;
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      gap:10px;
+      align-items:end;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .brand{ padding:6px 6px 6px 10px; }
+    .brand .t1{
+      font-weight:700; letter-spacing:.6px; font-size:16px;
+      display:flex; gap:10px; align-items:center;
+    }
+    .badge{
+      font-size:11px; padding:4px 8px;
+      border:1px solid var(--border);
+      border-radius:999px; color:var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    .brand .t2{ margin-top:6px; font-size:12px; color:var(--muted); line-height:1.2; }
+
+    .field label{
+      display:block; font-size:11px; color:var(--muted);
+      margin:0 0 6px; letter-spacing:.3px;
+    }
+    .field input{
+      width:100%; padding:10px 10px; border-radius:10px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color:var(--text); outline:none;
+    }
+    .field input:focus{
+      border-color: rgba(53,208,186,.55);
+      box-shadow: 0 0 0 3px rgba(53,208,186,.12);
+    }
+
+    .summary{
+      display:flex; gap:10px; align-items:center;
+      justify-content:flex-end; padding-right:6px; white-space:nowrap;
+    }
+    .pill{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .pill b{ color:var(--text); font-weight:700; }
+
+    .grid{
+      height:100%;
+      overflow:auto;
+      padding-bottom:8px;
+    }
+    /* Center + one below other */
+    .cards{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+    }
+    .card{
+      width:100%;
+      max-width:1100px;
+      background: linear-gradient(180deg, rgba(17,21,34,.88), rgba(12,14,20,.88));
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 12px 8px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+      min-height:360px;
+      display:flex;
+      flex-direction:column;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.4px;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .hint{ font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.2px; }
+    .canvasWrap{ flex:1; position:relative; }
+    canvas{ width:100% !important; height:100% !important; }
+
+    @media (max-width: 980px){
+      body{ overflow:auto; }
+      .wrap{ height:auto; }
+      .controls{ grid-template-columns: 1fr 1fr; }
+      .summary{ grid-column: 1 / -1; justify-content:flex-start; flex-wrap:wrap; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="controls">
+      <div class="brand">
+        <div class="t1">⚓ Pearl Mind Dashboard <span class="badge">±40 / Consistency Engine</span></div>
+        <div class="t2">Rule: <b>1 Lot per ₹1,00,000</b> (FLOOR). Lots stay constant for the month. Capital updates only at month end.</div>
+      </div>
+
+      <div class="field">
+        <label>Initial Capital (₹)</label>
+        <input id="capital" type="number" value="100000" min="0" step="1000">
+      </div>
+      <div class="field">
+        <label>Lot Size (Qty per Lot)</label>
+        <input id="lotSize" type="number" value="30" min="1" step="1">
+      </div>
+      <div class="field">
+        <label>Points / Day</label>
+        <input id="points" type="number" value="40" min="0" step="1">
+      </div>
+      <div class="field">
+        <label>Days / Month</label>
+        <input id="days" type="number" value="12" min="1" step="1">
+      </div>
+      <div class="field">
+        <label>Option Premium (₹)</label>
+        <input id="premium" type="number" value="800" min="0" step="10">
+      </div>
+      <div class="field">
+        <label>Months</label>
+        <input id="months" type="number" value="40" min="1" step="1">
+      </div>
+
+      <div class="summary" style="grid-column: 1 / -1;">
+        <div class="pill">Profit / Lot / Day: <b id="plpd">₹0</b></div>
+        <div class="pill">Lot Rule: <b id="lotrule">FLOOR(Capital / 1,00,000)</b></div>
+        <div class="pill">Milestones: <b id="milestones">—</b></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="cards">
+        <div class="card">
+          <h3>Points / Day (Discipline) <span class="hint">points</span></h3>
+          <div class="canvasWrap"><canvas id="cPts"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Total Points / Day (Points × Quantity) <span class="hint">points</span></h3>
+          <div class="canvasWrap"><canvas id="cTotPts"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Daily Profit Growth <span class="hint">₹ / day</span></h3>
+          <div class="canvasWrap"><canvas id="cDaily"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Monthly Profit Growth <span class="hint">₹ / month</span></h3>
+          <div class="canvasWrap"><canvas id="cMonthly"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Lots & Quantity <span class="hint">lot + qty</span></h3>
+          <div class="canvasWrap"><canvas id="cQty"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Capital Compounding Curve <span class="hint">₹ capital</span></h3>
+          <div class="canvasWrap"><canvas id="cCap"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  Chart.register(ChartDataLabels);
+
+  const el = (id)=>document.getElementById(id);
+
+  const capitalInput = el("capital");
+  const lotSizeInput = el("lotSize");
+  const pointsInput  = el("points");
+  const daysInput    = el("days");
+  const monthsInput  = el("months");
+
+  const plpdEl = el("plpd");
+  const milestonesEl = el("milestones");
+
+  let charts = [];
+
+  const fmtINR = (n)=> {
+    if (!isFinite(n)) return "—";
+    const x = Math.round(n);
+    return "₹" + x.toLocaleString("en-IN");
+  };
+
+  const compact = (v)=>{
+    const n = Math.abs(v);
+    if (n >= 10000000) return (v/10000000).toFixed(2) + "Cr";
+    if (n >= 100000) return (v/100000).toFixed(2) + "L";
+    return Math.round(v).toString();
+  };
+
+  function lotsFromCapital(cap){
+    if (cap <= 0) return 0;
+    return Math.floor(cap / 100000); // FLOOR rule
+  }
+
+  function buildModel(){
+    const startCap = +capitalInput.value;
+    const lotSize  = +lotSizeInput.value;
+    const points   = +pointsInput.value;
+    const days     = +daysInput.value;
+    const months   = +monthsInput.value;
+
+    const profitPerLotDay = lotSize * points;
+    plpdEl.textContent = fmtINR(profitPerLotDay);
+
+    let cap = startCap;
+
+    const labels = [];
+    const capitalArr = [];
+    const lotsArr = [];
+    const qtyArr = [];
+    const profitDayArr = [];
+    const profitMonthArr = [];
+    const ptsPerDayArr = [];
+    const totalPtsPerDayArr = [];
+
+    let m2=null, m10=null, m100=null;
+    const base = startCap > 0 ? startCap : 1;
+
+    for (let m = 1; m <= months; m++){
+      const lots = lotsFromCapital(cap);
+      const qty  = lots * lotSize;
+
+      const profitDay   = qty * points;       // ₹/day using quantity
+      const profitMonth = profitDay * days;
+
+      labels.push("M" + m);
+      capitalArr.push(cap);
+      lotsArr.push(lots);
+      qtyArr.push(qty);
+      profitDayArr.push(profitDay);
+      profitMonthArr.push(profitMonth);
+
+      ptsPerDayArr.push(points);
+      totalPtsPerDayArr.push(points * lots);
+
+      if (!m2 && cap >= 2*base) m2 = m;
+      if (!m10 && cap >= 10*base) m10 = m;
+      if (!m100 && cap >= 100*base) m100 = m;
+
+      cap += profitMonth;
+    }
+
+    const ms = [];
+    if (m2) ms.push(`2× in M${m2}`);
+    if (m10) ms.push(`10× in M${m10}`);
+    if (m100) ms.push(`100× in M${m100}`);
+    milestonesEl.textContent = ms.length ? ms.join("  |  ") : "—";
+
+    return { labels, capitalArr, lotsArr, qtyArr, profitDayArr, profitMonthArr, ptsPerDayArr, totalPtsPerDayArr, points };
+  }
+
+  function destroyCharts(){
+    charts.forEach(c => c.destroy());
+    charts = [];
+  }
+
+  function commonTooltip(model){
+    return {
+      mode: "index",
+      intersect: false,
+      position: "average",
+      callbacks:{
+        title: (items)=> {
+          const i = items[0].dataIndex;
+          return `Month: ${model.labels[i]}`;
+        },
+        label: (item)=>{
+          const i = item.dataIndex;
+          const cap = model.capitalArr[i];
+          const lots = model.lotsArr[i];
+          const qty  = model.qtyArr[i];
+          const pd   = model.profitDayArr[i];
+          const pm   = model.profitMonthArr[i];
+          const pts  = model.ptsPerDayArr[i];
+          const tpts = model.totalPtsPerDayArr[i];
+
+          // Keep it consistent across all charts
+          return [
+            `Capital: ${fmtINR(cap)}`,
+            `Lots: ${lots} (Rule: FLOOR(Cap/1,00,000))`,
+            `Quantity: ${qty}`,
+            `Points/Day: ${pts}`,
+            `Total Points/Day: ${tpts}`,
+            `Profit/Day: ${fmtINR(pd)}`,
+            `Profit/Month: ${fmtINR(pm)}`
+          ];
+        }
+      }
+    };
+  }
+
+  function baseOptions(model){
+    return {
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{ mode:"index", intersect:false },
+      plugins:{
+        legend:{ display:false },
+        tooltip: commonTooltip(model),
+        datalabels:{
+          color:"#cfeee9",
+          anchor:"end",
+          align:"end",
+          offset: 2,
+          clamp:true,
+          rotation: -60,          // angled labels for visibility
+          textAlign: "left",
+          font:{ size:10, weight:"700" },
+          formatter:(v)=>compact(v)
+        }
+      },
+      scales:{
+        x:{ ticks:{ color:"#98a7c3" }, grid:{ color:"rgba(255,255,255,0.06)" } },
+        y:{ ticks:{ color:"#98a7c3" }, grid:{ color:"rgba(255,255,255,0.06)" } }
+      }
+    };
+  }
+
+  function makeBarChart(canvasId, model, label, dataArr, color){
+    const ctx = el(canvasId);
+    return new Chart(ctx, {
+      type:"bar",
+      data:{
+        labels: model.labels,
+        datasets:[{
+          label,
+          data: dataArr,
+          backgroundColor: color,
+          borderColor: color,
+          borderWidth: 1,
+          borderRadius: 8
+        }]
+      },
+      options: baseOptions(model)
+    });
+  }
+
+  function makeComboLotsQty(canvasId, model){
+    const ctx = el(canvasId);
+    return new Chart(ctx, {
+      data:{
+        labels: model.labels,
+        datasets:[
+          {
+            type:"bar",
+            label:"Quantity",
+            data: model.qtyArr,
+            backgroundColor: "rgba(255, 176, 32, 0.85)",
+            borderColor: "rgba(255, 176, 32, 1)",
+            borderWidth: 1,
+            borderRadius: 8,
+            yAxisID: "y"
+          },
+          {
+            type:"line",
+            label:"Lots",
+            data: model.lotsArr,
+            borderColor: "rgba(53, 208, 186, 1)",
+            backgroundColor: "rgba(53, 208, 186, 0.15)",
+            pointRadius: 2.5,
+            tension: 0.25,
+            yAxisID: "y1"
+          }
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{ mode:"index", intersect:false },
+        plugins:{
+          legend:{ labels:{ color:"#cbd6ee" } },
+          tooltip: commonTooltip(model),
+          datalabels:{
+            // Show bar labels only; hide line labels
+            color:"#ffe6b3",
+            anchor:"end",
+            align:"end",
+            clamp:true,
+            rotation:-60,
+            font:{ size:10, weight:"800" },
+            formatter:(v, ctx)=> ctx.dataset.type === "line" ? "" : v.toString()
+          }
+        },
+        scales:{
+          x:{ ticks:{ color:"#98a7c3" }, grid:{ color:"rgba(255,255,255,0.06)" } },
+          y:{ position:"left", ticks:{ color:"#98a7c3" }, grid:{ color:"rgba(255,255,255,0.06)" }, title:{ display:true, text:"Quantity", color:"#98a7c3" } },
+          y1:{ position:"right", ticks:{ color:"#98a7c3" }, grid:{ drawOnChartArea:false }, title:{ display:true, text:"Lots", color:"#98a7c3" } }
+        }
+      }
+    });
+  }
+
+  function makeCapitalLine(canvasId, model){
+    const ctx = el(canvasId);
+    return new Chart(ctx, {
+      type:"line",
+      data:{
+        labels: model.labels,
+        datasets:[{
+          label:"Capital",
+          data: model.capitalArr,
+          borderColor:"rgba(53, 208, 186, 1)",
+          backgroundColor:"rgba(53, 208, 186, 0.12)",
+          fill:true,
+          pointRadius:2.5,
+          tension:0.25
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{ mode:"index", intersect:false },
+        plugins:{
+          legend:{ display:false },
+          tooltip: commonTooltip(model),
+          datalabels:{
+            color:"#cfeee9",
+            anchor:"end",
+            align:"top",
+            clamp:true,
+            font:{ size:10, weight:"800" },
+            formatter:(v,ctx)=>{
+              // reduce clutter: show every 2nd label
+              const i = ctx.dataIndex;
+              if (i % 2 !== 0) return "";
+              return compact(v);
+            }
+          }
+        },
+        scales:{
+          x:{ ticks:{ color:"#98a7c3" }, grid:{ color:"rgba(255,255,255,0.06)" } },
+          y:{ ticks:{ color:"#98a7c3" }, grid:{ color:"rgba(255,255,255,0.06)" } }
+        }
+      }
+    });
+  }
+
+  function render(){
+    destroyCharts();
+    const model = buildModel();
+
+    charts.push(makeBarChart("cPts", model, "Points/Day", model.ptsPerDayArr, "rgba(53, 208, 186, 0.75)"));
+    charts.push(makeBarChart("cTotPts", model, "Total Points/Day", model.totalPtsPerDayArr, "rgba(255, 176, 32, 0.75)"));
+
+    charts.push(makeBarChart("cDaily", model, "Daily Profit", model.profitDayArr, "rgba(53, 208, 186, 0.85)"));
+    charts.push(makeBarChart("cMonthly", model, "Monthly Profit", model.profitMonthArr, "rgba(53, 208, 186, 0.85)"));
+    charts.push(makeComboLotsQty("cQty", model));
+    charts.push(makeCapitalLine("cCap", model));
+  }
+
+  document.querySelectorAll("input").forEach(inp => inp.addEventListener("input", render));
+  render();
+</script>
+</body>
+</html>
