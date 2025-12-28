@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>10x Fit Father — Health & Fitness Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<style>
+:root{
+  --bg:#0b0f14; --panel:#111827; --line:#1f2937;
+  --text:#e5e7eb; --muted:#9ca3af;
+  --good:#22c55e; --accent:#38bdf8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+}
+.container{max-width:1200px;margin:25px auto;padding:20px}
+
+/* HEADER */
+.header{
+  display:flex; align-items:center; gap:20px;
+  background:var(--panel); padding:15px 20px;
+  border-radius:10px; margin-bottom:25px;
+}
+.logo{
+  width:80px;height:80px;border:2px dashed var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:12px;text-align:center;
+}
+.header-text h1{margin:0;font-size:24px}
+.header-text p{margin:4px 0 0;color:var(--muted)}
+
+/* TABLE */
+table{
+  width:100%; border-collapse:collapse; font-size:13px;
+}
+th,td{
+  border:1px solid var(--line);
+  padding:8px; text-align:center;
+}
+th{background:#020617}
+td.label{
+  text-align:left;background:#020617;
+  font-weight:500;
+}
+input[type=checkbox]{transform:scale(1.1)}
+
+/* DASH */
+.progress{
+  margin-top:25px;
+  display:flex; gap:20px; flex-wrap:wrap;
+}
+.card{
+  background:var(--panel); padding:15px; border-radius:10px;
+  flex:1; min-width:220px;
+}
+.percent{font-size:34px;font-weight:700;color:var(--good)}
+
+.note{
+  margin-top:25px; background:#020617;
+  padding:15px;border-radius:10px;color:var(--muted)
+}
+.footer{
+  margin-top:25px;color:var(--muted);
+  font-size:12px;text-align:center
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- HEADER WITH LOGO -->
+  <div class="header">
+    <div class="logo">
+      YOUR<br>LOGO
+    </div>
+    <div class="header-text">
+      <h1>10x Fit Father — Health & Fitness Discipline Tracker</h1>
+      <p>10 Days • Reset Digestion • Sleep • Breath • Mind • Routine</p>
+    </div>
+  </div>
+
+  <!-- TRACKER TABLE -->
+  <table id="tracker">
+    <tr>
+      <th>Daily Health Actions</th>
+      <th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th>
+      <th>D6</th><th>D7</th><th>D8</th><th>D9</th><th>D10</th>
+    </tr>
+
+    <!-- MORNING -->
+    <tr><td class="label">🌅 Morning: Empty Stomach Deep Breathing (5 min)</td></tr>
+    <tr><td class="label">🧠 Morning: ABCD Practice (Nervous System Reset)</td></tr>
+
+    <!-- DIGESTION -->
+    <tr><td class="label">🍽️ Digestion Rule: No Sugar / No Maida / No Packaged Food</td></tr>
+    <tr><td class="label">🥒 Kundru (Ivy Gourd) 100g in Lunch</td></tr>
+    <tr><td class="label">🍴 Eat Slowly (30 mins, 32 chews, no distractions)</td></tr>
+
+    <!-- EVENING -->
+    <tr><td class="label">🍵 Evening: Herbal / Green / Lemon Tea (No Milk)</td></tr>
+    <tr><td class="label">⏰ Circadian Rule: Dinner Before 7:00 PM</td></tr>
+
+    <!-- NIGHT -->
+    <tr><td class="label">📵 Digital Hygiene: No Screens 30 min Before Bed</td></tr>
+    <tr><td class="label">🧘 Visualization: Healthy & Ideal Weight Self (5 min)</td></tr>
+    <tr><td class="label">🌬️ Alternate Nostril Breathing (5 min)</td></tr>
+    <tr><td class="label">😴 Sleep Hygiene: Sleep Before 10:30 PM</td></tr>
+    <tr><td class="label">✅ Accountability: Night Message Sent — “DONE”</td></tr>
+  </table>
+
+  <!-- PROGRESS -->
+  <div class="progress">
+    <div class="card">
+      <div>Overall Health Discipline</div>
+      <div class="percent" id="percent">0%</div>
+    </div>
+    <div class="card">
+      <div>Fitness Philosophy</div>
+      <div class="subtitle">Health first. Weight follows.</div>
+    </div>
+    <div class="card">
+      <div>Reminder</div>
+      <div class="subtitle">Upload Day-0 Weight Photo</div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="note">
+    <b>Program Rules:</b><br>
+    • No diet charts. No gym. No supplements.<br>
+    • Prefer home food. Avoid Swiggy / Zomato.<br>
+    • Continue prescribed medicines.<br>
+    • Avoid packed milk if possible (optional).<br>
+    • Practice Yoganidra daily till Jan 1st, 2026.<br>
+    • Honesty > Perfection.
+  </div>
+
+  <div class="footer">
+    Team 10x Fit Father • Health is built daily, not someday
+  </div>
+</div>
+
+<script>
+const table=document.getElementById("tracker");
+for(let r=1;r<table.rows.length;r++){
+  for(let c=1;c<=10;c++){
+    const cell=table.rows[r].insertCell();
+    const cb=document.createElement("input");
+    cb.type="checkbox";
+    cb.onchange=calc;
+    cell.appendChild(cb);
+  }
+}
+function calc(){
+  const boxes=document.querySelectorAll("input[type=checkbox]");
+  let done=0;
+  boxes.forEach(b=>b.checked && done++);
+  document.getElementById("percent").innerText=
+    Math.round((done/boxes.length)*100)+"%";
+}
+</script>
+
+</body>
+</html>
