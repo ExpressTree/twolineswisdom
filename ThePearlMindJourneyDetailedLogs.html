@@ -1,0 +1,1137 @@
+  <!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Pearl Mind — Trading Emotions Journal (Monthly)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+    <style>
+      :root{
+        --bg:#070a12;--panel:#0c1220;--panel2:#0a0f1c;--line:#1a2436;
+        --text:#e7eaf0;--muted:#9aa4b2;--good:#22c55e;--bad:#ef4444;--gold:#d4af37;--ice:#60a5fa;
+        --warn:#f59e0b;--vio:#a78bfa;--cyan:#22d3ee;--pink:#fb7185;
+        --shadow: 0 14px 40px rgba(0,0,0,.35);
+        --radius:18px;
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+        color:var(--text);
+        background:
+          radial-gradient(1200px 600px at 50% 0%, #121a2c 0%, var(--bg) 60%, #02040a 100%);
+      }
+      a{color:inherit}
+      .wrap{max-width:1280px;margin:0 auto;padding:20px 16px 40px}
+      .topbar{
+        display:flex;gap:14px;align-items:center;justify-content:space-between;
+        padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);
+        background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+        box-shadow:var(--shadow);
+        position:sticky;top:10px;z-index:5;backdrop-filter: blur(10px);
+      }
+      .brand{display:flex;flex-direction:column;gap:2px}
+      .brand .title{font-weight:800;letter-spacing:.4px}
+      .brand .sub{color:var(--muted);font-size:12px}
+      .quote{
+        text-align:center;
+        font-size:14px;
+        color:#f3f4f6;
+        opacity:.95;
+        font-weight:700;
+        letter-spacing:.2px;
+      }
+      .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+      .pill{
+        display:flex;gap:8px;align-items:center;
+        padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+        background:rgba(255,255,255,.03);
+        color:var(--muted);
+        font-size:12px;
+        white-space:nowrap;
+      }
+      select,input[type="date"],input[type="time"],input[type="number"],input[type="text"]{
+        background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
+        padding:8px 10px;border-radius:12px;outline:none;
+      }
+
+      /* ===== Fix dropdown option visibility ===== */
+      select{
+        color: var(--text);
+        background-color: #0b1220;
+      }
+
+      select option{
+        background-color: #0b1220;   /* dark panel */
+        color: #e7eaf0;              /* bright readable text */
+      }
+
+      /* Hover / selected option */
+      select option:checked,
+      select option:hover{
+        background-color: #1f2a44;
+        color: #ffffff;
+      }
+
+      select{
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+      select option:disabled{
+        color: #6b7280;
+      }
+
+
+
+      input::placeholder{color:#7c8798}
+      .btn{
+        cursor:pointer;
+        border:1px solid var(--line);
+        background:linear-gradient(180deg, rgba(212,175,55,.22), rgba(212,175,55,.08));
+        color:#fff;
+        padding:9px 12px;border-radius:12px;
+        font-weight:700;
+        box-shadow:0 10px 30px rgba(212,175,55,.12);
+        transition:.15s transform ease;
+      }
+      .btn:active{transform:translateY(1px)}
+      .btn.secondary{
+        background:rgba(255,255,255,.03);
+        box-shadow:none;
+        color:var(--muted);
+        font-weight:650;
+      }
+      .grid{
+        margin-top:14px;
+        display:grid;
+        grid-template-columns: 380px 1fr;
+        gap:14px;
+        align-items:start;
+      }
+      @media (max-width: 1100px){
+        .grid{grid-template-columns:1fr}
+        .topbar{position:relative;top:auto}
+        .quote{display:none}
+      }
+      .card{
+        border:1px solid var(--line);
+        border-radius:var(--radius);
+        background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+        box-shadow:var(--shadow);
+        overflow:hidden;
+      }
+      .card .hd{
+        padding:14px 16px;
+        display:flex;align-items:center;justify-content:space-between;gap:10px;
+        border-bottom:1px solid rgba(255,255,255,.06);
+        background:rgba(255,255,255,.02);
+      }
+      .card .hd .h{
+        font-weight:850;letter-spacing:.25px;
+        display:flex;align-items:center;gap:10px;
+      }
+      .dot{width:10px;height:10px;border-radius:999px;background:var(--gold);box-shadow:0 0 0 4px rgba(212,175,55,.15)}
+      .card .bd{padding:14px 16px}
+      .muted{color:var(--muted)}
+      .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+      @media (max-width: 560px){.kpis{grid-template-columns:repeat(2,1fr)}}
+      .kpi{
+        border:1px solid var(--line);border-radius:16px;padding:10px 10px;
+        background:rgba(0,0,0,.12);
+      }
+      .kpi .lab{font-size:11px;color:var(--muted);display:flex;gap:6px;align-items:center}
+      .kpi .val{font-size:18px;font-weight:900;margin-top:4px}
+      .tag{
+        font-size:11px;
+        padding:3px 8px;border-radius:999px;border:1px solid var(--line);
+        color:var(--muted);background:rgba(255,255,255,.03);
+      }
+      .form{
+        display:grid;grid-template-columns:1fr 1fr;gap:10px;
+      }
+      .form .full{grid-column:1/-1}
+      .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+      label{font-size:11px;color:var(--muted);display:block;margin-bottom:6px}
+      textarea{
+        width:100%;min-height:84px;resize:vertical;
+        background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
+        padding:10px 10px;border-radius:14px;outline:none;
+      }
+      .seg{
+        display:flex;gap:8px;flex-wrap:wrap;
+        border:1px solid var(--line);border-radius:16px;padding:10px;
+        background:rgba(0,0,0,.12);
+      }
+      .seg .chip{
+        cursor:pointer;user-select:none;
+        padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08);
+        background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;font-weight:700;
+        transition:.12s ease;
+      }
+      .seg .chip.on{color:#fff;border-color:rgba(212,175,55,.35);background:rgba(212,175,55,.14)}
+      .twoCol{
+        display:grid;grid-template-columns:1fr 1fr;gap:10px;
+      }
+      .small{font-size:12px}
+      .hr{height:1px;background:rgba(255,255,255,.06);margin:12px 0}
+      table{width:100%;border-collapse:separate;border-spacing:0}
+      th,td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
+      th{
+        text-align:left;font-size:11px;color:var(--muted);font-weight:800;
+        position:sticky;top:0;background:rgba(10,15,28,.92);backdrop-filter: blur(8px);
+        z-index:2;
+        transform: skewX(-12deg);
+        white-space:nowrap;
+      }
+      th > span{display:inline-block;transform: skewX(12deg)}
+      td{font-size:12px;color:#dde3ee}
+      .tableWrap{max-height:420px;overflow:auto;border:1px solid rgba(255,255,255,.06);border-radius:16px}
+      .badge{
+        font-size:11px;font-weight:900;
+        padding:3px 8px;border-radius:999px;
+        border:1px solid rgba(255,255,255,.10);
+        background:rgba(255,255,255,.04);
+        display:inline-flex;gap:6px;align-items:center;
+        white-space:nowrap;
+      }
+      .bG{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25)}
+      .bR{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25)}
+      .bY{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25)}
+      .bB{background:rgba(96,165,250,.12);border-color:rgba(96,165,250,.25)}
+      .bP{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.25)}
+      .actions{display:flex;gap:10px;flex-wrap:wrap}
+      .note{
+        font-size:12px;color:var(--muted);line-height:1.45;
+        border:1px dashed rgba(255,255,255,.12);
+        background:rgba(0,0,0,.10);
+        padding:10px 12px;border-radius:16px;
+      }
+      .charts{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:14px;
+      }
+      /*canvas{width:100%!important;height:260px!important}*/
+      .chartBox{
+        position: relative;
+        width: 100%;
+        height: 300px; /* desktop default */
+      }
+
+      @media (max-width: 768px){
+        .chartBox{
+          height: 240px;
+        }
+      }
+
+      .footer{
+        margin-top:14px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap
+      }
+      .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    </style>
+  </head>
+
+  <body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Pearl Mind — Trading Emotions Journal</div>
+        <div class="sub">Trade-by-trade mindset tracking • Monthly dashboard • Robot psychology comparison</div>
+      </div>
+
+      <div class="quote">“Every trade is a mind test. Record it like a scientist.”</div>
+
+      <div class="controls">
+        <div class="pill">
+          <span class="muted">Month</span>
+          <select id="monthSel"></select>
+        </div>
+        <div class="pill">
+          <span class="muted">Year</span>
+          <select id="yearSel"></select>
+        </div>
+        <button class="btn secondary" id="seedBtn" title="Add demo trades for this month">Load Demo</button>
+        <button class="btn secondary" id="exportBtn" title="Export month as JSON">Export</button>
+        <button class="btn secondary" id="importBtn" title="Import JSON (paste)">Import</button>
+        <button class="btn" id="resetBtn" title="Reset month data (careful)">Reset Month</button>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- LEFT: Journal entry -->
+      <div class="card">
+        <div class="hd">
+          <div class="h"><span class="dot"></span>Journal Entry (Trade)</div>
+          <span class="tag" id="monthTag">—</span>
+        </div>
+        <div class="bd">
+
+          <div class="kpis" style="margin-bottom:12px">
+            <div class="kpi">
+              <div class="lab">Trades <span class="tag">This Month</span></div>
+              <div class="val" id="kTrades">0</div>
+            </div>
+            <div class="kpi">
+              <div class="lab">Win Rate</div>
+              <div class="val" id="kWin">0%</div>
+            </div>
+            <div class="kpi">
+              <div class="lab">Avg Discipline</div>
+              <div class="val" id="kDisc">0%</div>
+            </div>
+            <div class="kpi">
+              <div class="lab">Mind Drift</div>
+              <div class="val" id="kDrift">0%</div>
+            </div>
+          </div>
+
+          <div class="note">
+            <b>How scoring works:</b><br/>
+            You’ll rate <b>Discipline / Fear / Greed</b> (0–100). Monthly dashboard converts them into % and compares to <b>Robot Psychology</b> (ideal baseline).<br/>
+            <span class="mono">Mind Drift</span> = average(|You - Robot|) across Discipline/Fear/Greed (lower is better).
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="form">
+            <div>
+              <label>Date</label>
+              <input type="date" id="tDate"/>
+            </div>
+            <div>
+              <label>Time</label>
+              <input type="time" id="tTime"/>
+            </div>
+
+            <div>
+              <label>Instrument</label>
+              <input type="text" id="tSymbol" placeholder="BANKNIFTY / NIFTY / STOCK"/>
+            </div>
+            <div>
+              <label>Setup / Play</label>
+              <select id="tSetup">
+                <option value="±40 Blueprint">±40 Blueprint</option>
+                <option value="Trend Ride">Trend Ride</option>
+                <option value="Reversal">Reversal</option>
+                <option value="Range Trap">Range Trap</option>
+                <option value="Breakout">Breakout</option>
+                <option value="Scalp">Scalp</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Direction</label>
+              <select id="tSide">
+                <option value="BUY CE">BUY CE</option>
+                <option value="BUY PE">BUY PE</option>
+                <option value="SELL CE">SELL CE</option>
+                <option value="SELL PE">SELL PE</option>
+                <option value="FUT LONG">FUT LONG</option>
+                <option value="FUT SHORT">FUT SHORT</option>
+                <option value="CASH LONG">CASH LONG</option>
+                <option value="CASH SHORT">CASH SHORT</option>
+              </select>
+            </div>
+            <div>
+              <label>Quantity / Lots</label>
+              <input type="number" id="tQty" min="1" step="1" value="1"/>
+            </div>
+
+            <div>
+              <label>Planned Risk (₹ or pts)</label>
+              <input type="number" id="tRisk" step="0.01" placeholder="e.g. 1000 or 40"/>
+            </div>
+            <div>
+              <label>Outcome (₹ or pts)</label>
+              <input type="number" id="tPnl" step="0.01" placeholder="e.g. +800 or -40"/>
+            </div>
+
+            <div class="full">
+              <label>Execution Type (choose all that apply)</label>
+              <div class="seg" id="execSeg">
+                <div class="chip" data-k="ruleFollow">Rule Followed</div>
+                <div class="chip" data-k="planClear">Plan Clear</div>
+                <div class="chip" data-k="entryPatience">Entry Patience</div>
+                <div class="chip" data-k="exitRule">Exit Rule</div>
+                <div class="chip" data-k="noRevenge">No Revenge</div>
+                <div class="chip" data-k="noOvertrade">No Overtrade</div>
+                <div class="chip" data-k="calmBody">Calm Body</div>
+                <div class="chip" data-k="impulse">Impulse</div>
+                <div class="chip" data-k="fomo">FOMO</div>
+                <div class="chip" data-k="hope">Hope</div>
+              </div>
+            </div>
+
+            <div class="full twoCol">
+              <div>
+                <label>BEFORE trade (Mind snapshot)</label>
+                <textarea id="preNote" placeholder="What was the trigger? What did you believe? What did you fear? What was the plan?"></textarea>
+              </div>
+              <div>
+                <label>AFTER trade (Truth snapshot)</label>
+                <textarea id="postNote" placeholder="What actually happened? Did you follow rules? What did you learn? What will you repeat/avoid?"></textarea>
+              </div>
+            </div>
+
+            <div class="full">
+              <label>Emotion Scoring (0–100)</label>
+              <div class="twoCol">
+                <div class="kpi">
+                  <div class="lab">Discipline <span class="tag">Higher = better</span></div>
+                  <input type="number" id="sDisc" min="0" max="100" value="70" style="width:100%;margin-top:8px"/>
+                </div>
+                <div class="kpi">
+                  <div class="lab">Fear <span class="tag">Lower = better</span></div>
+                  <input type="number" id="sFear" min="0" max="100" value="20" style="width:100%;margin-top:8px"/>
+                </div>
+                <div class="kpi">
+                  <div class="lab">Greed <span class="tag">Lower = better</span></div>
+                  <input type="number" id="sGreed" min="0" max="100" value="15" style="width:100%;margin-top:8px"/>
+                </div>
+                <div class="kpi">
+                  <div class="lab">Clarity <span class="tag">Higher = better</span></div>
+                  <input type="number" id="sClarity" min="0" max="100" value="75" style="width:100%;margin-top:8px"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="full">
+              <label>Robot Psychology Baseline (ideal)</label>
+              <div class="twoCol">
+                <div class="kpi">
+                  <div class="lab">Robot Discipline</div>
+                  <input type="number" id="rDisc" min="0" max="100" value="90" style="width:100%;margin-top:8px"/>
+                </div>
+                <div class="kpi">
+                  <div class="lab">Robot Fear</div>
+                  <input type="number" id="rFear" min="0" max="100" value="10" style="width:100%;margin-top:8px"/>
+                </div>
+                <div class="kpi">
+                  <div class="lab">Robot Greed</div>
+                  <input type="number" id="rGreed" min="0" max="100" value="10" style="width:100%;margin-top:8px"/>
+                </div>
+                <div class="kpi">
+                  <div class="lab">Robot Clarity</div>
+                  <input type="number" id="rClarity" min="0" max="100" value="90" style="width:100%;margin-top:8px"/>
+                </div>
+              </div>
+              <div class="small muted" style="margin-top:8px">
+                Tip: Keep Robot baseline stable for a month. That becomes your “execution identity target.”
+              </div>
+            </div>
+
+            <div class="full actions">
+              <button class="btn" id="addTradeBtn">Save Trade</button>
+              <button class="btn secondary" id="clearFormBtn">Clear Form</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Dashboard -->
+      <div class="card">
+        <div class="hd">
+          <div class="h"><span class="dot" style="background:var(--ice);box-shadow:0 0 0 4px rgba(96,165,250,.12)"></span>Monthly Dashboard</div>
+          <div class="row">
+            <span class="badge bB" id="badgeRobot">Robot vs You</span>
+            <span class="badge bY" id="badgeQuality">Execution Quality</span>
+            <span class="badge bP" id="badgeEdge">Edge</span>
+          </div>
+        </div>
+
+        <div class="bd">
+          <div class="charts">
+            <!-- Radar Chart -->
+          <div class="card" style="box-shadow:none">
+            <div class="hd">
+              <div class="h"><span class="dot" style="background:var(--gold)"></span>Mind Profile: You vs Robot</div>
+              <span class="tag">Radar</span>
+            </div>
+            <div class="bd">
+              <div class="chartBox">
+                <canvas id="radar"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Line Chart -->
+          <div class="card" style="box-shadow:none">
+            <div class="hd">
+              <div class="h"><span class="dot" style="background:var(--good)"></span>Daily Discipline / Fear / Greed</div>
+              <span class="tag">Trend</span>
+            </div>
+            <div class="bd">
+              <div class="chartBox">
+                <canvas id="line"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bar Chart -->
+          <div class="card" style="box-shadow:none">
+            <div class="hd">
+              <div class="h"><span class="dot" style="background:var(--warn)"></span>Outcome vs Mind Drift</div>
+              <span class="tag">Bars</span>
+            </div>
+            <div class="bd">
+              <div class="chartBox">
+                <canvas id="bar"></canvas>
+              </div>
+            </div>
+          </div>
+
+
+            <div class="card" style="box-shadow:none">
+              <div class="hd">
+                <div class="h"><span class="dot" style="background:var(--cyan)"></span>Trade Log</div>
+                <span class="tag">Scrollable</span>
+              </div>
+              <div class="bd">
+                <div class="tableWrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th><span>#</span></th>
+                        <th><span>Date/Time</span></th>
+                        <th><span>Instrument</span></th>
+                        <th><span>Setup</span></th>
+                        <th><span>Side</span></th>
+                        <th><span>Qty</span></th>
+                        <th><span>P/L</span></th>
+                        <th><span>Disc%</span></th>
+                        <th><span>Fear%</span></th>
+                        <th><span>Greed%</span></th>
+                        <th><span>Drift%</span></th>
+                        <th><span>Flags</span></th>
+                        <th><span>Actions</span></th>
+                      </tr>
+                    </thead>
+                    <tbody id="logBody"></tbody>
+                  </table>
+                </div>
+
+                <div class="footer">
+                  <div>Storage: <span class="mono">localStorage</span> (your browser)</div>
+                  <div class="muted">Tip: Export monthly JSON as backup.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    // ---------- Utilities ----------
+    const $ = (id)=>document.getElementById(id);
+    const pad = (n)=>String(n).padStart(2,'0');
+    const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+    const round = (v)=>Math.round((v+Number.EPSILON)*100)/100;
+
+    function todayLocalISO(){
+      const d=new Date();
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+    function nowTime(){
+      const d=new Date();
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    // ---------- Month/Year selectors ----------
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const monthSel = $("monthSel");
+    const yearSel = $("yearSel");
+    const cur = new Date();
+    for(let m=0;m<12;m++){
+      const opt=document.createElement("option");
+      opt.value=String(m);
+      opt.textContent=monthNames[m].toUpperCase();
+      monthSel.appendChild(opt);
+    }
+    const baseYear = cur.getFullYear()-3;
+    for(let y=baseYear;y<=cur.getFullYear()+2;y++){
+      const opt=document.createElement("option");
+      opt.value=String(y);
+      opt.textContent=String(y);
+      yearSel.appendChild(opt);
+    }
+    monthSel.value=String(cur.getMonth());
+    yearSel.value=String(cur.getFullYear());
+
+    // ---------- State ----------
+    function keyForMonth(y,m){ return `PM_TRADE_JOURNAL_${y}_${m}`; }
+    function loadMonth(){
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      const raw=localStorage.getItem(keyForMonth(y,m));
+      return raw ? JSON.parse(raw) : { trades: [], robot: {disc:90,fear:10,greed:10,clarity:90} };
+    }
+    function saveMonth(state){
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      localStorage.setItem(keyForMonth(y,m), JSON.stringify(state));
+    }
+
+    let state = loadMonth();
+
+    // ---------- Form defaults ----------
+    $("tDate").value = todayLocalISO();
+    $("tTime").value = nowTime();
+
+    // robot baseline
+    function syncRobotToForm(){
+      $("rDisc").value = state.robot?.disc ?? 90;
+      $("rFear").value = state.robot?.fear ?? 10;
+      $("rGreed").value = state.robot?.greed ?? 10;
+      $("rClarity").value = state.robot?.clarity ?? 90;
+    }
+    syncRobotToForm();
+
+    // month tag
+    function updateMonthTag(){
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      $("monthTag").textContent = `${monthNames[m].toUpperCase()} ${y}`;
+    }
+    updateMonthTag();
+
+    // ---------- Execution chips ----------
+    const execSeg = $("execSeg");
+    const execDefaults = {
+      ruleFollow:false, planClear:false, entryPatience:false, exitRule:false,
+      noRevenge:false, noOvertrade:false, calmBody:false,
+      impulse:false, fomo:false, hope:false
+    };
+    function getExecFlags(){
+      const flags = {...execDefaults};
+      execSeg.querySelectorAll(".chip").forEach(ch=>{
+        flags[ch.dataset.k] = ch.classList.contains("on");
+      });
+      return flags;
+    }
+    function setExecFlags(flags){
+      execSeg.querySelectorAll(".chip").forEach(ch=>{
+        const on = !!(flags && flags[ch.dataset.k]);
+        ch.classList.toggle("on", on);
+      });
+    }
+    execSeg.addEventListener("click",(e)=>{
+      const chip = e.target.closest(".chip");
+      if(!chip) return;
+      chip.classList.toggle("on");
+    });
+
+    // ---------- Scoring ----------
+    function driftPercent(t, robot){
+      // average absolute difference across Discipline/Fear/Greed (and Clarity as secondary)
+      const d1 = Math.abs(t.scores.disc - robot.disc);
+      const d2 = Math.abs(t.scores.fear - robot.fear);
+      const d3 = Math.abs(t.scores.greed - robot.greed);
+      const d4 = Math.abs(t.scores.clarity - robot.clarity);
+      return round((d1+d2+d3+d4)/4);
+    }
+    function qualityLabel(avgDisc, avgFear, avgGreed, avgClarity){
+      // simple heuristic
+      const calm = (avgFear<=25 && avgGreed<=25);
+      const strong = (avgDisc>=75 && avgClarity>=75);
+      if(calm && strong) return {txt:"Monk Execution", cls:"bG"};
+      if(strong && !calm) return {txt:"Strong but Reactive", cls:"bY"};
+      if(!strong && calm) return {txt:"Calm but Loose", cls:"bB"};
+      return {txt:"Unstable Mind", cls:"bR"};
+    }
+
+    // ---------- Charts ----------
+    let radarChart=null, lineChart=null, barChart=null;
+
+    const commonPlugins = {
+      legend: { labels: { color: "#e7eaf0" } },
+      tooltip: {
+        enabled: true,
+        backgroundColor: "rgba(10,15,28,.95)",
+        borderColor: "rgba(255,255,255,.08)",
+        borderWidth: 1,
+        titleColor: "#ffffff",
+        bodyColor: "#e7eaf0",
+        padding: 10,
+        cornerRadius: 12,
+        displayColors: false
+      }
+    };
+
+    function buildCharts(stats){
+      const rctx = $("radar").getContext("2d");
+      const lctx = $("line").getContext("2d");
+      const bctx = $("bar").getContext("2d");
+
+      if(radarChart) radarChart.destroy();
+      if(lineChart) lineChart.destroy();
+      if(barChart) barChart.destroy();
+
+      radarChart = new Chart(rctx,{
+        type:"radar",
+        data:{
+          labels:["Discipline","Fear (low)","Greed (low)","Clarity"],
+          datasets:[
+            {
+              label:"You (avg)",
+              data:[
+                stats.avg.disc,
+                100 - stats.avg.fear,
+                100 - stats.avg.greed,
+                stats.avg.clarity
+              ],
+              fill:true,
+              borderWidth:2,
+              pointRadius:2
+            },
+            {
+              label:"Robot (ideal)",
+              data:[
+                stats.robot.disc,
+                100 - stats.robot.fear,
+                100 - stats.robot.greed,
+                stats.robot.clarity
+              ],
+              fill:true,
+              borderWidth:2,
+              pointRadius:2
+            }
+          ]
+        },
+        options:{
+          responsive:true,
+          plugins: commonPlugins,
+          scales:{
+            r:{
+              min:0,max:100,
+              ticks:{ color:"#9aa4b2", backdropColor:"transparent" },
+              grid:{ color:"rgba(255,255,255,.08)" },
+              angleLines:{ color:"rgba(255,255,255,.10)" },
+              pointLabels:{ color:"#e7eaf0", font:{weight:"700"} }
+            }
+          }
+        }
+      });
+
+      lineChart = new Chart(lctx,{
+        type:"line",
+        data:{
+          labels: stats.daily.labels,
+          datasets:[
+            { label:"Discipline", data: stats.daily.disc, borderWidth:2, pointRadius:2, tension:.25 },
+            { label:"Fear", data: stats.daily.fear, borderWidth:2, pointRadius:2, tension:.25 },
+            { label:"Greed", data: stats.daily.greed, borderWidth:2, pointRadius:2, tension:.25 }
+          ]
+        },
+        options:{
+          responsive:true,
+          plugins: commonPlugins,
+          scales:{
+            x:{ ticks:{ color:"#9aa4b2", maxRotation:60, minRotation:60 }, grid:{ color:"rgba(255,255,255,.06)"} },
+            y:{ min:0,max:100, ticks:{ color:"#9aa4b2" }, grid:{ color:"rgba(255,255,255,.06)"} }
+          }
+        }
+      });
+
+      barChart = new Chart(bctx,{
+        type:"bar",
+        data:{
+          labels: stats.outcome.labels,
+          datasets:[
+            { label:"P/L", data: stats.outcome.pnl, borderWidth:1 },
+            { label:"Mind Drift", data: stats.outcome.drift, borderWidth:1 }
+          ]
+        },
+        options:{
+          responsive:true,
+          plugins: commonPlugins,
+          scales:{
+            x:{ ticks:{ color:"#9aa4b2", maxRotation:60, minRotation:60 }, grid:{ color:"rgba(255,255,255,.06)"} },
+            y:{ ticks:{ color:"#9aa4b2" }, grid:{ color:"rgba(255,255,255,.06)"} }
+          }
+        }
+      });
+    }
+
+    // ---------- Stats + Render ----------
+    function computeStats(){
+      const trades = state.trades || [];
+      const robot = {
+        disc: clamp(Number($("rDisc").value||90),0,100),
+        fear: clamp(Number($("rFear").value||10),0,100),
+        greed: clamp(Number($("rGreed").value||10),0,100),
+        clarity: clamp(Number($("rClarity").value||90),0,100)
+      };
+
+      // persist robot baseline in month state
+      state.robot = {...robot};
+      saveMonth(state);
+
+      let wins=0, sumDisc=0,sumFear=0,sumGreed=0,sumClarity=0,sumDrift=0, pnlSum=0;
+
+      // daily aggregation
+      const byDay = new Map(); // day -> {disc,fear,greed,count}
+      // outcome series (last 20 trades)
+      const outcomeTrades = trades.slice(-20);
+
+      trades.forEach(t=>{
+        const pnl = Number(t.pnl||0);
+        pnlSum += pnl;
+        if(pnl>0) wins++;
+        sumDisc += t.scores.disc;
+        sumFear += t.scores.fear;
+        sumGreed += t.scores.greed;
+        sumClarity += t.scores.clarity;
+
+        const d = driftPercent(t, robot);
+        sumDrift += d;
+
+        const day = (t.date||"").slice(8,10);
+        if(day){
+          const k = String(Number(day)); // no leading 0
+          const o = byDay.get(k) || {disc:0,fear:0,greed:0,count:0};
+          o.disc += t.scores.disc;
+          o.fear += t.scores.fear;
+          o.greed += t.scores.greed;
+          o.count += 1;
+          byDay.set(k,o);
+        }
+      });
+
+      const n = trades.length || 1;
+      const avg = {
+        disc: round(sumDisc/n),
+        fear: round(sumFear/n),
+        greed: round(sumGreed/n),
+        clarity: round(sumClarity/n),
+        drift: round(sumDrift/n)
+      };
+
+      // daily arrays (1..max day in month)
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      const daysInMonth = new Date(y, m+1, 0).getDate();
+      const labels=[], discArr=[], fearArr=[], greedArr=[];
+      for(let d=1; d<=daysInMonth; d++){
+        labels.push(String(d));
+        const o = byDay.get(String(d));
+        if(o && o.count){
+          discArr.push(round(o.disc/o.count));
+          fearArr.push(round(o.fear/o.count));
+          greedArr.push(round(o.greed/o.count));
+        }else{
+          discArr.push(null); fearArr.push(null); greedArr.push(null);
+        }
+      }
+
+      const outLabels = outcomeTrades.map((t,i)=>{
+        const dd = (t.date||"").slice(8,10);
+        const tm = (t.time||"").slice(0,5);
+        return `${dd} ${tm} #${(state.trades.length - outcomeTrades.length) + i + 1}`;
+      });
+      const outPnl = outcomeTrades.map(t=>Number(t.pnl||0));
+      const outDr = outcomeTrades.map(t=>driftPercent(t, robot));
+
+      const winRate = round((wins/(trades.length||1))*100);
+
+      return {
+        trades,
+        robot,
+        avg,
+        winRate,
+        pnlSum: round(pnlSum),
+        daily:{labels, disc:discArr, fear:fearArr, greed:greedArr},
+        outcome:{labels:outLabels, pnl:outPnl, drift:outDr}
+      };
+    }
+
+    function render(){
+      updateMonthTag();
+      const stats = computeStats();
+
+      // KPIs
+      $("kTrades").textContent = stats.trades.length;
+      $("kWin").textContent = `${stats.winRate}%`;
+      $("kDisc").textContent = `${stats.avg.disc}%`;
+      $("kDrift").textContent = `${stats.avg.drift}%`;
+
+      // Badges
+      const q = qualityLabel(stats.avg.disc, stats.avg.fear, stats.avg.greed, stats.avg.clarity);
+      const bQ = $("badgeQuality");
+      bQ.textContent = q.txt;
+      bQ.className = `badge ${q.cls}`;
+
+      const drift = stats.avg.drift;
+      const bR = $("badgeRobot");
+      bR.textContent = drift <= 12 ? "Aligned to Robot" : (drift <= 22 ? "Partially Aligned" : "Far from Robot");
+      bR.className = `badge ${drift <= 12 ? "bG" : drift <= 22 ? "bY" : "bR"}`;
+
+      const edge = stats.pnlSum;
+      const bE = $("badgeEdge");
+      bE.textContent = edge > 0 ? `Positive Edge (${edge})` : edge < 0 ? `Negative Edge (${edge})` : `Flat Edge (0)`;
+      bE.className = `badge ${edge > 0 ? "bG" : edge < 0 ? "bR" : "bB"}`;
+
+      // Log table
+      const body = $("logBody");
+      body.innerHTML = "";
+      stats.trades.slice().reverse().forEach((t, idxRev)=>{
+        const idx = stats.trades.length - idxRev; // 1-based
+        const driftT = driftPercent(t, stats.robot);
+        const pnl = Number(t.pnl||0);
+        const pnlBadge = pnl > 0 ? `badge bG` : pnl < 0 ? `badge bR` : `badge bB`;
+        const flags = [];
+        const f = t.execFlags || {};
+        if(f.ruleFollow) flags.push("Rule");
+        if(f.planClear) flags.push("Plan");
+        if(f.entryPatience) flags.push("Patience");
+        if(f.exitRule) flags.push("Exit");
+        if(f.noRevenge) flags.push("NoRevenge");
+        if(f.noOvertrade) flags.push("NoOvertrade");
+        if(f.calmBody) flags.push("Calm");
+        if(f.impulse) flags.push("Impulse");
+        if(f.fomo) flags.push("FOMO");
+        if(f.hope) flags.push("Hope");
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="mono">${idx}</td>
+          <td class="mono">${t.date||""} ${t.time||""}</td>
+          <td>${escapeHtml(t.symbol||"")}</td>
+          <td>${escapeHtml(t.setup||"")}</td>
+          <td><span class="badge bP">${escapeHtml(t.side||"")}</span></td>
+          <td class="mono">${t.qty||1}</td>
+          <td><span class="${pnlBadge} mono">${pnl}</span></td>
+          <td class="mono">${t.scores.disc}%</td>
+          <td class="mono">${t.scores.fear}%</td>
+          <td class="mono">${t.scores.greed}%</td>
+          <td><span class="badge ${driftT<=12?"bG":driftT<=22?"bY":"bR"} mono">${driftT}%</span></td>
+          <td class="mono">${flags.join(" • ")}</td>
+          <td>
+            <button class="btn secondary" data-act="view" data-id="${t.id}" style="padding:6px 10px;border-radius:10px">View</button>
+            <button class="btn secondary" data-act="del" data-id="${t.id}" style="padding:6px 10px;border-radius:10px">Del</button>
+          </td>
+        `;
+        body.appendChild(tr);
+      });
+
+      // Charts
+      buildCharts(stats);
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, (m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+    }
+
+    
+
+    // ---------- Add trade ----------
+    function readTradeFromForm(){
+      const date = $("tDate").value || todayLocalISO();
+      const time = $("tTime").value || nowTime();
+
+      const symbol = $("tSymbol").value.trim() || "BANKNIFTY";
+      const setup = $("tSetup").value;
+      const side = $("tSide").value;
+      const qty = clamp(Number($("tQty").value||1),1,9999);
+
+      const risk = Number($("tRisk").value||0);
+      const pnl = Number($("tPnl").value||0);
+
+      const preNote = $("preNote").value.trim();
+      const postNote = $("postNote").value.trim();
+
+      const scores = {
+        disc: clamp(Number($("sDisc").value||0),0,100),
+        fear: clamp(Number($("sFear").value||0),0,100),
+        greed: clamp(Number($("sGreed").value||0),0,100),
+        clarity: clamp(Number($("sClarity").value||0),0,100)
+      };
+
+      return {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+        date,time,symbol,setup,side,qty,risk,pnl,
+        execFlags: getExecFlags(),
+        preNote, postNote,
+        scores
+      };
+    }
+
+    function clearForm(){
+      $("tDate").value = todayLocalISO();
+      $("tTime").value = nowTime();
+      $("tSymbol").value = "BANKNIFTY";
+      $("tSetup").value = "±40 Blueprint";
+      $("tSide").value = "BUY CE";
+      $("tQty").value = 1;
+      $("tRisk").value = "";
+      $("tPnl").value = "";
+      setExecFlags(execDefaults);
+      $("preNote").value = "";
+      $("postNote").value = "";
+      $("sDisc").value = 70;
+      $("sFear").value = 20;
+      $("sGreed").value = 15;
+      $("sClarity").value = 75;
+    }
+
+    $("addTradeBtn").addEventListener("click", ()=>{
+      const t = readTradeFromForm();
+      state.trades = state.trades || [];
+      state.trades.push(t);
+      saveMonth(state);
+      clearForm();
+      render();
+    });
+    $("clearFormBtn").addEventListener("click", clearForm);
+
+    // ---------- Log actions (view/delete) ----------
+    $("logBody").addEventListener("click",(e)=>{
+      const btn = e.target.closest("button");
+      if(!btn) return;
+      const act = btn.dataset.act;
+      const id = btn.dataset.id;
+      const trades = state.trades || [];
+      const idx = trades.findIndex(t=>t.id===id);
+      if(idx<0) return;
+
+      if(act==="del"){
+        const ok = confirm("Delete this trade? This cannot be undone.");
+        if(!ok) return;
+        trades.splice(idx,1);
+        state.trades = trades;
+        saveMonth(state);
+        render();
+        return;
+      }
+      if(act==="view"){
+        const t = trades[idx];
+        alert(
+          "PRE (Before):\n" + (t.preNote||"(empty)") +
+          "\n\nPOST (After):\n" + (t.postNote||"(empty)")
+        );
+        return;
+      }
+    });
+
+    // ---------- Month switching ----------
+    function reloadMonth(){
+      state = loadMonth();
+      syncRobotToForm();
+      render();
+    }
+    monthSel.addEventListener("change", reloadMonth);
+    yearSel.addEventListener("change", reloadMonth);
+
+    // Robot baseline changes -> re-render
+    ["rDisc","rFear","rGreed","rClarity"].forEach(id=>{
+      $(id).addEventListener("input", ()=>render());
+    });
+
+    // ---------- Reset month ----------
+    $("resetBtn").addEventListener("click", ()=>{
+      const ok = confirm("Reset ALL trades for this month? (robot baseline will also reset to defaults)");
+      if(!ok) return;
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      localStorage.removeItem(keyForMonth(y,m));
+      state = loadMonth();
+      syncRobotToForm();
+      render();
+    });
+
+    // ---------- Export / Import ----------
+    $("exportBtn").addEventListener("click", ()=>{
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      const payload = {
+        meta:{ app:"PearlMindTradeJournal", year:y, month:m, monthName:monthNames[m], exportedAt:new Date().toISOString() },
+        data: state
+      };
+      const txt = JSON.stringify(payload, null, 2);
+      // copy to clipboard if possible
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(()=>alert("Export copied to clipboard.\n\nPaste it into a file to save backup."));
+      }else{
+        prompt("Copy JSON below:", txt);
+      }
+    });
+    
+
+    $("importBtn").addEventListener("click", ()=>{
+      const raw = prompt("Paste exported JSON here:");
+      if(!raw) return;
+      try{
+        const obj = JSON.parse(raw);
+        if(!obj || !obj.data || !obj.meta) throw new Error("Invalid export format.");
+        // import into current selected month
+        state = obj.data;
+        saveMonth(state);
+        syncRobotToForm();
+        render();
+        alert("Imported into this month successfully.");
+      }catch(err){
+        alert("Import failed: " + err.message);
+      }
+    });
+
+    // ---------- Demo seed ----------
+    $("seedBtn").addEventListener("click", ()=>{
+      const ok = confirm("Load demo trades for this month? This will ADD (not replace).");
+      if(!ok) return;
+      const y=Number(yearSel.value), m=Number(monthSel.value);
+      const demo = makeDemoTrades(y,m);
+      state.trades = (state.trades||[]).concat(demo);
+      saveMonth(state);
+      render();
+    });
+
+    function makeDemoTrades(y,m){
+      // 10 demo trades scattered
+      const pick = (arr)=>arr[Math.floor(Math.random()*arr.length)];
+      const setups = ["±40 Blueprint","Trend Ride","Range Trap","Reversal","Breakout"];
+      const sides  = ["BUY CE","BUY PE","SELL CE","SELL PE"];
+      const flagsList = [
+        {ruleFollow:true,planClear:true,entryPatience:true,exitRule:true,noRevenge:true,noOvertrade:true,calmBody:true},
+        {ruleFollow:true,planClear:true,exitRule:true,calmBody:true,hope:true},
+        {ruleFollow:false,planClear:false,impulse:true,fomo:true},
+        {ruleFollow:true,planClear:true,entryPatience:true,noOvertrade:true,calmBody:true},
+        {ruleFollow:true,planClear:true,exitRule:false,hope:true}
+      ];
+      const out=[];
+      for(let i=0;i<10;i++){
+        const day = pad(1+Math.floor(Math.random()*20));
+        const date = `${y}-${pad(m+1)}-${day}`;
+        const time = `${pad(9+Math.floor(Math.random()*5))}:${pad(Math.floor(Math.random()*60))}`;
+        const pnl = pick([40,60,80,-40,-60,-80,20,-20]);
+        const disc = clamp(70 + (pnl>0?10:-10) + Math.floor(Math.random()*15)-7,0,100);
+        const fear = clamp(20 + (pnl<0?15:0) + Math.floor(Math.random()*18)-9,0,100);
+        const greed= clamp(15 + (pnl>0?10:0) + Math.floor(Math.random()*18)-9,0,100);
+        const clarity = clamp(75 + Math.floor(Math.random()*16)-8,0,100);
+        out.push({
+          id: (crypto.randomUUID?crypto.randomUUID():String(Date.now()+i)),
+          date,time,
+          symbol:"BANKNIFTY",
+          setup: pick(setups),
+          side: pick(sides),
+          qty: pick([1,1,2,3]),
+          risk: 40,
+          pnl: pnl,
+          execFlags: pick(flagsList),
+          preNote:"Plan: wait for confirmation. Avoid FOMO. Respect ±40.",
+          postNote: pnl>0 ? "Executed clean. No interference." : "Hesitation/hope entered. Need stricter exit rule.",
+          scores:{disc,fear,greed,clarity}
+        });
+      }
+      return out;
+    }
+
+
+    
+    // ---------- Init ----------
+    render();
+  })();
+  </script>
+  </body>
+  </html>
