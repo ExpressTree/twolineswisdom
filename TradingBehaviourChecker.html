@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pearl Mind — Daily Trading Ritual (Before vs After)</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <style>
+        :root {
+            --bg: #070a12;
+            --panel: #0c1220;
+            --panel2: #0a0f1c;
+            --line: #1a2436;
+            --text: #e7eaf0;
+            --muted: #9aa4b2;
+            --gold: #d4af37;
+            --good: #22c55e;
+            --bad: #ef4444;
+            --blue: #60a5fa;
+            --chip: #111a2c
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            background: radial-gradient(1200px 700px at 50% 0%, #121a2c 0%, var(--bg) 55%, #02040a 100%);
+            color: var(--text)
+        }
+
+        a {
+            color: inherit
+        }
+
+        .wrap {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 18px
+        }
+
+        .top {
+            display: flex;
+            gap: 14px;
+            align-items: stretch;
+            flex-wrap: wrap
+        }
+
+        .brand {
+            flex: 1;
+            min-width: 280px;
+            background: linear-gradient(180deg, var(--panel), var(--panel2));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 14px 14px 12px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .brand:before {
+            content: "";
+            position: absolute;
+            inset: -60px -60px auto auto;
+            width: 220px;
+            height: 220px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, .25), rgba(96, 165, 250, .10), transparent 65%)
+        }
+
+        .h1 {
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            display: grid;
+            place-items: center;
+            background: rgba(212, 175, 55, .12);
+            color: var(--gold);
+            font-weight: 800
+        }
+
+        .title {
+            line-height: 1.05
+        }
+
+        .title b {
+            display: block;
+            font-size: 15px;
+            letter-spacing: .4px
+        }
+
+        .title span {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px
+        }
+
+        .pill {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .03);
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .pill input,
+        .pill select {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 12px
+        }
+
+        .pill select option {
+            background: #0b1020;
+            color: var(--text)
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px
+        }
+
+        .btn {
+            cursor: pointer;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .04);
+            color: var(--text);
+            padding: 9px 11px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .btn:hover {
+            border-color: #2b3a57
+        }
+
+        .btn.primary {
+            border-color: rgba(212, 175, 55, .45);
+            background: rgba(212, 175, 55, .08)
+        }
+
+        .btn.good {
+            border-color: rgba(34, 197, 94, .45);
+            background: rgba(34, 197, 94, .08)
+        }
+
+        .btn.bad {
+            border-color: rgba(239, 68, 68, .45);
+            background: rgba(239, 68, 68, .08)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 14px;
+            margin-top: 14px
+        }
+
+        @media(max-width:980px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: linear-gradient(180deg, var(--panel), var(--panel2));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            overflow: hidden
+        }
+
+        .cardH {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .cardH b {
+            font-size: 13px;
+            letter-spacing: .3px
+        }
+
+        .cardH span {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .cardB {
+            padding: 12px 14px
+        }
+
+        .cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        @media(max-width:720px) {
+            .cols {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .section {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .02);
+            overflow: hidden
+        }
+
+        .sectionH {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(0, 0, 0, .10)
+        }
+
+        .sectionH b {
+            font-size: 12px
+        }
+
+        .sectionH .tag {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+            border-top: 1px dashed rgba(154, 164, 178, .18)
+        }
+
+        .row:first-child {
+            border-top: none
+        }
+
+        .lab {
+            flex: 1
+        }
+
+        .small {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.3
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            border: 1px solid rgba(26, 36, 54, .9);
+            background: rgba(0, 0, 0, .18);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 10px 10px;
+            font-size: 12px;
+            outline: none
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical
+        }
+
+        .check {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start
+        }
+
+        .cb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            border: 1px solid rgba(154, 164, 178, .45);
+            background: rgba(0, 0, 0, .2);
+            margin-top: 2px;
+            cursor: pointer;
+            position: relative;
+            flex: 0 0 auto
+        }
+
+        .cb:checked {
+            border-color: rgba(212, 175, 55, .75);
+            background: rgba(212, 175, 55, .12)
+        }
+
+        .cb:checked:after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border-right: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            transform: rotate(40deg)
+        }
+
+        .kpiRow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        @media(max-width:520px) {
+            .kpiRow {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .kpi {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, .02)
+        }
+
+        .kpi b {
+            font-size: 12px;
+            display: block
+        }
+
+        .kpi .v {
+            font-size: 20px;
+            margin-top: 6px
+        }
+
+        .kpi .m {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .hr {
+            height: 1px;
+            background: rgba(26, 36, 54, .9);
+            margin: 12px 0
+        }
+
+        .list {
+            display: grid;
+            gap: 8px
+        }
+
+        .item {
+            border: 1px solid rgba(26, 36, 54, .9);
+            border-radius: 14px;
+            padding: 10px;
+            background: rgba(0, 0, 0, .14)
+        }
+
+        .item .t {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center
+        }
+
+        .item .t b {
+            font-size: 12px
+        }
+
+        .item .t i {
+            font-style: normal;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .bar {
+            height: 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(26, 36, 54, .9);
+            background: rgba(0, 0, 0, .2);
+            overflow: hidden;
+            margin-top: 8px
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%
+        }
+
+        .legend {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            display: inline-block;
+            margin-right: 6px
+        }
+
+        .shareCard {
+            padding: 0
+        }
+
+        .shareTop {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .canvasWrap {
+            padding: 14px
+        }
+
+        #shareCanvas {
+            width: 100%;
+            max-width: 540px;
+            display: block;
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: linear-gradient(180deg, #0a1020, #060a12)
+        }
+
+        .note {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.35
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .03);
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .upload {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .file {
+            border: 1px dashed rgba(154, 164, 178, .35);
+            border-radius: 14px;
+            padding: 10px;
+            background: rgba(0, 0, 0, .12);
+            flex: 1;
+            min-width: 220px
+        }
+
+        .file input {
+            width: 100%
+        }
+
+        .imgPrev {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .03);
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .imgPrev img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 18px;
+            background: rgba(12, 18, 32, .95);
+            border: 1px solid var(--line);
+            padding: 10px 12px;
+            border-radius: 14px;
+            color: var(--text);
+            font-size: 12px;
+            display: none;
+            gap: 8px;
+            align-items: center;
+            z-index: 9
+        }
+
+        .toast.show {
+            display: flex
+        }
+
+        #photoBox:hover {
+            border-color: rgba(212, 175, 55, 1);
+            background: rgba(212, 175, 55, .15);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div class="brand">
+                <div class="h1">
+                    <div class="logo">PM</div>
+                    <div class="title">
+                        <b>Daily Trading Ritual</b>
+                        <span>Before Market Plan → During Market Discipline → After Market Lessons (shareable)</span>
+                    </div>
+                </div>
+                <div class="meta">
+                    <div class="pill"><b>Name</b> <input id="traderName" type="text" placeholder="Your Name"
+                            style="font-weight:700" /></div>
+
+                    <div class="pill" style="gap:10px">
+                        <div id="photoBox" title="Click to upload photo" style="width:54px;height:54px;border-radius:14px;
+                    border:2px dashed rgba(212,175,55,.6);
+                    display:grid;place-items:center;
+                    cursor:pointer;
+                    background:rgba(212,175,55,.08);
+                    font-weight:800;color:var(--gold)">
+                            +
+                        </div>
+                        <input id="traderPhoto" type="file" accept="image/*" hidden />
+                    </div>
+
+
+                    <div class="pill">Date <input id="date" type="date" /></div>
+                    <div class="pill">Market
+                        <select id="market">
+                            <option>BankNifty</option>
+                            <option>Nifty</option>
+                            <option>Stocks</option>
+                            <option>Crypto</option>
+                        </select>
+                    </div>
+                    <div class="pill">Goal <input id="goal" type="text" /></div>
+                    <div class="pill">Max Trades <input id="maxTrades" type="text" value="2"
+                            style="width:42px;text-align:center" /></div>
+                    <div class="pill">Max Loss <input id="maxLoss" type="text" /></div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn primary" id="saveBtn">💾 Save</button>
+                    <button class="btn good" id="beforeShotBtn">📸 Export “Before” Card</button>
+                    <button class="btn bad" id="afterShotBtn">📸 Export “After” Card</button>
+                    <button class="btn" id="resetBtn">🧹 Reset Today</button>
+                </div>
+                <div class="note">Principle: Market usually gives small, repeatable moves. Success comes from fixed
+                    limits, one method, and emotional neutrality.</div>
+            </div>
+
+            <div class="brand shareCard">
+                <div class="shareTop">
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                        <span class="badge">🧭 Discipline Score: <b id="discScoreTxt"
+                                style="color:var(--gold)">0</b>/100</span>
+                        <span class="badge">🧠 Clarity Score: <b id="clarScoreTxt"
+                                style="color:var(--blue)">0</b>/100</span>
+                    </div>
+                    <div class="legend">
+                        <span><span class="dot" style="background:var(--gold)"></span>Discipline</span>
+                        <span><span class="dot" style="background:var(--blue)"></span>Clarity</span>
+                        <span><span class="dot" style="background:var(--good)"></span>Done</span>
+                        <span><span class="dot" style="background:var(--bad)"></span>Missed</span>
+                    </div>
+                </div>
+                <div class="canvasWrap">
+                    <canvas id="shareCanvas" width="420" height="740"></canvas>
+                    <div class="note">Use the Export buttons to generate a shareable community screenshot card
+                        (Before/After). On desktop: right-click canvas → “Save image”.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="cardH"><b>Before vs After Market Tracker</b><span>Write your plan first, then record what
+                        actually happened</span></div>
+                <div class="cardB">
+                    <div class="cols">
+                        <div class="section" id="before">
+                            <div class="sectionH"><b>BEFORE MARKET (Plan)</b><span class="tag">Your promise to
+                                    yourself</span></div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">1) One simple method (no indicator stacking). What will you
+                                        follow today?</div>
+                                    <input id="method" type="text"
+                                        placeholder="Example: Two Lines + confirmation candle; only A+ setups" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">2) Allowed setups (max 2–3). Define your “YES list”.</div>
+                                    <textarea id="yesList"
+                                        placeholder="• Setup 1...\n• Setup 2...\n• Setup 3..."></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">3) “NO list” (avoid traps): what you will NOT do today?</div>
+                                    <textarea id="noList"
+                                        placeholder="• No revenge trade\n• No trade out of boredom\n• No late entry\n• No size increase emotionally"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">4) Entry + Exit rules (simple):</div>
+                                    <div class="kpiRow">
+                                        <div><input id="entryRule" type="text"
+                                                placeholder="Entry rule (Example: break + retest + close)" /></div>
+                                        <div><input id="exitRule" type="text"
+                                                placeholder="Exit rule (Example: +40 or invalidation)" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">5) Screenshot proof (optional): upload your “Plan” screenshot
+                                        (chart/notes).</div>
+                                    <div class="upload">
+                                        <div class="imgPrev" id="planPrev">🖼️</div>
+                                        <div class="file"><input id="planShot" type="file" accept="image/*" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="check">
+                                    <input class="cb" id="preMindset" type="checkbox" />
+                                    <div class="lab">
+                                        <b style="font-size:12px">Mindset Check</b>
+                                        <div class="small">I accept small moves. I will not chase. I will stop after
+                                            target or max loss.</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="section" id="after">
+                            <div class="sectionH"><b>AFTER MARKET (Reality + Lessons)</b><span class="tag">Truth over
+                                    ego</span></div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">1) What actually happened? (short story)</div>
+                                    <textarea id="story"
+                                        placeholder="What did the market do? What did I do?"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">2) Plan vs Execution (write honestly)</div>
+                                    <div class="kpiRow">
+                                        <div><input id="plannedTrades" type="text"
+                                                placeholder="Planned trades (Example: 1–2)" /></div>
+                                        <div><input id="actualTrades" type="text"
+                                                placeholder="Actual trades (Example: 3)" /></div>
+                                    </div>
+                                    <div style="margin-top:10px" class="kpiRow">
+                                        <div><input id="plannedRisk" type="text"
+                                                placeholder="Planned max risk (Example: -40)" /></div>
+                                        <div><input id="actualRisk" type="text"
+                                                placeholder="Actual risk taken (Example: -80)" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">3) Lessons learned (3 bullets):</div>
+                                    <textarea id="lessons"
+                                        placeholder="• Lesson 1...\n• Lesson 2...\n• Lesson 3..."></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lab">
+                                    <div class="small">4) Screenshot proof (optional): upload “What I did” screenshot
+                                        (trades/marks).</div>
+                                    <div class="upload">
+                                        <div class="imgPrev" id="donePrev">🖼️</div>
+                                        <div class="file"><input id="doneShot" type="file" accept="image/*" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="check">
+                                    <input class="cb" id="postTruth" type="checkbox" />
+                                    <div class="lab">
+                                        <b style="font-size:12px">Truth Check</b>
+                                        <div class="small">I wrote the truth even if it hurts. I will fix one thing
+                                            tomorrow.</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hr"></div>
+
+                    <div class="section">
+                        <div class="sectionH"><b>Daily Ritual Checklist (Auto-Scoring)</b><span class="tag">Small edge,
+                                repeated</span></div>
+                        <div class="row">
+                            <div class="list" style="width:100%">
+                                <div class="item">
+                                    <div class="t"><b>Fixed limits (max trades + max loss)</b><i id="s1">Not set</i>
+                                    </div>
+                                    <div class="bar">
+                                        <div class="fill" id="b1"></div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="t"><b>One method only (no tool hopping)</b><i id="s2">Not set</i></div>
+                                    <div class="bar">
+                                        <div class="fill" id="b2"></div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="t"><b>NO list respected (no boredom / revenge / chase)</b><i id="s3">Not
+                                            set</i></div>
+                                    <div class="bar">
+                                        <div class="fill" id="b3"></div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="t"><b>Plan first (before market written)</b><i id="s4">Not set</i></div>
+                                    <div class="bar">
+                                        <div class="fill" id="b4"></div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="t"><b>After market truth + 3 lessons</b><i id="s5">Not set</i></div>
+                                    <div class="bar">
+                                        <div class="fill" id="b5"></div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="t"><b>Stop rule followed (target/loss/limit)</b><i id="s6">Not set</i>
+                                    </div>
+                                    <div class="bar">
+                                        <div class="fill" id="b6"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;width:100%">
+                                <div style="flex:1;min-width:260px">
+                                    <div class="small">Stop Rule (manual): tick what happened today</div>
+                                    <div style="display:grid;gap:8px;margin-top:8px">
+                                        <label class="check"><input class="cb" id="stopTarget" type="checkbox" />
+                                            <div class="lab"><b style="font-size:12px">Stopped after target</b>
+                                                <div class="small">I stopped trading once my goal was met.</div>
+                                            </div>
+                                        </label>
+                                        <label class="check"><input class="cb" id="stopLoss" type="checkbox" />
+                                            <div class="lab"><b style="font-size:12px">Stopped after max loss</b>
+                                                <div class="small">I accepted loss and stopped instead of revenge.</div>
+                                            </div>
+                                        </label>
+                                        <label class="check"><input class="cb" id="stopLimit" type="checkbox" />
+                                            <div class="lab"><b style="font-size:12px">Stopped after max trades</b>
+                                                <div class="small">I respected trade count even if “more looks
+                                                    possible”.</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="flex:1;min-width:260px">
+                                    <div class="small">Emotions faced (tick if happened). This is NOT shame — it is
+                                        data.</div>
+                                    <div id="emoGrid"
+                                        style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="cardH"><b>D3 Dashboard</b><span>Discipline + Clarity + Emotion Load</span></div>
+                <div class="cardB">
+                    <div class="kpiRow">
+                        <div class="kpi"><b>Today’s Core</b>
+                            <div class="v" id="coreLine">—</div>
+                            <div class="m">One sentence you’ll share to community</div>
+                        </div>
+                        <div class="kpi"><b>Tomorrow’s Fix</b>
+                            <div class="v" id="fixLine">—</div>
+                            <div class="m">One behavior you will correct</div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="section">
+                        <div class="sectionH"><b>Discipline & Clarity Gauges</b><span class="tag">D3</span></div>
+                        <div class="row">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%">
+                                <div id="gauge1"></div>
+                                <div id="gauge2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="section">
+                        <div class="sectionH"><b>Emotion Load (count of ticks)</b><span class="tag">D3</span></div>
+                        <div class="row">
+                            <div id="emoChart" style="width:100%"></div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="section">
+                        <div class="sectionH"><b>Community Share Text</b><span class="tag">Copy/Paste</span></div>
+                        <div class="row">
+                            <div class="lab">
+                                <textarea id="shareText" style="min-height:128px" placeholder=""></textarea>
+                                <div class="note">Tip: Post “Before card” in morning + “After card” at EOD. Your
+                                    consistency becomes your identity.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="toast" id="toast">✅ <span id="toastMsg">Saved</span></div>
+
+    <script>
+        const LSKEY = "PM_DAILY_RITUAL_V1";
+        const $ = id => document.getElementById(id);
+        const todayISO = () => { const d = new Date(); const off = d.getTimezoneOffset(); const d2 = new Date(d.getTime() - off * 60000); return d2.toISOString().slice(0, 10) };
+        const stateDefault = () => ({ date: todayISO(), market: "BankNifty", traderName: "", traderPhoto: null, goal: "", maxTrades: "2", maxLoss: "", method: "", yesList: "", noList: "", entryRule: "", exitRule: "", preMindset: false, story: "", plannedTrades: "", actualTrades: "", plannedRisk: "", actualRisk: "", lessons: "", postTruth: false, stopTarget: false, stopLoss: false, stopLimit: false, emotions: {}, planImg: null, doneImg: null });
+        const EMOS = ["FOMO", "Overtrading", "Late Entry", "Early Exit", "Re-Entry Urge", "Fear", "Greed", "Increase Quantity", "Decrease Quantity", "Revenge Trade", "Boredom Trade", "Against Signal", "Mixed Method", "No-Rule Entry", "No-Rule Exit", "PNL Obsession"];
+        let S = load(); bind(); renderAll();
+
+        function load() { try { const raw = localStorage.getItem(LSKEY); if (!raw) return stateDefault(); const s = JSON.parse(raw); const base = stateDefault(); const merged = { ...base, ...s }; merged.emotions = { ...base.emotions, ...(s.emotions || {}) }; return merged } catch (e) { return stateDefault() } }
+        function save() { localStorage.setItem(LSKEY, JSON.stringify(S)); toast("Saved"); }
+        function toast(msg) { $("toastMsg").textContent = msg; const t = $("toast"); t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 900) }
+        function bind() {
+            ["date", "market", "goal", "maxTrades", "maxLoss", "method", "yesList", "noList", "entryRule", "exitRule", "story", "plannedTrades", "actualTrades", "plannedRisk", "actualRisk", "lessons", "shareText"].forEach(id => { const el = $(id); if (!el) return; el.addEventListener("input", () => { S[id] = el.value; syncDerived(); renderAll(); save(); }) });
+            ["preMindset", "postTruth", "stopTarget", "stopLoss", "stopLimit"].forEach(id => { $(id).addEventListener("change", () => { S[id] = $(id).checked; syncDerived(); renderAll(); save(); }) });
+            $("market").addEventListener("change", () => { S.market = $("market").value; syncDerived(); renderAll(); save(); });
+            $("date").addEventListener("change", () => { S.date = $("date").value; syncDerived(); renderAll(); save(); });
+            $("saveBtn").addEventListener("click", () => save());
+            $("resetBtn").addEventListener("click", () => { S = stateDefault(); renderAll(); save(); toast("Reset for today"); });
+            $("beforeShotBtn").addEventListener("click", () => drawShareCard("BEFORE MARKET"));
+            $("afterShotBtn").addEventListener("click", () => drawShareCard("AFTER MARKET"));
+            $("planShot").addEventListener("change", e => handleImg(e, "planImg", "planPrev"));
+            $("doneShot").addEventListener("change", e => handleImg(e, "doneImg", "donePrev"));
+            $("traderName").addEventListener("input", () => {
+                S.traderName = $("traderName").value;
+                renderAll();   // 🔴 REQUIRED
+                save();
+            });
+
+            buildEmoGrid();
+            $("traderPhoto").addEventListener("change", e => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                const r = new FileReader();
+                r.onload = () => {
+                    S.traderPhoto = r.result;
+                    renderAll();
+                    save();
+                };
+                r.readAsDataURL(f);
+            });
+
+        }
+
+        function handleImg(e, key, prevId) { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => { S[key] = r.result; const box = $(prevId); box.innerHTML = ""; const im = document.createElement("img"); im.src = r.result; box.appendChild(im); renderAll(); save(); }; r.readAsDataURL(f); }
+        function buildEmoGrid() {
+            const g = $("emoGrid"); g.innerHTML = "";
+            EMOS.forEach(name => {
+                const id = "emo_" + name.replace(/\W+/g, "_");
+                const wrap = document.createElement("label"); wrap.className = "check";
+                const cb = document.createElement("input"); cb.className = "cb"; cb.type = "checkbox"; cb.id = id; cb.checked = !!S.emotions[name];
+                cb.addEventListener("change", () => { S.emotions[name] = cb.checked; syncDerived(); renderAll(); save(); });
+                const lab = document.createElement("div"); lab.className = "lab";
+                lab.innerHTML = `<b style="font-size:12px">${name}</b><div class="small">Tick if happened today.</div>`;
+                wrap.appendChild(cb); wrap.appendChild(lab); g.appendChild(wrap);
+            });
+        }
+
+        function syncInputs() {
+            $("date").value = S.date || todayISO();
+            $("market").value = S.market || "BankNifty";
+            $("goal").value = S.goal || "";
+            $("maxTrades").value = S.maxTrades || "";
+            $("maxLoss").value = S.maxLoss || "";
+            $("method").value = S.method || "";
+            $("yesList").value = S.yesList || "";
+            $("noList").value = S.noList || "";
+            $("entryRule").value = S.entryRule || "";
+            $("exitRule").value = S.exitRule || "";
+            $("preMindset").checked = !!S.preMindset;
+            $("story").value = S.story || "";
+            $("plannedTrades").value = S.plannedTrades || "";
+            $("actualTrades").value = S.actualTrades || "";
+            $("plannedRisk").value = S.plannedRisk || "";
+            $("actualRisk").value = S.actualRisk || "";
+            $("lessons").value = S.lessons || "";
+            $("postTruth").checked = !!S.postTruth;
+            $("stopTarget").checked = !!S.stopTarget;
+            $("stopLoss").checked = !!S.stopLoss;
+            $("stopLimit").checked = !!S.stopLimit;
+            $("traderName").value = S.traderName || "";
+            if (S.planImg) { $("planPrev").innerHTML = `<img src="${S.planImg}">`; }
+            if (S.doneImg) { $("donePrev").innerHTML = `<img src="${S.doneImg}">`; }
+            if (S.traderPhoto) {
+                $("photoBox").innerHTML =
+                    `<img src="${S.traderPhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`;
+            }
+
+        }
+
+        function score() {
+            // Discipline: limits + plan + truth + stop + (no overtrade indicator via planned vs actual) + mindset checks
+            const hasLimits = (S.maxTrades || "").trim() !== "" && (S.maxLoss || "").trim() !== "";
+            const oneMethod = (S.method || "").trim().length >= 4;
+            const planWritten = (S.yesList || "").trim().length > 0 && (S.noList || "").trim().length > 0 && (S.entryRule || "").trim().length > 0 && (S.exitRule || "").trim().length > 0;
+            const truthDone = (S.story || "").trim().length > 0 && (S.lessons || "").trim().split("\n").filter(x => x.trim()).length >= 3;
+            const stopOk = !!(S.stopTarget || S.stopLoss || S.stopLimit);
+            const preOk = !!S.preMindset;
+            const postOk = !!S.postTruth;
+            const planned = parseFloat((S.plannedTrades || "").replace(/[^\d.]/g, "")) || 0;
+            const actual = parseFloat((S.actualTrades || "").replace(/[^\d.]/g, "")) || 0;
+            const overTrade = planned > 0 && actual > 0 ? (actual > planned) : (actual > parseFloat(S.maxTrades || "999"));
+            const overPenalty = overTrade ? 12 : 0;
+            let disc = 0;
+            disc += hasLimits ? 18 : 0;
+            disc += oneMethod ? 16 : 0;
+            disc += planWritten ? 22 : 0;
+            disc += stopOk ? 18 : 0;
+            disc += preOk ? 13 : 0;
+            disc += postOk ? 13 : 0;
+            disc = Math.max(0, Math.min(100, disc - overPenalty));
+
+            // Clarity: simple goal + yes/no list length + lessons quality proxy
+            const goalOk = (S.goal || "").trim().length > 0;
+            const yesCount = (S.yesList || "").split("\n").filter(x => x.trim().startsWith("•") || x.trim().length > 0).length;
+            const noCount = (S.noList || "").split("\n").filter(x => x.trim().startsWith("•") || x.trim().length > 0).length;
+            const lessonsCount = (S.lessons || "").split("\n").filter(x => x.trim()).length;
+            let clar = 0;
+            clar += goalOk ? 22 : 0;
+            clar += (yesCount >= 2 ? 18 : yesCount === 1 ? 10 : 0);
+            clar += (noCount >= 3 ? 18 : noCount === 2 ? 12 : noCount === 1 ? 6 : 0);
+            clar += ((S.entryRule || "").trim().length > 0 && (S.exitRule || "").trim().length > 0) ? 18 : 0;
+            clar += (lessonsCount >= 3 ? 24 : lessonsCount === 2 ? 14 : lessonsCount === 1 ? 7 : 0);
+            clar = Math.max(0, Math.min(100, clar));
+
+            // Emotion load
+            const emoOn = Object.entries(S.emotions || {}).filter(([k, v]) => !!v).map(([k]) => k);
+            return { disc, clar, emoOn, hasLimits, oneMethod, planWritten, truthDone, stopOk, preOk, postOk, overTrade };
+        }
+
+        function syncDerived() {
+            const sc = score();
+            $("discScoreTxt").textContent = sc.disc.toFixed(0);
+            $("clarScoreTxt").textContent = sc.clar.toFixed(0);
+            // Community share text
+            const core = pickCoreLine(sc);
+            const fix = pickFixLine(sc);
+            $("coreLine").textContent = core;
+            $("fixLine").textContent = fix;
+            const beforeSummary = `BEFORE (${S.market} | ${S.date})\nGoal: ${S.goal || "—"}\nMethod: ${S.method || "—"}\nYES: ${compactBullets(S.yesList)}\nNO: ${compactBullets(S.noList)}\nLimits: Max Trades ${S.maxTrades || "—"}, Max Loss ${S.maxLoss || "—"}\n`;
+            const afterSummary = `AFTER (${S.market} | ${S.date})\nPlanned Trades: ${S.plannedTrades || "—"} | Actual Trades: ${S.actualTrades || "—"}\nPlanned Risk: ${S.plannedRisk || "—"} | Actual Risk: ${S.actualRisk || "—"}\nLessons: ${compactBullets(S.lessons)}\nEmotion Load: ${sc.emoOn.length ? sc.emoOn.join(", ") : "None"}\nOne Fix Tomorrow: ${fix}\n`;
+            $("shareText").value = `${beforeSummary}\n${afterSummary}\nCore Line: ${core}\nDiscipline ${sc.disc.toFixed(0)}/100 | Clarity ${sc.clar.toFixed(0)}/100\n#PearlMind #TwoLines #Discipline`;
+        }
+
+        function compactBullets(txt) {
+            const arr = (txt || "").split("\n").map(x => x.replace(/^•\s*/, "").trim()).filter(Boolean);
+            if (!arr.length) return "—";
+            return arr.slice(0, 4).join(" | ") + (arr.length > 4 ? ` (+${arr.length - 4} more)` : "");
+        }
+        function pickCoreLine(sc) {
+            if (sc.disc >= 85 && sc.clar >= 80) return "Small edge. Calm execution. Repeat.";
+            if (!sc.hasLimits) return "Limits first. Then trading.";
+            if (!sc.planWritten) return "Plan beats impulse.";
+            if (sc.overTrade) return "Stop rule is the real strategy.";
+            if (sc.emoOn.length >= 6) return "Emotions are loud. Rules must be louder.";
+            return "Take what the market gives — not what I want.";
+        }
+        function pickFixLine(sc) {
+            if (!sc.hasLimits) return "Set max trades & max loss before open.";
+            if (!sc.oneMethod) return "Use ONE method only — no hopping.";
+            if (!sc.planWritten) return "Write YES/NO + entry/exit before market.";
+            if (!sc.truthDone) return "Write 3 honest lessons after market.";
+            if (!sc.stopOk) return "Stop after target/loss/trade limit.";
+            if (sc.emoOn.includes("Overtrading")) return "Hard stop after max trades.";
+            if (sc.emoOn.includes("FOMO")) return "No late entry; wait for setup.";
+            return "Reduce one mistake by 1% daily.";
+        }
+
+        function renderChecklist(sc) {
+            // progress bars (0/100 each item)
+            const setBar = (id, ok, pct, color) => { const el = $(id); el.style.width = `${pct}%`; el.style.background = color; };
+            const setStat = (id, ok, txt, color) => { const el = $(id); el.textContent = txt; el.style.color = color; };
+            // 1 limits
+            setBar("b1", sc.hasLimits, sc.hasLimits ? 100 : 25, sc.hasLimits ? "var(--good)" : "rgba(239,68,68,.7)");
+            setStat("s1", sc.hasLimits, sc.hasLimits ? "Set" : "Missing", sc.hasLimits ? "var(--good)" : "var(--bad)");
+            // 2 one method
+            setBar("b2", sc.oneMethod, sc.oneMethod ? 100 : 35, sc.oneMethod ? "var(--good)" : "rgba(239,68,68,.7)");
+            setStat("s2", sc.oneMethod, sc.oneMethod ? "Locked" : "Drifting", sc.oneMethod ? "var(--good)" : "var(--bad)");
+            // 3 NO list respected proxy: if emotions include overtrading/boredom/revenge/mixed method/late entry -> reduce
+            const leaks = ["Overtrading", "Boredom Trade", "Revenge Trade", "Mixed Method", "Late Entry"];
+            const leakCount = leaks.filter(x => sc.emoOn.includes(x)).length;
+            const noScore = Math.max(0, 100 - leakCount * 22);
+            setBar("b3", noScore >= 70, noScore, noScore >= 70 ? "var(--good)" : "rgba(239,68,68,.7)");
+            setStat("s3", noScore >= 70, `${noScore}%`, noScore >= 70 ? "var(--good)" : "var(--bad)");
+            // 4 Plan written
+            setBar("b4", sc.planWritten, sc.planWritten ? 100 : 30, sc.planWritten ? "var(--good)" : "rgba(239,68,68,.7)");
+            setStat("s4", sc.planWritten, sc.planWritten ? "Done" : "Missing", sc.planWritten ? "var(--good)" : "var(--bad)");
+            // 5 After truth + lessons
+            setBar("b5", sc.truthDone, sc.truthDone ? 100 : 25, sc.truthDone ? "var(--good)" : "rgba(239,68,68,.7)");
+            setStat("s5", sc.truthDone, sc.truthDone ? "Done" : "Missing", sc.truthDone ? "var(--good)" : "var(--bad)");
+            // 6 Stop rule
+            const stopScore = (S.stopTarget || S.stopLoss || S.stopLimit) ? 100 : 20;
+            setBar("b6", stopScore >= 80, stopScore, stopScore >= 80 ? "var(--good)" : "rgba(239,68,68,.7)");
+            setStat("s6", stopScore >= 80, stopScore >= 80 ? "Followed" : "Broken", stopScore >= 80 ? "var(--good)" : "var(--bad)");
+        }
+
+        function gauge(el, value, color, label) {
+            const w = 260, h = 160, r = 70;
+            d3.select(el).selectAll("*").remove();
+            const svg = d3.select(el).append("svg").attr("width", "100%").attr("viewBox", `0 0 ${w} ${h}`);
+            const g = svg.append("g").attr("transform", `translate(${w / 2},${h - 8})`);
+            const arc = d3.arc().innerRadius(r - 14).outerRadius(r).startAngle(-Math.PI).endAngle(0);
+            g.append("path").attr("d", arc()).attr("fill", "rgba(255,255,255,.05)").attr("stroke", "rgba(26,36,54,.9)");
+            const arc2 = d3.arc().innerRadius(r - 14).outerRadius(r).startAngle(-Math.PI).endAngle(-Math.PI + (Math.PI * value / 100));
+            g.append("path").attr("d", arc2()).attr("fill", color);
+            // ticks
+            const ticks = d3.range(0, 101, 20);
+            g.selectAll("line.tick").data(ticks).enter().append("line").attr("class", "tick").attr("x1", d => Math.cos(-Math.PI + Math.PI * d / 100) * (r + 2)).attr("y1", d => Math.sin(-Math.PI + Math.PI * d / 100) * (r + 2)).attr("x2", d => Math.cos(-Math.PI + Math.PI * d / 100) * (r - 8)).attr("y2", d => Math.sin(-Math.PI + Math.PI * d / 100) * (r - 8)).attr("stroke", "rgba(154,164,178,.35)");
+            svg.append("text").attr("x", w / 2).attr("y", 20).attr("text-anchor", "middle").attr("fill", "rgba(154,164,178,.9)").attr("font-size", "12").text(label);
+            svg.append("text").attr("x", w / 2).attr("y", 64).attr("text-anchor", "middle").attr("fill", "var(--text)").attr("font-weight", "800").attr("font-size", "34").text(Math.round(value));
+            svg.append("text").attr("x", w / 2).attr("y", 86).attr("text-anchor", "middle").attr("fill", "rgba(154,164,178,.9)").attr("font-size", "11").text("/ 100");
+        }
+
+        function emoBarChart(el, emoOn) {
+            const data = EMOS.map(k => ({ k, v: (S.emotions || {})[k] ? 1 : 0 }));
+            d3.select(el).selectAll("*").remove();
+            const W = 520, H = 260, m = { t: 16, r: 14, b: 90, l: 30 };
+            const svg = d3.select(el).append("svg").attr("width", "100%").attr("viewBox", `0 0 ${W} ${H}`);
+            const x = d3.scaleBand().domain(data.map(d => d.k)).range([m.l, W - m.r]).padding(0.25);
+            const y = d3.scaleLinear().domain([0, 1]).range([H - m.b, m.t]);
+            svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickSize(0)).selectAll("text").attr("fill", "rgba(154,164,178,.85)").attr("font-size", "10").attr("transform", "rotate(-35)").attr("text-anchor", "end").attr("dx", "-6").attr("dy", "6");
+            svg.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(1).tickSize(0)).selectAll("text").attr("fill", "rgba(154,164,178,.85)").attr("font-size", "10");
+            svg.selectAll(".domain").attr("stroke", "rgba(26,36,54,.9)");
+            svg.selectAll("g.tick line").attr("stroke", "rgba(26,36,54,.55)");
+            svg.selectAll("rect.bar").data(data).enter().append("rect").attr("class", "bar").attr("x", d => x(d.k)).attr("y", d => y(d.v)).attr("width", x.bandwidth()).attr("height", d => (H - m.b) - y(d.v)).attr("rx", 10).attr("fill", d => d.v ? "rgba(239,68,68,.75)" : "rgba(96,165,250,.18)").attr("stroke", "rgba(26,36,54,.9)");
+            svg.append("text").attr("x", m.l).attr("y", H - 10).attr("fill", "rgba(154,164,178,.9)").attr("font-size", "11").text(`Emotion Load: ${emoOn.length} (lower is better)`);
+        }
+
+        function drawShareCard(mode) {
+            const c = $("shareCanvas");
+            const ctx = c.getContext("2d");
+
+            const W = 420, H = 740;
+            c.width = W; c.height = H;
+
+            const TOP = 16;
+            const LEFT = 28;
+            const RIGHT = W - 28;
+            const MAX_WIDTH = RIGHT - LEFT;
+            const LINE = 16;
+            const SECTION_GAP = 18;
+            const BOTTOM_SAFE = 40;
+
+            let y = TOP;
+
+            ctx.clearRect(0, 0, W, H);
+
+            /* ===== Background ===== */
+            const bg = ctx.createLinearGradient(0, 0, 0, H);
+            bg.addColorStop(0, "#0b1020");
+            bg.addColorStop(1, "#060a12");
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.textAlign = "center";
+
+            /* ===== Header ===== */
+            drawText("Pearl Mind — Daily Trading Ritual", "900 18px system-ui", "#e7eaf0");
+            drawText(`${mode} | ${S.market} | ${S.date}`, "600 12px system-ui", "#9aa4b2");
+            y += SECTION_GAP;
+
+            /* ===== Photo ===== */
+            const photoSize = 84;
+            const r = photoSize / 2;
+            const px = W / 2;
+
+            if (S.traderPhoto) {
+                const img = new Image();
+                img.src = S.traderPhoto;
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(px, y + r, r, 0, Math.PI * 2);
+                ctx.clip();
+                ctx.drawImage(img, px - r, y, photoSize, photoSize);
+                ctx.restore();
+
+                ctx.strokeStyle = "#d4af37";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(px, y + r, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            y += photoSize + 10;
+
+            drawText(S.traderName || "Anonymous Trader", "800 15px system-ui", "#ffffff");
+            y += SECTION_GAP;
+
+            /* ===== Scores ===== */
+            const sc = score();
+            drawText(`Discipline ${sc.disc}/100`, "700 12px system-ui", "#d4af37");
+            drawText(`Clarity ${sc.clar}/100`, "700 12px system-ui", "#60a5fa");
+            y += SECTION_GAP;
+
+            drawLine();
+            y += SECTION_GAP;
+
+            /* ===== PLAN / REALITY ===== */
+            ctx.textAlign = "left";
+            drawSection("PLAN / REALITY");
+
+            drawKeyValue("Planned Trades", S.plannedTrades, "Actual Trades", S.actualTrades);
+            drawKeyValue("Planned Risk", S.plannedRisk, "Actual Risk", S.actualRisk);
+
+            drawParagraph("Story", S.story);
+            drawParagraph("Lessons", compactBullets(S.lessons));
+            drawParagraph(
+                "Emotion Load",
+                Object.keys(S.emotions || {}).filter(k => S.emotions[k]).join(", ") || "None",
+                2
+            );
+
+            drawLine();
+            y += SECTION_GAP;
+
+            /* ===== CORE LINE ===== */
+            drawCenterSection("CORE LINE", pickCoreLine(sc), "#d4af37");
+
+            /* ===== FIX ===== */
+            drawCenterSection("TOMORROW’S FIX", pickFixLine(sc), "#60a5fa");
+
+            /* ===== Footer ===== */
+            if (y < H - BOTTOM_SAFE) {
+                ctx.textAlign = "center";
+                ctx.fillStyle = "#9aa4b2";
+                ctx.font = "600 11px system-ui";
+                ctx.fillText("#PearlMind #TwoLines #Discipline", W / 2, H - 16);
+            }
+
+            ctx.textAlign = "left";
+
+            /* ========= HELPERS ========= */
+
+            function drawText(text, font, color) {
+                ctx.font = font;
+                ctx.fillStyle = color;
+                ctx.fillText(text, W / 2, y);
+                y += LINE;
+            }
+
+            function drawSection(title) {
+                ctx.font = "800 13px system-ui";
+                ctx.fillStyle = "#e7eaf0";
+                ctx.fillText(title, LEFT, y);
+                y += LINE;
+            }
+
+            function drawKeyValue(lk, lv, rk, rv) {
+                ctx.font = "600 12px system-ui";
+                ctx.fillStyle = "#9aa4b2";
+                ctx.fillText(`${lk}: ${lv || "—"}`, LEFT, y);
+                ctx.fillText(`${rk}: ${rv || "—"}`, W / 2 + 8, y);
+                y += LINE;
+            }
+
+            function drawParagraph(label, text, maxLines = 3) {
+                ctx.font = "700 12px system-ui";
+                ctx.fillStyle = "#e7eaf0";
+                ctx.fillText(label, LEFT, y);
+                y += LINE;
+
+                ctx.font = "500 12px system-ui";
+                ctx.fillStyle = "#9aa4b2";
+                y = wrapSafe(text || "—", LEFT, y, MAX_WIDTH, LINE, maxLines);
+                y += 6;
+            }
+
+            function drawCenterSection(title, text, color) {
+                ctx.textAlign = "center";
+
+                ctx.font = "800 13px system-ui";
+                ctx.fillStyle = color;
+                ctx.fillText(title, W / 2, y);
+                y += LINE;
+
+                ctx.font = "600 13px system-ui";
+                ctx.fillStyle = "#e7eaf0";
+
+                y = wrapSafeCenter(
+                    text || "—",
+                    W / 2,
+                    y,
+                    MAX_WIDTH,
+                    LINE,
+                    3
+                );
+
+                y += SECTION_GAP;
+                ctx.textAlign = "left";
+            }
+
+
+            function wrapSafe(text, x, startY, maxWidth, lineHeight, maxLines) {
+                const words = (text || "").split(" ");
+                let line = "", lines = 0, yy = startY;
+
+                for (let i = 0; i < words.length; i++) {
+                    const test = line + words[i] + " ";
+                    if (ctx.measureText(test).width > maxWidth) {
+                        ctx.fillText(line.trim(), x, yy);
+                        line = words[i] + " ";
+                        yy += lineHeight;
+                        lines++;
+                        if (lines >= maxLines - 1) {
+                            ctx.fillText(line.trim() + "…", x, yy);
+                            return yy + lineHeight;
+                        }
+                    } else line = test;
+                }
+                ctx.fillText(line.trim(), x, yy);
+                return yy + lineHeight;
+            }
+
+            function wrapSafeCenter(text, centerX, startY, maxWidth, lineHeight, maxLines) {
+                const words = (text || "").split(" ");
+                let line = "";
+                let lines = 0;
+                let y = startY;
+
+                ctx.textAlign = "center";
+
+                for (let i = 0; i < words.length; i++) {
+                    const testLine = line + words[i] + " ";
+                    if (ctx.measureText(testLine).width > maxWidth) {
+                        ctx.fillText(line.trim(), centerX, y);
+                        line = words[i] + " ";
+                        y += lineHeight;
+                        lines++;
+
+                        if (lines >= maxLines - 1) {
+                            ctx.fillText(line.trim() + "…", centerX, y);
+                            return y + lineHeight;
+                        }
+                    } else {
+                        line = testLine;
+                    }
+                }
+
+                ctx.fillText(line.trim(), centerX, y);
+                return y + lineHeight;
+            }
+
+
+            function drawLine() {
+                ctx.strokeStyle = "rgba(154,164,178,.25)";
+                ctx.beginPath();
+                ctx.moveTo(LEFT, y);
+                ctx.lineTo(RIGHT, y);
+                ctx.stroke();
+            }
+        }
+
+
+        function drawMiniMeter(ctx, x, y, w, h, sc) {
+            ctx.save();
+            ctx.beginPath(); roundRect(ctx, x, y, w, h, 18); ctx.fillStyle = "rgba(255,255,255,.03)"; ctx.fill(); ctx.strokeStyle = "rgba(26,36,54,.9)"; ctx.lineWidth = 2; ctx.stroke();
+            // bars
+            const bx = x + 22, by = y + 26, bw = w - 44, bh = 16;
+            const bar = (label, val, color, yy) => { ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.beginPath(); roundRect(ctx, bx, yy, bw, bh, 999); ctx.fill(); ctx.strokeStyle = "rgba(26,36,54,.9)"; ctx.stroke(); ctx.fillStyle = color; ctx.beginPath(); roundRect(ctx, bx, yy, bw * (val / 100), bh, 999); ctx.fill(); ctx.fillStyle = "rgba(231,234,240,.95)"; ctx.font = "700 14px system-ui"; ctx.fillText(label, bx, yy - 6); ctx.fillStyle = "rgba(154,164,178,.95)"; ctx.font = "700 14px system-ui"; ctx.fillText(`${Math.round(val)}/100`, bx + bw - 72, yy - 6); }
+            bar("Discipline", sc.disc, "rgba(212,175,55,.85)", by + 18);
+            bar("Clarity", sc.clar, "rgba(96,165,250,.85)", by + 68);
+            // emotion
+            ctx.fillStyle = "rgba(231,234,240,.95)"; ctx.font = "700 14px system-ui"; ctx.fillText("Emotion Load", bx, by + 118);
+            ctx.fillStyle = sc.emoOn.length <= 2 ? "rgba(34,197,94,.9)" : sc.emoOn.length <= 5 ? "rgba(212,175,55,.9)" : "rgba(239,68,68,.9)";
+            ctx.font = "900 26px system-ui"; ctx.fillText(`${sc.emoOn.length}`, bx, by + 144);
+            ctx.fillStyle = "rgba(154,164,178,.95)"; ctx.font = "600 12px system-ui"; ctx.fillText("(lower is better)", bx + 32, by + 144);
+            ctx.restore();
+        }
+
+        function roundRect(ctx, x, y, w, h, r) { const rr = Math.min(r, w / 2, h / 2); ctx.moveTo(x + rr, y); ctx.arcTo(x + w, y, x + w, y + h, rr); ctx.arcTo(x + w, y + h, x, y + h, rr); ctx.arcTo(x, y + h, x, y, rr); ctx.arcTo(x, y, x + w, y, rr); ctx.closePath(); }
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) { const words = (text || "").split(" "); let line = ""; for (let n = 0; n < words.length; n++) { const test = line + words[n] + " "; const w = ctx.measureText(test).width; if (w > maxWidth && n > 0) { ctx.fillText(line, x, y); line = words[n] + " "; y += lineHeight } else line = test; } ctx.fillText(line, x, y); }
+
+        function renderAll() {
+            syncInputs();
+            // re-sync emotion checkboxes
+            EMOS.forEach(name => { const id = "emo_" + name.replace(/\W+/g, "_"); const el = $(id); if (el) el.checked = !!S.emotions[name]; });
+            const sc = score();
+            renderChecklist(sc);
+            gauge("#gauge1", sc.disc, "rgba(212,175,55,.85)", "Discipline");
+            gauge("#gauge2", sc.clar, "rgba(96,165,250,.85)", "Clarity");
+            emoBarChart("#emoChart", sc.emoOn);
+            syncDerived();
+            // keep canvas always reflecting last mode (default BEFORE)
+            drawShareCard((S.postTruth || S.truthDone) ? "AFTER MARKET" : "BEFORE MARKET");
+        }
+
+        function renderChecklist(sc) { // override to include overtrade effect in item 3 + stop rule in item 6
+            const setBar = (id, pct, color) => { $(id).style.width = `${pct}%`; $(id).style.background = color; };
+            const setStat = (id, txt, color) => { $(id).textContent = txt; $(id).style.color = color; };
+            setBar("b1", sc.hasLimits ? 100 : 25, sc.hasLimits ? "var(--good)" : "rgba(239,68,68,.7)"); setStat("s1", sc.hasLimits ? "Set" : "Missing", sc.hasLimits ? "var(--good)" : "var(--bad)");
+            setBar("b2", sc.oneMethod ? 100 : 35, sc.oneMethod ? "var(--good)" : "rgba(239,68,68,.7)"); setStat("s2", sc.oneMethod ? "Locked" : "Drifting", sc.oneMethod ? "var(--good)" : "var(--bad)");
+            const leaks = ["Overtrading", "Boredom Trade", "Revenge Trade", "Mixed Method", "Late Entry"]; const leakCount = leaks.filter(x => sc.emoOn.includes(x)).length;
+            const planned = parseFloat((S.plannedTrades || "").replace(/[^\d.]/g, "")) || 0; const actual = parseFloat((S.actualTrades || "").replace(/[^\d.]/g, "")) || 0;
+            const over = (planned > 0 && actual > planned) || (actual > parseFloat(S.maxTrades || "999"));
+            const noScore = Math.max(0, 100 - leakCount * 18 - (over ? 18 : 0));
+            setBar("b3", noScore, noScore >= 70 ? "var(--good)" : "rgba(239,68,68,.7)"); setStat("s3", `${noScore}%`, noScore >= 70 ? "var(--good)" : "var(--bad)");
+            setBar("b4", sc.planWritten ? 100 : 30, sc.planWritten ? "var(--good)" : "rgba(239,68,68,.7)"); setStat("s4", sc.planWritten ? "Done" : "Missing", sc.planWritten ? "var(--good)" : "var(--bad)");
+            setBar("b5", sc.truthDone ? 100 : 25, sc.truthDone ? "var(--good)" : "rgba(239,68,68,.7)"); setStat("s5", sc.truthDone ? "Done" : "Missing", sc.truthDone ? "var(--good)" : "var(--bad)");
+            const stopScore = (S.stopTarget || S.stopLoss || S.stopLimit) ? 100 : 20;
+            setBar("b6", stopScore, stopScore >= 80 ? "var(--good)" : "rgba(239,68,68,.7)"); setStat("s6", stopScore >= 80 ? "Followed" : "Broken", stopScore >= 80 ? "var(--good)" : "var(--bad)");
+        }
+
+        $("photoBox").addEventListener("click", () => {
+            $("traderPhoto").click();
+        });
+
+
+
+        renderAll();
+    </script>
+</body>
+
+</html>
