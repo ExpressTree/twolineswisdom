@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>TwoLines™ – Belief Proof Review</title>
+
+<style>
+:root{
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --soft:#f1f5f9;
+  --border:#e5e7eb;
+  --text:#0f172a;
+  --muted:#64748b;
+  --accent:#22c55e;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(135deg,#ffffff,#f1f5f9);
+  color:var(--text);
+}
+
+.wrapper{
+  max-width:1300px;
+  margin:24px auto;
+  padding:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:0 20px 40px rgba(15,23,42,.08);
+}
+
+/* HEADER */
+.header{
+  display:grid;
+  grid-template-columns:110px 1fr 1fr;
+  gap:16px;
+  align-items:center;
+  margin-bottom:16px;
+}
+.photo{
+  width:100px;height:100px;
+  border-radius:50%;
+  border:2px dashed var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:var(--muted);
+  font-size:12px;
+  overflow:hidden;
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+
+.nameBlock input{
+  font-size:24px;
+  font-weight:800;
+  border:none;
+  outline:none;
+  width:100%;
+}
+.identity{
+  font-size:18px;
+  font-style:italic;
+  color:#334155;
+}
+.identity::before{content:"“"}
+.identity::after{content:"”"}
+
+/* SECTIONS */
+.section{
+  margin-bottom:14px;
+}
+.section h3 {
+    font-size: 24px;
+    color: #8500ff;
+    margin-bottom: 6px;
+}
+
+/* BEFORE AFTER */
+.beforeAfter{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+textarea{
+  width:100%;
+  height:70px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  resize:none;
+  font-size:14px;
+}
+
+/* REPORT CARD */
+.report{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.card{
+  background:var(--soft);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px;
+}
+.card h4{
+  font-size:20px;
+  margin-bottom:8px;
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:20px;
+  margin-bottom:6px;
+}
+
+/* STARS */
+.stars{display:flex;gap:3px}
+.star{
+  font-size:24px;
+  color:#cbd5e1;
+  cursor:pointer;
+}
+.star.active{color:#f59e0b}
+
+/* TAKEAWAYS */
+.takeaways{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.takeaways textarea{height:60px}
+
+/* FOOTER */
+.footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+}
+button{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:10px 22px;
+  font-weight:900;
+  cursor:pointer;
+}
+.brand{
+  font-size:12px;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="photo" onclick="file.click()">
+    <span id="photoText">Add Photo</span>
+    <img id="img" hidden>
+    <input id="file" type="file" hidden accept="image/*">
+  </div>
+  <div class="nameBlock">
+    <input placeholder="Your Name">
+    <div class="identity" contenteditable>
+      From emotional & confused → calm, rule-based trader
+    </div>
+  </div>
+  <div class="card">
+      <h4>The Overall Rating for ThePearlMind</h4>
+      <div class="row"><div class="stars"></div></div>
+    </div>
+  
+</div>
+
+<!-- BEFORE AFTER -->
+<div class="section">
+  <h3>Before & After the Workshop & 84 day's Challenge with +/-40 Blueprint</h3>
+  <h5>Write your own feedback and share the screenshot with the community</h5>
+  <div class="beforeAfter">
+    <textarea placeholder="Before: fear, losses, confusion, over-trading…"></textarea>
+    <textarea placeholder="After: clarity, calm execution, confidence…"></textarea>
+  </div>
+</div>
+
+<!-- REPORT CARD -->
+<div class="section">
+  <h3>What has changed in Me (Trader’s Perspective)</h3>
+  <div class="report">
+
+    <div class="card">
+      <h4>The Pearl Mind™</h4>
+      <div class="row"><span>Fear & Greed Control</span><div class="stars"></div></div>
+      <div class="row"><span>Over-Trading Reduction</span><div class="stars"></div></div>
+      <div class="row"><span>Entry–Exit Clarity</span><div class="stars"></div></div>
+      <div class="row"><span>Decision Confidence</span><div class="stars"></div></div>
+      <div class="row"><span>Psychological Calm</span><div class="stars"></div></div>
+    </div>
+
+    <div class="card">
+      <h4>The Opportunity Window™</h4>
+      <div class="row"><span>Capital Safety Feeling</span><div class="stars"></div></div>
+      <div class="row"><span>Patience & Timing</span><div class="stars"></div></div>
+      <div class="row"><span>Stress-Free Holding</span><div class="stars"></div></div>
+      <div class="row"><span>Risk-Reward Understanding</span><div class="stars"></div></div>
+      <div class="row"><span>Wealth Alignment</span><div class="stars"></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TAKEAWAYS -->
+<div class="section">
+  <h3>3 Key Takeaways (For Your Future Trading Journey)</h3>
+  <div class="takeaways">
+    <textarea placeholder="1. Biggest mindset shift"></textarea>
+    <textarea placeholder="2. Most practical change"></textarea>
+    <textarea placeholder="3. Why others should learn this"></textarea>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="brand">TwoLinesClub • ThePearlMind™ • TheOpportunityWindow™</div>
+  <button onclick="save()">Save Review</button>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll(".stars").forEach(starBox=>{
+  for(let i=1;i<=5;i++){
+    const s=document.createElement("span");
+    s.className="star";
+    s.textContent="★";
+    s.onclick=()=>{
+      [...starBox.children].forEach((x,j)=>x.classList.toggle("active",j<i));
+    };
+    starBox.appendChild(s);
+  }
+});
+
+file.onchange=e=>{
+  const r=new FileReader();
+  r.onload=()=>{
+    img.src=r.result;
+    img.hidden=false;
+    photoText.hidden=true;
+  };
+  r.readAsDataURL(e.target.files[0]);
+};
+
+function save(){
+  const data={date:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="TwoLines_BeliefProof_Review.json";
+  a.click();
+}
+</script>
+</body>
+</html>
