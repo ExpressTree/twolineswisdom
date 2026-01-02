@@ -21,6 +21,29 @@
             --chip: #111a2c
         }
 
+        :root {
+            /* Paper & Ink */
+            --bg: #f6f2ea;
+            --panel: #ffffff;
+            --panel2: #fbf8f2;
+            --line: #e3dccf;
+
+            --text: #2b2b2b;
+            --muted: #6b6b6b;
+
+            /* Accents (very subtle) */
+            --gold: #8a6d3b;
+            /* muted ink-gold */
+            --blue: #4b6ea8;
+            /* fountain pen blue */
+            --good: #3b7a57;
+            /* muted green */
+            --bad: #a94442;
+            /* muted red */
+            --chip: #f1ede4;
+        }
+
+
         * {
             box-sizing: border-box
         }
@@ -32,10 +55,23 @@
 
         body {
             margin: 0;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            font-family: Aptos, -apple-system, Segoe UI, Roboto, Arial;
             background: radial-gradient(1200px 700px at 50% 0%, #121a2c 0%, var(--bg) 55%, #02040a 100%);
             color: var(--text)
         }
+
+        body {
+            margin: 0;
+            font-family: "Georgia", "Times New Roman", serif;
+            background:
+                repeating-linear-gradient(to bottom,
+                    #f6f2ea,
+                    #f6f2ea 28px,
+                    #f2eee6 29px);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
 
         a {
             color: inherit
@@ -541,6 +577,102 @@
             border-color: rgba(212, 175, 55, 1);
             background: rgba(212, 175, 55, .15);
         }
+
+        .brand,
+        .card,
+        .section,
+        .item {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow:
+                0 1px 0 rgba(0, 0, 0, .04),
+                0 6px 20px rgba(0, 0, 0, .03);
+        }
+
+        .h1 b,
+        .cardH b,
+        .sectionH b {
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        input[type="text"],
+        textarea {
+            background: #fffdf8;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: "Georgia", "Times New Roman", serif;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        textarea {
+            min-height: 90px;
+            background:
+                repeating-linear-gradient(to bottom,
+                    #fffdf8,
+                    #fffdf8 26px,
+                    #f2eee6 27px);
+        }
+
+        .pill {
+            background: #fffdf8;
+            border: 1px dashed var(--line);
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .btn {
+            background: #fffdf8;
+            border: 1px solid var(--line);
+            color: var(--text);
+            font-family: "Georgia", serif;
+        }
+
+        .btn.primary {
+            background: #f4efe3;
+            border-color: var(--gold);
+        }
+
+        .btn.good {
+            background: #edf4ee;
+            border-color: var(--good);
+        }
+
+        .btn.bad {
+            background: #f6ecec;
+            border-color: var(--bad);
+        }
+
+        .cb {
+            background: #fffdf8;
+            border: 1px solid var(--line);
+        }
+
+        .cb:checked {
+            background: #f4efe3;
+            border-color: var(--gold);
+        }
+
+        .cb:checked:after {
+            border-color: var(--gold);
+        }
+
+        .bar {
+            background: #f1ede4;
+        }
+
+        .fill {
+            background:
+                repeating-linear-gradient(45deg,
+                    rgba(0, 0, 0, .15),
+                    rgba(0, 0, 0, .15) 4px,
+                    rgba(0, 0, 0, .05) 4px,
+                    rgba(0, 0, 0, .05) 8px);
+        }
     </style>
 </head>
 
@@ -860,7 +992,7 @@
                         <div class="sectionH"><b>Community Share Text</b><span class="tag">Copy/Paste</span></div>
                         <div class="row">
                             <div class="lab">
-                                <textarea id="shareText" style="min-height:128px" placeholder=""></textarea>
+                                <textarea id="shareText" style="min-height:500px" placeholder=""></textarea>
                                 <div class="note">Tip: Post “Before card” in morning + “After card” at EOD. Your
                                     consistency becomes your identity.</div>
                             </div>
@@ -882,7 +1014,46 @@
         let S = load(); bind(); renderAll();
 
         function load() { try { const raw = localStorage.getItem(LSKEY); if (!raw) return stateDefault(); const s = JSON.parse(raw); const base = stateDefault(); const merged = { ...base, ...s }; merged.emotions = { ...base.emotions, ...(s.emotions || {}) }; return merged } catch (e) { return stateDefault() } }
-        function save() { localStorage.setItem(LSKEY, JSON.stringify(S)); toast("Saved"); }
+        /*function save() { localStorage.setItem(LSKEY, JSON.stringify(S)); toast("Saved"); }*/
+        function save() {
+            try {
+                localStorage.setItem(LSKEY, JSON.stringify(S));
+                toast("Saved");
+            } catch (e) {
+                if (e.name === "QuotaExceededError") {
+                    console.warn("Storage quota exceeded. Saving without images.");
+
+                    // 🔒 Preserve images in memory (session still works)
+                    const backup = {
+                        traderPhoto: S.traderPhoto,
+                        planImg: S.planImg,
+                        doneImg: S.doneImg
+                    };
+
+                    // ❗ Remove heavy fields ONLY for storage
+                    const slim = { ...S };
+                    delete slim.traderPhoto;
+                    delete slim.planImg;
+                    delete slim.doneImg;
+
+                    try {
+                        localStorage.setItem(LSKEY, JSON.stringify(slim));
+                        toast("Saved (images kept for session)");
+                    } catch (err) {
+                        console.error("Still cannot save:", err);
+                        toast("Save failed (storage full)");
+                    }
+
+                    // ♻ Restore images back into runtime state
+                    S.traderPhoto = backup.traderPhoto;
+                    S.planImg = backup.planImg;
+                    S.doneImg = backup.doneImg;
+                } else {
+                    console.error(e);
+                }
+            }
+        }
+
         function toast(msg) { $("toastMsg").textContent = msg; const t = $("toast"); t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 900) }
         function bind() {
             ["date", "market", "goal", "maxTrades", "maxLoss", "method", "yesList", "noList", "entryRule", "exitRule", "story", "plannedTrades", "actualTrades", "plannedRisk", "actualRisk", "lessons", "shareText"].forEach(id => { const el = $(id); if (!el) return; el.addEventListener("input", () => { S[id] = el.value; syncDerived(); renderAll(); save(); }) });
@@ -1107,103 +1278,122 @@
             const W = 420, H = 740;
             c.width = W; c.height = H;
 
-            const TOP = 16;
+            const PAD = 22;
             const LEFT = 28;
             const RIGHT = W - 28;
             const MAX_WIDTH = RIGHT - LEFT;
             const LINE = 16;
-            const SECTION_GAP = 18;
-            const BOTTOM_SAFE = 40;
+            const GAP = 12;
 
-            let y = TOP;
+            const COLORS = {
+                bgTop: "#ffffff",
+                bgBottom: "#f3f4f6",
+                panel: "#f9fafb",
+                inkPrimary: "#1f2937",
+                inkSecondary: "#6b7280",
+                inkSoft: "#9ca3af",
+                gold: "#8b6b2e",
+                goldSoft: "rgba(139,107,46,0.12)",
+                blue: "#355d9a",
+                divider: "rgba(31,41,55,0.15)"
+            };
 
+            const FONT = {
+                title: "700 18px Palatino Linotype, Georgia, serif",
+                name: "700 15px Palatino Linotype, Georgia, serif",
+                section: "700 13px Inter, system-ui, sans-serif",
+                label: "600 12px Inter, system-ui, sans-serif",
+                body: "400 12px Inter, system-ui, sans-serif",
+                score: "600 12px Inter, system-ui, sans-serif",
+                footer: "500 11px Inter, system-ui, sans-serif"
+            };
+
+            let y = PAD;
             ctx.clearRect(0, 0, W, H);
 
             /* ===== Background ===== */
             const bg = ctx.createLinearGradient(0, 0, 0, H);
-            bg.addColorStop(0, "#0b1020");
-            bg.addColorStop(1, "#060a12");
+            bg.addColorStop(0, COLORS.bgTop);
+            bg.addColorStop(1, COLORS.bgBottom);
             ctx.fillStyle = bg;
             ctx.fillRect(0, 0, W, H);
 
-            ctx.textAlign = "center";
+            drawBorder();
 
+            y += 50;
             /* ===== Header ===== */
-            drawText("Pearl Mind — Daily Trading Ritual", "900 18px system-ui", "#e7eaf0");
-            drawText(`${mode} | ${S.market} | ${S.date}`, "600 12px system-ui", "#9aa4b2");
-            y += SECTION_GAP;
+            ctx.textAlign = "center";
+            drawText("Pearl Mind — Daily Trading Ritual", FONT.title, COLORS.inkPrimary);
+            drawText(`${mode} (${S.market} | ${S.date})`, FONT.body, COLORS.inkSecondary);
+            y += 10;
 
             /* ===== Photo ===== */
-            const photoSize = 84;
-            const r = photoSize / 2;
-            const px = W / 2;
-
+            const size = 78;
+            const r = size / 2;
             if (S.traderPhoto) {
                 const img = new Image();
                 img.src = S.traderPhoto;
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(px, y + r, r, 0, Math.PI * 2);
+                ctx.arc(W / 2, y + r, r, 0, Math.PI * 2);
                 ctx.clip();
-                ctx.drawImage(img, px - r, y, photoSize, photoSize);
+                ctx.drawImage(img, W / 2 - r, y, size, size);
                 ctx.restore();
 
-                ctx.strokeStyle = "#d4af37";
-                ctx.lineWidth = 3;
+                ctx.strokeStyle = COLORS.gold;
+                ctx.lineWidth = 2;
                 ctx.beginPath();
-                ctx.arc(px, y + r, r, 0, Math.PI * 2);
+                ctx.arc(W / 2, y + r, r, 0, Math.PI * 2);
                 ctx.stroke();
             }
+            y += size + 22;
 
-            y += photoSize + 10;
+            drawText(S.traderName || "Anonymous Trader", FONT.name, COLORS.inkPrimary);
+            y += GAP;
 
-            drawText(S.traderName || "Anonymous Trader", "800 15px system-ui", "#ffffff");
-            y += SECTION_GAP;
-
-            /* ===== Scores ===== */
+            /* ===== Score Band ===== */
             const sc = score();
-            drawText(`Discipline ${sc.disc}/100`, "700 12px system-ui", "#d4af37");
-            drawText(`Clarity ${sc.clar}/100`, "700 12px system-ui", "#60a5fa");
-            y += SECTION_GAP;
+            drawScoreBand(`Discipline ${sc.disc}/100`, `Clarity ${sc.clar}/100`);
+            y += 16;
 
-            drawLine();
-            y += SECTION_GAP;
+            /* ===== BEFORE PANEL ===== */
+            drawPanel("BEFORE — PLAN", [
+                ["Goal", S.goal],
+                ["Method", S.method],
+                ["YES", compactBullets(S.yesList)],
+                ["NO", compactBullets(S.noList)],
+                ["Limits", `Max Trades ${S.maxTrades}, Max Loss ${S.maxLoss}`]
+            ]);
 
-            /* ===== PLAN / REALITY ===== */
-            ctx.textAlign = "left";
-            drawSection("PLAN / REALITY");
+            /* ===== AFTER PANEL ===== */
+            const emo = Object.keys(S.emotions || {}).filter(k => S.emotions[k]).join(", ") || "None";
+            drawPanel("AFTER — REALITY", [
+                ["Trades", `Planned ${S.plannedTrades} | Actual ${S.actualTrades}`],
+                ["Risk", `Planned ${S.plannedRisk} | Actual ${S.actualRisk}`],
+                ["Lessons", compactBullets(S.lessons)],
+                ["Emotion Load", emo]
+            ]);
 
-            drawKeyValue("Planned Trades", S.plannedTrades, "Actual Trades", S.actualTrades);
-            drawKeyValue("Planned Risk", S.plannedRisk, "Actual Risk", S.actualRisk);
-
-            drawParagraph("Story", S.story);
-            drawParagraph("Lessons", compactBullets(S.lessons));
-            drawParagraph(
-                "Emotion Load",
-                Object.keys(S.emotions || {}).filter(k => S.emotions[k]).join(", ") || "None",
-                2
-            );
-
-            drawLine();
-            y += SECTION_GAP;
-
-            /* ===== CORE LINE ===== */
-            drawCenterSection("CORE LINE", pickCoreLine(sc), "#d4af37");
+            /* ===== CORE ===== */
+            drawCallout("CORE LINE", pickCoreLine(sc), COLORS.gold);
 
             /* ===== FIX ===== */
-            drawCenterSection("TOMORROW’S FIX", pickFixLine(sc), "#60a5fa");
+            drawCallout("ONE FIX TOMORROW", pickFixLine(sc), COLORS.blue);
 
             /* ===== Footer ===== */
-            if (y < H - BOTTOM_SAFE) {
-                ctx.textAlign = "center";
-                ctx.fillStyle = "#9aa4b2";
-                ctx.font = "600 11px system-ui";
-                ctx.fillText("#PearlMind #TwoLines #Discipline", W / 2, H - 16);
+            ctx.font = FONT.footer;
+            ctx.fillStyle = COLORS.inkSoft;
+            ctx.textAlign = "center";
+            ctx.fillText("#PearlMind #TwoLines #Discipline", W / 2, H - 14);
+
+            /* ================= HELPERS ================= */
+
+            function drawBorder() {
+                ctx.strokeStyle = COLORS.gold;
+                ctx.lineWidth = 1.6;
+                roundRect(10, 10, W - 20, H - 20, 22);
+                ctx.stroke();
             }
-
-            ctx.textAlign = "left";
-
-            /* ========= HELPERS ========= */
 
             function drawText(text, font, color) {
                 ctx.font = font;
@@ -1212,115 +1402,74 @@
                 y += LINE;
             }
 
-            function drawSection(title) {
-                ctx.font = "800 13px system-ui";
-                ctx.fillStyle = "#e7eaf0";
-                ctx.fillText(title, LEFT, y);
-                y += LINE;
-            }
+            function drawScoreBand(left, right) {
+                ctx.fillStyle = COLORS.goldSoft;
+                roundRect(LEFT, y, RIGHT - LEFT, 32, 12);
+                ctx.fill();
 
-            function drawKeyValue(lk, lv, rk, rv) {
-                ctx.font = "600 12px system-ui";
-                ctx.fillStyle = "#9aa4b2";
-                ctx.fillText(`${lk}: ${lv || "—"}`, LEFT, y);
-                ctx.fillText(`${rk}: ${rv || "—"}`, W / 2 + 8, y);
-                y += LINE;
-            }
-
-            function drawParagraph(label, text, maxLines = 3) {
-                ctx.font = "700 12px system-ui";
-                ctx.fillStyle = "#e7eaf0";
-                ctx.fillText(label, LEFT, y);
-                y += LINE;
-
-                ctx.font = "500 12px system-ui";
-                ctx.fillStyle = "#9aa4b2";
-                y = wrapSafe(text || "—", LEFT, y, MAX_WIDTH, LINE, maxLines);
-                y += 6;
-            }
-
-            function drawCenterSection(title, text, color) {
-                ctx.textAlign = "center";
-
-                ctx.font = "800 13px system-ui";
-                ctx.fillStyle = color;
-                ctx.fillText(title, W / 2, y);
-                y += LINE;
-
-                ctx.font = "600 13px system-ui";
-                ctx.fillStyle = "#e7eaf0";
-
-                y = wrapSafeCenter(
-                    text || "—",
-                    W / 2,
-                    y,
-                    MAX_WIDTH,
-                    LINE,
-                    3
-                );
-
-                y += SECTION_GAP;
+                ctx.font = FONT.score;
+                ctx.fillStyle = COLORS.inkPrimary;
                 ctx.textAlign = "left";
-            }
-
-
-            function wrapSafe(text, x, startY, maxWidth, lineHeight, maxLines) {
-                const words = (text || "").split(" ");
-                let line = "", lines = 0, yy = startY;
-
-                for (let i = 0; i < words.length; i++) {
-                    const test = line + words[i] + " ";
-                    if (ctx.measureText(test).width > maxWidth) {
-                        ctx.fillText(line.trim(), x, yy);
-                        line = words[i] + " ";
-                        yy += lineHeight;
-                        lines++;
-                        if (lines >= maxLines - 1) {
-                            ctx.fillText(line.trim() + "…", x, yy);
-                            return yy + lineHeight;
-                        }
-                    } else line = test;
-                }
-                ctx.fillText(line.trim(), x, yy);
-                return yy + lineHeight;
-            }
-
-            function wrapSafeCenter(text, centerX, startY, maxWidth, lineHeight, maxLines) {
-                const words = (text || "").split(" ");
-                let line = "";
-                let lines = 0;
-                let y = startY;
-
+                ctx.fillText(left, LEFT + 12, y + 21);
+                ctx.textAlign = "right";
+                ctx.fillText(right, RIGHT - 12, y + 21);
                 ctx.textAlign = "center";
 
-                for (let i = 0; i < words.length; i++) {
-                    const testLine = line + words[i] + " ";
-                    if (ctx.measureText(testLine).width > maxWidth) {
-                        ctx.fillText(line.trim(), centerX, y);
-                        line = words[i] + " ";
-                        y += lineHeight;
-                        lines++;
-
-                        if (lines >= maxLines - 1) {
-                            ctx.fillText(line.trim() + "…", centerX, y);
-                            return y + lineHeight;
-                        }
-                    } else {
-                        line = testLine;
-                    }
-                }
-
-                ctx.fillText(line.trim(), centerX, y);
-                return y + lineHeight;
+                y += 32;
             }
 
+            function drawPanel(title, rows) {
+                const startY = y;
+                const pad = 12;
 
-            function drawLine() {
-                ctx.strokeStyle = "rgba(154,164,178,.25)";
+                // Estimate height
+                let h = 28 + rows.length * LINE;
+                ctx.fillStyle = COLORS.panel;
+                roundRect(LEFT, startY, RIGHT - LEFT, h + 10, 14);
+                ctx.fill();
+
+                ctx.font = FONT.section;
+                ctx.fillStyle = COLORS.gold;
+                ctx.textAlign = "left";
+                ctx.fillText(title, LEFT + pad, startY + 18);
+
+                y = startY + 34;
+                ctx.font = FONT.label;
+                ctx.fillStyle = COLORS.inkSecondary;
+
+                rows.forEach(([k, v]) => {
+                    ctx.fillText(`${k}: ${v || "—"}`, LEFT + pad, y);
+                    y += LINE;
+                });
+
+                y += GAP;
+            }
+
+            function drawCallout(title, text, color) {
+                ctx.fillStyle = "rgba(0,0,0,0.03)";
+                roundRect(LEFT, y, RIGHT - LEFT, 56, 14);
+                ctx.fill();
+
+                ctx.font = FONT.section;
+                ctx.fillStyle = color;
+                ctx.textAlign = "center";
+                ctx.fillText(title, W / 2, y + 18);
+
+                ctx.font = FONT.body;
+                ctx.fillStyle = COLORS.inkPrimary;
+                ctx.fillText(text || "—", W / 2, y + 38);
+
+                y += 64;
+            }
+
+            function roundRect(x, y, w, h, r) {
                 ctx.beginPath();
-                ctx.moveTo(LEFT, y);
-                ctx.lineTo(RIGHT, y);
-                ctx.stroke();
+                ctx.moveTo(x + r, y);
+                ctx.arcTo(x + w, y, x + w, y + h, r);
+                ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y, r);
+                ctx.arcTo(x, y, x + w, y, r);
+                ctx.closePath();
             }
         }
 
