@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swar Chaitanya Live — Tickets & Fan Wall</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Josefin+Sans:wght@300;400;600;700&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:       #1A1208;
+  --ink2:      #2D2010;
+  --gold:      #B8860B;
+  --gold-mid:  #D4A017;
+  --gold-lt:   #E8C547;
+  --gold-pale: #F5E6A3;
+  --silver:    #7A8B8B;
+  --silver-lt: #B2BFBF;
+  --crimson:   #8B1A1A;
+  --cream:     #FDFAF3;
+  --ivory:     #F7F1E3;
+  --warm-bg:   #F0E8D0;
+  --parch:     #EDE0C4;
+  --border:    rgba(184,134,11,0.25);
+  --shadow:    0 8px 40px rgba(26,18,8,0.15);
+}
+html{scroll-behavior:smooth;}
+body{
+  background:#E8DFC8;
+  font-family:'Josefin Sans',sans-serif;
+  color:var(--ink);
+  min-height:100vh;
+}
+
+/* ══════════════════════════════════════════════════
+   TAB NAVIGATION
+══════════════════════════════════════════════════ */
+.tabs-nav{
+  display:flex;
+  background:var(--ink);
+  border-bottom:3px solid var(--gold);
+  position:sticky;top:0;z-index:999;
+}
+.tab-btn{
+  padding:16px 36px;
+  font-family:'Josefin Sans',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+  background:none;border:none;cursor:pointer;
+  border-bottom:3px solid transparent;
+  margin-bottom:-3px;
+  transition:all .25s;
+  position:relative;
+}
+.tab-btn.active{
+  color:var(--gold-lt);
+  border-bottom-color:var(--gold-lt);
+  background:rgba(184,134,11,0.08);
+}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,0.7);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ══════════════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════════════ */
+.page-header{
+  background:var(--ink);
+  color:var(--cream);
+  text-align:center;
+  padding:48px 20px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.page-header::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 30% 50%,rgba(184,134,11,.12),transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 30%,rgba(212,160,23,.07),transparent 50%);
+}
+.ph-label{
+  font-size:9px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold-mid);margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+}
+.ph-label::before,.ph-label::after{content:'';display:inline-block;width:40px;height:1px;background:var(--gold);}
+.ph-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,5vw,52px);font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt),var(--gold-pale),var(--gold-lt),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;letter-spacing:2px;
+}
+.ph-sub{
+  font-family:'Cormorant',serif;font-size:16px;
+  color:rgba(245,230,163,.7);margin-top:8px;
+  font-style:italic;letter-spacing:2px;
+}
+.ph-date{
+  display:inline-block;
+  margin-top:16px;
+  background:rgba(184,134,11,.15);
+  border:1px solid rgba(184,134,11,.4);
+  padding:6px 20px;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold-pale);
+}
+
+/* ══════════════════════════════════════════════════
+   TICKET CONTAINER
+══════════════════════════════════════════════════ */
+.tickets-page{padding:48px 24px 80px;}
+.category-section{max-width:960px;margin:0 auto 80px;}
+.cat-header{
+  display:flex;align-items:center;gap:16px;margin-bottom:32px;
+}
+.cat-badge{
+  font-family:'Josefin Sans',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
+  padding:6px 18px;border-radius:2px;
+  flex-shrink:0;
+}
+.cat-badge.silver{background:linear-gradient(135deg,#8a9a9a,#b2bfbf);color:var(--ink);}
+.cat-badge.gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--ink);}
+.cat-badge.vip{background:linear-gradient(135deg,var(--crimson),#c0392b);color:#fff;}
+.cat-title{
+  font-family:'Playfair Display',serif;font-size:26px;font-weight:700;
+  color:var(--ink);
+}
+.cat-rule{flex:1;height:1px;}
+.cat-rule.silver{background:linear-gradient(to right,var(--silver),transparent);}
+.cat-rule.gold{background:linear-gradient(to right,var(--gold),transparent);}
+.cat-rule.vip{background:linear-gradient(to right,var(--crimson),transparent);}
+
+/* FRONT / BACK FLIP CONTAINER */
+.ticket-flip-wrap{
+  perspective:1200px;
+  margin-bottom:16px;
+}
+.ticket-flip{
+  position:relative;
+  width:100%;
+  /* 6:2.25 ratio */
+  padding-bottom:37.5%;
+  transform-style:preserve-3d;
+  transition:transform .7s cubic-bezier(.4,0,.2,1);
+  cursor:pointer;
+}
+.ticket-flip.flipped{transform:rotateY(180deg);}
+.ticket-face,.ticket-back{
+  position:absolute;inset:0;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 12px 48px rgba(26,18,8,.2),0 2px 8px rgba(26,18,8,.1);
+}
+.ticket-back{transform:rotateY(180deg);}
+
+.flip-hint{
+  text-align:center;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(26,18,8,.45);
+  margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.flip-hint::before,.flip-hint::after{content:'';display:inline-block;width:24px;height:1px;background:rgba(26,18,8,.25);}
+.share-btns{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.share-btn{
+  font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;padding:8px 18px;border:none;cursor:pointer;
+  border-radius:2px;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+}
+.share-btn.insta{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;}
+.share-btn.copy{background:var(--ink);color:var(--gold-lt);}
+.share-btn.download{background:var(--gold);color:var(--ink);}
+.share-btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
+
+/* ══════════════════════════════════════════════════
+   TICKET FRONT — SILVER
+══════════════════════════════════════════════════ */
+.tf-silver{
+  background:var(--cream);
+  display:grid;
+  grid-template-columns:1fr 2px 200px;
+  height:100%;font-family:'Josefin Sans',sans-serif;
+}
+
+.tf-main{
+  position:relative;overflow:hidden;
+  padding:20px 24px 16px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+
+/* Subtle paper texture */
+.tf-main::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 50% 60% at 15% 50%,rgba(184,134,11,.06),transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 23px,rgba(184,134,11,.025) 24px);
+  pointer-events:none;
+}
+
+/* Photo strip on left inside main */
+.tf-photo-strip{
+  position:absolute;left:0;top:0;bottom:0;width:90px;
+  overflow:hidden;
+}
+.tf-photo-strip img{
+  width:100%;height:100%;object-fit:cover;object-position:top;
+  opacity:.18;
+}
+.tf-photo-strip::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,transparent 40%,var(--cream) 100%);
+}
+
+.tf-content{position:relative;z-index:5;padding-left:10px;}
+
+.tf-top-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.tf-presenter{
+  font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--silver);
+  line-height:1.6;
+}
+.tf-cat-pill{
+  font-size:7px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:3px 10px;border:1px solid var(--silver-lt);color:var(--silver);
+  background:rgba(122,139,139,.06);
+}
+
+.tf-artist-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,4.5vw,38px);font-weight:900;
+  color:var(--ink);line-height:.95;
+  letter-spacing:1px;margin:4px 0;
+}
+.tf-artist-name span{
+  display:block;font-size:60%;font-weight:400;
+  font-style:italic;color:var(--silver);letter-spacing:3px;
+  margin-bottom:2px;
+}
+.tf-concert-name{
+  font-family:'Cormorant',serif;font-size:13px;font-style:italic;
+  color:var(--ink2);opacity:.65;letter-spacing:2px;margin-bottom:10px;
+}
+
+.tf-divider{
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--silver-lt) 30%,var(--silver-lt) 70%,transparent);
+  margin:8px 0;
+}
+
+.tf-details{display:flex;gap:20px;flex-wrap:wrap;}
+.tf-detail{display:flex;flex-direction:column;gap:1px;}
+.tf-detail-label{font-size:6.5px;letter-spacing:3px;text-transform:uppercase;color:var(--silver);line-height:1;}
+.tf-detail-value{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);line-height:1.2;}
+.tf-detail-sub{font-size:8px;letter-spacing:1px;color:rgba(26,18,8,.5);}
+
+.tf-bottom{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding-top:8px;position:relative;z-index:5;
+}
+.tf-serial{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(26,18,8,.3);}
+.tf-sponsor-strip{display:flex;gap:6px;align-items:center;}
+.tf-sponsor-box{
+  border:1px solid rgba(122,139,139,.3);padding:2px 7px;
+  font-size:6px;letter-spacing:1.5px;text-transform:uppercase;color:var(--silver);
+  background:rgba(122,139,139,.04);white-space:nowrap;
+}
+
+/* TEAR LINE */
+.tf-tear{
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 5px,rgba(122,139,139,.3) 5px,rgba(122,139,139,.3) 8px);
+  position:relative;
+}
+.tf-tear::before,.tf-tear::after{
+  content:'';position:absolute;left:50%;transform:translateX(-50%);
+  width:14px;height:14px;border-radius:50%;
+  background:#E8DFC8;
+  box-shadow:inset 0 0 0 1px rgba(122,139,139,.3);
+}
+.tf-tear::before{top:-7px;}
+.tf-tear::after{bottom:-7px;}
+
+/* STUB */
+.tf-stub{
+  background:var(--ivory);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:14px 12px;position:relative;overflow:hidden;
+}
+.tf-stub::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(122,139,139,.06),transparent);
+}
+.stub-artist{
+  font-family:'Playfair Display',serif;font-size:11px;font-weight:700;
+  color:var(--ink);text-align:center;letter-spacing:1px;position:relative;z-index:1;
+  line-height:1.2;
+}
+.stub-event{
+  font-size:7px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--silver);text-align:center;margin-top:2px;position:relative;z-index:1;
+}
+.stub-qr{
+  width:72px;height:72px;background:#fff;
+  border:1px solid rgba(122,139,139,.2);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+  box-shadow:0 2px 8px rgba(26,18,8,.08);
+}
+.stub-qr-label{
+  font-size:5.5px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--silver);text-align:center;line-height:1.6;position:relative;z-index:1;
+}
+.stub-qr-label strong{display:block;font-size:6.5px;color:var(--ink);letter-spacing:1px;}
+.stub-seat-row{
+  display:flex;gap:12px;position:relative;z-index:1;
+}
+.stub-seat-item{text-align:center;}
+.stub-seat-lbl{font-size:6px;letter-spacing:2px;text-transform:uppercase;color:var(--silver);display:block;}
+.stub-seat-val{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink);line-height:1;}
+.stub-num{font-family:'DM Mono',monospace;font-size:6px;letter-spacing:2px;color:rgba(26,18,8,.25);position:relative;z-index:1;}
+
+/* ══════════════════════════════════════════════════
+   GOLD VARIANT OVERRIDES
+══════════════════════════════════════════════════ */
+.tf-gold .tf-main::before{
+  background:
+    radial-gradient(ellipse 60% 80% at 10% 50%,rgba(184,134,11,.1),transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 23px,rgba(184,134,11,.04) 24px);
+}
+.tf-gold .tf-cat-pill{border-color:var(--gold);color:var(--gold);background:rgba(184,134,11,.05);}
+.tf-gold .tf-artist-name span{color:var(--gold);}
+.tf-gold .tf-divider{background:linear-gradient(to right,transparent,var(--gold) 30%,var(--gold) 70%,transparent);opacity:.35;}
+.tf-gold .tf-detail-value{color:var(--ink);}
+.tf-gold .tf-tear{background:repeating-linear-gradient(to bottom,transparent 0,transparent 5px,rgba(184,134,11,.35) 5px,rgba(184,134,11,.35) 8px);}
+.tf-gold .tf-stub{background:#FAF5E4;}
+.tf-gold .stub-artist,.tf-gold .stub-event{color:var(--ink);}
+.tf-gold .stub-seat-val{color:var(--gold);}
+.tf-gold .stub-num{color:rgba(184,134,11,.3);}
+.tf-gold .stub-qr-label strong{color:var(--gold);}
+
+/* ══════════════════════════════════════════════════
+   VIP VARIANT — DARK LUXURY
+══════════════════════════════════════════════════ */
+.tf-vip{
+  background:linear-gradient(160deg,#1c0e0e 0%,#100808 100%) !important;
+}
+.tf-vip .tf-main::before{
+  background:
+    radial-gradient(ellipse 60% 80% at 10% 50%,rgba(139,26,26,.2),transparent 60%),
+    radial-gradient(ellipse 40% 40% at 90% 80%,rgba(184,134,11,.08),transparent 50%),
+    repeating-linear-gradient(0deg,transparent,transparent 23px,rgba(139,26,26,.06) 24px);
+}
+.tf-vip .tf-presenter{color:rgba(197,40,42,.6);}
+.tf-vip .tf-cat-pill{border-color:var(--crimson);color:#E04444;background:rgba(139,26,26,.12);}
+.tf-vip .tf-artist-name{color:#FDEBD0;}
+.tf-vip .tf-artist-name span{color:rgba(197,40,42,.8);}
+.tf-vip .tf-concert-name{color:#FDEBD0;opacity:.6;}
+.tf-vip .tf-divider{background:linear-gradient(to right,transparent,var(--crimson) 30%,var(--crimson) 70%,transparent);opacity:.5;}
+.tf-vip .tf-detail-label{color:rgba(197,40,42,.6);}
+.tf-vip .tf-detail-value{color:#FDEBD0;}
+.tf-vip .tf-detail-sub{color:rgba(253,235,208,.4);}
+.tf-vip .tf-serial{color:rgba(197,40,42,.2);}
+.tf-vip .tf-sponsor-box{border-color:rgba(139,26,26,.4);color:rgba(197,40,42,.5);}
+.tf-vip .tf-tear{background:repeating-linear-gradient(to bottom,transparent 0,transparent 5px,rgba(139,26,26,.5) 5px,rgba(139,26,26,.5) 8px);}
+.tf-vip .tf-tear::before,.tf-vip .tf-tear::after{background:#1a1510;}
+.tf-vip .tf-stub{background:linear-gradient(160deg,#1a0a0a,#0e0606);}
+.tf-vip .stub-artist{color:#FDEBD0;}
+.tf-vip .stub-event{color:rgba(197,40,42,.6);}
+.tf-vip .stub-seat-val{color:#E04444;}
+.tf-vip .stub-seat-lbl{color:rgba(197,40,42,.5);}
+.tf-vip .stub-num{color:rgba(139,26,26,.3);}
+.tf-vip .stub-qr-label{color:rgba(197,40,42,.5);}
+.tf-vip .stub-qr-label strong{color:#E04444;}
+.tf-vip .stub-qr{background:#fdf6e3;border-color:rgba(139,26,26,.3);}
+
+/* ══════════════════════════════════════════════════
+   TICKET BACK SIDE
+══════════════════════════════════════════════════ */
+.ticket-back-face{
+  width:100%;height:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  font-family:'Josefin Sans',sans-serif;
+  border-radius:8px;overflow:hidden;
+  border:1px solid rgba(184,134,11,.2);
+}
+
+/* LEFT HALF — partial face slice */
+.back-face-slice{
+  position:relative;overflow:hidden;
+  background:var(--ink);
+}
+.back-face-slice img{
+  width:100%;height:100%;object-fit:cover;
+  object-position:center;
+  display:block;
+}
+/* Overlay with ticket number watermark */
+.back-face-slice::after{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to right,transparent 50%,rgba(253,250,243,.95) 100%),
+    linear-gradient(to bottom,rgba(26,18,8,.3),transparent 40%,transparent 60%,rgba(26,18,8,.3));
+  pointer-events:none;
+}
+.back-face-num{
+  position:absolute;top:12px;left:12px;z-index:5;
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;
+  color:rgba(255,255,255,.5);
+  background:rgba(0,0,0,.4);padding:3px 8px;border-radius:2px;
+}
+.back-mosaic-badge{
+  position:absolute;bottom:14px;left:12px;right:0;z-index:5;
+  font-size:7px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+  line-height:1.8;
+}
+.back-mosaic-badge strong{
+  display:block;font-size:8.5px;
+  color:var(--gold-lt);
+}
+
+/* RIGHT HALF — back info */
+.back-info{
+  background:var(--cream);
+  padding:18px 20px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.back-info::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 23px,rgba(184,134,11,.03) 24px);
+  pointer-events:none;
+}
+.back-info-section{position:relative;z-index:1;}
+.back-section-label{
+  font-size:7px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px;
+  display:flex;align-items:center;gap:8px;
+}
+.back-section-label::after{content:'';display:inline-block;width:20px;height:1px;background:var(--gold);opacity:.4;}
+.back-terms{
+  font-family:'Cormorant',serif;font-size:11px;font-style:italic;
+  color:rgba(26,18,8,.55);line-height:1.7;
+}
+.back-benefits{display:flex;flex-direction:column;gap:5px;}
+.back-benefit-item{
+  display:flex;align-items:flex-start;gap:7px;
+  font-size:9px;color:var(--ink2);line-height:1.5;
+  border-bottom:1px solid rgba(184,134,11,.1);
+  padding-bottom:4px;
+}
+.back-benefit-icon{color:var(--gold);flex-shrink:0;font-size:10px;margin-top:1px;}
+.back-mosaic-cta{
+  background:var(--ink);
+  padding:10px 14px;
+  display:flex;align-items:center;gap:10px;
+  position:relative;z-index:1;
+}
+.back-mosaic-icon{font-size:20px;}
+.back-mosaic-text{
+  font-size:8px;line-height:1.7;
+  color:rgba(245,230,163,.7);
+}
+.back-mosaic-text strong{
+  display:block;font-size:9px;color:var(--gold-lt);letter-spacing:1px;
+}
+
+/* Back side VIP overrides */
+.back-vip .back-info{background:linear-gradient(160deg,#1a0808,#110606);}
+.back-vip .back-section-label{color:#E04444;}
+.back-vip .back-section-label::after{background:#E04444;}
+.back-vip .back-terms{color:rgba(253,235,208,.45);}
+.back-vip .back-benefit-item{color:#FDEBD0;border-color:rgba(139,26,26,.2);}
+.back-vip .back-benefit-icon{color:#E04444;}
+.back-vip .back-mosaic-cta{background:rgba(139,26,26,.3);border:1px solid rgba(139,26,26,.4);}
+.back-vip .back-info::before{background:repeating-linear-gradient(0deg,transparent,transparent 23px,rgba(139,26,26,.06) 24px);}
+
+/* ══════════════════════════════════════════════════
+   MOSAIC WALL PAGE
+══════════════════════════════════════════════════ */
+.mosaic-page{background:#E8DFC8;min-height:100vh;}
+.mosaic-header{
+  background:var(--ink);
+  padding:40px 24px 32px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.mosaic-header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 100% at 50% 50%,rgba(139,26,26,.15),transparent 60%);
+}
+.mosaic-title{
+  font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,48px);font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt),var(--gold-pale),var(--gold-lt));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;letter-spacing:2px;position:relative;z-index:1;
+}
+.mosaic-subtitle{
+  font-family:'Cormorant',serif;font-size:16px;font-style:italic;
+  color:rgba(245,230,163,.6);margin-top:8px;letter-spacing:2px;
+  position:relative;z-index:1;
+}
+.mosaic-desc{
+  max-width:600px;margin:16px auto 0;font-size:12px;line-height:1.8;
+  color:rgba(245,230,163,.5);letter-spacing:.5px;
+  position:relative;z-index:1;
+}
+.mosaic-stats{
+  display:flex;justify-content:center;gap:40px;margin-top:24px;flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.mosaic-stat{text-align:center;}
+.mosaic-stat-num{
+  font-family:'Playfair Display',serif;font-size:28px;font-weight:900;
+  color:var(--gold-lt);line-height:1;
+}
+.mosaic-stat-lbl{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(245,230,163,.4);margin-top:3px;}
+
+.mosaic-grid-wrap{
+  max-width:900px;margin:40px auto;padding:0 20px;
+  position:relative;
+}
+.mosaic-grid-label{
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink2);
+  text-align:center;margin-bottom:12px;opacity:.5;
+}
+
+/* THE GRID */
+.mosaic-grid{
+  display:grid;
+  grid-template-columns:repeat(20,1fr);
+  gap:2px;
+  background:var(--ink);
+  padding:3px;
+  border-radius:4px;
+  box-shadow:0 20px 80px rgba(26,18,8,.3);
+  border:2px solid rgba(184,134,11,.3);
+  position:relative;
+}
+
+/* reference image behind grid */
+.mosaic-ref-img{
+  position:absolute;inset:3px;
+  border-radius:2px;overflow:hidden;
+  pointer-events:none;opacity:.08;z-index:0;
+}
+.mosaic-ref-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+.mosaic-cell{
+  aspect-ratio:1;
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  position:relative;z-index:1;
+  overflow:hidden;
+  transition:all .2s;
+  border:1px solid transparent;
+}
+.mosaic-cell:hover{
+  border-color:var(--gold);
+  z-index:10;
+  transform:scale(1.1);
+  box-shadow:0 0 12px rgba(184,134,11,.6);
+}
+.mosaic-cell.filled{
+  background:none;
+  border:none;
+}
+.mosaic-cell.filled img{width:100%;height:100%;object-fit:cover;display:block;}
+.mosaic-cell .cell-num{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4px;color:rgba(184,134,11,.3);
+  font-family:'DM Mono',monospace;
+}
+.mosaic-cell.filled .cell-num{display:none;}
+
+/* Upload modal */
+.upload-panel{
+  max-width:600px;margin:0 auto 48px;padding:0 20px;
+}
+.upload-card{
+  background:var(--cream);
+  border-radius:6px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.upload-title{
+  font-family:'Playfair Display',serif;font-size:22px;font-weight:700;
+  color:var(--ink);margin-bottom:4px;
+}
+.upload-sub{font-size:11px;color:rgba(26,18,8,.5);letter-spacing:.5px;line-height:1.7;margin-bottom:20px;}
+.upload-form{display:flex;flex-direction:column;gap:12px;}
+.upload-field{display:flex;flex-direction:column;gap:5px;}
+.upload-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+.upload-input{
+  border:1px solid rgba(184,134,11,.3);
+  padding:10px 14px;font-family:'Josefin Sans',sans-serif;font-size:12px;
+  color:var(--ink);background:var(--ivory);
+  outline:none;border-radius:2px;width:100%;
+  transition:border-color .2s;
+}
+.upload-input:focus{border-color:var(--gold);}
+.upload-submit{
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+  color:var(--ink);border:none;cursor:pointer;
+  padding:12px 28px;font-family:'Josefin Sans',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;border-radius:2px;
+  transition:all .2s;width:100%;
+}
+.upload-submit:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.upload-note{
+  font-size:9px;color:rgba(26,18,8,.4);letter-spacing:.5px;line-height:1.7;
+  margin-top:8px;text-align:center;font-style:italic;
+  font-family:'Cormorant',serif;
+}
+
+/* HOW IT WORKS */
+.how-section{max-width:900px;margin:0 auto 60px;padding:0 20px;}
+.how-title{
+  font-family:'Playfair Display',serif;font-size:24px;font-weight:700;
+  text-align:center;color:var(--ink);margin-bottom:24px;
+}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;}
+.how-step{
+  background:var(--cream);padding:20px;
+  border-radius:4px;border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.how-step-num{
+  font-family:'Playfair Display',serif;font-size:48px;font-weight:900;
+  color:rgba(184,134,11,.12);line-height:1;position:absolute;right:12px;top:4px;
+}
+.how-step-icon{font-size:22px;margin-bottom:8px;}
+.how-step-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--ink);margin-bottom:4px;}
+.how-step-desc{font-size:10px;color:rgba(26,18,8,.5);line-height:1.7;}
+
+/* Progress bar */
+.progress-section{max-width:900px;margin:0 auto 40px;padding:0 20px;}
+.progress-label{display:flex;justify-content:space-between;margin-bottom:8px;}
+.progress-label span{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(26,18,8,.5);}
+.progress-label strong{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);}
+.progress-bar{height:6px;background:rgba(26,18,8,.1);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(to right,var(--gold),var(--gold-lt));border-radius:3px;transition:width 1s ease;width:0%;}
+
+/* FAN WALL recent uploads */
+.recent-wall{max-width:900px;margin:0 auto 60px;padding:0 20px;}
+.recent-title{
+  font-family:'Playfair Display',serif;font-size:20px;font-weight:700;
+  color:var(--ink);margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.recent-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+.recent-card{
+  background:var(--cream);border-radius:4px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .2s,box-shadow .2s;cursor:pointer;
+}
+.recent-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(184,134,11,.2);}
+.recent-card-img{height:100px;overflow:hidden;position:relative;}
+.recent-card-img img{width:100%;height:100%;object-fit:cover;}
+.recent-card-img .cell-badge{
+  position:absolute;top:6px;left:6px;
+  background:var(--ink);color:var(--gold-lt);
+  font-family:'DM Mono',monospace;font-size:7px;padding:2px 6px;border-radius:2px;letter-spacing:1px;
+}
+.recent-card-info{padding:8px 10px;}
+.recent-card-handle{font-size:9px;font-weight:700;color:var(--ink);letter-spacing:.5px;}
+.recent-card-seat{font-size:8px;color:var(--gold);letter-spacing:1px;}
+
+/* ══════════════════════════════════════════════════
+   QR SVG (reusable)
+══════════════════════════════════════════════════ */
+.qr-svg{display:block;}
+
+/* ══════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════ */
+.gold-text{background:linear-gradient(135deg,var(--gold),var(--gold-lt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.section-spacer{height:40px;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+   TAB NAV
+══════════════════════════════════════════════ -->
+<div class="tabs-nav">
+  <button class="tab-btn active" onclick="switchTab('tickets',this)">🎫 &nbsp; Concert Tickets</button>
+  <button class="tab-btn" onclick="switchTab('mosaic',this)">🎨 &nbsp; Fan Mosaic Wall</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+   TAB 1: TICKETS
+══════════════════════════════════════════════ -->
+<div id="tab-tickets" class="tab-panel active">
+
+  <div class="page-header">
+    <div class="ph-label">18 April 2026 · Pune, Maharashtra</div>
+    <div class="ph-title">SWAR CHAITANYA</div>
+    <div class="ph-sub">Live in Concert — His First Ever</div>
+    <div class="ph-date">✦ Click Any Ticket To Flip & See Back Side ✦</div>
+  </div>
+
+  <div class="tickets-page">
+
+    <!-- ─────────────────────────────────
+         SILVER CATEGORY
+    ───────────────────────────────── -->
+    <div class="category-section">
+      <div class="cat-header">
+        <div class="cat-badge silver">Silver</div>
+        <div class="cat-title">General Admission</div>
+        <div class="cat-rule silver"></div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--silver);white-space:nowrap;">₹ 799</div>
+      </div>
+
+      <!-- FRONT -->
+      <div class="flip-hint">Click ticket to reveal back side</div>
+      <div class="ticket-flip-wrap">
+        <div class="ticket-flip" id="ticket-silver" onclick="flipTicket('ticket-silver')">
+          <!-- FRONT -->
+          <div class="ticket-face">
+            <div class="tf-silver" style="height:100%;">
+              <!-- Photo strip background -->
+              <div class="tf-main tf-content" style="position:relative;overflow:hidden;">
+                <div class="tf-photo-strip">
+                  <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-2.webp" alt="Chaitanya"/>
+                </div>
+                <div style="position:relative;z-index:5;display:flex;flex-direction:column;justify-content:space-between;height:100%;padding-left:8px;">
+                  <!-- TOP -->
+                  <div class="tf-top-row">
+                    <div class="tf-presenter">
+                      Presents<br>
+                      <span style="font-size:6px;color:rgba(122,139,139,.5);">Engage4More · Sony Entertainment</span>
+                    </div>
+                    <div class="tf-cat-pill">Silver · General</div>
+                  </div>
+                  <!-- ARTIST NAME -->
+                  <div style="padding:2px 0;">
+                    <div class="tf-artist-name">
+                      <span>Swar Chaitanya</span>
+                      CHAITANYA<br>DEVADHE
+                    </div>
+                    <div class="tf-concert-name">Live in Concert — His First Ever</div>
+                  </div>
+                  <!-- DETAILS -->
+                  <div>
+                    <div class="tf-divider"></div>
+                    <div class="tf-details">
+                      <div class="tf-detail">
+                        <span class="tf-detail-label">Date</span>
+                        <span class="tf-detail-value">18 APR 2026</span>
+                        <span class="tf-detail-sub">Saturday</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label">Venue</span>
+                        <span class="tf-detail-value" style="font-size:11px;">Nehru Memorial</span>
+                        <span class="tf-detail-sub">Pune, Maharashtra</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label">Gates Open</span>
+                        <span class="tf-detail-value">6:30 PM</span>
+                        <span class="tf-detail-sub">Show: 7:30 PM</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label">Price</span>
+                        <span class="tf-detail-value">₹ 799</span>
+                        <span class="tf-detail-sub">Inc. all taxes</span>
+                      </div>
+                    </div>
+                    <div class="tf-bottom" style="margin-top:10px;">
+                      <div class="tf-serial">SC·2026·GA·04721</div>
+                      <div class="tf-sponsor-strip">
+                        <div class="tf-sponsor-box">SPONSOR</div>
+                        <div class="tf-sponsor-box">SPONSOR</div>
+                        <div class="tf-sponsor-box" style="border-color:var(--silver);color:var(--silver);">TITLE SPONSOR</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-tear"></div>
+              <!-- STUB -->
+              <div class="tf-stub">
+                <div>
+                  <div class="stub-artist">Chaitanya<br>Devadhe</div>
+                  <div class="stub-event">Live 2026</div>
+                </div>
+                <div class="stub-qr">
+                  <svg width="64" height="64" viewBox="0 0 74 74" class="qr-svg">
+                    <rect width="74" height="74" fill="#FDF6E3"/>
+                    <rect x="4"  y="4"  width="21" height="21" fill="#1A1208" rx="2"/>
+                    <rect x="7"  y="7"  width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="10" y="10" width="9"  height="9"  fill="#1A1208" rx="1"/>
+                    <rect x="49" y="4"  width="21" height="21" fill="#1A1208" rx="2"/>
+                    <rect x="52" y="7"  width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="55" y="10" width="9"  height="9"  fill="#1A1208" rx="1"/>
+                    <rect x="4"  y="49" width="21" height="21" fill="#1A1208" rx="2"/>
+                    <rect x="7"  y="52" width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="10" y="55" width="9"  height="9"  fill="#1A1208" rx="1"/>
+                    <g fill="#1A1208">
+                      <rect x="28" y="4"  width="4" height="4"/><rect x="36" y="4"  width="4" height="4"/><rect x="44" y="4"  width="4" height="4"/>
+                      <rect x="28" y="10" width="4" height="4"/><rect x="44" y="10" width="4" height="4"/>
+                      <rect x="36" y="16" width="4" height="4"/><rect x="44" y="16" width="4" height="4"/>
+                      <rect x="4"  y="28" width="4" height="4"/><rect x="12" y="28" width="4" height="4"/><rect x="28" y="28" width="4" height="4"/>
+                      <rect x="36" y="28" width="4" height="4"/><rect x="52" y="28" width="4" height="4"/><rect x="60" y="28" width="4" height="4"/>
+                      <rect x="68" y="28" width="4" height="4"/><rect x="28" y="36" width="4" height="4"/><rect x="44" y="36" width="4" height="4"/>
+                      <rect x="52" y="36" width="4" height="4"/><rect x="28" y="44" width="4" height="4"/><rect x="60" y="44" width="4" height="4"/>
+                      <rect x="36" y="52" width="4" height="4"/><rect x="52" y="52" width="4" height="4"/>
+                      <rect x="28" y="60" width="4" height="4"/><rect x="44" y="60" width="4" height="4"/><rect x="68" y="60" width="4" height="4"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="stub-qr-label"><strong>Sponsor Offers</strong>Scan to unlock<br>ticket benefits</div>
+                <div class="stub-seat-row">
+                  <div class="stub-seat-item"><span class="stub-seat-lbl">Block</span><span class="stub-seat-val">D</span></div>
+                  <div style="width:1px;height:24px;background:rgba(122,139,139,.25);align-self:center;"></div>
+                  <div class="stub-seat-item"><span class="stub-seat-lbl">Row</span><span class="stub-seat-val">12</span></div>
+                  <div style="width:1px;height:24px;background:rgba(122,139,139,.25);align-self:center;"></div>
+                  <div class="stub-seat-item"><span class="stub-seat-lbl">Seat</span><span class="stub-seat-val">21</span></div>
+                </div>
+                <div class="stub-num">SC·GA·04721</div>
+              </div>
+            </div>
+          </div>
+          <!-- BACK -->
+          <div class="ticket-back">
+            <div class="ticket-back-face">
+              <div class="back-face-slice">
+                <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-1.webp" alt="Chaitanya mosaic tile" style="object-position:35% top;"/>
+                <div class="back-face-num">TILE #04721</div>
+                <div class="back-mosaic-badge">
+                  <strong>🧩 YOUR PIECE OF HISTORY</strong>
+                  You hold tile #04721 of<br>Chaitanya's face mosaic
+                </div>
+              </div>
+              <div class="back-info">
+                <div class="back-info-section">
+                  <div class="back-section-label">Ticket Benefits</div>
+                  <div class="back-benefits">
+                    <div class="back-benefit-item"><span class="back-benefit-icon">✓</span>General Admission — Block D</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon">✓</span>10% off at merchandise counter</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon">✓</span>Sponsor exclusive offers (scan QR)</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon">✓</span>1 complimentary digital souvenir</div>
+                  </div>
+                </div>
+                <div class="back-info-section" style="margin-top:10px;">
+                  <div class="back-section-label">Fan Mosaic</div>
+                  <div class="back-terms">Upload your ticket photo on Instagram with <strong>#SwarchaitanyaMosaic</strong> to place your tile in the giant fan wall.</div>
+                </div>
+                <div class="back-mosaic-cta">
+                  <div class="back-mosaic-icon">🎨</div>
+                  <div class="back-mosaic-text">
+                    <strong>COMPLETE THE FACE</strong>
+                    Tag @chaitanya_devadhe_offical<br>Your tile builds his portrait
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="share-btns">
+        <button class="share-btn insta" onclick="shareInsta('Silver')">📸 Share on Instagram</button>
+        <button class="share-btn copy" onclick="copyTicketLink('SC·2026·GA·04721')">🔗 Copy Ticket Link</button>
+        <button class="share-btn download" onclick="alert('In production: downloads as PNG optimised for Instagram Stories (1080×1920)')">⬇ Download for Story</button>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────
+         GOLD CATEGORY
+    ───────────────────────────────── -->
+    <div class="category-section">
+      <div class="cat-header">
+        <div class="cat-badge gold">Gold</div>
+        <div class="cat-title">Premium Standing</div>
+        <div class="cat-rule gold"></div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);white-space:nowrap;">₹ 1,499</div>
+      </div>
+
+      <div class="flip-hint">Click ticket to reveal back side</div>
+      <div class="ticket-flip-wrap">
+        <div class="ticket-flip" id="ticket-gold" onclick="flipTicket('ticket-gold')">
+          <div class="ticket-face">
+            <div class="tf-silver tf-gold" style="height:100%;background:#FAF6E8;">
+              <div class="tf-main tf-content" style="position:relative;overflow:hidden;">
+                <div class="tf-photo-strip">
+                  <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-4.webp" alt="Chaitanya Gold"/>
+                </div>
+                <div style="position:relative;z-index:5;display:flex;flex-direction:column;justify-content:space-between;height:100%;padding-left:8px;">
+                  <div class="tf-top-row">
+                    <div class="tf-presenter" style="color:var(--gold);">
+                      Presents<br>
+                      <span style="font-size:6px;color:rgba(184,134,11,.45);">Engage4More · Sony Entertainment</span>
+                    </div>
+                    <div class="tf-cat-pill" style="border-color:var(--gold);color:var(--gold);background:rgba(184,134,11,.06);">Gold · Premium</div>
+                  </div>
+                  <div style="padding:2px 0;">
+                    <div class="tf-artist-name" style="color:var(--ink);">
+                      <span style="color:var(--gold);">Swar Chaitanya</span>
+                      CHAITANYA<br>DEVADHE
+                    </div>
+                    <div class="tf-concert-name">Live in Concert — His First Ever</div>
+                  </div>
+                  <div>
+                    <div class="tf-divider" style="background:linear-gradient(to right,transparent,var(--gold) 30%,var(--gold) 70%,transparent);opacity:.35;"></div>
+                    <div class="tf-details">
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:var(--gold);">Date</span>
+                        <span class="tf-detail-value">18 APR 2026</span>
+                        <span class="tf-detail-sub">Saturday</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:var(--gold);">Venue</span>
+                        <span class="tf-detail-value" style="font-size:11px;">Nehru Memorial</span>
+                        <span class="tf-detail-sub">Pune, Maharashtra</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:var(--gold);">Gates Open</span>
+                        <span class="tf-detail-value">6:00 PM</span>
+                        <span class="tf-detail-sub">Show: 7:30 PM</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:var(--gold);">Price</span>
+                        <span class="tf-detail-value" style="color:var(--gold);">₹ 1,499</span>
+                        <span class="tf-detail-sub">Inc. all taxes</span>
+                      </div>
+                    </div>
+                    <div class="tf-bottom" style="margin-top:10px;">
+                      <div class="tf-serial" style="color:rgba(184,134,11,.3);">SC·2026·GOLD·02189</div>
+                      <div class="tf-sponsor-strip">
+                        <div class="tf-sponsor-box" style="border-color:rgba(184,134,11,.3);color:var(--gold);">SPONSOR</div>
+                        <div class="tf-sponsor-box" style="border-color:rgba(184,134,11,.3);color:var(--gold);">SPONSOR</div>
+                        <div class="tf-sponsor-box" style="border-color:var(--gold);color:var(--gold);background:rgba(184,134,11,.08);">TITLE SPONSOR</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-tear" style="background:repeating-linear-gradient(to bottom,transparent 0,transparent 5px,rgba(184,134,11,.35) 5px,rgba(184,134,11,.35) 8px);"></div>
+              <div class="tf-stub" style="background:#FAF5E4;">
+                <div>
+                  <div class="stub-artist">Chaitanya<br>Devadhe</div>
+                  <div class="stub-event" style="color:var(--gold);">Live 2026</div>
+                </div>
+                <div class="stub-qr">
+                  <svg width="64" height="64" viewBox="0 0 74 74" class="qr-svg">
+                    <rect width="74" height="74" fill="#FDF6E3"/>
+                    <rect x="4"  y="4"  width="21" height="21" fill="#B8860B" rx="2"/>
+                    <rect x="7"  y="7"  width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="10" y="10" width="9"  height="9"  fill="#B8860B" rx="1"/>
+                    <rect x="49" y="4"  width="21" height="21" fill="#B8860B" rx="2"/>
+                    <rect x="52" y="7"  width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="55" y="10" width="9"  height="9"  fill="#B8860B" rx="1"/>
+                    <rect x="4"  y="49" width="21" height="21" fill="#B8860B" rx="2"/>
+                    <rect x="7"  y="52" width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="10" y="55" width="9"  height="9"  fill="#B8860B" rx="1"/>
+                    <g fill="#B8860B">
+                      <rect x="28" y="4"  width="4" height="4"/><rect x="44" y="4"  width="4" height="4"/>
+                      <rect x="28" y="10" width="4" height="4"/><rect x="36" y="10" width="4" height="4"/>
+                      <rect x="36" y="16" width="4" height="4"/><rect x="44" y="16" width="4" height="4"/>
+                      <rect x="4"  y="28" width="4" height="4"/><rect x="20" y="28" width="4" height="4"/><rect x="36" y="28" width="4" height="4"/>
+                      <rect x="44" y="28" width="4" height="4"/><rect x="60" y="28" width="4" height="4"/>
+                      <rect x="36" y="36" width="4" height="4"/><rect x="52" y="36" width="4" height="4"/><rect x="60" y="36" width="4" height="4"/>
+                      <rect x="28" y="44" width="4" height="4"/><rect x="44" y="44" width="4" height="4"/>
+                      <rect x="28" y="52" width="4" height="4"/><rect x="52" y="52" width="4" height="4"/><rect x="60" y="52" width="4" height="4"/>
+                      <rect x="36" y="60" width="4" height="4"/><rect x="52" y="60" width="4" height="4"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="stub-qr-label" style="color:rgba(184,134,11,.5);"><strong style="color:var(--gold);">Sponsor Offers</strong>Premium benefits<br>await you</div>
+                <div class="stub-seat-row">
+                  <div class="stub-seat-item"><span class="stub-seat-lbl" style="color:rgba(184,134,11,.5);">Block</span><span class="stub-seat-val" style="color:var(--gold);">B</span></div>
+                  <div style="width:1px;height:24px;background:rgba(184,134,11,.2);align-self:center;"></div>
+                  <div class="stub-seat-item"><span class="stub-seat-lbl" style="color:rgba(184,134,11,.5);">Row</span><span class="stub-seat-val" style="color:var(--gold);">5</span></div>
+                  <div style="width:1px;height:24px;background:rgba(184,134,11,.2);align-self:center;"></div>
+                  <div class="stub-seat-item"><span class="stub-seat-lbl" style="color:rgba(184,134,11,.5);">Seat</span><span class="stub-seat-val" style="color:var(--gold);">08</span></div>
+                </div>
+                <div class="stub-num" style="color:rgba(184,134,11,.25);">SC·GOLD·02189</div>
+              </div>
+            </div>
+          </div>
+          <!-- GOLD BACK -->
+          <div class="ticket-back">
+            <div class="ticket-back-face" style="border-color:rgba(184,134,11,.35);">
+              <div class="back-face-slice">
+                <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-5.webp" alt="Chaitanya Gold tile" style="object-position:60% top;"/>
+                <div class="back-face-num" style="color:rgba(255,215,100,.6);background:rgba(0,0,0,.5);">TILE #02189</div>
+                <div class="back-mosaic-badge">
+                  <strong style="color:var(--gold-lt);">🧩 YOUR PIECE OF HISTORY</strong>
+                  You hold tile #02189 of<br>Chaitanya's face mosaic
+                </div>
+              </div>
+              <div class="back-info" style="background:#FAF5E4;">
+                <div class="back-info-section">
+                  <div class="back-section-label">Gold Benefits</div>
+                  <div class="back-benefits">
+                    <div class="back-benefit-item"><span class="back-benefit-icon" style="color:var(--gold);">✓</span>Premium Block B — Closer to Stage</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon" style="color:var(--gold);">✓</span>Free merchandise: keychain + lanyard</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon" style="color:var(--gold);">✓</span>Priority entry from Gate 1</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon" style="color:var(--gold);">✓</span>Sponsor exclusive deals (scan QR)</div>
+                    <div class="back-benefit-item"><span class="back-benefit-icon" style="color:var(--gold);">✓</span>2 complimentary digital souvenirs</div>
+                  </div>
+                </div>
+                <div class="back-info-section" style="margin-top:8px;">
+                  <div class="back-section-label">Fan Mosaic</div>
+                  <div class="back-terms" style="color:rgba(26,18,8,.55);">Post your ticket on Instagram with <strong>#SwarchaitanyaMosaic</strong> — Gold tiles unlock a special shimmering gold effect on the wall!</div>
+                </div>
+                <div class="back-mosaic-cta" style="background:var(--ink);">
+                  <div class="back-mosaic-icon">✨</div>
+                  <div class="back-mosaic-text">
+                    <strong style="color:var(--gold-lt);">GOLD TILE — SPECIAL GLOW</strong>
+                    Your tile glows gold on the mosaic<br>@chaitanya_devadhe_offical
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="share-btns">
+        <button class="share-btn insta" onclick="shareInsta('Gold')">📸 Share on Instagram</button>
+        <button class="share-btn copy" onclick="copyTicketLink('SC·2026·GOLD·02189')">🔗 Copy Ticket Link</button>
+        <button class="share-btn download" onclick="alert('Downloads as PNG for Instagram Stories')">⬇ Download for Story</button>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────
+         VIP CATEGORY
+    ───────────────────────────────── -->
+    <div class="category-section">
+      <div class="cat-header">
+        <div class="cat-badge vip">VIP</div>
+        <div class="cat-title">Platinum Experience</div>
+        <div class="cat-rule vip"></div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--crimson);white-space:nowrap;">₹ 4,999</div>
+      </div>
+
+      <div class="flip-hint">Click ticket to reveal back side</div>
+      <div class="ticket-flip-wrap">
+        <div class="ticket-flip" id="ticket-vip" onclick="flipTicket('ticket-vip')">
+          <div class="ticket-face">
+            <div class="tf-silver tf-vip" style="height:100%;">
+              <div class="tf-main tf-content" style="position:relative;overflow:hidden;">
+                <div class="tf-photo-strip">
+                  <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-6.webp" alt="Chaitanya VIP" style="opacity:.3;"/>
+                </div>
+                <!-- Red top strip -->
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent,var(--crimson),#E04444,var(--crimson),transparent);z-index:10;"></div>
+                <div style="position:relative;z-index:5;display:flex;flex-direction:column;justify-content:space-between;height:100%;padding-left:8px;padding-top:6px;">
+                  <div class="tf-top-row">
+                    <div class="tf-presenter" style="color:rgba(224,68,68,.6);">
+                      VIP EXPERIENCE<br>
+                      <span style="font-size:6px;color:rgba(197,40,42,.4);">Backstage · Meet &amp; Greet · Front Row</span>
+                    </div>
+                    <div class="tf-cat-pill" style="border-color:var(--crimson);color:#E04444;background:rgba(139,26,26,.15);">VIP · Platinum</div>
+                  </div>
+                  <div style="padding:2px 0;">
+                    <div class="tf-artist-name" style="color:#FDEBD0;">
+                      <span style="color:rgba(224,68,68,.8);">Swar Chaitanya</span>
+                      CHAITANYA<br>DEVADHE
+                    </div>
+                    <div class="tf-concert-name" style="color:#FDEBD0;opacity:.55;">Live in Concert — His First Ever</div>
+                  </div>
+                  <div>
+                    <div class="tf-divider" style="background:linear-gradient(to right,transparent,var(--crimson) 30%,var(--crimson) 70%,transparent);opacity:.5;"></div>
+                    <div class="tf-details">
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:rgba(197,40,42,.6);">Date</span>
+                        <span class="tf-detail-value" style="color:#FDEBD0;">18 APR 2026</span>
+                        <span class="tf-detail-sub" style="color:rgba(253,235,208,.4);">Saturday</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:rgba(197,40,42,.6);">Venue</span>
+                        <span class="tf-detail-value" style="color:#FDEBD0;font-size:11px;">Nehru Memorial</span>
+                        <span class="tf-detail-sub" style="color:rgba(253,235,208,.4);">Pune, Maharashtra</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:rgba(197,40,42,.6);">VIP Entry</span>
+                        <span class="tf-detail-value" style="color:#FDEBD0;">5:00 PM</span>
+                        <span class="tf-detail-sub" style="color:rgba(253,235,208,.4);">Show: 7:30 PM</span>
+                      </div>
+                      <div class="tf-detail">
+                        <span class="tf-detail-label" style="color:rgba(197,40,42,.6);">Price</span>
+                        <span class="tf-detail-value" style="color:#E04444;">₹ 4,999</span>
+                        <span class="tf-detail-sub" style="color:rgba(253,235,208,.4);">All inclusive</span>
+                      </div>
+                    </div>
+                    <div class="tf-bottom" style="margin-top:10px;">
+                      <div class="tf-serial" style="color:rgba(139,26,26,.3);">SC·2026·VIP·00047</div>
+                      <div class="tf-sponsor-strip">
+                        <div class="tf-sponsor-box" style="border-color:rgba(139,26,26,.4);color:rgba(197,40,42,.5);">SPONSOR</div>
+                        <div class="tf-sponsor-box" style="border-color:rgba(139,26,26,.4);color:rgba(197,40,42,.5);">SPONSOR</div>
+                        <div class="tf-sponsor-box" style="border-color:rgba(197,40,42,.6);color:#E04444;background:rgba(139,26,26,.12);">TITLE SPONSOR</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-tear" style="background:repeating-linear-gradient(to bottom,transparent 0,transparent 5px,rgba(139,26,26,.5) 5px,rgba(139,26,26,.5) 8px);"></div>
+              <div class="tf-stub" style="background:linear-gradient(160deg,#1a0a0a,#0e0606);">
+                <div>
+                  <div class="stub-artist" style="color:#FDEBD0;">Chaitanya<br>Devadhe</div>
+                  <div class="stub-event" style="color:rgba(197,40,42,.6);">VIP · 2026</div>
+                </div>
+                <div class="stub-qr" style="background:#fdf6e3;border-color:rgba(139,26,26,.3);">
+                  <svg width="64" height="64" viewBox="0 0 74 74" class="qr-svg">
+                    <rect width="74" height="74" fill="#FDF6E3"/>
+                    <rect x="4"  y="4"  width="21" height="21" fill="#8B1A1A" rx="2"/>
+                    <rect x="7"  y="7"  width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="10" y="10" width="9"  height="9"  fill="#8B1A1A" rx="1"/>
+                    <rect x="49" y="4"  width="21" height="21" fill="#8B1A1A" rx="2"/>
+                    <rect x="52" y="7"  width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="55" y="10" width="9"  height="9"  fill="#8B1A1A" rx="1"/>
+                    <rect x="4"  y="49" width="21" height="21" fill="#8B1A1A" rx="2"/>
+                    <rect x="7"  y="52" width="15" height="15" fill="#FDF6E3" rx="1"/>
+                    <rect x="10" y="55" width="9"  height="9"  fill="#8B1A1A" rx="1"/>
+                    <g fill="#8B1A1A">
+                      <rect x="28" y="4"  width="4" height="4"/><rect x="36" y="4"  width="4" height="4"/>
+                      <rect x="44" y="10" width="4" height="4"/><rect x="28" y="16" width="4" height="4"/>
+                      <rect x="4"  y="28" width="4" height="4"/><rect x="12" y="28" width="4" height="4"/><rect x="28" y="28" width="4" height="4"/>
+                      <rect x="44" y="28" width="4" height="4"/><rect x="52" y="28" width="4" height="4"/>
+                      <rect x="28" y="36" width="4" height="4"/><rect x="36" y="36" width="4" height="4"/><rect x="60" y="36" width="4" height="4"/>
+                      <rect x="28" y="44" width="4" height="4"/><rect x="52" y="44" width="4" height="4"/>
+                      <rect x="28" y="52" width="4" height="4"/><rect x="44" y="52" width="4" height="4"/>
+                      <rect x="36" y="60" width="4" height="4"/><rect x="52" y="60" width="4" height="4"/><rect x="68" y="60" width="4" height="4"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="stub-qr-label" style="color:rgba(197,40,42,.5);"><strong style="color:#E04444;">VIP Offers</strong>Backstage pass &amp;<br>exclusive perks</div>
+                <div class="stub-seat-row">
+                  <div class="stub-seat-item"><span class="stub-seat-lbl" style="color:rgba(197,40,42,.5);">Row</span><span class="stub-seat-val" style="color:#E04444;">A</span></div>
+                  <div style="width:1px;height:24px;background:rgba(139,26,26,.3);align-self:center;"></div>
+                  <div class="stub-seat-item"><span class="stub-seat-lbl" style="color:rgba(197,40,42,.5);">Seat</span><span class="stub-seat-val" style="color:#E04444;">02</span></div>
+                  <div style="width:1px;height:24px;background:rgba(139,26,26,.3);align-self:center;"></div>
+                  <div class="stub-seat-item"><span class="stub-seat-lbl" style="color:rgba(197,40,42,.5);">Gate</span><span class="stub-seat-val" style="color:#E04444;">VIP</span></div>
+                </div>
+                <div class="stub-num" style="color:rgba(139,26,26,.3);">SC·VIP·00047</div>
+              </div>
+            </div>
+          </div>
+          <!-- VIP BACK -->
+          <div class="ticket-back">
+            <div class="ticket-back-face back-vip" style="border-color:rgba(139,26,26,.4);">
+              <div class="back-face-slice">
+                <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-3.webp" alt="Chaitanya VIP tile" style="object-position:50% 20%;"/>
+                <div class="back-face-num" style="color:rgba(224,68,68,.7);background:rgba(0,0,0,.6);">VIP TILE #00047</div>
+                <div class="back-mosaic-badge">
+                  <strong style="color:#E04444;">👑 RARE VIP TILE</strong>
+                  One of only 100 VIP tiles<br>in Chaitanya's mosaic
+                </div>
+              </div>
+              <div class="back-info" style="background:linear-gradient(160deg,#1a0808,#110606);">
+                <div class="back-info-section">
+                  <div class="back-section-label" style="color:#E04444;">VIP Exclusive Benefits</div>
+                  <div class="back-benefits">
+                    <div class="back-benefit-item" style="color:#FDEBD0;border-color:rgba(139,26,26,.2);"><span class="back-benefit-icon" style="color:#E04444;">★</span>Front Row A — Best seats in house</div>
+                    <div class="back-benefit-item" style="color:#FDEBD0;border-color:rgba(139,26,26,.2);"><span class="back-benefit-icon" style="color:#E04444;">★</span>Exclusive backstage meet &amp; greet</div>
+                    <div class="back-benefit-item" style="color:#FDEBD0;border-color:rgba(139,26,26,.2);"><span class="back-benefit-icon" style="color:#E04444;">★</span>Signed poster + premium merchandise</div>
+                    <div class="back-benefit-item" style="color:#FDEBD0;border-color:rgba(139,26,26,.2);"><span class="back-benefit-icon" style="color:#E04444;">★</span>Sponsor VIP lounge access</div>
+                    <div class="back-benefit-item" style="color:#FDEBD0;border-color:rgba(139,26,26,.2);"><span class="back-benefit-icon" style="color:#E04444;">★</span>Photo op with Chaitanya Devadhe</div>
+                  </div>
+                </div>
+                <div class="back-info-section" style="margin-top:8px;">
+                  <div class="back-section-label" style="color:#E04444;">Fan Mosaic</div>
+                  <div class="back-terms" style="color:rgba(253,235,208,.45);">Your VIP tile pulses with a red glow on the fan wall. Upload with <strong style="color:#E04444;">#SwarchaitanyaMosaic</strong> for a special VIP frame.</div>
+                </div>
+                <div class="back-mosaic-cta" style="background:rgba(139,26,26,.25);border:1px solid rgba(139,26,26,.4);">
+                  <div class="back-mosaic-icon">👑</div>
+                  <div class="back-mosaic-text">
+                    <strong style="color:#E04444;">RARE VIP TILE — GLOWING RED</strong>
+                    Only 100 VIP tiles exist.<br>Yours is one of them.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="share-btns">
+        <button class="share-btn insta" onclick="shareInsta('VIP')">📸 Share on Instagram</button>
+        <button class="share-btn copy" onclick="copyTicketLink('SC·2026·VIP·00047')">🔗 Copy Ticket Link</button>
+        <button class="share-btn download" onclick="alert('Downloads as PNG for Instagram Stories')">⬇ Download for Story</button>
+      </div>
+    </div>
+
+  </div><!-- /tickets-page -->
+</div><!-- /tab-tickets -->
+
+<!-- ══════════════════════════════════════════════
+   TAB 2: FAN MOSAIC WALL
+══════════════════════════════════════════════ -->
+<div id="tab-mosaic" class="tab-panel">
+  <div class="mosaic-page">
+
+    <div class="mosaic-header">
+      <div class="ph-label" style="position:relative;z-index:1;">The Fan Project</div>
+      <div class="mosaic-title">COMPLETE<br>THE FACE</div>
+      <div class="mosaic-subtitle">Every ticket is a piece of Chaitanya's portrait</div>
+      <div class="mosaic-desc">Each of the <strong style="color:var(--gold-lt);">400 tickets sold</strong> corresponds to one tile in this 20×20 mosaic. Upload your ticket photo to Instagram with <strong style="color:var(--gold-lt);">#SwarchaitanyaMosaic</strong>, paste the link below, and watch your piece appear — completing his face, tile by tile.</div>
+      <div class="mosaic-stats">
+        <div class="mosaic-stat"><div class="mosaic-stat-num" id="tiles-filled">47</div><div class="mosaic-stat-lbl">Tiles Placed</div></div>
+        <div class="mosaic-stat"><div class="mosaic-stat-num">400</div><div class="mosaic-stat-lbl">Total Tiles</div></div>
+        <div class="mosaic-stat"><div class="mosaic-stat-num" id="pct-done">11.75%</div><div class="mosaic-stat-lbl">Complete</div></div>
+        <div class="mosaic-stat"><div class="mosaic-stat-num">353</div><div class="mosaic-stat-lbl">Tiles Remaining</div></div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-section" style="margin-top:40px;">
+      <div class="how-title">How It Works</div>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">1</div>
+          <div class="how-step-icon">🎫</div>
+          <div class="how-step-title">Buy Your Ticket</div>
+          <div class="how-step-desc">Each ticket has a unique tile number printed on the back — your personal piece of the mosaic.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">2</div>
+          <div class="how-step-icon">📸</div>
+          <div class="how-step-title">Snap & Post</div>
+          <div class="how-step-desc">Photograph your ticket and post it on Instagram with <strong>#SwarchaitanyaMosaic</strong> and your tile number.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">3</div>
+          <div class="how-step-icon">🔗</div>
+          <div class="how-step-title">Link Your Post</div>
+          <div class="how-step-desc">Paste your Instagram post URL below. Your photo loads into the exact tile position on the mosaic.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">4</div>
+          <div class="how-step-icon">🧩</div>
+          <div class="how-step-title">Complete the Face</div>
+          <div class="how-step-desc">As 400 fans upload, Chaitanya's portrait emerges tile by tile — a collective fan artwork.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">5</div>
+          <div class="how-step-icon">🎁</div>
+          <div class="how-step-title">Win Rewards</div>
+          <div class="how-step-desc">The fan who completes the final tile wins a signed guitar + free tickets to next year's concert!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Mosaic Progress</span>
+        <strong>47 / 400 tiles</strong>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:11.75%;"></div>
+      </div>
+    </div>
+
+    <!-- THE MOSAIC GRID -->
+    <div class="mosaic-grid-wrap">
+      <div class="mosaic-grid-label">↓ Click any empty tile to add your photo ↓</div>
+      <div class="mosaic-grid" id="mosaicGrid">
+        <!-- Ghost reference image -->
+        <div class="mosaic-ref-img">
+          <img src="https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-1.webp" alt="Chaitanya reference"/>
+        </div>
+        <!-- Grid cells generated by JS -->
+      </div>
+    </div>
+
+    <!-- UPLOAD PANEL -->
+    <div class="upload-panel">
+      <div class="upload-card">
+        <div class="upload-title">🎨 Place Your Tile</div>
+        <div class="upload-sub">Enter your ticket number, Instagram post URL, and handle to add your piece to the mosaic. Your photo will appear at the exact position your ticket corresponds to.</div>
+        <div class="upload-form">
+          <div class="upload-field">
+            <label class="upload-label">Ticket Number</label>
+            <input class="upload-input" type="text" id="ticketNumInput" placeholder="e.g. SC·2026·GOLD·02189" />
+          </div>
+          <div class="upload-field">
+            <label class="upload-label">Instagram Photo URL</label>
+            <input class="upload-input" type="url" id="instaUrlInput" placeholder="https://instagram.com/p/your-post-id or direct image URL" />
+          </div>
+          <div class="upload-field">
+            <label class="upload-label">Your Instagram Handle</label>
+            <input class="upload-input" type="text" id="handleInput" placeholder="@yourhandle" />
+          </div>
+          <div class="upload-field">
+            <label class="upload-label">Direct Image URL (for preview)</label>
+            <input class="upload-input" type="url" id="imgUrlInput" placeholder="Direct .jpg or .webp image URL to display in your tile" />
+          </div>
+          <button class="upload-submit" onclick="placeTile()">🧩 Place My Tile on the Mosaic</button>
+          <div class="upload-note">Your Instagram handle will be credited on the fan wall. By submitting you agree that your post is publicly visible and you are the ticket holder.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT UPLOADS -->
+    <div class="recent-wall">
+      <div class="recent-title">Recent Fan Tiles</div>
+      <div class="recent-grid" id="recentGrid">
+        <!-- Populated by JS with demo tiles -->
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:20px 20px 60px;font-family:'Cormorant',serif;font-size:14px;font-style:italic;color:rgba(26,18,8,.4);">
+      When all 400 tiles are placed, this page becomes a permanent artwork — Chaitanya's face, built entirely by his fans. ✦
+    </div>
+
+  </div>
+</div><!-- /tab-mosaic -->
+
+<script>
+/* ══════════════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════════════ */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════
+   TICKET FLIP
+══════════════════════════════════════════════ */
+function flipTicket(id) {
+  document.getElementById(id).classList.toggle('flipped');
+}
+
+/* ══════════════════════════════════════════════
+   SHARE / COPY
+══════════════════════════════════════════════ */
+function shareInsta(cat) {
+  const text = `🎤 Just got my ${cat} ticket for @chaitanya_devadhe_offical's FIRST EVER live concert!\n\n📅 18 April 2026 · Nehru Memorial Hall, Pune\n🧩 My tile is part of the #SwarchaitanyaMosaic fan wall!\n\n#SwarchaitanyaLive #SwarChaitanya #ChaitanyaDevadhe #IndianIdol15 #ConcertTicket`;
+  if (navigator.share) {
+    navigator.share({ title: 'My Concert Ticket', text });
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('📋 Caption copied! Paste when posting on Instagram');
+    });
+  }
+}
+function copyTicketLink(num) {
+  const url = `https://swarchaitanya.com/ticket/${num}`;
+  navigator.clipboard.writeText(url).then(() => showToast('🔗 Ticket link copied: ' + num));
+}
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#1A1208;color:#F2D675;padding:12px 24px;border-radius:4px;font-family:Josefin Sans,sans-serif;font-size:12px;letter-spacing:1px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.4);border:1px solid rgba(184,134,11,.4);';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+/* ══════════════════════════════════════════════
+   MOSAIC GRID GENERATION
+══════════════════════════════════════════════ */
+const COLS = 20, ROWS = 20, TOTAL = COLS * ROWS;
+// Pre-filled demo tiles with actual fan images (using CDN images as placeholders)
+const DEMO_TILES = {
+  5:  { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-2.webp', handle:'@mahesh_fan', num:'SC·GA·00005' },
+  12: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-4.webp', handle:'@priya_pune',  num:'SC·GOLD·00012' },
+  23: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-5.webp', handle:'@rajan_m',     num:'SC·GA·00023' },
+  38: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-6.webp', handle:'@alandi_fan',  num:'SC·GA·00038' },
+  47: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-3.webp', handle:'@varkari_dev', num:'SC·VIP·00047' },
+  61: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-1.webp', handle:'@sony_fan99',  num:'SC·GOLD·00061' },
+  74: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-2.webp', handle:'@mauli_fan',   num:'SC·GA·00074' },
+  89: { img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-4.webp', handle:'@pune_music',  num:'SC·GA·00089' },
+  102:{ img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-5.webp', handle:'@idol15fan',   num:'SC·GOLD·00102'},
+  115:{ img:'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-6.webp', handle:'@bhajan_lover',num:'SC·GA·00115' },
+};
+
+const tileData = { ...DEMO_TILES };
+let filledCount = Object.keys(tileData).length;
+
+function buildGrid() {
+  const grid = document.getElementById('mosaicGrid');
+  // Keep the reference image div
+  const refImg = grid.querySelector('.mosaic-ref-img');
+  grid.innerHTML = '';
+  grid.appendChild(refImg);
+
+  for (let i = 0; i < TOTAL; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'mosaic-cell';
+    cell.dataset.idx = i;
+    cell.title = `Tile #${String(i+1).padStart(5,'0')}`;
+
+    if (tileData[i]) {
+      cell.classList.add('filled');
+      const img = document.createElement('img');
+      img.src = tileData[i].img;
+      img.alt = tileData[i].handle;
+      img.title = `${tileData[i].handle} · ${tileData[i].num}`;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      img.onerror = () => { img.style.display='none'; cell.style.background='rgba(184,134,11,.15)'; };
+      cell.appendChild(img);
+      // VIP glow
+      if (tileData[i].num && tileData[i].num.includes('VIP')) {
+        cell.style.boxShadow = '0 0 4px rgba(224,68,68,.8)';
+        cell.style.zIndex = '2';
+      } else if (tileData[i].num && tileData[i].num.includes('GOLD')) {
+        cell.style.boxShadow = '0 0 3px rgba(184,134,11,.6)';
+      }
+    } else {
+      const numEl = document.createElement('div');
+      numEl.className = 'cell-num';
+      numEl.textContent = String(i+1).padStart(3,'0');
+      cell.appendChild(numEl);
+      cell.addEventListener('click', () => openTileModal(i));
+    }
+    grid.appendChild(cell);
+  }
+  updateStats();
+}
+
+function openTileModal(idx) {
+  document.getElementById('ticketNumInput').value = '';
+  document.getElementById('instaUrlInput').value = '';
+  document.getElementById('handleInput').value = '';
+  document.getElementById('imgUrlInput').value = '';
+  // scroll to upload panel
+  document.querySelector('.upload-panel').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('ticketNumInput').focus();
+  // Store target index
+  document.getElementById('mosaicGrid').dataset.pendingIdx = idx;
+  showToast(`🎯 Placing tile #${String(idx+1).padStart(3,'0')} — fill in details below`);
+}
+
+function placeTile() {
+  const num    = document.getElementById('ticketNumInput').value.trim();
+  const insta  = document.getElementById('instaUrlInput').value.trim();
+  const handle = document.getElementById('handleInput').value.trim();
+  const imgUrl = document.getElementById('imgUrlInput').value.trim();
+
+  if (!num || !handle) { showToast('⚠ Please enter your ticket number and Instagram handle'); return; }
+
+  // Derive tile index from ticket number (last digits) or use pending
+  const grid = document.getElementById('mosaicGrid');
+  let idx = parseInt(grid.dataset.pendingIdx ?? -1);
+  if (idx < 0) {
+    const match = num.match(/(\d{4,5})$/);
+    idx = match ? (parseInt(match[1]) - 1) % TOTAL : Math.floor(Math.random() * TOTAL);
+  }
+  while (tileData[idx]) idx = (idx + 1) % TOTAL;
+
+  const photoSrc = imgUrl || 'https://cdn.engage4more.com/files/images/gallery/chaitanya-devadhe-singer-' + ((idx % 6) + 1) + '.webp';
+
+  tileData[idx] = { img: photoSrc, handle: handle.startsWith('@') ? handle : '@' + handle, num };
+  filledCount++;
+  buildGrid();
+  addRecentCard(idx, tileData[idx]);
+  delete grid.dataset.pendingIdx;
+
+  // clear form
+  ['ticketNumInput','instaUrlInput','handleInput','imgUrlInput'].forEach(id => document.getElementById(id).value = '');
+
+  showToast(`🧩 Tile #${String(idx+1).padStart(3,'0')} placed! ${handle} is now part of the mosaic!`);
+  grid.children[idx + 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function updateStats() {
+  filledCount = Object.keys(tileData).length;
+  const pct = ((filledCount / TOTAL) * 100).toFixed(2);
+  document.getElementById('tiles-filled').textContent = filledCount;
+  document.getElementById('pct-done').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function addRecentCard(idx, data) {
+  const grid = document.getElementById('recentGrid');
+  const card = document.createElement('div');
+  card.className = 'recent-card';
+  const isVip  = data.num.includes('VIP');
+  const isGold = data.num.includes('GOLD');
+  const borderColor = isVip ? '#8B1A1A' : isGold ? '#B8860B' : 'rgba(184,134,11,.2)';
+  card.style.borderColor = borderColor;
+  card.innerHTML = `
+    <div class="recent-card-img">
+      <img src="${data.img}" alt="${data.handle}" onerror="this.style.display='none'"/>
+      <div class="cell-badge">#${String(idx+1).padStart(3,'0')}</div>
+    </div>
+    <div class="recent-card-info">
+      <div class="recent-card-handle">${data.handle}</div>
+      <div class="recent-card-seat" style="color:${isVip?'#E04444':isGold?'#B8860B':'#7A8B8B'}">${isVip?'VIP ★':isGold?'Gold ✦':'Silver'}</div>
+    </div>`;
+  grid.insertBefore(card, grid.firstChild);
+}
+
+// Build demo recent cards
+function buildRecentCards() {
+  Object.entries(DEMO_TILES).forEach(([idx, data]) => addRecentCard(parseInt(idx), data));
+}
+
+// INIT
+window.addEventListener('DOMContentLoaded', () => {
+  buildGrid();
+  buildRecentCards();
+  // Animate progress bar
+  setTimeout(() => {
+    document.getElementById('progressFill').style.width = '11.75%';
+  }, 300);
+});
+</script>
+</body>
+</html>
