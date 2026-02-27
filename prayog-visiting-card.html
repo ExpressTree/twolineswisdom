@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#080501">
+<meta property="og:title" content="Yogesh Saraf — Prayog Event Decorators">
+<meta property="og:description" content="Co-Founder & Execution Head | Mumbai's Premier Event Decorators">
+<title>Yogesh Saraf · Prayog</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Great+Vibes&family=Josefin+Sans:wght@100;200;300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════════ */
+:root{
+  --g:#c9a84c; --g2:#e8d08a; --gd:#7a5b1a; --gdk:#3d2d09;
+  --dark:#080501; --dark2:#110c03; --dark3:#1c1205;
+  --rose:#c4767a; --cream:#fdf6ec;
+  --r:4px;
+  --card-w:min(390px,94vw);
+  --trans:cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-family:'Josefin Sans',sans-serif;-webkit-font-smoothing:antialiased}
+button{border:none;background:none;cursor:pointer;font-family:inherit}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ═══════════════════════════════════════════
+   BACKGROUND SCENE
+═══════════════════════════════════════════ */
+#bg-canvas{position:fixed;inset:0;z-index:0;opacity:.45}
+
+.page{
+  position:fixed;inset:0;z-index:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:max(12px,env(safe-area-inset-top)) env(safe-area-inset-right) max(12px,env(safe-area-inset-bottom)) env(safe-area-inset-left);
+  scrollbar-width:none;
+}
+.page::-webkit-scrollbar{display:none}
+
+/* ═══════════════════════════════════════════
+   CARD WRAPPER — physical card feel
+═══════════════════════════════════════════ */
+#card-wrap{
+  width:var(--card-w);
+  flex-shrink:0;
+  position:relative;
+  transform-style:preserve-3d;
+  perspective:1200px;
+  transition:all .6s var(--trans);
+  margin:auto;
+}
+
+/* Shadow beneath card */
+#card-wrap::after{
+  content:'';
+  position:absolute;
+  bottom:-20px;left:10%;right:10%;
+  height:30px;
+  background:radial-gradient(ellipse,rgba(201,168,76,.25),transparent 70%);
+  filter:blur(12px);
+  animation:shadowBreath 4s ease-in-out infinite;
+}
+@keyframes shadowBreath{0%,100%{opacity:.5;transform:scaleX(.9)}50%{opacity:.8;transform:scaleX(1)}}
+
+/* ═══════════════════════════════════════════
+   CARD FRONT — THE VISITING CARD
+═══════════════════════════════════════════ */
+#card-front{
+  width:100%;
+  background:linear-gradient(158deg,#130b04 0%,#0c0701 35%,#180e04 65%,#0e0802 100%);
+  border-radius:var(--r);
+  border:1px solid rgba(201,168,76,.22);
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,.06),
+    0 0 40px rgba(201,168,76,.1),
+    0 30px 80px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(201,168,76,.18);
+  overflow:hidden;
+  position:relative;
+  display:flex;flex-direction:column;
+  animation:cardFloat 6s ease-in-out infinite;
+  transition:transform .2s ease;
+  /* No fixed height — grows with content */
+}
+@keyframes cardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+#card-front:hover{animation-play-state:paused}
+
+/* Gold shimmer top edge */
+#card-front::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:10;
+  background:linear-gradient(90deg,transparent 0%,var(--g) 20%,var(--g2) 50%,var(--g) 80%,transparent 100%);
+  box-shadow:0 0 20px rgba(201,168,76,.5);
+  animation:edgeGlow 3s ease-in-out infinite;
+}
+@keyframes edgeGlow{0%,100%{opacity:.6}50%{opacity:1;box-shadow:0 0 35px rgba(201,168,76,.9)}}
+
+/* Texture overlay */
+#card-front::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+
+/* Corner ornaments */
+.orn{position:absolute;width:20px;height:20px;z-index:5}
+.orn::before,.orn::after{content:'';position:absolute;background:var(--g);box-shadow:0 0 6px rgba(201,168,76,.4)}
+.orn::before{width:100%;height:1.5px;top:0;left:0}
+.orn::after{width:1.5px;height:100%;top:0;left:0}
+.orn.tr{top:10px;right:10px;transform:scaleX(-1)}
+.orn.tl{top:10px;left:10px}
+.orn.br{bottom:10px;right:10px;transform:scale(-1)}
+.orn.bl{bottom:10px;left:10px;transform:scaleY(-1)}
+
+/* ── CARD HERO SECTION ── */
+.card-hero{
+  position:relative;z-index:2;
+  padding:clamp(16px,3.5vw,28px) clamp(22px,5vw,36px) clamp(10px,2vw,16px);
+  display:flex;flex-direction:column;align-items:center;
+  flex:0 0 auto;
+}
+
+/* Decorative background pattern in hero */
+.card-hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 120%,rgba(201,168,76,.07),transparent),
+    radial-gradient(ellipse 50% 80% at 20% 50%,rgba(201,168,76,.03),transparent),
+    radial-gradient(ellipse 50% 80% at 80% 50%,rgba(201,168,76,.03),transparent);
+  pointer-events:none;
+}
+
+.brand-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:clamp(16px,3vw,22px);
+  width:100%;justify-content:center;
+}
+.brand-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3))}
+.brand-line.r{background:linear-gradient(270deg,transparent,rgba(201,168,76,.3))}
+.brand-name{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.4rem,5vw,1.9rem);
+  color:var(--g);
+  text-shadow:0 0 25px rgba(201,168,76,.4);
+  white-space:nowrap;
+}
+
+/* Photo circle */
+.photo-ring{
+  width:clamp(75px,16vw,96px);
+  height:clamp(75px,16vw,96px);
+  border-radius:50%;
+  position:relative;
+  margin-bottom:clamp(10px,2vw,14px);
+  flex-shrink:0;
+}
+.photo-ring::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--g),var(--g2),var(--gd),var(--g));
+  animation:spinGrad 6s linear infinite;
+}
+@keyframes spinGrad{to{transform:rotate(360deg)}}
+.photo-ring::after{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px dashed rgba(201,168,76,.2);
+  animation:spinGrad 12s linear infinite reverse;
+}
+.photo-inner{
+  position:absolute;inset:3px;border-radius:50%;
+  background:linear-gradient(135deg,var(--dark3),var(--dark2));
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--dark2);
+}
+.photo-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.photo-placeholder{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2rem,7vw,2.8rem);
+  color:var(--g);
+  text-shadow:0 0 20px rgba(201,168,76,.4);
+  line-height:1;
+  /* REPLACE THIS: add your photo using <img src="yogesh.jpg"> inside .photo-inner and remove this div */
+}
+
+.person-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,6vw,2.3rem);
+  font-weight:300;
+  color:#fff;
+  letter-spacing:clamp(3px,1.5vw,8px);
+  text-transform:uppercase;
+  text-align:center;
+  line-height:1.05;
+}
+.person-name span{color:var(--g);text-shadow:0 0 25px rgba(201,168,76,.4)}
+.person-role{
+  font-size:clamp(.52rem,1.6vw,.65rem);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:rgba(201,168,76,.5);
+  text-align:center;
+  margin-top:6px;
+  line-height:1.6;
+}
+
+/* ── DIVIDER ── */
+.divider{
+  display:flex;align-items:center;gap:8px;
+  padding:0 clamp(16px,4vw,28px);
+  flex-shrink:0;position:relative;z-index:2;
+  margin:clamp(4px,1vw,8px) 0;
+}
+.dl{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.2),transparent)}
+.dd{width:5px;height:5px;background:var(--g);transform:rotate(45deg);box-shadow:0 0 8px rgba(201,168,76,.5);flex-shrink:0}
+
+/* ── QUICK CONTACT STRIP ── */
+.quick-strip{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  padding:0 clamp(14px,3.5vw,24px);
+  flex-shrink:0;position:relative;z-index:2;
+}
+.qs-btn{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:clamp(8px,2vw,12px) 4px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(201,168,76,.08);
+  border-radius:2px;
+  transition:all .25s;
+  text-decoration:none;
+}
+.qs-btn:active,.qs-btn:hover{background:rgba(201,168,76,.07);border-color:rgba(201,168,76,.25);transform:scale(.97)}
+.qs-icon{font-size:clamp(1rem,3.5vw,1.3rem);line-height:1}
+.qs-label{font-size:.45rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(201,168,76,.45);line-height:1}
+
+/* ── TAGLINE BLOCK ── */
+.tagline-block{
+  padding:clamp(4px,1vw,8px) clamp(20px,5vw,32px);
+  text-align:center;
+  flex-shrink:0;position:relative;z-index:2;
+}
+.tagline-quote{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.8rem,2.8vw,1rem);
+  color:rgba(255,255,255,.5);
+  line-height:1.6;
+}
+.tagline-quote span{color:rgba(201,168,76,.7)}
+
+/* ── UNFOLD BUTTON ── */
+.unfold-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:clamp(6px,1.5vw,12px) clamp(14px,4vw,24px) clamp(6px,1.5vw,10px);
+  padding:clamp(12px,3vw,16px) 24px;
+  background:linear-gradient(135deg,var(--g),var(--gd));
+  color:var(--dark);
+  font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;
+  clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition:all .3s;
+  flex-shrink:0;position:relative;z-index:2;
+  cursor:pointer;border:none;font-family:'Josefin Sans',sans-serif;
+  box-shadow:0 6px 30px rgba(201,168,76,.4),0 0 0 0 rgba(201,168,76,.3);
+  animation:btnPulse 2.5s ease-in-out infinite;
+}
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 6px 25px rgba(201,168,76,.35),0 0 0 0 rgba(201,168,76,.2)}
+  50%{box-shadow:0 8px 35px rgba(201,168,76,.55),0 0 0 8px rgba(201,168,76,0)}
+}
+.unfold-btn:active{transform:scale(.97);animation:none;box-shadow:0 3px 15px rgba(201,168,76,.2)}
+.unfold-icon{font-size:.9rem;transition:transform .4s var(--trans)}
+.unfold-btn:hover .unfold-icon{transform:translateY(-2px)}
+
+/* ── SOCIAL ROW ── */
+.social-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(8px,2.5vw,16px);
+  padding:clamp(4px,1.2vw,8px) clamp(14px,3.5vw,24px) clamp(8px,2vw,12px);
+  flex-shrink:0;position:relative;z-index:2;
+}
+.soc{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  opacity:.6;transition:opacity .25s;text-decoration:none;
+}
+.soc:hover,.soc:active{opacity:1}
+.soc-icon{
+  width:clamp(30px,8vw,38px);height:clamp(30px,8vw,38px);
+  border-radius:50%;border:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(201,168,76,.05);
+  font-size:clamp(.8rem,2.5vw,1rem);
+  transition:all .25s;
+}
+.soc:active .soc-icon{background:rgba(201,168,76,.15);border-color:rgba(201,168,76,.4);box-shadow:0 0 15px rgba(201,168,76,.3)}
+.soc-lbl{font-size:.42rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(201,168,76,.4)}
+
+/* ── BOTTOM FOOTER OF CARD ── */
+.card-footer{
+  border-top:1px solid rgba(201,168,76,.08);
+  padding:clamp(8px,2vw,12px) clamp(16px,4vw,24px);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;position:relative;z-index:2;
+}
+.cf-left{display:flex;flex-direction:column;gap:2px}
+.cf-website{font-size:.55rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.cf-city{font-size:.48rem;letter-spacing:1.5px;color:rgba(201,168,76,.35);text-transform:uppercase}
+.vcf-btn{
+  font-size:.5rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(201,168,76,.5);border:1px solid rgba(201,168,76,.15);
+  padding:5px 10px;transition:all .25s;cursor:pointer;background:none;font-family:'Josefin Sans',sans-serif;
+}
+.vcf-btn:active{color:var(--g);border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.07)}
+
+/* ═══════════════════════════════════════════
+   PRESENTATION MODE — THE UNFOLD
+═══════════════════════════════════════════ */
+#pres-overlay{
+  position:fixed;inset:0;z-index:100;
+  background:var(--dark);
+  display:flex;flex-direction:column;
+  transform:translateY(100%);
+  transition:transform .7s var(--trans);
+  overflow:hidden;
+}
+#pres-overlay.open{transform:translateY(0)}
+
+/* ── SLIDE CONTAINER ── */
+#slides{
+  flex:1;overflow:hidden;position:relative;
+}
+
+/* Individual slide */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transform:translateX(100%);
+  transition:transform .6s var(--trans);
+  background:var(--dark);
+}
+.slide.active{transform:translateX(0)}
+.slide.prev{transform:translateX(-100%)}
+
+/* SLIDE BACKGROUNDS — each one unique */
+.slide-bg{
+  position:absolute;inset:0;pointer-events:none;
+  transition:opacity 1s ease;
+}
+
+/* ── PRESENTATION HEADER ── */
+.pres-header{
+  position:absolute;top:0;left:0;right:0;z-index:50;
+  padding:clamp(10px,3vw,16px) clamp(14px,3.5vw,22px);
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(8,5,1,.9),transparent);
+}
+.ph-brand{font-family:'Great Vibes',cursive;font-size:clamp(1rem,3.5vw,1.4rem);color:var(--g);text-shadow:0 0 15px rgba(201,168,76,.35)}
+.ph-close{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.25);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.7);font-size:1rem;cursor:pointer;
+  background:rgba(201,168,76,.06);transition:all .25s;
+}
+.ph-close:active{background:rgba(201,168,76,.15);color:var(--g)}
+
+/* ── NAV BOTTOM ── */
+.pres-nav{
+  position:absolute;bottom:0;left:0;right:0;z-index:50;
+  padding:clamp(12px,3vw,18px) clamp(16px,4vw,24px);
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(0deg,rgba(8,5,1,.95),transparent);
+}
+.nav-dots{display:flex;gap:6px;align-items:center}
+.nav-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(201,168,76,.25);
+  transition:all .35s;cursor:pointer;
+}
+.nav-dot.on{background:var(--g);box-shadow:0 0 8px rgba(201,168,76,.7);width:18px;border-radius:3px}
+.nav-arrow{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(201,168,76,.6);font-size:1rem;cursor:pointer;
+  background:rgba(201,168,76,.04);transition:all .25s;
+}
+.nav-arrow:active{background:rgba(201,168,76,.15);color:var(--g)}
+.nav-arrow.dim{opacity:.25;pointer-events:none}
+
+/* ── SLIDE CONTENT TYPOGRAPHY ── */
+.sl-eyebrow{font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:rgba(201,168,76,.55);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.sl-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--g);opacity:.5}
+.sl-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,8vw,3.4rem);font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}
+.sl-h1 em{font-style:italic;color:var(--g)}
+.sl-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,5vw,2rem);font-weight:300;color:#fff;line-height:1.1;margin-bottom:10px}
+.sl-body{font-size:clamp(.72rem,2.5vw,.85rem);color:rgba(255,255,255,.55);line-height:1.8;letter-spacing:.3px}
+.sl-gold{color:var(--g)}
+
+/* Content wrapper inside slide */
+.sl-content{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:clamp(65px,15vw,90px) clamp(24px,6vw,40px) clamp(65px,15vw,80px);
+  z-index:2;
+}
+
+/* ── SLIDE 1: WELCOME ── */
+#sl1 .slide-bg{
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 90%,rgba(201,168,76,.1),transparent),
+    radial-gradient(ellipse 60% 40% at 20% 20%,rgba(201,168,76,.04),transparent),
+    linear-gradient(160deg,#0f0803 0%,#080501 60%,#12090302 100%);
+}
+.welcome-visual{
+  display:flex;align-items:center;gap:clamp(16px,4vw,24px);
+  margin-bottom:clamp(20px,5vw,32px);
+}
+.wv-photo{
+  width:clamp(70px,18vw,90px);height:clamp(70px,18vw,90px);
+  border-radius:50%;overflow:hidden;flex-shrink:0;
+  border:2px solid rgba(201,168,76,.4);
+  background:linear-gradient(135deg,var(--dark3),var(--dark2));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(201,168,76,.15);
+}
+.wv-photo img{width:100%;height:100%;object-fit:cover}
+.wv-photo .ph-initial{font-family:'Great Vibes',cursive;font-size:2.2rem;color:var(--g);text-shadow:0 0 15px rgba(201,168,76,.4)}
+.wv-text{}
+.sl1-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.85rem,3vw,1.1rem);color:rgba(255,255,255,.45);line-height:1.6;margin-top:12px;border-left:2px solid rgba(201,168,76,.3);padding-left:14px}
+
+/* Animated ornament */
+.sl1-ornament{
+  width:100%;display:flex;align-items:center;gap:10px;margin:clamp(16px,4vw,24px) 0;
+}
+.sl1-ornament .dl{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent)}
+.sl1-ornament .center{font-family:'Great Vibes',cursive;font-size:1.2rem;color:rgba(201,168,76,.5)}
+
+/* Stat counters */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:clamp(12px,3vw,20px)}
+.stat-item{
+  text-align:center;
+  padding:clamp(10px,2.5vw,16px) 8px;
+  background:rgba(201,168,76,.04);
+  border:1px solid rgba(201,168,76,.1);
+}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,5vw,2rem);color:var(--g);font-weight:600;line-height:1}
+.stat-lbl{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px}
+
+/* ── SLIDE 2: SERVICES ── */
+#sl2 .slide-bg{
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 20%,rgba(201,168,76,.08),transparent),
+    linear-gradient(200deg,#120905 0%,#080501 100%);
+}
+.services-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin-top:clamp(14px,3.5vw,20px);
+}
+.svc-item{
+  padding:clamp(10px,2.5vw,16px) clamp(10px,2.5vw,14px);
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(201,168,76,.1);
+  border-left:2px solid rgba(201,168,76,.4);
+  transition:all .25s;
+  cursor:default;
+  animation:slideItemIn .5s var(--trans) both;
+}
+.svc-item:nth-child(1){animation-delay:.05s}
+.svc-item:nth-child(2){animation-delay:.1s}
+.svc-item:nth-child(3){animation-delay:.15s}
+.svc-item:nth-child(4){animation-delay:.2s}
+.svc-item:nth-child(5){animation-delay:.25s}
+.svc-item:nth-child(6){animation-delay:.3s}
+@keyframes slideItemIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.svc-em{font-size:clamp(.9rem,2.8vw,1.15rem);margin-bottom:5px}
+.svc-name{font-family:'Cormorant Garamond',serif;font-size:clamp(.85rem,2.8vw,1rem);color:#fff;margin-bottom:3px}
+.svc-sub{font-size:.5rem;letter-spacing:1.5px;color:rgba(201,168,76,.4);text-transform:uppercase}
+
+/* ── SLIDE 3: PORTFOLIO / VIDEO ── */
+#sl3 .slide-bg{
+  background:linear-gradient(180deg,#0b0703 0%,#080501 100%);
+}
+.video-frame{
+  width:100%;
+  aspect-ratio:16/9;
+  background:rgba(0,0,0,.6);
+  border:1px solid rgba(201,168,76,.2);
+  border-radius:2px;
+  overflow:hidden;
+  position:relative;
+  margin-top:clamp(12px,3vw,20px);
+  flex-shrink:0;
+}
+.video-frame iframe{width:100%;height:100%;border:none}
+.video-placeholder{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:linear-gradient(135deg,#130b04,#0a0501);
+}
+.vp-play{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(201,168,76,.15);border:2px solid rgba(201,168,76,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;cursor:pointer;transition:all .3s;
+  animation:playPulse 2s ease-in-out infinite;
+  color:var(--g);
+}
+@keyframes playPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.3)}70%{box-shadow:0 0 0 14px rgba(201,168,76,0)}}
+.vp-play:active{background:rgba(201,168,76,.3);transform:scale(.95)}
+.vp-label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,.5)}
+
+/* Image gallery strip */
+.gallery-strip{
+  display:flex;gap:6px;margin-top:clamp(10px,2.5vw,14px);
+  overflow-x:auto;scrollbar-width:none;
+  scroll-snap-type:x mandatory;
+  flex-shrink:0;
+}
+.gallery-strip::-webkit-scrollbar{display:none}
+.gallery-thumb{
+  width:clamp(70px,22vw,90px);height:clamp(55px,17vw,72px);
+  flex-shrink:0;scroll-snap-align:start;
+  background:rgba(201,168,76,.06);
+  border:1px solid rgba(201,168,76,.12);
+  border-radius:2px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .25s;
+  position:relative;
+}
+.gallery-thumb:active{border-color:rgba(201,168,76,.4);transform:scale(.97)}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover}
+.gallery-thumb .gt-ph{font-size:1.4rem;opacity:.4}
+.gallery-thumb .gt-num{
+  position:absolute;bottom:3px;right:4px;
+  font-size:.42rem;letter-spacing:1px;color:rgba(255,255,255,.5);
+}
+
+/* ── SLIDE 4: TESTIMONIALS ── */
+#sl4 .slide-bg{
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%,rgba(196,118,122,.06),transparent),
+    linear-gradient(180deg,#100804 0%,#080501 100%);
+}
+.testi-carousel{position:relative;overflow:hidden;flex:1;margin-top:clamp(12px,3vw,18px)}
+.testi-track{
+  display:flex;height:100%;
+  transition:transform .5s var(--trans);
+}
+.testi-card{
+  min-width:100%;padding:clamp(16px,4vw,24px);
+  display:flex;flex-direction:column;
+  background:rgba(201,168,76,.03);
+  border:1px solid rgba(201,168,76,.1);
+  border-left:3px solid rgba(201,168,76,.4);
+  position:relative;
+  flex-shrink:0;
+}
+.testi-card::before{
+  content:'"';
+  position:absolute;top:8px;right:16px;
+  font-family:'Great Vibes',cursive;font-size:4rem;
+  color:rgba(201,168,76,.12);line-height:1;
+}
+.testi-stars{color:var(--g);font-size:.75rem;letter-spacing:2px;margin-bottom:10px}
+.testi-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(.85rem,3vw,1rem);color:rgba(255,255,255,.65);
+  line-height:1.75;flex:1;
+}
+.testi-person{margin-top:clamp(12px,3vw,18px)}
+.testi-name{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#fff}
+.testi-event{font-size:.55rem;letter-spacing:1.5px;color:rgba(201,168,76,.45);margin-top:3px;text-transform:uppercase}
+
+.testi-nav{display:flex;gap:6px;justify-content:center;margin-top:clamp(10px,2.5vw,14px);flex-shrink:0}
+.tn-dot{width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,.2);cursor:pointer;transition:all .3s}
+.tn-dot.on{background:var(--g);width:14px;border-radius:3px}
+
+/* ── SLIDE 5: PACKAGES / PRICING ── */
+#sl5 .slide-bg{
+  background:
+    radial-gradient(ellipse 60% 50% at 100% 50%,rgba(201,168,76,.06),transparent),
+    linear-gradient(160deg,#0c0702 0%,#080501 100%);
+}
+.pkg-list{display:flex;flex-direction:column;gap:8px;margin-top:clamp(12px,3vw,18px)}
+.pkg-item{
+  display:flex;align-items:center;gap:12px;
+  padding:clamp(10px,2.5vw,14px) clamp(12px,3vw,16px);
+  border:1px solid rgba(201,168,76,.1);
+  background:rgba(255,255,255,.02);
+  position:relative;overflow:hidden;
+  transition:all .3s;cursor:default;
+  animation:slideItemIn .5s var(--trans) both;
+}
+.pkg-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--g)}
+.pkg-item:nth-child(1){animation-delay:.05s;--pb:var(--g)}
+.pkg-item:nth-child(2){animation-delay:.12s}
+.pkg-item:nth-child(3){animation-delay:.19s}
+.pkg-item:nth-child(4){animation-delay:.26s}
+.pkg-item:nth-child(5){animation-delay:.33s}
+.pkg-icon{font-size:clamp(1rem,3.5vw,1.3rem);flex-shrink:0}
+.pkg-info{flex:1;min-width:0}
+.pkg-name{font-family:'Cormorant Garamond',serif;font-size:clamp(.9rem,3vw,1.05rem);color:#fff;margin-bottom:2px}
+.pkg-detail{font-size:.5rem;letter-spacing:1.5px;color:rgba(201,168,76,.4);text-transform:uppercase}
+.pkg-price{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(.85rem,2.8vw,1rem);
+  color:var(--g);text-align:right;white-space:nowrap;flex-shrink:0;
+}
+.pkg-price small{font-size:.6em;color:rgba(201,168,76,.5)}
+
+/* ── SLIDE 6: BOOK NOW / CTA ── */
+#sl6 .slide-bg{
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 100%,rgba(201,168,76,.12),transparent),
+    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(201,168,76,.04),transparent),
+    linear-gradient(180deg,#0e0904 0%,#080501 100%);
+}
+.cta-block{text-align:center;margin-top:clamp(14px,3.5vw,22px)}
+
+.cta-row{display:flex;flex-direction:column;gap:10px;margin-top:clamp(16px,4vw,24px)}
+.cta-wa{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#25D366;color:#fff;
+  padding:clamp(13px,3.5vw,16px) 24px;
+  font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;
+  clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition:all .3s;text-decoration:none;
+  box-shadow:0 8px 25px rgba(37,211,102,.3);
+}
+.cta-wa:active{background:#1ebe5d;transform:scale(.97)}
+.cta-call{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  border:1px solid rgba(201,168,76,.3);color:var(--g);
+  padding:clamp(11px,3vw,14px) 24px;
+  font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;
+  clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition:all .3s;text-decoration:none;
+}
+.cta-call:active{background:rgba(201,168,76,.08)}
+
+.contact-details{
+  display:flex;flex-direction:column;gap:6px;
+  margin-top:clamp(14px,3.5vw,20px);
+  text-align:left;
+}
+.cd-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.08)}
+.cd-icon{font-size:.9rem;flex-shrink:0}
+.cd-text{flex:1;min-width:0}
+.cd-label{font-size:.48rem;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.4)}
+.cd-value{font-size:.68rem;color:rgba(255,255,255,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* QR placeholder in CTA slide */
+.qr-box{
+  width:80px;height:80px;border:1px solid rgba(201,168,76,.25);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto clamp(8px,2vw,12px);cursor:pointer;position:relative;
+  background:rgba(201,168,76,.03);
+  transition:all .3s;
+}
+.qr-box:hover{border-color:rgba(201,168,76,.5);box-shadow:0 0 20px rgba(201,168,76,.15)}
+.qr-box::before,.qr-box::after{content:'';position:absolute;width:10px;height:10px;border:1.5px solid var(--g)}
+.qr-box::before{top:4px;left:4px;border-right:none;border-bottom:none}
+.qr-box::after{bottom:4px;right:4px;border-left:none;border-top:none}
+.qr-box img{width:70px;height:70px;object-fit:contain;display:none}/* show when QR added */
+.qr-ph{font-size:1.8rem;opacity:.3}
+.qr-hint{font-size:.42rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(201,168,76,.35);text-align:center;margin-top:2px}
+
+/* ─── SWIPE HINT ─── */
+.swipe-hint{
+  position:absolute;bottom:68px;left:50%;transform:translateX(-50%);
+  font-size:.48rem;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,.2);white-space:nowrap;
+  pointer-events:none;
+  animation:hintFade 3s 2s ease-in-out forwards;
+}
+@keyframes hintFade{0%,100%{opacity:0}30%,70%{opacity:1}}
+
+/* ─── LANDSCAPE MODE ─── */
+@media (orientation:landscape){
+  :root{--card-w:min(540px,62vw);--card-h:min(360px,90vh)}
+  .page{padding:8px}
+  #card-front{flex-direction:row;flex-wrap:wrap}
+  .card-hero{flex:0 0 45%;border-right:1px solid rgba(201,168,76,.08)}
+  .card-hero .brand-row{justify-content:flex-start}
+  .quick-strip{grid-template-columns:repeat(2,1fr)}
+  .social-row{flex-direction:column;align-items:flex-start}
+}
+
+/* ─── ANIMATIONS ON SLIDE ENTRY ─── */
+.slide.active .sl-eyebrow,
+.slide.active .sl-h1,
+.slide.active .sl-h2,
+.slide.active .sl-body,
+.slide.active .welcome-visual,
+.slide.active .sl1-tagline,
+.slide.active .stat-row,
+.slide.active .cta-block{
+  animation:slideTextIn .7s var(--trans) both;
+}
+.slide.active .sl-h1{animation-delay:.08s}
+.slide.active .sl-h2{animation-delay:.06s}
+.slide.active .sl-body{animation-delay:.14s}
+.slide.active .welcome-visual{animation-delay:.04s}
+.slide.active .sl1-tagline{animation-delay:.18s}
+.slide.active .stat-row{animation-delay:.22s}
+.slide.active .cta-block{animation-delay:.06s}
+@keyframes slideTextIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- AMBIENT BACKGROUND CANVAS -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- PAGE WRAPPER -->
+<div class="page">
+  <div id="card-wrap">
+
+    <!-- ═══ VISITING CARD FRONT ═══ -->
+    <div id="card-front">
+      <div class="orn tl"></div><div class="orn tr"></div>
+      <div class="orn bl"></div><div class="orn br"></div>
+
+      <!-- HERO -->
+      <div class="card-hero">
+        <div class="brand-row">
+          <div class="brand-line"></div>
+          <div class="brand-name">Prayog</div>
+          <div class="brand-line r"></div>
+        </div>
+
+        <!-- Photo -->
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <!-- ► ADD PHOTO: replace div below with <img src="yogesh.jpg" alt="Yogesh Saraf"> -->
+            <div class="photo-placeholder">Y</div>
+          </div>
+        </div>
+
+        <div class="person-name">YOGESH&nbsp;<span>SARAF</span></div>
+        <div class="person-role">Co-Founder &amp; Execution Head<br>Event Decorator · Mumbai</div>
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dl"></div><div class="dd"></div><div class="dl"></div></div>
+
+      <!-- QUICK CONTACT -->
+      <div class="quick-strip">
+        <a href="tel:+91XXXXXXXXXX" class="qs-btn">
+          <span class="qs-icon">📞</span><span class="qs-label">Call</span>
+        </a>
+        <a href="https://wa.me/91XXXXXXXXXX?text=Hi%20Yogesh!%20I%20just%20saw%20your%20card.%20Let%E2%80%99s%20connect%20for%20event%20decoration!" target="_blank" class="qs-btn">
+          <span class="qs-icon">💬</span><span class="qs-label">WhatsApp</span>
+        </a>
+        <a href="https://www.instagram.com/prayog_events" target="_blank" class="qs-btn">
+          <span class="qs-icon">📸</span><span class="qs-label">Instagram</span>
+        </a>
+        <a href="mailto:yogesh@prayogevents.com" class="qs-btn">
+          <span class="qs-icon">✉️</span><span class="qs-label">Email</span>
+        </a>
+      </div>
+
+      <!-- TAGLINE -->
+      <div class="tagline-block">
+        <div class="tagline-quote">"Every flower, every light — <span>exactly where it should be.</span>"</div>
+      </div>
+
+      <!-- UNFOLD BUTTON -->
+      <button class="unfold-btn" onclick="openPresentation()">
+        <span class="unfold-icon">▶</span>
+        View Portfolio &amp; Book Now
+        <span class="unfold-icon">✦</span>
+      </button>
+
+      <!-- SOCIAL -->
+      <div class="social-row">
+        <a href="https://www.instagram.com/prayog_events" target="_blank" class="soc">
+          <div class="soc-icon">📸</div>
+          <div class="soc-lbl">Instagram</div>
+        </a>
+        <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="soc">
+          <div class="soc-icon">💬</div>
+          <div class="soc-lbl">WhatsApp</div>
+        </a>
+        <a href="https://www.youtube.com/@prayogevents" target="_blank" class="soc">
+          <div class="soc-icon">▶️</div>
+          <div class="soc-lbl">YouTube</div>
+        </a>
+        <a href="https://www.facebook.com/prayogevents" target="_blank" class="soc">
+          <div class="soc-icon">📘</div>
+          <div class="soc-lbl">Facebook</div>
+        </a>
+        <a href="https://g.page/prayogevents" target="_blank" class="soc">
+          <div class="soc-icon">⭐</div>
+          <div class="soc-lbl">Google</div>
+        </a>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="card-footer">
+        <div class="cf-left">
+          <div class="cf-website">www.prayogevents.com</div>
+          <div class="cf-city">Mumbai · Thane · Navi Mumbai · Pune</div>
+        </div>
+        <button class="vcf-btn" onclick="downloadVCard()">⬇ Save Contact</button>
+      </div>
+    </div><!-- /card-front -->
+
+  </div><!-- /card-wrap -->
+</div><!-- /page -->
+
+<!-- ═══════════════════════════════════════════
+     PRESENTATION OVERLAY
+═══════════════════════════════════════════ -->
+<div id="pres-overlay">
+
+  <!-- HEADER -->
+  <div class="pres-header">
+    <div class="ph-brand">Prayog</div>
+    <button class="ph-close" onclick="closePresentation()">✕</button>
+  </div>
+
+  <!-- SLIDES -->
+  <div id="slides">
+
+    <!-- ── SLIDE 1: WELCOME ── -->
+    <div class="slide active" id="sl1">
+      <div class="slide-bg"></div>
+      <div class="sl-content">
+        <div class="sl-eyebrow">Welcome</div>
+
+        <div class="welcome-visual">
+          <div class="wv-photo">
+            <!-- ► ADD PHOTO: <img src="yogesh.jpg" alt="Yogesh"> -->
+            <div class="ph-initial">Y</div>
+          </div>
+          <div class="wv-text">
+            <div class="sl-h1">YOGESH<br><em>SARAF</em></div>
+            <div class="person-role" style="text-align:left;margin-top:4px">Co-Founder &amp; Execution Head<br>Prayog Event Decorators</div>
+          </div>
+        </div>
+
+        <div class="sl1-ornament">
+          <div class="dl"></div>
+          <div class="center">✦ Prayog ✦</div>
+          <div class="dl"></div>
+        </div>
+
+        <div class="sl1-tagline">
+          "We don't just decorate venues — we craft the atmosphere where memories are born. Every event is a blank canvas, and we pour our heart into each petal, each light."
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="stat-num" data-target="500">0</div>
+            <div class="stat-lbl">Events Done</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="8">0</div>
+            <div class="stat-lbl">Years Active</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="50">0</div>
+            <div class="stat-lbl">Unique Themes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 2: SERVICES ── -->
+    <div class="slide" id="sl2">
+      <div class="slide-bg"></div>
+      <div class="sl-content">
+        <div class="sl-eyebrow">What We Do</div>
+        <div class="sl-h2">Events We <em class="sl-gold">Transform</em></div>
+        <div class="services-grid">
+          <div class="svc-item"><div class="svc-em">💍</div><div class="svc-name">Weddings</div><div class="svc-sub">Mandap · Stage · Floral</div></div>
+          <div class="svc-item"><div class="svc-em">🎂</div><div class="svc-name">Birthdays</div><div class="svc-sub">Balloon · Theme · Backdrop</div></div>
+          <div class="svc-item"><div class="svc-em">🌸</div><div class="svc-name">Engagement</div><div class="svc-sub">Romantic · Floral · Luxury</div></div>
+          <div class="svc-item"><div class="svc-em">🍼</div><div class="svc-name">Baby Shower</div><div class="svc-sub">Pastel · Dreamy · Soft</div></div>
+          <div class="svc-item"><div class="svc-em">🏢</div><div class="svc-name">Corporate</div><div class="svc-sub">Stage · Awards · Launch</div></div>
+          <div class="svc-item"><div class="svc-em">🎊</div><div class="svc-name">Festivals</div><div class="svc-sub">Navratri · Diwali · Ganpati</div></div>
+        </div>
+        <div class="sl-body" style="margin-top:12px">Serving Mumbai · Thane · Navi Mumbai · Pune</div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 3: PORTFOLIO / VIDEO ── -->
+    <div class="slide" id="sl3">
+      <div class="slide-bg"></div>
+      <div class="sl-content" style="padding-top:clamp(60px,14vw,80px)">
+        <div class="sl-eyebrow">Portfolio</div>
+        <div class="sl-h2">Our <em class="sl-gold">Work</em> Speaks</div>
+
+        <!-- VIDEO EMBED AREA -->
+        <div class="video-frame" id="videoFrame">
+          <!-- ► TO EMBED VIDEO: Replace the placeholder below with:
+               <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1"
+                 allow="autoplay; encrypted-media" allowfullscreen></iframe>
+               OR for local video:
+               <video src="showreel.mp4" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
+          -->
+          <div class="video-placeholder" id="videoPh">
+            <div class="vp-play" onclick="loadVideo()" title="Play Showreel">▶</div>
+            <div class="vp-label">Tap to Play Showreel</div>
+            <div style="font-size:.5rem;letter-spacing:2px;color:rgba(201,168,76,.3);margin-top:4px;text-transform:uppercase">Replace with your YouTube embed</div>
+          </div>
+        </div>
+
+        <!-- PHOTO GALLERY STRIP -->
+        <div class="gallery-strip" id="galleryStrip">
+          <!-- Placeholders — replace src with your event photos -->
+          <div class="gallery-thumb"><div class="gt-ph">🌸</div><div class="gt-num">01</div></div>
+          <div class="gallery-thumb"><div class="gt-ph">💍</div><div class="gt-num">02</div></div>
+          <div class="gallery-thumb"><div class="gt-ph">🎂</div><div class="gt-num">03</div></div>
+          <div class="gallery-thumb"><div class="gt-ph">🌹</div><div class="gt-num">04</div></div>
+          <div class="gallery-thumb"><div class="gt-ph">🎊</div><div class="gt-num">05</div></div>
+          <div class="gallery-thumb"><div class="gt-ph">✨</div><div class="gt-num">06</div></div>
+          <!--
+          REAL PHOTOS: replace each <div class="gallery-thumb"> with:
+          <div class="gallery-thumb"><img src="images/event1.jpg" alt="Event 1"></div>
+          -->
+        </div>
+        <div class="sl-body" style="margin-top:8px;font-size:.5rem">← Swipe gallery · Tap to view</div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 4: TESTIMONIALS ── -->
+    <div class="slide" id="sl4">
+      <div class="slide-bg"></div>
+      <div class="sl-content">
+        <div class="sl-eyebrow">Client Love</div>
+        <div class="sl-h2">Words That <em class="sl-gold">Warm Us</em></div>
+
+        <div class="testi-carousel">
+          <div class="testi-track" id="testiTrack">
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"Yogesh and Prashant turned our wedding mandap into something from a fairy tale. Every guest complimented the décor. We still get goosebumps looking at the photos!"</div>
+              <div class="testi-person">
+                <div class="testi-name">Riya &amp; Arjun Sharma</div>
+                <div class="testi-event">Wedding · Thane · 2024</div>
+              </div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"My daughter's first birthday was pure magic. The balloon canopy and floral wall were Instagram-worthy. Prayog delivered beyond imagination — on time, every time!"</div>
+              <div class="testi-person">
+                <div class="testi-name">Sunita Mehta</div>
+                <div class="testi-event">Birthday · Navi Mumbai · 2024</div>
+              </div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"We hired Prayog for our company annual day and the stage setup was world-class. Professional, creative and extremely well coordinated. Highly recommended!"</div>
+              <div class="testi-person">
+                <div class="testi-name">Rajeev Kulkarni</div>
+                <div class="testi-event">Corporate Event · Mumbai · 2023</div>
+              </div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"Our engagement ceremony was decorated so beautifully by Prayog. The floral arch was breathtaking. Yogesh personally made sure every detail was perfect."</div>
+              <div class="testi-person">
+                <div class="testi-name">Pooja &amp; Rahul Desai</div>
+                <div class="testi-event">Engagement · Pune · 2024</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-nav" id="testiNav">
+          <div class="tn-dot on"></div>
+          <div class="tn-dot"></div>
+          <div class="tn-dot"></div>
+          <div class="tn-dot"></div>
+        </div>
+
+        <div class="sl-body" style="margin-top:10px;font-size:.5rem;opacity:.5">← Swipe for more reviews · 4.9★ on Google</div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 5: PACKAGES ── -->
+    <div class="slide" id="sl5">
+      <div class="slide-bg"></div>
+      <div class="sl-content">
+        <div class="sl-eyebrow">Investment</div>
+        <div class="sl-h2">Our <em class="sl-gold">Packages</em></div>
+        <div class="pkg-list">
+          <div class="pkg-item">
+            <span class="pkg-icon">✨</span>
+            <div class="pkg-info"><div class="pkg-name">Essential Elegance</div><div class="pkg-detail">Balloon · Backdrop · Basic Floral</div></div>
+            <div class="pkg-price">₹5K–₹15K<br><small>+GST</small></div>
+          </div>
+          <div class="pkg-item">
+            <span class="pkg-icon">💐</span>
+            <div class="pkg-info"><div class="pkg-name">Signature Bloom</div><div class="pkg-detail">Full Floral · Stage · Lighting</div></div>
+            <div class="pkg-price">₹15K–₹40K<br><small>+GST</small></div>
+          </div>
+          <div class="pkg-item">
+            <span class="pkg-icon">👑</span>
+            <div class="pkg-info"><div class="pkg-name">Royal Grandeur</div><div class="pkg-detail">Premium Mandap · Full Setup</div></div>
+            <div class="pkg-price">₹40K–₹1L<br><small>+GST</small></div>
+          </div>
+          <div class="pkg-item">
+            <span class="pkg-icon">💎</span>
+            <div class="pkg-info"><div class="pkg-name">Luxury Bespoke</div><div class="pkg-detail">Custom · Fully Managed · Luxury</div></div>
+            <div class="pkg-price">₹1L+<br><small>Custom</small></div>
+          </div>
+          <div class="pkg-item">
+            <span class="pkg-icon">🏢</span>
+            <div class="pkg-info"><div class="pkg-name">Corporate Package</div><div class="pkg-detail">Stage · Branding · A/V · Awards</div></div>
+            <div class="pkg-price">Custom<br><small>Quote</small></div>
+          </div>
+        </div>
+        <div class="sl-body" style="margin-top:10px;font-size:.52rem">All packages include site visit, setup &amp; teardown · GST extra</div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 6: BOOK NOW ── -->
+    <div class="slide" id="sl6">
+      <div class="slide-bg"></div>
+      <div class="sl-content">
+        <div class="sl-eyebrow">Let's Begin</div>
+        <div class="sl-h2">Ready to Create <em class="sl-gold">Magic?</em></div>
+
+        <div class="cta-block">
+
+          <!-- QR CODE -->
+          <div class="qr-box" onclick="window.open('https://www.instagram.com/prayog_events','_blank')" title="Scan to visit Instagram">
+            <!-- ► ADD YOUR QR: <img src="qr-instagram.png" alt="QR Code"> -->
+            <div class="qr-ph">▦</div>
+          </div>
+          <div class="qr-hint">Scan for Instagram · Replace with your QR image</div>
+
+          <div class="cta-row">
+            <a href="https://wa.me/91XXXXXXXXXX?text=Hi%20Yogesh!%20I%20saw%20your%20presentation%20and%20would%20love%20to%20discuss%20my%20event%20decoration.%20Please%20share%20details!" target="_blank" class="cta-wa">
+              💬 Book via WhatsApp
+            </a>
+            <a href="tel:+91XXXXXXXXXX" class="cta-call">
+              📞 Call Yogesh Directly
+            </a>
+          </div>
+
+          <div class="contact-details">
+            <div class="cd-row">
+              <span class="cd-icon">📍</span>
+              <div class="cd-text">
+                <div class="cd-label">Location</div>
+                <div class="cd-value">Mumbai · Thane · Navi Mumbai · Pune</div>
+              </div>
+            </div>
+            <div class="cd-row">
+              <span class="cd-icon">✉️</span>
+              <div class="cd-text">
+                <div class="cd-label">Email</div>
+                <div class="cd-value">yogesh@prayogevents.com</div>
+              </div>
+            </div>
+            <div class="cd-row">
+              <span class="cd-icon">🕐</span>
+              <div class="cd-text">
+                <div class="cd-label">Hours</div>
+                <div class="cd-value">Mon–Sat 9AM–8PM · Sun by appointment</div>
+              </div>
+            </div>
+            <div class="cd-row">
+              <span class="cd-icon">🌐</span>
+              <div class="cd-text">
+                <div class="cd-label">Website</div>
+                <div class="cd-value">www.prayogevents.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <!-- SWIPE HINT -->
+  <div class="swipe-hint">← swipe to navigate →</div>
+
+  <!-- BOTTOM NAV -->
+  <div class="pres-nav">
+    <button class="nav-arrow dim" id="prevBtn" onclick="changeSlide(-1)">←</button>
+    <div class="nav-dots" id="navDots">
+      <div class="nav-dot on"  onclick="gotoSlide(0)" title="Intro"></div>
+      <div class="nav-dot"     onclick="gotoSlide(1)" title="Services"></div>
+      <div class="nav-dot"     onclick="gotoSlide(2)" title="Portfolio"></div>
+      <div class="nav-dot"     onclick="gotoSlide(3)" title="Reviews"></div>
+      <div class="nav-dot"     onclick="gotoSlide(4)" title="Packages"></div>
+      <div class="nav-dot"     onclick="gotoSlide(5)" title="Book Now"></div>
+    </div>
+    <button class="nav-arrow" id="nextBtn" onclick="changeSlide(1)">→</button>
+  </div>
+
+</div><!-- /pres-overlay -->
+
+<script>
+/* ═══════════════════════════════════════════════
+   AMBIENT BACKGROUND CANVAS
+═══════════════════════════════════════════════ */
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const x=c.getContext('2d');
+  function resize(){c.width=innerWidth;c.height=innerHeight}
+  resize();window.addEventListener('resize',resize);
+
+  // Particles
+  const pts=[];
+  for(let i=0;i<60;i++){
+    pts.push({
+      x:Math.random()*innerWidth, y:Math.random()*innerHeight,
+      r:Math.random()*1.5+0.3,
+      vx:(Math.random()-.5)*0.15, vy:(Math.random()-.5)*0.15,
+      a:Math.random(), da:0.003+Math.random()*0.008,
+      hue:Math.random()>0.7?0:40,
+    });
+  }
+
+  let t=0;
+  function draw(){
+    t+=0.005;
+    x.clearRect(0,0,c.width,c.height);
+
+    // Background gradient
+    const bg=x.createRadialGradient(c.width*.5,c.height*.5,0,c.width*.5,c.height*.5,c.width*.8);
+    bg.addColorStop(0,'rgba(18,10,3,1)');
+    bg.addColorStop(.5,'rgba(10,6,1,1)');
+    bg.addColorStop(1,'rgba(4,2,0,1)');
+    x.fillStyle=bg;x.fillRect(0,0,c.width,c.height);
+
+    // Ambient glow
+    const glow=x.createRadialGradient(c.width*.5,c.height*.6,0,c.width*.5,c.height*.6,c.width*.5);
+    glow.addColorStop(0,`rgba(201,168,76,${.04+.02*Math.sin(t)})`);
+    glow.addColorStop(1,'transparent');
+    x.fillStyle=glow;x.fillRect(0,0,c.width,c.height);
+
+    // Particles
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
+      if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
+      p.a+=p.da;if(p.a>1||p.a<0)p.da*=-1;
+
+      x.save();
+      x.globalAlpha=p.a*.7;
+      x.shadowColor=p.hue===0?'rgba(196,118,122,.5)':'rgba(201,168,76,.5)';
+      x.shadowBlur=p.r*6;
+      x.fillStyle=p.hue===0?'rgba(196,118,122,.8)':'rgba(201,168,76,.8)';
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fill();
+      x.restore();
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══════════════════════════════════════════════
+   CARD 3D MOUSE/TOUCH TILT
+═══════════════════════════════════════════════ */
+const cf=document.getElementById('card-front');
+document.addEventListener('mousemove',e=>{
+  const r=cf.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const dx=(e.clientX-cx)/(r.width/2)*10;
+  const dy=(e.clientY-cy)/(r.height/2)*10;
+  cf.style.transform=`perspective(1000px) rotateX(${-dy*.5}deg) rotateY(${dx*.5}deg)`;
+});
+document.addEventListener('mouseleave',()=>{cf.style.transform='';});
+
+// Touch tilt
+let tx0=0,ty0=0;
+cf.addEventListener('touchmove',e=>{
+  const t=e.touches[0];
+  const r=cf.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const dx=(t.clientX-cx)/(r.width/2)*8;
+  const dy=(t.clientY-cy)/(r.height/2)*8;
+  cf.style.transform=`perspective(1000px) rotateX(${-dy*.4}deg) rotateY(${dx*.4}deg)`;
+},{passive:true});
+cf.addEventListener('touchend',()=>{
+  cf.style.transform='';
+},{passive:true});
+
+/* ═══════════════════════════════════════════════
+   PRESENTATION CONTROLLER
+═══════════════════════════════════════════════ */
+let currentSlide=0;
+const totalSlides=6;
+const overlay=document.getElementById('pres-overlay');
+
+function openPresentation(){
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  // Animate stats on first open
+  setTimeout(animateStats,800);
+}
+function closePresentation(){
+  overlay.classList.remove('open');
+}
+
+// ── SLIDE CHANGE ──
+function gotoSlide(n){
+  if(n<0||n>=totalSlides)return;
+  const slides=document.querySelectorAll('.slide');
+  slides[currentSlide].classList.remove('active');
+  slides[currentSlide].classList.add('prev');
+  setTimeout(()=>slides[currentSlide].classList.remove('prev'),700);
+
+  currentSlide=n;
+  slides[currentSlide].classList.add('active');
+  updateNavUI();
+
+  // Trigger per-slide effects
+  if(currentSlide===0) animateStats();
+}
+
+function changeSlide(dir){gotoSlide(currentSlide+dir);}
+
+function updateNavUI(){
+  // Dots in pres nav
+  document.querySelectorAll('#navDots .nav-dot').forEach((d,i)=>d.classList.toggle('on',i===currentSlide));
+  // Arrows
+  document.getElementById('prevBtn').classList.toggle('dim',currentSlide===0);
+  document.getElementById('nextBtn').classList.toggle('dim',currentSlide===totalSlides-1);
+}
+
+/* ─── SWIPE GESTURE on slides ─── */
+let touchStartX=0,touchStartY=0;
+const slidesEl=document.getElementById('slides');
+slidesEl.addEventListener('touchstart',e=>{
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+},{passive:true});
+slidesEl.addEventListener('touchend',e=>{
+  const dx=touchStartX-e.changedTouches[0].clientX;
+  const dy=Math.abs(touchStartY-e.changedTouches[0].clientY);
+  if(Math.abs(dx)>40&&dy<80){changeSlide(dx>0?1:-1);}
+},{passive:true});
+
+/* Keyboard nav */
+document.addEventListener('keydown',e=>{
+  if(!overlay.classList.contains('open'))return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')changeSlide(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')changeSlide(-1);
+  if(e.key==='Escape')closePresentation();
+});
+
+/* ═══════════════════════════════════════════════
+   STAT COUNTER ANIMATION
+═══════════════════════════════════════════════ */
+let statsAnimated=false;
+function animateStats(){
+  if(statsAnimated)return;statsAnimated=true;
+  document.querySelectorAll('.stat-num[data-target]').forEach(el=>{
+    const target=parseInt(el.dataset.target);
+    let current=0;
+    const step=target/50;
+    const timer=setInterval(()=>{
+      current=Math.min(current+step,target);
+      el.textContent=Math.floor(current)+(target>=100?'+':'+');
+      if(current>=target)clearInterval(timer);
+    },30);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   TESTIMONIAL CAROUSEL
+═══════════════════════════════════════════════ */
+let testiIdx=0;
+const testiDots=document.querySelectorAll('.tn-dot');
+const testiTrack=document.getElementById('testiTrack');
+
+function gotoTesti(n){
+  testiIdx=n;
+  testiTrack.style.transform=`translateX(${-n*100}%)`;
+  testiDots.forEach((d,i)=>d.classList.toggle('on',i===n));
+}
+testiDots.forEach((d,i)=>d.addEventListener('click',()=>gotoTesti(i)));
+
+// Auto-rotate testimonials
+setInterval(()=>{
+  if(currentSlide===3)gotoTesti((testiIdx+1)%4);
+},4000);
+
+// Touch swipe on testimonials
+let testiTX=0;
+const testiCarousel=document.querySelector('.testi-carousel');
+testiCarousel.addEventListener('touchstart',e=>{testiTX=e.touches[0].clientX;},{passive:true});
+testiCarousel.addEventListener('touchend',e=>{
+  const dx=testiTX-e.changedTouches[0].clientX;
+  if(Math.abs(dx)>30)gotoTesti(Math.max(0,Math.min(3,testiIdx+(dx>0?1:-1))));
+},{passive:true});
+
+/* ═══════════════════════════════════════════════
+   VIDEO LOADER
+═══════════════════════════════════════════════ */
+function loadVideo(){
+  const ph=document.getElementById('videoPh');
+  const frame=document.getElementById('videoFrame');
+  // ► Replace YOUR_VIDEO_ID with your actual YouTube video ID
+  const videoId='YOUR_VIDEO_ID';
+  if(videoId==='YOUR_VIDEO_ID'){
+    ph.querySelector('.vp-label').textContent='Add your YouTube video ID in the code';
+    return;
+  }
+  const iframe=document.createElement('iframe');
+  iframe.src=`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0`;
+  iframe.allow='autoplay;encrypted-media;fullscreen';
+  iframe.allowFullscreen=true;
+  frame.innerHTML='';
+  frame.appendChild(iframe);
+}
+
+/* ═══════════════════════════════════════════════
+   vCARD DOWNLOAD (Save to Contacts)
+═══════════════════════════════════════════════ */
+function downloadVCard(){
+  const vcard=`BEGIN:VCARD\r\nVERSION:3.0\r\nFN:Yogesh Saraf\r\nORG:Prayog Event Decorators\r\nTITLE:Co-Founder & Execution Head\r\nTEL;TYPE=CELL:+91XXXXXXXXXX\r\nEMAIL:yogesh@prayogevents.com\r\nURL:https://www.prayogevents.com\r\nADR;TYPE=WORK:;;Mumbai;;Maharashtra;;India\r\nX-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/prayog_events\r\nNOTE:Prayog Event Decorators — Where Moments Become Memories\r\nEND:VCARD`;
+  const blob=new Blob([vcard],{type:'text/vcard'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Yogesh_Saraf_Prayog.vcf';
+  a.click();URL.revokeObjectURL(a.href);
+}
+
+/* ═══════════════════════════════════════════════
+   SHARE (Web Share API)
+═══════════════════════════════════════════════ */
+async function shareCard(){
+  const d={
+    title:'Yogesh Saraf — Prayog Event Decorators',
+    text:'🎭 Check out this stunning interactive visiting card from Yogesh Saraf, Co-Founder of Prayog Event Decorators, Mumbai! Complete portfolio inside ✨',
+    url:window.location.href,
+  };
+  try{
+    if(navigator.share)await navigator.share(d);
+    else{
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Link copied! Share it on WhatsApp or Instagram.');
+    }
+  }catch(e){}
+}
+
+/* ─── ORIENTATION HANDLER ─── */
+function handleOrientation(){
+  // No-op: card now auto-sizes to content
+}
+window.addEventListener('resize',handleOrientation);
+window.addEventListener('orientationchange',handleOrientation);
+handleOrientation();
+
+/* ═══════════════════════════════════════════════
+   PREVENT SCROLL BOUNCE on MOBILE
+═══════════════════════════════════════════════ */
+document.addEventListener('touchmove',e=>{
+  if(!e.target.closest('.testi-carousel')&&!e.target.closest('.gallery-strip')&&!e.target.closest('.pkg-list'))
+    e.preventDefault();
+},{passive:false});
+
+/* Auto-fullscreen on first mobile tap */
+let fs=false;
+document.body.addEventListener('touchstart',()=>{
+  if(!fs&&document.documentElement.requestFullscreen){
+    document.documentElement.requestFullscreen().catch(()=>{});fs=true;
+  }
+},{once:true,passive:true});
+</script>
+</body>
+</html>
