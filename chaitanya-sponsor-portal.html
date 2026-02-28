@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaitanya Devadhe · Sponsor Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #0D1B2A;
+  --navy-mid:   #1A2E42;
+  --navy-soft:  #233D56;
+  --gold:       #B8892A;
+  --gold-light: #D4A84B;
+  --gold-pale:  #F0D898;
+  --gold-bg:    #FBF5E6;
+  --white:      #FFFFFF;
+  --off-white:  #F8F6F1;
+  --cream:      #F2EDE3;
+  --border:     #E0D8CC;
+  --border-dark:#C8BFA8;
+  --text-dark:  #0D1B2A;
+  --text-body:  #2C3E50;
+  --text-mid:   #556677;
+  --text-light: #8899AA;
+  --shadow-sm:  0 2px 8px rgba(13,27,42,0.06);
+  --shadow-md:  0 4px 20px rgba(13,27,42,0.10);
+  --shadow-lg:  0 12px 40px rgba(13,27,42,0.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--off-white);color:var(--text-body);font-family:'Source Sans 3',Georgia,sans-serif;font-weight:400;line-height:1.6;min-height:100vh;}
+h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--text-dark);line-height:1.2;}
+.label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:300px;min-width:260px;background:var(--navy);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;flex-shrink:0;z-index:50;}
+.sidebar-top{padding:1.75rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(212,168,75,0.6);margin-bottom:0.4rem;}
+.sidebar-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:0.1rem;}
+.sidebar-sub{font-size:0.78rem;color:rgba(255,255,255,0.4);font-style:italic;font-family:'Source Sans 3',sans-serif;}
+.sidebar-controls{padding:0.9rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-search{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:0.55rem 0.85rem;color:#fff;font-family:'Source Sans 3',sans-serif;font-size:0.85rem;outline:none;transition:border-color .2s;margin-bottom:0.65rem;}
+.sidebar-search::placeholder{color:rgba(255,255,255,0.28);}
+.sidebar-search:focus{border-color:var(--gold-light);}
+.cat-filters{display:flex;flex-wrap:wrap;gap:0.3rem;}
+.cat-btn{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.28rem 0.55rem;border-radius:3px;border:1px solid rgba(255,255,255,0.14);background:transparent;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .18s;}
+.cat-btn:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.8);}
+.cat-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:500;}
+.brand-list{flex:1;overflow-y:auto;padding:0.35rem 0;}
+.brand-list::-webkit-scrollbar{width:3px;}
+.brand-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.brand-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1.5rem;cursor:pointer;border-left:3px solid transparent;transition:all .18s;}
+.brand-item:hover{background:rgba(255,255,255,0.05);}
+.brand-item.active{background:rgba(212,168,75,0.1);border-left-color:var(--gold-light);}
+.b-rank{font-family:'DM Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.22);width:1.4rem;text-align:center;flex-shrink:0;}
+.brand-item.active .b-rank{color:var(--gold-light);}
+.b-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.d-high{background:var(--gold-light);box-shadow:0 0 5px rgba(212,168,75,0.45);}
+.d-mid{background:rgba(212,168,75,0.4);}
+.d-low{background:rgba(255,255,255,0.18);}
+.b-info{flex:1;min-width:0;}
+.b-name{font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;font-family:'Source Sans 3',sans-serif;}
+.brand-item.active .b-name{color:#fff;}
+.b-cat{font-family:'DM Mono',monospace;font-size:0.54rem;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:0.08em;}
+.brand-item.active .b-cat{color:rgba(212,168,75,0.65);}
+.sort-bar{padding:0.65rem 1.5rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;}
+.sort-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.12em;color:rgba(255,255,255,0.28);text-transform:uppercase;}
+.sort-toggle{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gold-light);background:none;border:1px solid rgba(212,168,75,0.28);border-radius:3px;padding:0.22rem 0.55rem;cursor:pointer;transition:all .2s;letter-spacing:0.08em;}
+.sort-toggle:hover{background:rgba(212,168,75,0.1);}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;background:var(--off-white);}
+
+/* HOME */
+.home-screen{padding:3rem 3.5rem;max-width:900px;}
+.home-title{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:900;color:var(--navy);line-height:1.05;margin-bottom:0.5rem;}
+.home-title em{font-style:italic;color:var(--gold);}
+.home-sub{font-size:1.1rem;color:var(--text-mid);font-style:italic;margin-bottom:2rem;}
+.gold-rule{width:70px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-pale));border-radius:2px;margin-bottom:2.5rem;}
+.stat-row{display:flex;gap:1.25rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.stat-box{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.5rem;box-shadow:var(--shadow-sm);}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:0.2rem;}
+.stat-num span{color:var(--gold);}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light);}
+.about-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:2rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm);}
+.about-card p{font-size:1rem;line-height:1.75;color:var(--text-body);margin-bottom:0.9rem;}
+.about-card p:last-child{margin-bottom:0;}
+.about-card strong{color:var(--navy);font-weight:600;}
+.achieve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.5rem;}
+.ach-item{background:var(--white);padding:1.1rem 1.25rem;}
+.ach-icon{font-size:1.3rem;margin-bottom:0.35rem;}
+.ach-title{font-size:0.88rem;font-weight:600;color:var(--navy);margin-bottom:0.15rem;font-family:'Source Sans 3',sans-serif;}
+.ach-desc{font-size:0.75rem;color:var(--text-light);}
+.pos-block{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:2.25rem;position:relative;overflow:hidden;margin-bottom:1.5rem;}
+.pos-block::before{content:'"';position:absolute;top:-1.5rem;left:1.5rem;font-family:'Playfair Display',serif;font-size:9rem;color:rgba(212,168,75,0.1);line-height:1;pointer-events:none;}
+.pos-text{font-family:'Playfair Display',serif;font-size:1.15rem;font-style:italic;color:rgba(255,255,255,0.9);line-height:1.65;position:relative;z-index:1;}
+.hint-box{background:var(--gold-bg);border:1px solid rgba(184,137,42,0.28);border-radius:8px;padding:1.1rem 1.5rem;font-size:0.92rem;color:var(--navy-mid);display:flex;align-items:center;gap:0.65rem;}
+
+/* SPONSOR VIEW */
+.sponsor-view{display:none;}
+.sponsor-view.active{display:block;}
+
+/* TABS NAV */
+.sponsor-tabs{background:var(--white);border-bottom:2px solid var(--border);padding:0 3.5rem;display:flex;position:sticky;top:0;z-index:30;box-shadow:var(--shadow-sm);}
+.s-tab{font-family:'Source Sans 3',sans-serif;font-size:0.88rem;font-weight:500;color:var(--text-light);padding:0.9rem 1.25rem;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.s-tab:hover{color:var(--text-body);}
+.s-tab.active{color:var(--navy);border-bottom-color:var(--gold);font-weight:600;}
+
+/* TAB PAGES */
+.tab-page{display:none;animation:fadeIn .25s ease;}
+.tab-page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* COVER */
+.cover-page{background:var(--white);min-height:calc(100vh - 45px);}
+.cover-topbar{background:var(--navy);padding:0.85rem 3.5rem;display:flex;align-items:center;justify-content:space-between;}
+.ctb-lbl{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.ctb-name{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-light);}
+.cover-body{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 120px);}
+.cover-left{padding:3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);}
+.c-prep{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:0.65rem;}
+.c-brand-name{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,3.5vw,3.4rem);font-weight:900;color:var(--navy);line-height:1.05;margin-bottom:0.4rem;}
+.c-brand-cat{font-size:0.95rem;color:var(--text-mid);font-style:italic;margin-bottom:1.75rem;font-family:'Source Sans 3',sans-serif;}
+.c-gold-line{width:55px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:1.75rem;}
+.c-prop-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.4rem;}
+.c-event-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--navy-mid);line-height:1.3;margin-bottom:1.5rem;}
+.c-meta{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.c-meta-item .c-mk{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.18rem;}
+.c-meta-item .c-mv{font-size:0.9rem;font-weight:600;color:var(--text-dark);font-family:'Source Sans 3',sans-serif;}
+.cover-right{background:var(--navy);padding:3.5rem;display:flex;flex-direction:column;justify-content:center;gap:1.5rem;}
+.cr-art-lbl{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(212,168,75,0.55);margin-bottom:0.2rem;}
+.cr-art-name{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:0.2rem;}
+.cr-art-sub{font-size:0.85rem;font-style:italic;color:rgba(255,255,255,0.45);margin-bottom:1.25rem;font-family:'Source Sans 3',sans-serif;}
+.cr-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;margin-bottom:1.25rem;}
+.cr-stat{background:rgba(255,255,255,0.03);padding:0.9rem 1.1rem;}
+.cr-snum{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold-light);line-height:1;margin-bottom:0.18rem;}
+.cr-slbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);}
+.cr-excl{background:rgba(212,168,75,0.13);border:1px solid rgba(212,168,75,0.28);border-radius:6px;padding:0.7rem 1rem;font-size:0.84rem;color:var(--gold-light);font-family:'Source Sans 3',sans-serif;line-height:1.5;}
+.cover-footer{background:var(--cream);border-top:1px solid var(--border);padding:1.1rem 3.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;}
+.cf-left{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;color:var(--text-light);text-transform:uppercase;}
+.cf-right{display:flex;gap:0.75rem;}
+.btn-primary{background:var(--navy);color:#fff;border:none;border-radius:5px;padding:0.55rem 1.3rem;font-family:'Source Sans 3',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:var(--navy-soft);}
+.btn-secondary{background:transparent;color:var(--navy);border:1.5px solid var(--border-dark);border-radius:5px;padding:0.55rem 1.3rem;font-family:'Source Sans 3',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all .2s;}
+.btn-secondary:hover{border-color:var(--navy);background:rgba(13,27,42,0.04);}
+
+/* INNER PAGES */
+.inner-page{padding:2.5rem 3.5rem;max-width:1000px;}
+.page-lbl{margin-bottom:0.35rem;}
+.page-title{font-family:'Playfair Display',serif;font-size:1.85rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem;}
+.page-sub{font-size:0.95rem;color:var(--text-mid);margin-bottom:2rem;font-style:italic;font-family:'Source Sans 3',sans-serif;}
+
+/* INTEL GRID */
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:2.5rem;}
+.intel-card{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:1.4rem;box-shadow:var(--shadow-sm);}
+.intel-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:0.45rem;display:flex;align-items:center;gap:0.35rem;}
+.intel-lbl::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.intel-txt{font-size:0.95rem;line-height:1.65;color:var(--text-body);}
+.intel-txt strong{color:var(--navy);font-weight:600;}
+.intel-hl{grid-column:span 2;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border:none;}
+.intel-hl .intel-lbl{color:var(--gold-light);}
+.intel-hl .intel-lbl::before{background:var(--gold-light);}
+.intel-hl .intel-txt{color:rgba(255,255,255,0.87);}
+.intel-hl .intel-txt strong{color:var(--gold-light);}
+
+/* TIERS TABLE */
+.sec-hd{display:flex;align-items:flex-end;gap:1.25rem;margin-bottom:1.1rem;}
+.sec-hd h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--navy);}
+.sec-hd-line{flex:1;height:1px;background:var(--border);margin-bottom:0.35rem;}
+.tiers-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--white);border:1px solid var(--border);border-radius:9px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:2.5rem;}
+.tiers-table thead th{background:var(--navy);color:rgba(255,255,255,0.65);font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.85rem 1.1rem;text-align:left;font-weight:400;}
+.tiers-table tbody tr:not(:last-child) td{border-bottom:1px solid var(--border);}
+.tiers-table tbody td{padding:1rem 1.1rem;font-size:0.92rem;color:var(--text-body);vertical-align:top;line-height:1.55;}
+.tiers-table tbody tr:hover td{background:var(--off-white);}
+.tier-pill{display:inline-flex;align-items:center;gap:0.3rem;padding:0.28rem 0.7rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:500;white-space:nowrap;}
+.tier-pill::before{content:'';width:4px;height:4px;border-radius:50%;}
+.t-gold{background:rgba(184,137,42,0.1);color:var(--gold);border:1px solid rgba(184,137,42,0.28);}
+.t-gold::before{background:var(--gold);}
+.t-red{background:rgba(192,57,43,0.07);color:#C0392B;border:1px solid rgba(192,57,43,0.18);}
+.t-red::before{background:#C0392B;}
+.t-gray{background:rgba(13,27,42,0.05);color:var(--text-mid);border:1px solid var(--border);}
+.t-gray::before{background:var(--text-mid);}
+.budget-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.75rem;font-weight:500;color:var(--navy);background:var(--gold-bg);border:1px solid rgba(184,137,42,0.22);border-radius:4px;padding:0.18rem 0.55rem;}
+
+/* PITCH LETTER */
+.letter-wrap{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-md);margin-bottom:2.5rem;}
+.letter-hdr{background:var(--navy);padding:1.25rem 2.25rem;display:flex;align-items:center;justify-content:space-between;}
+.letter-hdr-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.45);}
+.letter-date{font-family:'DM Mono',monospace;font-size:0.58rem;color:rgba(212,168,75,0.65);}
+.letter-body{padding:2.75rem 3rem;}
+.letter-body p{font-size:1rem;line-height:1.8;color:var(--text-body);margin-bottom:1rem;}
+.letter-body .salutation{font-size:1.02rem;font-weight:600;color:var(--navy);margin-bottom:1.4rem;font-family:'Source Sans 3',sans-serif;}
+.letter-body .highlight{color:var(--navy);font-weight:600;}
+.letter-body .gold-hl{color:var(--gold);font-weight:600;}
+.letter-body .sign-off{border-top:1px solid var(--border);padding-top:1.4rem;margin-top:1.4rem;}
+.letter-body .sign-off p{color:var(--text-body);}
+.letter-body .sign-off strong{color:var(--navy);font-size:1.02rem;}
+.letter-ftr{background:var(--cream);border-top:1px solid var(--border);padding:0.9rem 2.25rem;display:flex;align-items:center;justify-content:space-between;}
+.letter-ftr-note{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.12em;color:var(--text-light);text-transform:uppercase;}
+.copy-btn{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.42rem 0.9rem;background:var(--navy);color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background .2s;}
+.copy-btn:hover{background:var(--navy-soft);}
+
+/* CONTACTS */
+.contacts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.9rem;margin-top:1.1rem;margin-bottom:2.25rem;}
+.contact-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;box-shadow:var(--shadow-sm);transition:box-shadow .2s;}
+.contact-card:hover{box-shadow:var(--shadow-md);}
+.contact-role{font-family:'DM Mono',monospace;font-size:0.53rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:0.35rem;}
+.contact-val{font-size:0.86rem;color:var(--text-body);word-break:break-word;font-family:'Source Sans 3',sans-serif;}
+.contact-val a{color:var(--navy);text-decoration:none;font-weight:500;}
+.contact-val a:hover{color:var(--gold);text-decoration:underline;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .sidebar{width:250px;}
+  .home-screen,.inner-page{padding:2rem;}
+  .sponsor-tabs{padding:0 1rem;overflow-x:auto;}
+  .cover-body{grid-template-columns:1fr;}
+  .cover-right{display:none;}
+  .intel-grid{grid-template-columns:1fr;}
+  .intel-hl{grid-column:span 1;}
+  .achieve-grid{grid-template-columns:1fr 1fr;}
+  .cover-left,.cover-topbar,.cover-footer{padding-left:2rem;padding-right:2rem;}
+}
+@media(max-width:640px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:relative;}
+  .brand-list{max-height:260px;}
+  .letter-body{padding:1.75rem;}
+}
+@media print{
+  .sidebar,.sponsor-tabs,.cover-topbar,.cover-footer,.letter-ftr,.btn-primary,.btn-secondary,.copy-btn{display:none!important;}
+  .main{overflow:visible;}
+  .cover-body{grid-template-columns:1fr;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-logo-lbl">Sponsor Portal</div>
+    <div class="sidebar-title">Chaitanya Devadhe</div>
+    <div class="sidebar-sub">First Live Concert · Pune</div>
+  </div>
+  <div class="sidebar-controls">
+    <input class="sidebar-search" id="sideSearch" placeholder="Search brand…" oninput="filterList()" type="text">
+    <div class="cat-filters">
+      <button class="cat-btn active" onclick="setCategory('all',this)">All</button>
+      <button class="cat-btn" onclick="setCategory('beverages',this)">Beverages</button>
+      <button class="cat-btn" onclick="setCategory('jewellery',this)">Jewellery</button>
+      <button class="cat-btn" onclick="setCategory('realestate',this)">Real Estate</button>
+      <button class="cat-btn" onclick="setCategory('electronics',this)">Electronics</button>
+      <button class="cat-btn" onclick="setCategory('education',this)">Education</button>
+      <button class="cat-btn" onclick="setCategory('healthcare',this)">Healthcare</button>
+      <button class="cat-btn" onclick="setCategory('beauty',this)">Beauty</button>
+      <button class="cat-btn" onclick="setCategory('mall',this)">Mall</button>
+      <button class="cat-btn" onclick="setCategory('local',this)">Local</button>
+    </div>
+  </div>
+  <div class="brand-list" id="brandList"></div>
+  <div class="sort-bar">
+    <span class="sort-lbl">Sorted by</span>
+    <button class="sort-toggle" id="sortToggle" onclick="toggleSort()">Priority ↑</button>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main" id="mainPanel">
+
+  <!-- HOME -->
+  <div id="homeScreen" class="home-screen">
+    <p class="label" style="margin-bottom:0.5rem">Sponsor Outreach Portal · 2025–26</p>
+    <h1 class="home-title">First Live Concert<br><em>Sponsor Deck</em></h1>
+    <p class="home-sub">Chaitanya Devadhe · Mauli · Alandi, Pune · Maharashtra</p>
+    <div class="gold-rule"></div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-num">240<span>K+</span></div><div class="stat-lbl">Instagram</div></div>
+      <div class="stat-box"><div class="stat-num">126<span>K+</span></div><div class="stat-lbl">Spotify</div></div>
+      <div class="stat-box"><div class="stat-num">S<span>15</span></div><div class="stat-lbl">Indian Idol Finalist</div></div>
+      <div class="stat-box"><div class="stat-num">17</div><div class="stat-lbl">Priority Sponsors</div></div>
+      <div class="stat-box"><div class="stat-num">94<span>%</span></div><div class="stat-lbl">Rising Star Vote</div></div>
+    </div>
+    <div class="about-card">
+      <p><strong>Chaitanya Devadhe</strong> — known by his devotional name <strong>Mauli</strong> — is one of Maharashtra's most compelling emerging voices. Born in 2007 in Alandi Devachi, Pune, his roots in bhajan, abhang, and Hindustani classical tradition run deep.</p>
+      <p>He rose to national recognition as a <strong>Top 10 contestant on Superstar Singer (Sony TV)</strong>, a <strong>Rising Star Season 2 finalist with 94% public voting</strong>, and most recently as a <strong>Finalist on Indian Idol Season 15</strong>, earning applause from Shreya Ghoshal, Vishal Dadlani, and Aditya Prateek Singh. He also appeared in the Marathi film <strong>Luckee (2019)</strong> directed by Sanjay Jadhav.</p>
+      <p>His repertoire spans classical, Marathi folk, devotional, Bollywood, Sufi, and fusion — making him a rare performer who can move audiences from spiritual stillness to joyous celebration within a single set.</p>
+    </div>
+    <div class="achieve-grid">
+      <div class="ach-item"><div class="ach-icon">🏆</div><div class="ach-title">Indian Idol S15 Finalist</div><div class="ach-desc">Praised by Shreya Ghoshal & Vishal Dadlani</div></div>
+      <div class="ach-item"><div class="ach-icon">⭐</div><div class="ach-title">Superstar Singer Top 10</div><div class="ach-desc">Sony Entertainment Television</div></div>
+      <div class="ach-item"><div class="ach-icon">🎙️</div><div class="ach-title">Rising Star S2 — 94% Vote</div><div class="ach-desc">Colors TV national platform</div></div>
+      <div class="ach-item"><div class="ach-icon">🎬</div><div class="ach-title">Marathi Film Debut</div><div class="ach-desc">Luckee (2019) · Sanjay Jadhav</div></div>
+      <div class="ach-item"><div class="ach-icon">📍</div><div class="ach-title">Alandi · Pune Roots</div><div class="ach-desc">Deep Marathi cultural identity</div></div>
+      <div class="ach-item"><div class="ach-icon">🎼</div><div class="ach-title">Multi-Genre Performer</div><div class="ach-desc">Classical · Devotional · Bollywood · Sufi</div></div>
+    </div>
+    <div class="pos-block">
+      <p class="pos-text">"We are not asking for sponsorship only. We are inviting your brand to become a <strong style="color:var(--gold-light)">founding growth partner</strong> of Chaitanya Devadhe's first live concert. When a fan sees that a brand supported the artist they love at the beginning of his journey, the brand is no longer just a seller — it becomes part of the fan's story."</p>
+    </div>
+    <div class="hint-box">
+      <span style="font-size:1.2rem">👈</span>
+      <span><strong>Select any brand</strong> from the left panel to open their personalised sponsor presentation — cover page, brand-specific pitch letter, sponsorship packages, and direct contacts.</span>
+    </div>
+  </div>
+
+  <!-- SPONSOR VIEW -->
+  <div id="sponsorView" class="sponsor-view"></div>
+
+</main>
+</div>
+
+<script>
+/* ════════════ DATA ════════════ */
+const BRANDS=[
+  {rank:1,name:"Coca-Cola / HCCB",cat:"beverages",catLabel:"Beverages",val:"~₹31.9T (parent)",priority:10,dot:"high",pain:"Hard to stand out in the crowded youth beverage market",gain:"Mass visibility + sampling + emotional memory",offer:"Pouring rights, chill zone, product sampling for 100% of audience, QR-linked database, combo coupons",success:"Product trials, QR scans, brand recall, repeat purchase",why:"Live concerts create thirst, celebration, and shared emotion — the perfect triangle for a beverage brand. Chaitanya's Marathi + devotional + Bollywood setlist reaches the full family demographic.",excl:"Exclusive Beverage Category Rights",pitchType:"beverages",contacts:[{role:"India Helpline",val:"1800-208-2653"},{role:"India Email",val:'<a href="mailto:indiahelpline@coca-cola.com">indiahelpline@coca-cola.com</a>'},{role:"HCCB Email",val:'<a href="mailto:hccb-india@coca-cola.in">hccb-india@coca-cola.in</a>'},{role:"Ask For",val:"Regional Marketing / On-Ground Activations Head"}]},
+  {rank:2,name:"PepsiCo India",cat:"beverages",catLabel:"Beverages",val:"~$231.4B (parent)",priority:9.5,dot:"high",pain:"Competing for youth attention in real-world settings",gain:"Concert buzz, sampling, coupon redemption, UGC content",offer:"Energy zone sponsorship, branded merch, giveaway contest, social media co-branding",success:"Social impressions, UGC volume, trial conversions, database collection",why:"Pepsi's brand DNA is youth rebellion and music energy — Chaitanya's first concert is a perfect origin story both brands can own together.",excl:"Exclusive Beverage Category Rights",pitchType:"beverages",contacts:[{role:"Consumer Feedback",val:'<a href="mailto:consumer.feedback@pepsico.com">consumer.feedback@pepsico.com</a>'},{role:"Helpline",val:"1800224020"},{role:"Corporate Comms",val:'<a href="mailto:corporate.communications@pepsico.com">corporate.communications@pepsico.com</a>'},{role:"Ask For",val:"Experiential Marketing / Regional Brand Activation"}]},
+  {rank:3,name:"Reliance Digital",cat:"electronics",catLabel:"Consumer Electronics",val:"~₹18.86T (parent RIL)",priority:9,dot:"high",pain:"Need demo-to-sale conversion and product placement",gain:"Footfall + gadget aspiration + creator content",offer:"Creator kit giveaway, demo booth, audio/selfie zone branded, QR offers driving store visits",success:"Lead database, store visit referrals, sales enquiries",why:"Chaitanya's audience — music lovers, creators, families — are exactly the people who buy premium audio gear, smartphones, and smart TVs. The concert is a live demo environment.",excl:"Exclusive Technology & Electronics Category Rights",pitchType:"electronics",contacts:[{role:"Phoenix MC Store",val:"+91 86920 09456"},{role:"Store Email",val:'<a href="mailto:cdit_pune.8919_marketcity@zmail.ril.com">cdit_pune.8919_marketcity@zmail.ril.com</a>'},{role:"RRVL Secretarial",val:'<a href="mailto:rrvl.secretarial@ril.com">rrvl.secretarial@ril.com</a>'},{role:"Ask For",val:"Store Manager → Regional Marketing Head"}]},
+  {rank:4,name:"Titan / Tanishq",cat:"jewellery",catLabel:"Jewellery / Lifestyle",val:"~₹3,83,968 Cr",priority:8.8,dot:"high",pain:"Need emotional purchase triggers and premium cultural association",gain:"Trust + aspiration + celebration moments",offer:"Title sponsor, gifting segment, artist felicitation on stage, festive campaign tie-in",success:"Premium brand lift, family/women leads, pre-festive sales uplift",why:"Music + emotion + celebration is the Tanishq purchase triangle. When Mauli performs devotional and Marathi songs, the audience is primed for the emotional, generous purchases Tanishq thrives on.",excl:"Exclusive Jewellery Category Rights",pitchType:"jewellery",contacts:[{role:"Investor/Corporate",val:'<a href="mailto:investor@titan.co.in">investor@titan.co.in</a>'},{role:"Titan Phone",val:"+91 80 67047000"},{role:"Tanishq Helpline",val:"1800-266-0123"},{role:"Ask For",val:"City Manager / Regional Marketing / Events"}]},
+  {rank:5,name:"Diageo / United Spirits",cat:"beverages",catLabel:"Premium Beverages",val:"~₹1,01,014 Cr",priority:8.5,dot:"high",pain:"Need culture relevance, not just advertising visibility",gain:"Cool factor + premium association with live performance",offer:"VIP lounge, artist hospitality zone, content clips, premium event packaging",success:"Premium audience engagement, UGC social buzz, brand image elevation",why:"Diageo's brands are built on aspiration and performance. Sponsoring a prodigy's first concert is a powerful brand-origin story for both parties.",excl:"Exclusive Premium Beverages Category Rights",pitchType:"premium_bev",contacts:[{role:"India Contact",val:'<a href="mailto:Contactus.india@diageo.com">Contactus.india@diageo.com</a>'},{role:"India Phone",val:"+91 080-22210705"},{role:"Shweta Arora",val:'<a href="mailto:Shweta.Arora@diageo.com">Shweta.Arora@diageo.com</a>'},{role:"Ask For",val:"Brand Partnerships / Premium Events / Experiential Team"}]},
+  {rank:6,name:"Nykaa",cat:"beauty",catLabel:"Beauty / Lifestyle",val:"~₹76,338 Cr",priority:8,dot:"high",pain:"Need fresh engagement beyond e-commerce and standard retail",gain:"Women-led discovery + trial + influencer content",offer:"Glam styling booth, influencer corner, beauty coupons, QR signups, giveaway",success:"Trial conversions, content output, email signups, store traffic",why:"Concert-goers dress up. They're in their most aspirational, style-conscious mood. A Nykaa presence catches audience members exactly when they're open to beauty discovery.",excl:"Exclusive Beauty & Lifestyle Category Rights",pitchType:"beauty",contacts:[{role:"Phoenix Store",val:"+91 20 66890657"},{role:"Company Secretary",val:'<a href="mailto:nykaacompanysecretary@nykaa.com">nykaacompanysecretary@nykaa.com</a>'},{role:"Corporate",val:"+91 22 6838 9616"},{role:"Ask For",val:"Regional Events / Brand Partnerships Manager"}]},
+  {rank:7,name:"Phoenix Marketcity Pune",cat:"mall",catLabel:"Mall / Multi-Brand Gateway",val:"~₹60,422 Cr",priority:9.8,dot:"high",pain:"Needs repeat footfall and event-driven reasons to visit",gain:"Footfall + tenant sales + buzz + media coverage",offer:"Venue partnership, cross-promo of tenant brands, activation week tie-in, media coverage",success:"Footfall count, tenant uplift, PR coverage, future concert property ownership",why:"One Phoenix relationship unlocks the venue, co-branding with 100+ tenant brands, and institutional credibility. Phoenix has a proven history of supporting live events in Pune.",excl:"Venue & Title Partnership (Exclusive)",pitchType:"mall",contacts:[{role:"Events / Info",val:'<a href="mailto:infopune@phoenixmills.com">infopune@phoenixmills.com</a>'},{role:"Reception",val:"020 66890000"},{role:"Floor Manager",val:'<a href="mailto:floor.manager@phoenixmills.com">floor.manager@phoenixmills.com</a>'},{role:"Ask For",val:"Mall Marketing Head / Events & Promotions Team"}]},
+  {rank:8,name:"PNG Jewellers",cat:"jewellery",catLabel:"Jewellery",val:"~₹7,423 Cr",priority:7.8,dot:"mid",pain:"Competing with national brands; needs deep Marathi cultural association",gain:"Cultural trust + community goodwill + gifting visibility",offer:"Associate sponsor, Marathi cultural segment, artist felicitation, joint devotional campaign",success:"Brand loyalty, community engagement, Diwali/festive season sales lift",why:"PNG Jewellers publicly promotes an Art Initiative supporting budding artists. Chaitanya Devadhe — Alandi-born, Marathi, devotional, nationally recognized — is the perfect candidate.",excl:"Exclusive Marathi Jewellery Cultural Patron Rights",pitchType:"jewellery",contacts:[{role:"Customer Service",val:'<a href="mailto:customerservice@pngadgil.com">customerservice@pngadgil.com</a>'},{role:"Helpline",val:"1800 233 5005"},{role:"Secretarial",val:'<a href="mailto:secretarial@pngadgil.com">secretarial@pngadgil.com</a>'},{role:"Ask For",val:"City Marketing / Corporate Partnerships Head"}]},
+  {rank:9,name:"Kolte-Patil Developers",cat:"realestate",catLabel:"Real Estate",val:"~₹3,254 Cr",priority:7.5,dot:"mid",pain:"High ticket, long sales cycle, need qualified family audience",gain:"Lead database + premium community experience + lifestyle positioning",offer:"Project showcase lounge, booking desk, family hospitality zone, event branding",success:"Site visit enquiries, homebuyer leads, lifestyle brand association",why:"Families at a Chaitanya Devadhe concert are exactly Kolte-Patil's target customer — premium taste, Pune-rooted, income-capable.",excl:"Exclusive Real Estate Category Rights",pitchType:"realestate",contacts:[{role:"Corporate",val:"+91-20 6742 9200"},{role:"Toll Free",val:"1800-2662-233"},{role:"Investor Relations",val:'<a href="mailto:investorrelation@koltepatil.com">investorrelation@koltepatil.com</a>'},{role:"Ask For",val:"Marketing Head / Channel Partnerships"}]},
+  {rank:10,name:"MITCON",cat:"education",catLabel:"Education / Consulting",val:"~₹98 Cr",priority:6.5,dot:"mid",pain:"Needs youth relevance and community presence beyond campus",gain:"Student affinity + registrations + youth-brand trust",offer:"Student ambassador tie-in, scholarship announcement, campus promo, social recognition",success:"Enquiry leads, application uplift, youth trust and recall",why:"Chaitanya's story — talent from Alandi achieving national fame through discipline — is exactly the aspirational narrative MITCON wants associated with skill development.",excl:"Exclusive Education & Skill Development Category Rights",pitchType:"education",contacts:[{role:"Business Development",val:'<a href="mailto:bd@mitconindia.com">bd@mitconindia.com</a>'},{role:"Phone",val:"+91 20 66289100"},{role:"Ask For",val:"Business Development / Institutional Partnerships"}]},
+  {rank:11,name:"Manipal Hospitals Kharadi",cat:"healthcare",catLabel:"Healthcare",val:"Private",priority:6.8,dot:"mid",pain:"Hard to make healthcare feel warm, approachable, and community-connected",gain:"Family trust + community goodwill + positive brand humanization",offer:"Health awareness desk, first-aid partner credit, wellness kits, safety partner branding",success:"Local brand recall, trust metrics, preventive-health engagement",why:"A family-safe concert is the ideal setting for a healthcare brand to show its community side. Manipal's association with a beloved local artist builds emotional trust.",excl:"Exclusive Healthcare & Wellness Category Rights",pitchType:"healthcare",contacts:[{role:"General Info",val:'<a href="mailto:info@manipalhospitals.com">info@manipalhospitals.com</a>'},{role:"Kharadi",val:"020 6813 8888"},{role:"Toll Free",val:"1800 210 9888"},{role:"Ask For",val:"Hospital Marketing / Community Outreach Team"}]},
+  {rank:12,name:"Gera Developments",cat:"realestate",catLabel:"Real Estate (Premium)",val:"Private",priority:6.5,dot:"mid",pain:"Need premium audience access and lifestyle-first brand positioning",gain:"Qualified lifestyle leads + cultural excellence association",offer:"VIP lounge, lifestyle branding, project showcase, premium experience zone",success:"Enquiries, site visits, premium-audience database",why:"Gera's premium township buyers value culture, art, and community — exactly the atmosphere Chaitanya's concert creates.",excl:"Premium Real Estate Lifestyle Partner Rights",pitchType:"realestate",contacts:[{role:"Corporate",val:"+91 20 6680 7700"},{role:"Location",val:"Boat Club Road, Pune"},{role:"Ask For",val:"Brand Marketing / Customer Engagement Team"}]},
+  {rank:13,name:"Indira College",cat:"education",catLabel:"Education",val:"Private",priority:6,dot:"mid",pain:"Needs student community visibility and youth-first brand identity",gain:"Student ambassador base, volunteer network, campus buzz",offer:"Student ambassador program, campus ticket promotion, volunteer opportunity",success:"Registrations, student participation, social visibility on campus",why:"Chaitanya's journey from Alandi to national television is an aspirational story for college students — and Indira College association gives the college a youth-first positioning.",excl:"Exclusive Education Institution Partner Rights",pitchType:"education",contacts:[{role:"Campus Phone",val:"020 66759634"},{role:"Admissions",val:"9223002901"},{role:"Contact Janardhan",val:'<a href="mailto:janardanp@iccs.ac.in">janardanp@iccs.ac.in</a>'},{role:"Ask For",val:"Outreach / Branding / Admissions Team"}]},
+  {rank:14,name:"Red Bull India",cat:"beverages",catLabel:"Beverages / Youth Culture",val:"Private",priority:7.2,dot:"mid",pain:"Needs authentic music/culture activation beyond mass advertising",gain:"Creator buzz + youth energy + authentic live event association",offer:"Energy bar, can sampling, creator-kit giveaway, social content collab, event energy branding",success:"Social impressions, UGC content, brand cool-factor lift, trial conversions",why:"Red Bull's global identity is built on music, performance, and youth culture. Chaitanya's first live concert is the exact type of origin-story event Red Bull loves to be part of — and document.",excl:"Exclusive Energy Drink Category Rights",pitchType:"beverages",contacts:[{role:"Regional Contact",val:'<a href="mailto:harish.kanotra@in.redbull.com">harish.kanotra@in.redbull.com</a>'},{role:"HQ",val:"Andheri, Mumbai"},{role:"Ask For",val:"Regional Events & Culture Marketing"}]},
+  {rank:15,name:"High Spirits Cafe",cat:"local",catLabel:"Venue / Lifestyle",val:"Private",priority:5.5,dot:"low",pain:"Wants to stay at the center of Pune's live music culture",gain:"Association with a rising star before he's mainstream",offer:"After-party collaboration, artist lounge, cross-promotion, cultural network bridge",success:"Walk-ins post-concert, social cross-promo, influencer network expansion",why:"High Spirits is a beloved Pune live music institution. A collaboration at Chaitanya's first concert positions both as pillars of Pune's emerging music scene.",excl:"Official After-Party & Lifestyle Partner",pitchType:"local",contacts:[{role:"Email",val:'<a href="mailto:highspiritscafe@gmail.com">highspiritscafe@gmail.com</a>'},{role:"Phone",val:"+91 97654 00484"},{role:"Ask For",val:"Owner / Event Programming Team"}]},
+  {rank:16,name:"Jaihind Udyog Samuh",cat:"local",catLabel:"Agarbatti / Incense",val:"Private",priority:4.5,dot:"low",pain:"Limited visibility beyond local distribution networks",gain:"Category visibility + cultural fit + devotional audience access",offer:"Devotional segment sponsor, incense/agarbatti sampling, spiritual branding zone",success:"Category recall, dealer interest, festival season purchase lift",why:"When Chaitanya performs bhajans and abhangs, the audience is in a devotional state of mind. Jaihind's agarbatti brands fit perfectly and meaningfully in that space.",excl:"Exclusive Devotional & Incense Category Rights",pitchType:"local",contacts:[{role:"Email",val:'<a href="mailto:jaihindfmcgproducts@gmail.com">jaihindfmcgproducts@gmail.com</a>'},{role:"Phone",val:"9075508537 / 8047635845"},{role:"Location",val:"Kharadi, Pune"},{role:"Ask For",val:"Founder / CEO"}]},
+  {rank:17,name:"Mahaveer Enterprises",cat:"local",catLabel:"Incense / Fragrance",val:"Private",priority:4,dot:"low",pain:"Niche visibility and limited brand recognition beyond local markets",gain:"Cultural event association + audience sampling + local recall",offer:"Fragrance sampling zone, cultural segment co-branding, audience gift pack",success:"Brand recall, dealer enquiries, festival purchase association",why:"Maharashtra's cultural events have deep sensory associations — sound and fragrance are intertwined. Mahaveer's fragrance brands can own that sensory layer at the concert.",excl:"Exclusive Fragrance & Wellness Category Rights",pitchType:"local",contacts:[{role:"Contact Person",val:"Sandeep Kharade"},{role:"Mobile",val:"8971432309"},{role:"Location",val:"Urawade / Pirangut, Pune"},{role:"Ask For",val:"Founder / Proprietor"}]}
+];
+
+const TIERS={
+  beverages:[
+    {tier:"Title Sponsor",pill:"t-gold",offer:"Exclusive pouring rights · Branded chill zone · Product sampling for 100% of audience · LED stage branding · MC mentions every 20 mins · QR database collection · Post-event content package",gets:"5,000+ impressions, product trials, QR-linked database, social co-branding (240K+ reach)",budget:"₹1.5L – ₹5L"},
+    {tier:"Associate Sponsor",pill:"t-red",offer:"Sampling booth · Standee · One MC mention · Social post tag · Event mention in digital creatives",gets:"1,000+ audience reach, product trial touchpoints, 1 co-branded social post",budget:"₹50K – ₹1L"},
+    {tier:"Community Partner",pill:"t-gray",offer:"Brand coupon insert in entry pass · Logo on event backdrop · Social tag",gets:"Coupon redemption tracking, 500+ audience reach, event visibility",budget:"₹15K – ₹30K"}
+  ],
+  premium_bev:[
+    {tier:"Presenting Sponsor",pill:"t-gold",offer:"VIP lounge naming rights · Artist hospitality co-branded under your name · Professionally captured content clips · LED branding · MC mention · Co-produced social campaign",gets:"Premium audience engagement, content rights, social buzz (240K+ reach), brand prestige lift",budget:"₹3L – ₹8L"},
+    {tier:"VIP Zone Partner",pill:"t-red",offer:"VIP experience area co-branding · Social collaboration · Event mention",gets:"Premium audience association, 2 co-branded social posts, exclusive zone visibility",budget:"₹1L – ₹2.5L"},
+    {tier:"Content Partner",pill:"t-gray",offer:"Post-event Instagram reel collaboration",gets:"1 co-branded reel, 240K+ Instagram reach, brand mention",budget:"₹20K – ₹50K"}
+  ],
+  electronics:[
+    {tier:"Official Tech Partner",pill:"t-gold",offer:"Gadget giveaway contest · Demo booth · Audio/selfie zone 'Powered by [Brand]' · QR offers driving store visits · Creator-kit distribution · LED branding",gets:"Lead database, 200+ store visit referrals, 5,000+ impressions, creator content",budget:"₹2L – ₹6L"},
+    {tier:"Demo Zone Partner",pill:"t-red",offer:"Demo booth · Standee · Giveaway social contest",gets:"Product awareness, contest entries, 1,000+ audience touchpoints",budget:"₹75K – ₹1.5L"},
+    {tier:"Gift Sponsor",pill:"t-gray",offer:"Branded gift to artist/top fan · Social mention post",gets:"Brand story, 240K+ Instagram reach",budget:"₹20K – ₹40K"}
+  ],
+  jewellery:[
+    {tier:"Title Sponsor",pill:"t-gold",offer:"Concert segment naming rights · Artist felicitation award on stage · LED branding · Dedicated social campaign · Emotional gifting moment · Professional documentation",gets:"Premium brand story, women + family leads, festive season lift, 5,000+ impressions, community goodwill",budget:"₹2L – ₹8L"},
+    {tier:"Cultural Patron",pill:"t-red",offer:"Certificate of cultural patronage · Standee · 2 social posts · Backstage brand presence",gets:"Cultural prestige, media mention, Marathi community trust",budget:"₹75K – ₹2L"},
+    {tier:"Gift Partner",pill:"t-gray",offer:"Branded gift to performer · Thank-you social post",gets:"Brand story post, 240K+ Instagram reach",budget:"₹15K – ₹40K"}
+  ],
+  beauty:[
+    {tier:"Beauty Zone Sponsor",pill:"t-gold",offer:"Dedicated glam/styling booth · Product trials · Influencer content corner · QR-linked signup offer · Social collaboration · Post-event reel production",gets:"Trial conversions, content output, 500+ signups, women-audience reach (240K+ reach)",budget:"₹75K – ₹2.5L"},
+    {tier:"Gifting Partner",pill:"t-red",offer:"Gift hampers for lucky draw · Social tag · Event mention",gets:"200+ trial touchpoints, co-branded social post, QR coupon redemption",budget:"₹30K – ₹75K"},
+    {tier:"Content Partner",pill:"t-gray",offer:"Post-concert Instagram reel collaboration",gets:"1 reel, 240K+ reach, brand mention",budget:"₹10K – ₹25K"}
+  ],
+  mall:[
+    {tier:"Venue & Title Partner",pill:"t-gold",offer:"Naming association (Presented by [Mall]) · Exclusive cross-promo of tenant brands · Activation week tie-in · PR and media partnership · First-access rights to future concert series",gets:"Footfall lift, tenant sales uplift, media coverage, destination event ownership, ongoing concert property",budget:"Revenue share / In-kind venue value"},
+    {tier:"Promo Partner",pill:"t-red",offer:"Joint social campaign · Ticket booth in mall · Mall-wide announcement on the day",gets:"Cross-audience reach, social impressions, mall footfall lift",budget:"₹50K – ₹1.5L"}
+  ],
+  realestate:[
+    {tier:"Lifestyle Presenting Sponsor",pill:"t-gold",offer:"Branded project lounge · Family hospitality zone · Professional lead-collection desk · LED branding · MC introductions · Full co-branded social campaign",gets:"Site visit enquiries, homebuyer leads, premium audience database, lifestyle positioning",budget:"₹2L – ₹6L"},
+    {tier:"Community Sponsor",pill:"t-red",offer:"Standee · Project brochure distribution · Social post · Event mention",gets:"Brand awareness, 200+ warm leads, community goodwill",budget:"₹50K – ₹1.5L"},
+    {tier:"Branding Partner",pill:"t-gray",offer:"Logo on event backdrop · Digital creative tag",gets:"Event visibility, 5,000+ impressions",budget:"₹15K – ₹40K"}
+  ],
+  education:[
+    {tier:"Youth Partner",pill:"t-gold",offer:"Student ambassador program · Scholarship announcement on stage · Campus ticket promo · LED branding · Social collaboration",gets:"Registrations, youth recall, campus social buzz, aspirational brand story",budget:"₹50K – ₹2L"},
+    {tier:"Knowledge Partner",pill:"t-gray",offer:"Brochure distribution · Standee · Social tag",gets:"Brand awareness among youth audience, 500+ touchpoints",budget:"₹20K – ₹50K"}
+  ],
+  healthcare:[
+    {tier:"Safety & Wellness Partner",pill:"t-gold",offer:"Health awareness desk · First-aid partner credit · Wellness kit distribution · Family zone co-branding · MC safety mention · LED branding",gets:"Community trust, local recall, preventive-health engagement, family audience goodwill",budget:"₹50K – ₹1.5L"},
+    {tier:"Community Care Partner",pill:"t-gray",offer:"Informational booth · Health brochures · Social mention",gets:"Warm community association, 200+ touchpoints",budget:"₹20K – ₹40K"}
+  ],
+  local:[
+    {tier:"Cultural Patron",pill:"t-gold",offer:"Segment branding · Sampling zone · On-stage mention · Standee · Social mention",gets:"Category visibility, cultural association, devotional audience recall",budget:"₹15K – ₹50K"},
+    {tier:"Community Supporter",pill:"t-gray",offer:"Brochure distribution · Logo on event materials",gets:"Local brand recognition, 200+ touchpoints",budget:"₹5K – ₹15K"}
+  ]
+};
+
+/* LETTERS */
+const TODAY=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+function getLetter(b){
+  const M={
+    beverages:`<p class="salutation">Dear ${b.name} Marketing / Regional Activation Team,</p><p>My name is <span class="highlight">Chaitanya Devadhe</span>, widely known as <em>Mauli</em> — a Finalist on Indian Idol Season 15, Top 10 on Superstar Singer (Sony TV), and a 94% public-vote finalist on Rising Star Season 2. I am writing from Alandi Devachi, Pune, Maharashtra — and I am reaching out because I believe we can create something genuinely memorable together.</p><p>I am organizing <span class="highlight">my first ticketed live concert in Pune</span> — a solo multi-genre performance spanning Marathi devotional, classical, Bollywood, Sufi, and fusion music. Our audience spans young adults (18–35), families, and cultural enthusiasts across Pune, PCMC, and the Alandi corridor — precisely the demographic that forms the emotional core of beverage consumption decisions.</p><p>Live concerts are one of the most powerful environments for ${b.name}. The combination of <span class="highlight">crowd energy, shared celebration, and collective emotion</span> creates purchase memory that advertising alone cannot replicate. ${b.name} has the opportunity to be the brand that was <em>there</em> — that refreshed the crowd at the moment they first fell in love with Mauli's voice.</p><p>We are offering <span class="gold-hl">${b.excl}</span> — no competing beverage brand will be present at the event. Assets include pouring rights, a branded chill zone, product sampling for every attendee, QR-driven database collection, LED stage branding, MC mentions every 20 minutes, and co-branded social content reaching <strong>240,000+ Instagram followers</strong>.</p><p>Post-event, we deliver a full performance report: footfall data, QR scan counts, product trial numbers, social impressions, and a professional photo and video package for your marketing team.</p><p>This is not just a sponsorship. It is a <span class="highlight">founding partnership</span> at the beginning of an artist's journey that Maharashtra is already proud of. When fans remember this concert, they will remember ${b.name} was part of it.</p><div class="sign-off"><p>I would love to schedule a brief call to present our full sponsor pack.</p><p>With warm regards,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>Indian Idol Season 15 Finalist · Alandi, Pune<br>📞 +91 83693 90931 · @chaitanya_devadhe_offical</p></div>`,
+    premium_bev:`<p class="salutation">Dear ${b.name} Brand Partnerships Team,</p><p>I am <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist from Alandi, Pune, Maharashtra. I am writing to propose a partnership for my first live solo concert — and I believe ${b.name}'s brand story aligns powerfully with this occasion.</p><p>${b.name} has built its identity on <span class="highlight">aspiration, performance, and the premium experience</span>. My first concert offers exactly that canvas. A prodigy's debut — crafted with care, reaching a discerning adult audience in Pune's premium ecosystem — is the kind of cultural moment that premium brands are built to own.</p><p>We are proposing a Presenting Sponsor arrangement with <span class="gold-hl">${b.excl}</span>: a premium VIP lounge with your branding, artist hospitality co-branded under your name, professionally captured content clips for your digital channels, and a co-produced social campaign reaching <strong>240,000+ Instagram followers</strong> before, during, and after the concert.</p><p>Our audience skews aspirational: 22–45, income-capable, Pune-rooted and culturally engaged. They are the same audience ${b.name} wants at the centre of every premium activation.</p><p>This is a <span class="highlight">founding brand partnership</span>. The brands that walk in on Day One of an artist's journey are the ones fans never forget.</p><div class="sign-off"><p>We would love to present our full proposal at your convenience.</p><p>Warmly,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931 · @chaitanya_devadhe_offical</p></div>`,
+    electronics:`<p class="salutation">Dear ${b.name} Regional Marketing / Events Team,</p><p>My name is <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist from Alandi, Pune. I am planning my first live concert in Pune and reaching out to ${b.name} as our preferred Technology Partner.</p><p>Live concerts are one of the highest-intent environments for consumer electronics. When an audience watches a performer pour emotion into a microphone, they want the device in their hand to capture it perfectly. <span class="highlight">${b.name} sells exactly what a concert audience dreams about.</span></p><p>We are proposing an Official Tech Partnership with <span class="gold-hl">${b.excl}</span>: a branded gadget giveaway contest, an audio/selfie zone branded as <em>"Powered by ${b.name}"</em>, QR codes driving footfall to your nearest store, and creator-kit distribution to our music community. We will co-produce content reaching <strong>240,000+ Instagram followers</strong>.</p><p>Our audience skews young, creator-minded, and product-aspiring — the exact cluster that drives electronics purchase decisions. With 5,000+ expected impressions and a post-event lead database delivered to your regional team, the ROI model is clean and trackable.</p><div class="sign-off"><p>I look forward to discussing this with your team.</p><p>Best regards,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`,
+    jewellery:`<p class="salutation">Dear ${b.name} Marketing / Partnerships Team,</p><p>My name is <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist, born in Alandi Devachi, Pune. I write to you with a proposal that carries deep emotional resonance for both ${b.name} and our audience.</p><p>Music and jewellery share a language. Both are gifted at celebrations. Both are passed down through generations. Both carry emotional memory that outlasts the moment. <span class="highlight">${b.name} and Chaitanya Devadhe, together, can own that moment.</span></p><p>For my first live solo concert in Pune, I am inviting ${b.name} to be our <span class="gold-hl">${b.excl}</span>. The concert will feature a dedicated cultural segment branded as the <em>"${b.name} Cultural Moment"</em> — including a live artist felicitation, positioned as a celebration of Maharashtra's artistic heritage, documented professionally and shared across our 240,000+ Instagram followers.</p><p>Our audience is family-rich, aspirational, and culturally engaged — exactly the profile that drives festive-season jewellery purchases. We will deliver warm leads from our post-event engagement data.</p><p>This is not an advertisement. <span class="highlight">This is a memory. And ${b.name} will be in it.</span></p><div class="sign-off"><p>I would love to present our full proposal at a time convenient for your team.</p><p>With respect and warmth,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931 · @chaitanya_devadhe_offical</p></div>`,
+    beauty:`<p class="salutation">Dear ${b.name} Brand Partnerships / Regional Events Team,</p><p>I am <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist from Pune, Maharashtra. I am organizing my first live solo concert in Pune and believe ${b.name} is the ideal beauty and lifestyle partner for this event.</p><p>Concert-goers are among the most intentional self-presenters of any audience. They dress up, they want to feel their best, they create content and share it. <span class="highlight">The concert is not just a music event — it is a self-expression occasion.</span></p><p>We are proposing a <span class="gold-hl">${b.excl}</span> including a dedicated <em>${b.name} Glam Zone</em> — a styled, branded booth where audience members can discover, try, and shop — coupled with an influencer content corner, QR-linked offers, and lucky-draw giveaways. Post-event, we will produce co-branded content reaching <strong>240,000+ Instagram followers</strong>.</p><p>Our audience skews female, aspirational, and creator-influenced — exactly the profile that responds to ${b.name}'s discovery-first model. We see this as the start of an ongoing concert series partnership.</p><div class="sign-off"><p>I would love to share more over a quick call.</p><p>Warmly,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`,
+    mall:`<p class="salutation">Dear ${b.name} Events & Marketing Team,</p><p>I am <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist from Alandi, Pune. I am writing to propose a venue and co-marketing partnership for my first live solo concert, and I believe ${b.name} is the ideal partner to bring this to life.</p><p>${b.name} has built its reputation as Pune's premier live-event destination. My first concert represents exactly the anchoring cultural event that drives quality footfall, generates media coverage, and gives your tenant brands meaningful audience interaction. <span class="highlight">A successful concert here tells Pune: this is where live culture happens.</span></p><p>We propose a <span class="gold-hl">${b.excl}</span>: ${b.name} receives naming association — <em>"Chaitanya Devadhe's First Live Concert, Presented by ${b.name}"</em> — exclusive cross-promotion of tenant brands, activation zones, and a co-produced social campaign reaching <strong>240,000+ Instagram followers</strong>. In return, we access the venue on a revenue-share or in-kind basis.</p><p>Beyond this concert, we envision an ongoing <em>Mauli Live</em> series at ${b.name}. <span class="highlight">First edition rights are available exclusively to ${b.name}.</span></p><div class="sign-off"><p>I would love to meet your events team at the earliest to present our full plan.</p><p>With great respect,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`,
+    realestate:`<p class="salutation">Dear ${b.name} Marketing / Customer Engagement Team,</p><p>My name is <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist from Alandi Devachi, Pune. I am reaching out about a sponsorship that will deliver genuine, measurable ROI for ${b.name}'s marketing objectives.</p><p>Real estate brands face a singular challenge: the buying journey is emotional, long, and trust-dependent. Traditional advertising reaches everyone; <span class="highlight">events reach the right people at the right moment.</span> A family attending a live concert together — aspirational, at ease, celebrating — is a family open to conversations about their home and future.</p><p>For my first live solo concert in Pune, we are offering ${b.name} a <span class="gold-hl">${b.excl}</span>: a branded project lounge, a professional lead-collection desk, a booking desk, MC introductions positioning ${b.name} as a champion of Maharashtra's cultural community, and full co-branded social content reaching <strong>240,000+ Instagram followers</strong>. We will deliver a post-event database of qualified audience members directly to your sales team.</p><p>Our audience is Pune's aspirational middle-to-premium class — families and young professionals who appreciate quality, culture, and community. <span class="highlight">These are ${b.name}'s homebuyers.</span></p><div class="sign-off"><p>We would love to present our full proposal at your convenience.</p><p>Sincerely,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`,
+    education:`<p class="salutation">Dear ${b.name} Outreach / Institutional Partnerships Team,</p><p>I am <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist from Alandi, Pune. My journey — from a small town in Maharashtra to national television, through discipline, practice, and passion — is the story your institution celebrates every day.</p><p>I am writing because ${b.name} and I share the same audience: <span class="highlight">ambitious young people from Maharashtra building their future with intention.</span> My first live concert in Pune is an opportunity to reach them in a setting of joy, inspiration, and community.</p><p>We propose a <span class="gold-hl">${b.excl}</span>: on-stage mention during a motivational concert moment, co-branding rights for the Youth Zone, a scholarship announcement on stage, campus-based ticket promotion, and co-branded social content reaching <strong>240,000+ Instagram followers</strong>. In exchange, we welcome your students as ambassadors and volunteers.</p><p>Chaitanya's story is proof that talent from any background can achieve anything with the right platform and the right education. <span class="highlight">${b.name} can be part of that story.</span></p><div class="sign-off"><p>Let's discuss how we can build something meaningful for Maharashtra's youth.</p><p>With warm regards,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`,
+    healthcare:`<p class="salutation">Dear ${b.name} Community Outreach / Marketing Team,</p><p>I am <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist, Alandi, Pune. I am organizing my first live solo concert in Pune and reaching out to ${b.name} as our preferred Safety and Wellness Partner.</p><p>A live concert is a family gathering — a community moment. This is the space where healthcare brands can show their most human side: not through clinical messaging, but through <span class="highlight">care, presence, and community commitment.</span></p><p>We are proposing a <span class="gold-hl">${b.excl}</span>: a staffed ${b.name} Wellness Zone, a health information desk, wellness kit distribution, first-aid partner branding, and an MC acknowledgment recognizing ${b.name} as the official family safety partner — all co-documented and shared across <strong>240,000+ Instagram followers</strong>.</p><p>For a healthcare brand, community trust is the most valuable asset. Being the hospital that cared for an artist's concert audience — proactively, warmly, and publicly — builds trust that clinical branding simply cannot.</p><div class="sign-off"><p>I hope we can connect and explore this partnership.</p><p>With respect,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`,
+    local:`<p class="salutation">Dear ${b.name} Team,</p><p>Namaskar. I am <span class="highlight">Chaitanya Devadhe (Mauli)</span> — Indian Idol Season 15 Finalist, born in Alandi Devachi, Pune — the sacred home of Sant Dnyaneshwar Maharaj. My music is rooted in the same soil that ${b.name} serves.</p><p>I am planning my first live solo concert in Pune, and I believe a partnership with ${b.name} is not simply a business arrangement — it is a <span class="highlight">cultural alignment</span>. When I perform abhangs, bhajans, and Marathi devotional songs — which are central to every set I deliver — the audience is in a deeply spiritual, receptive state of mind. This is the precise emotional context where your brand's cultural identity speaks most powerfully.</p><p>We are proposing a <span class="gold-hl">${b.excl}</span>: ${b.name} recognized as the cultural and devotional segment partner, with branded sampling zones, on-stage mention during the devotional segment, standee presence, inclusion in all digital promotional materials, and co-produced social content reaching <strong>240,000+ Instagram followers</strong>.</p><p>Your brand. Our stage. <span class="highlight">The same Maharashtra roots.</span> Let us tell this story together.</p><div class="sign-off"><p>I would be honoured to speak with you about this partnership.</p><p>Jai Mauli,<br><strong>Chaitanya Devadhe (Mauli)</strong><br>📞 +91 83693 90931</p></div>`
+  };
+  return M[b.pitchType]||M.local;
+}
+
+/* ════════════ STATE ════════════ */
+let activeCategory='all', sortAsc=true, activeBrand=null;
+
+function getFiltered(){
+  const q=document.getElementById('sideSearch').value.toLowerCase();
+  return BRANDS.filter(b=>{
+    const cm=activeCategory==='all'||b.cat===activeCategory;
+    const qm=!q||b.name.toLowerCase().includes(q)||b.catLabel.toLowerCase().includes(q);
+    return cm&&qm;
+  }).sort((a,b)=>sortAsc?a.rank-b.rank:b.rank-a.rank);
+}
+
+function renderList(){
+  const list=document.getElementById('brandList');
+  const items=getFiltered();
+  if(!items.length){list.innerHTML='<div style="padding:1.5rem;color:rgba(255,255,255,0.28);font-size:0.82rem;font-style:italic;">No brands match</div>';return;}
+  list.innerHTML=items.map(b=>`
+    <div class="brand-item${activeBrand&&activeBrand.rank===b.rank?' active':''}" onclick="openBrand(${b.rank})">
+      <span class="b-rank">${b.rank}</span>
+      <span class="b-dot d-${b.dot}"></span>
+      <div class="b-info">
+        <div class="b-name">${b.name}</div>
+        <div class="b-cat">${b.catLabel}</div>
+      </div>
+    </div>`).join('');
+}
+
+function setCategory(cat,el){
+  activeCategory=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+}
+function filterList(){renderList();}
+function toggleSort(){
+  sortAsc=!sortAsc;
+  document.getElementById('sortToggle').textContent=sortAsc?'Priority ↑':'Priority ↓';
+  renderList();
+}
+
+function openBrand(rank){
+  const b=BRANDS.find(x=>x.rank===rank);
+  activeBrand=b;
+  renderList();
+  document.getElementById('homeScreen').style.display='none';
+  buildView(b);
+  document.getElementById('sponsorView').classList.add('active');
+  document.getElementById('mainPanel').scrollTo(0,0);
+}
+
+function buildView(b){
+  const tiers=TIERS[b.pitchType]||TIERS.local;
+  const tierRows=tiers.map(t=>`<tr><td><span class="tier-pill ${t.pill}">${t.tier}</span></td><td>${t.offer}</td><td>${t.gets}</td><td><span class="budget-badge">${t.budget}</span></td></tr>`).join('');
+  const contacts=b.contacts.map(c=>`<div class="contact-card"><div class="contact-role">${c.role}</div><div class="contact-val">${c.val}</div></div>`).join('');
+
+  document.getElementById('sponsorView').innerHTML=`
+  <div class="sponsor-tabs" id="sTabs">
+    <div class="s-tab active" onclick="switchTab('cover')">📄 Cover</div>
+    <div class="s-tab" onclick="switchTab('intel')">📊 Brand Intel &amp; Packages</div>
+    <div class="s-tab" onclick="switchTab('pitch')">✉️ Pitch Letter</div>
+    <div class="s-tab" onclick="switchTab('contacts')">📞 Contacts</div>
+  </div>
+
+  <!-- COVER -->
+  <div id="tabCover" class="tab-page active">
+    <div class="cover-page">
+      <div class="cover-topbar">
+        <span class="ctb-lbl">Sponsor Proposal · Confidential</span>
+        <span class="ctb-name">Chaitanya Devadhe · First Live Concert · Pune</span>
+      </div>
+      <div class="cover-body">
+        <div class="cover-left">
+          <div class="c-prep">Exclusively Prepared For</div>
+          <div class="c-brand-name">${b.name}</div>
+          <div class="c-brand-cat">${b.catLabel}</div>
+          <div class="c-gold-line"></div>
+          <div class="c-prop-lbl">Sponsorship Proposal</div>
+          <div class="c-event-title">Chaitanya Devadhe's<br>First Live Concert<br>Pune, Maharashtra</div>
+          <div class="c-meta">
+            <div class="c-meta-item"><div class="c-mk">Priority Rank</div><div class="c-mv">#${b.rank} of 17</div></div>
+            <div class="c-meta-item"><div class="c-mk">Category</div><div class="c-mv">${b.catLabel}</div></div>
+            <div class="c-meta-item"><div class="c-mk">Valuation</div><div class="c-mv">${b.val}</div></div>
+            <div class="c-meta-item"><div class="c-mk">Date</div><div class="c-mv">${TODAY}</div></div>
+          </div>
+        </div>
+        <div class="cover-right">
+          <div>
+            <div class="cr-art-lbl">Presented By</div>
+            <div class="cr-art-name">Chaitanya Devadhe</div>
+            <div class="cr-art-sub">Also known as Mauli · Alandi, Pune, Maharashtra</div>
+          </div>
+          <div class="cr-stats">
+            <div class="cr-stat"><div class="cr-snum">240K+</div><div class="cr-slbl">Instagram</div></div>
+            <div class="cr-stat"><div class="cr-snum">126K+</div><div class="cr-slbl">Spotify</div></div>
+            <div class="cr-stat"><div class="cr-snum">S15</div><div class="cr-slbl">Indian Idol Finalist</div></div>
+            <div class="cr-stat"><div class="cr-snum">94%</div><div class="cr-slbl">Rising Star Vote</div></div>
+          </div>
+          <div class="cr-excl"><strong>Offered Exclusively To ${b.name}:</strong><br>${b.excl}</div>
+        </div>
+      </div>
+      <div class="cover-footer">
+        <div class="cf-left">Chaitanya Devadhe · +91 83693 90931 · @chaitanya_devadhe_offical</div>
+        <div class="cf-right">
+          <button class="btn-secondary" onclick="window.print()">🖨 Print / Save PDF</button>
+          <button class="btn-primary" onclick="switchTab('intel')">View Full Pitch →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTEL -->
+  <div id="tabIntel" class="tab-page">
+    <div class="inner-page">
+      <p class="label page-lbl">Brand Intelligence</p>
+      <h2 class="page-title">Why ${b.name}?</h2>
+      <p class="page-sub">A tailored analysis of the opportunity for ${b.name} at Chaitanya Devadhe's first live concert.</p>
+      <div class="intel-grid">
+        <div class="intel-card"><div class="intel-lbl">Their Pain Point</div><div class="intel-txt">${b.pain}</div></div>
+        <div class="intel-card"><div class="intel-lbl">What They Want Most</div><div class="intel-txt">${b.gain}</div></div>
+        <div class="intel-card"><div class="intel-lbl">What We Offer</div><div class="intel-txt">${b.offer}</div></div>
+        <div class="intel-card"><div class="intel-lbl">What Success Looks Like</div><div class="intel-txt">${b.success}</div></div>
+        <div class="intel-card intel-hl"><div class="intel-lbl">Why This Concert Specifically Helps ${b.name}</div><div class="intel-txt">${b.why}</div></div>
+      </div>
+      <div class="sec-hd"><h3>Sponsorship Packages</h3><div class="sec-hd-line"></div></div>
+      <table class="tiers-table">
+        <thead><tr><th>Tier</th><th>What We Offer</th><th>What You Get</th><th>Est. Budget</th></tr></thead>
+        <tbody>${tierRows}</tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PITCH -->
+  <div id="tabPitch" class="tab-page">
+    <div class="inner-page">
+      <p class="label page-lbl">Personalised Pitch Letter</p>
+      <h2 class="page-title">Sponsor Pitch Letter</h2>
+      <p class="page-sub">Written exclusively for ${b.name} · ${b.catLabel}</p>
+      <div class="letter-wrap">
+        <div class="letter-hdr">
+          <span class="letter-hdr-lbl">Sponsor Pitch · Chaitanya Devadhe's First Live Concert</span>
+          <span class="letter-date">${TODAY}</span>
+        </div>
+        <div class="letter-body" id="letterBody">${getLetter(b)}</div>
+        <div class="letter-ftr">
+          <span class="letter-ftr-note">Confidential · Prepared exclusively for ${b.name}</span>
+          <button class="copy-btn" onclick="copyLetter()">Copy Letter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div id="tabContacts" class="tab-page">
+    <div class="inner-page">
+      <p class="label page-lbl">Contact Strategy</p>
+      <h2 class="page-title">Who to Reach at ${b.name}</h2>
+      <p class="page-sub">Recommended first contacts and outreach approach for ${b.name}.</p>
+      <div class="about-card" style="background:var(--gold-bg);border-color:rgba(184,137,42,0.25);margin-bottom:1.25rem;">
+        <p style="margin:0"><strong>Opening Script:</strong> <em>"We are planning Chaitanya Devadhe's first live concert in Pune and would like to speak with the person handling <strong>brand partnerships / local activations / event sponsorships</strong>."</em></p>
+      </div>
+      <div class="contacts-grid">${contacts}</div>
+      <div class="sec-hd" style="margin-top:0.5rem;"><h3>Recommended Approach</h3><div class="sec-hd-line"></div></div>
+      <div class="about-card">
+        <p><strong>Step 1 — Email first</strong> using the pitch letter (copy it from the Pitch Letter tab) to the primary contact listed above.</p>
+        <p><strong>Step 2 — Call after 2 business days</strong> — ask for the Regional Marketing / Brand Partnerships / Events Manager by role, not name.</p>
+        <p><strong>Step 3 — Follow up once</strong> after 5 working days with a brief, warm nudge referencing the original email.</p>
+        <p style="margin:0"><strong>Step 4</strong> — If no response in 3 weeks, try the store manager or secondary contact as a warm-intro route to the right person.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function switchTab(name){
+  document.querySelectorAll('.s-tab').forEach((t,i)=>{
+    t.classList.toggle('active',['cover','intel','pitch','contacts'][i]===name);
+  });
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  const map={cover:'tabCover',intel:'tabIntel',pitch:'tabPitch',contacts:'tabContacts'};
+  const el=document.getElementById(map[name]);
+  if(el){el.classList.add('active');document.getElementById('mainPanel').scrollTo(0,0);}
+}
+
+function copyLetter(){
+  const el=document.getElementById('letterBody');
+  if(!el)return;
+  navigator.clipboard.writeText(el.innerText).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    if(btn){btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='Copy Letter',2200);}
+  });
+}
+
+renderList();
+</script>
+</body>
+</html>
