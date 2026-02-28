@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swar Chaitanya Arts — Letterhead (3 Pages)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<style>
+/* ══════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════ */
+:root {
+  --indigo:      #1C2040;
+  --indigo-soft: #2A3060;
+  --gold:        #A87C2A;
+  --gold-mid:    #C49A3C;
+  --gold-light:  #D4B060;
+  --gold-cream:  #F7EDD8;
+  --gold-pale:   #FBF5E8;
+  --maroon:      #6E2030;
+  --ink:         #1E1E2E;
+  --body-text:   #333348;
+  --muted:       #72748A;
+  --rule-light:  #DDD5C4;
+  --cream:       #FDFAF3;
+  --line-color:  #D8CEBC;    /* writing lines */
+  --margin-line: #C8A85A;    /* left margin rule */
+
+  --fs-company:  28px;
+  --fs-tagline:  13.5px;
+  --fs-contact:  13px;
+  --fs-label:    10.5px;
+  --fs-body:     15px;
+  --fs-footer:   11.5px;
+  --lh-display:  1.15;
+  --lh-body:     1.85;
+
+  /* Writing line pitch — must match font-size × line-height */
+  --line-pitch:  32px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #D8D3C9;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 10%, rgba(168,124,42,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 60% at 85% 90%, rgba(28,32,64,0.05) 0%, transparent 70%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 80px;
+}
+
+/* ══════════════════════════════════════════
+   TOOLBAR
+══════════════════════════════════════════ */
+.toolbar {
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 2px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.toolbar-left { display: flex; flex-direction: column; gap: 4px; }
+
+.toolbar-label {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--indigo);
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.page-nav { display: flex; gap: 5px; flex-wrap: wrap; }
+
+.page-pill {
+  font-family: 'Lora', serif;
+  font-size: 10.5px;
+  color: var(--muted);
+  background: rgba(28,32,64,0.07);
+  border: 1px solid rgba(168,124,42,0.25);
+  padding: 3px 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-style: italic;
+}
+.page-pill.active {
+  background: var(--indigo);
+  color: var(--gold-cream);
+  border-color: var(--gold-mid);
+}
+.page-pill:hover:not(.active) { background: var(--gold-pale); }
+
+.btn-group { display: flex; gap: 8px; }
+
+.btn {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  border: 1.5px solid;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+.btn-docx {
+  background: var(--indigo);
+  color: var(--gold-cream);
+  border-color: var(--gold-mid);
+  box-shadow: 0 2px 10px rgba(28,32,64,0.22);
+}
+.btn-docx:hover {
+  background: var(--indigo-soft);
+  box-shadow: 0 4px 18px rgba(28,32,64,0.3);
+  transform: translateY(-1px);
+}
+.btn-print { background: transparent; color: var(--indigo); border-color: var(--gold-mid); }
+.btn-print:hover { background: var(--gold-cream); }
+
+/* ══════════════════════════════════════════
+   PAGE CARDS
+══════════════════════════════════════════ */
+.pages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  max-width: 820px;
+}
+
+.page-card {
+  width: 100%;
+  background: var(--cream);
+  box-shadow:
+    0 0 0 1px rgba(168,124,42,0.2),
+    0 4px 6px rgba(0,0,0,0.04),
+    0 12px 40px rgba(28,32,64,0.13),
+    0 24px 60px rgba(28,32,64,0.07);
+  position: relative;
+  animation: rise 0.5s cubic-bezier(0.22,1,0.36,1) both;
+}
+.page-card:nth-child(2) { animation-delay: 0.07s; }
+.page-card:nth-child(3) { animation-delay: 0.14s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-badge {
+  position: absolute;
+  top: -11px;
+  left: 44px;
+  background: var(--indigo);
+  color: var(--gold-cream);
+  font-family: 'Libre Baskerville', serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 2px 12px;
+  border: 1px solid var(--gold-mid);
+  z-index: 2;
+}
+
+/* ══════════════════════════════════════════
+   SHARED ELEMENTS
+══════════════════════════════════════════ */
+.stripe-top {
+  background: var(--indigo);
+  padding: 6px 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 2.5px solid var(--gold-mid);
+}
+.stripe-top-text {
+  font-family: 'Lora', serif;
+  font-size: 11px; font-style: italic;
+  color: var(--gold-cream);
+  letter-spacing: 0.28em; opacity: 0.9;
+}
+
+.gold-rule-thick {
+  height: 3.5px;
+  background: linear-gradient(to right, var(--indigo) 0%, var(--gold) 20%, var(--gold-light) 50%, var(--gold) 80%, var(--indigo) 100%);
+}
+
+.header-rule {
+  border: none;
+  border-top: 4px solid var(--indigo);
+  border-bottom: 1px solid var(--gold-light);
+  padding-top: 4px;
+}
+
+.orn-divider {
+  margin: 16px 44px 12px;
+  display: flex; align-items: center;
+}
+.orn-line       { flex: 1; height: 1px; background: var(--gold-mid); }
+.orn-line-thin  { flex: 1; height: 1px; background: var(--gold-light); opacity: 0.5; margin-top: 5px; }
+.orn-diamonds   { padding: 0 14px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.orn-row1 { color: var(--gold); font-size: 12px; letter-spacing: 6px; line-height: 1; }
+.orn-row2 { color: var(--gold-light); font-size: 7px; letter-spacing: 8px; opacity: 0.7; }
+
+/* FOOTER (shared) */
+.footer-top-rule {
+  margin: 0 44px;
+  border: none;
+  border-top: 1px solid var(--gold-light);
+  padding-top: 4px;
+  border-bottom: 3.5px solid var(--indigo);
+}
+.footer-orn {
+  text-align: center; padding: 9px 44px 7px;
+  color: var(--gold-mid); font-size: 10px; letter-spacing: 10px; opacity: 0.7;
+}
+.footer-regs {
+  text-align: center;
+  font-family: 'Lora', serif;
+  font-size: var(--fs-footer);
+  color: var(--body-text); padding: 0 44px 6px; line-height: 1.6;
+}
+.footer-regs .f-label {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 9.5px; font-weight: 700; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-right: 3px;
+}
+.footer-regs .f-sep { color: var(--gold-mid); margin: 0 9px; font-size: 9px; }
+.footer-social {
+  text-align: center; font-family: 'Lora', serif;
+  font-size: var(--fs-footer); color: var(--muted); padding: 0 44px 13px; line-height: 1.5;
+}
+.footer-social .handle { color: var(--gold); font-style: italic; }
+.footer-social .f-sep  { color: var(--gold-mid); margin: 0 7px; font-size: 9px; }
+.footer-band {
+  background: var(--indigo); padding: 8px 44px;
+  text-align: center; border-top: 2px solid var(--gold-mid);
+}
+.footer-band-text {
+  font-family: 'Lora', serif; font-size: 11px; font-style: italic;
+  color: var(--gold-cream); letter-spacing: 0.22em; opacity: 0.88;
+}
+
+/* ══════════════════════════════════════════
+   PAGE 1 — FULL HEADER
+══════════════════════════════════════════ */
+.identity {
+  padding: 24px 44px 0;
+  display: flex; align-items: center; gap: 24px;
+}
+.logo {
+  flex-shrink: 0; width: 72px; height: 72px;
+  border-radius: 50%; background: var(--indigo);
+  border: 2.5px solid var(--gold-mid);
+  box-shadow: 0 0 0 4px rgba(168,124,42,0.12), inset 0 0 0 5px rgba(168,124,42,0.08);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative;
+}
+.logo::before {
+  content: ''; position: absolute; inset: 5px;
+  border-radius: 50%; border: 1px solid rgba(212,176,96,0.3);
+}
+.logo-initials {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; color: var(--gold-light);
+  letter-spacing: 0.04em; line-height: 1;
+}
+.logo-year {
+  font-family: 'Lora', serif;
+  font-size: 7.5px; color: var(--gold-mid);
+  letter-spacing: 0.18em; margin-top: 3px; opacity: 0.8;
+}
+.vert-divider {
+  width: 1.5px; height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
+  flex-shrink: 0;
+}
+.company { flex: 1; }
+.company-name {
+  font-family: 'Playfair Display', serif;
+  font-size: var(--fs-company); font-weight: 700; color: var(--indigo);
+  line-height: var(--lh-display); letter-spacing: 0.01em; margin-bottom: 5px;
+}
+.company-tagline {
+  font-family: 'Lora', serif;
+  font-size: var(--fs-tagline); font-style: italic; color: var(--maroon); letter-spacing: 0.04em;
+}
+.tagline-orn { color: var(--gold-mid); margin: 0 7px; font-style: normal; font-size: 11px; }
+
+.contact-strip { text-align: center; padding: 0 44px 14px; }
+.contact-address {
+  font-family: 'Lora', serif; font-size: var(--fs-contact);
+  color: var(--body-text); line-height: 1.5; margin-bottom: 5px;
+}
+.contact-line { font-family: 'Lora', serif; font-size: var(--fs-contact); color: var(--body-text); line-height: 1.5; }
+.c-label { font-family: 'Libre Baskerville', serif; font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.12em; margin-right: 3px; text-transform: uppercase; }
+.c-sep { color: var(--gold-mid); margin: 0 11px; font-size: 10px; }
+
+/* Page 1 letter body */
+.letter-body { padding: 26px 44px 24px; }
+.meta-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; gap: 16px; }
+.meta-group { display: flex; flex-direction: column; gap: 3px; }
+.meta-group.right { text-align: right; }
+.meta-label {
+  font-family: 'Libre Baskerville', serif; font-size: var(--fs-label);
+  font-weight: 700; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
+}
+.meta-input {
+  font-family: 'Lora', serif; font-size: 14px; color: var(--ink);
+  border: none; border-bottom: 1px solid var(--rule-light);
+  background: transparent; outline: none; padding: 3px 0; width: 220px; line-height: 1.4;
+  transition: border-color 0.2s;
+}
+.meta-input:focus { border-bottom-color: var(--gold-mid); }
+.meta-input.right { text-align: right; }
+
+.to-block { margin-bottom: 20px; }
+.to-label { margin-bottom: 6px; }
+.to-input {
+  font-family: 'Lora', serif; font-size: 15px; color: var(--ink);
+  border: none; border-bottom: 1px solid var(--rule-light);
+  background: transparent; outline: none; width: 100%; display: block;
+  padding: 5px 0; margin-bottom: 7px; line-height: 1.4; transition: border-color 0.2s;
+}
+.to-input:focus { border-bottom-color: var(--gold-mid); }
+.to-input.to-name { font-size: 15.5px; font-weight: 600; color: var(--indigo); letter-spacing: 0.01em; }
+
+.subject-block {
+  display: flex; align-items: baseline; gap: 10px;
+  padding-bottom: 8px; border-bottom: 1.5px solid var(--gold-light); margin-bottom: 20px;
+}
+.subject-label {
+  font-family: 'Libre Baskerville', serif; font-size: 11px; font-weight: 700;
+  color: var(--indigo); letter-spacing: 0.1em; text-transform: uppercase; flex-shrink: 0;
+}
+.subject-input {
+  flex: 1; font-family: 'Lora', serif; font-size: 15px; color: var(--ink);
+  border: none; background: transparent; outline: none; padding: 3px 0; line-height: 1.4;
+}
+.salutation {
+  font-family: 'Lora', serif; font-size: 15px; font-style: italic;
+  color: var(--body-text); margin-bottom: 16px; line-height: 1.5;
+}
+.letter-content {
+  font-family: 'Lora', serif; font-size: var(--fs-body);
+  color: var(--body-text); line-height: var(--lh-body);
+  min-height: 220px; outline: none; width: 100%; padding: 4px 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent calc(var(--fs-body) * var(--lh-body) - 1px),
+    var(--rule-light) calc(var(--fs-body) * var(--lh-body) - 1px),
+    var(--rule-light) calc(var(--fs-body) * var(--lh-body))
+  );
+  caret-color: var(--gold); transition: background 0.2s;
+}
+.letter-content:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted); opacity: 0.45; font-style: italic; pointer-events: none;
+}
+.letter-content:focus {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(168,124,42,0.025) 0px,
+    rgba(168,124,42,0.025) calc(var(--fs-body) * var(--lh-body) - 1px),
+    var(--gold-light) calc(var(--fs-body) * var(--lh-body) - 1px),
+    var(--gold-light) calc(var(--fs-body) * var(--lh-body))
+  );
+}
+.continued-hint {
+  margin-top: 12px;
+  font-family: 'Lora', serif;
+  font-size: 11.5px; font-style: italic;
+  color: var(--muted); letter-spacing: 0.04em;
+  text-align: right;
+}
+
+/* ══════════════════════════════════════════
+   PAGE 2 — MIDDLE WRITING PAGE
+══════════════════════════════════════════ */
+
+/* Slim top bar — just identification, no full header */
+.mid-top-bar {
+  background: var(--indigo);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 44px;
+  border-bottom: 2.5px solid var(--gold-mid);
+}
+.mid-bar-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--gold-cream); letter-spacing: 0.06em;
+}
+.mid-bar-right {
+  display: flex; align-items: center; gap: 18px;
+}
+.mid-bar-pgnum {
+  font-family: 'Lora', serif;
+  font-size: 10.5px; font-style: italic;
+  color: var(--gold-light); letter-spacing: 0.12em; opacity: 0.8;
+}
+.mid-bar-ref {
+  font-family: 'Lora', serif;
+  font-size: 10.5px; font-style: italic;
+  color: var(--gold-light); opacity: 0.65;
+}
+
+/* Gold accent under bar */
+.mid-gold-accent {
+  height: 2px;
+  background: linear-gradient(to right, var(--indigo) 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, var(--indigo) 100%);
+}
+
+/* The writing area itself */
+.writing-area {
+  position: relative;
+  padding: 36px 52px 36px 88px;   /* left padding wider for margin line */
+  min-height: 900px;
+  overflow: hidden;
+}
+
+/* Watermark SCA in background */
+.writing-area::before {
+  content: 'SCA';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  font-family: 'Playfair Display', serif;
+  font-size: 200px;
+  font-weight: 700;
+  color: rgba(168,124,42,0.045);
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+/* Left margin rule — vertical gold line */
+.margin-rule {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 68px;
+  width: 1.5px;
+  background: linear-gradient(to bottom,
+    transparent 0px,
+    var(--margin-line) 40px,
+    var(--margin-line) calc(100% - 40px),
+    transparent 100%
+  );
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Small SCA ornament at top of margin */
+.margin-ornament {
+  position: absolute;
+  top: 26px;
+  left: 54px;
+  font-size: 10px;
+  color: var(--gold-mid);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+  line-height: 1;
+}
+
+/* The ruled content-editable area */
+.writing-lines {
+  position: relative;
+  z-index: 2;
+  font-family: 'Lora', serif;
+  font-size: 15.5px;
+  color: var(--body-text);
+  line-height: var(--line-pitch);
+  min-height: 860px;
+  outline: none;
+  width: 100%;
+  caret-color: var(--indigo);
+  background:
+    /* horizontal writing lines */
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent calc(var(--line-pitch) - 1px),
+      var(--line-color) calc(var(--line-pitch) - 1px),
+      var(--line-color) var(--line-pitch)
+    );
+  padding: 6px 0 0;
+  word-break: break-word;
+}
+.writing-lines:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted); opacity: 0.35;
+  font-style: italic; pointer-events: none;
+  font-size: 14px; line-height: var(--line-pitch);
+}
+.writing-lines:focus {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(168,124,42,0.018) 0px,
+      rgba(168,124,42,0.018) calc(var(--line-pitch) - 1px),
+      var(--gold-light) calc(var(--line-pitch) - 1px),
+      var(--gold-light) var(--line-pitch)
+    );
+}
+
+/* Thin bottom strip on writing page */
+.mid-bottom-strip {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px;
+  padding: 10px 44px;
+  border-top: 1px solid var(--rule-light);
+  background: rgba(168,124,42,0.025);
+}
+.mid-bottom-diamond { color: var(--gold-mid); font-size: 8px; opacity: 0.6; }
+.mid-bottom-text {
+  font-family: 'Lora', serif;
+  font-size: 10px; font-style: italic;
+  color: var(--muted); letter-spacing: 0.12em; opacity: 0.7;
+}
+
+/* ══════════════════════════════════════════
+   PAGE 3 — COMPACT CONTINUATION / CLOSING
+══════════════════════════════════════════ */
+.compact-header {
+  padding: 16px 44px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+.compact-logo { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.compact-medallion {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--indigo); border: 2px solid var(--gold-mid);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.compact-sca {
+  font-family: 'Playfair Display', serif;
+  font-size: 10px; font-weight: 700; color: var(--gold-light); letter-spacing: 0.05em; line-height: 1;
+}
+.compact-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700; color: var(--indigo); letter-spacing: 0.01em; line-height: 1.2;
+}
+.compact-tagline {
+  font-family: 'Lora', serif; font-size: 11px; font-style: italic; color: var(--maroon);
+}
+.compact-page-info { text-align: right; flex-shrink: 0; }
+.compact-page-num {
+  font-family: 'Libre Baskerville', serif; font-size: 10px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 2px;
+}
+.compact-page-ref {
+  font-family: 'Lora', serif; font-size: 11px; font-style: italic; color: var(--muted);
+}
+.compact-rule {
+  margin: 0 44px;
+  border: none; border-top: 3px solid var(--indigo); border-bottom: 1px solid var(--gold-light); padding-top: 3px;
+}
+
+/* Page 3 body */
+.p3-body { padding: 26px 44px 24px; }
+.continuation-note {
+  font-family: 'Lora', serif; font-size: 12px; font-style: italic;
+  color: var(--muted); margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px dashed var(--rule-light); letter-spacing: 0.03em;
+}
+.letter-content.tall { min-height: 280px; }
+
+.closing-section {
+  margin-top: 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
+}
+.closing-text {
+  font-family: 'Lora', serif; font-size: 15px; font-style: italic; color: var(--body-text); padding-top: 4px;
+}
+.signature-block { min-width: 200px; text-align: left; padding-top: 8px; }
+.sig-space { height: 52px; }
+.sig-rule-line { border: none; border-top: 1.5px solid var(--gold-light); margin-bottom: 8px; width: 180px; }
+.sig-name { font-family: 'Libre Baskerville', serif; font-size: 12px; font-weight: 700; color: var(--indigo); letter-spacing: 0.06em; margin-bottom: 3px; }
+.sig-company { font-family: 'Lora', serif; font-size: 12.5px; font-style: italic; color: var(--gold); margin-bottom: 24px; }
+.sig-seal { font-family: 'Lora', serif; font-size: 11.5px; font-style: italic; color: var(--muted); }
+
+.enclosure-block {
+  margin-top: 24px; padding: 14px 18px;
+  border-left: 3px solid var(--gold-mid); background: rgba(168,124,42,0.04);
+}
+.enc-label {
+  font-family: 'Libre Baskerville', serif; font-size: 10.5px; font-weight: 700;
+  color: var(--indigo); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+}
+.enc-input {
+  font-family: 'Lora', serif; font-size: 14px; color: var(--ink);
+  border: none; border-bottom: 1px solid var(--rule-light);
+  background: transparent; outline: none; width: 100%; display: block; padding: 4px 0; margin-bottom: 6px; line-height: 1.4; transition: border-color 0.2s;
+}
+.enc-input:focus { border-bottom-color: var(--gold-mid); }
+.enc-input::placeholder { color: var(--muted); opacity: 0.55; font-style: italic; }
+.copy-block {
+  margin-top: 20px; display: flex; align-items: baseline; gap: 12px;
+  padding-top: 14px; border-top: 1px solid var(--rule-light);
+}
+.copy-label {
+  font-family: 'Libre Baskerville', serif; font-size: 10.5px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; flex-shrink: 0;
+}
+.copy-input {
+  flex: 1; font-family: 'Lora', serif; font-size: 14px; color: var(--ink);
+  border: none; border-bottom: 1px solid var(--rule-light);
+  background: transparent; outline: none; padding: 3px 0; line-height: 1.4; transition: border-color 0.2s;
+}
+.copy-input:focus { border-bottom-color: var(--gold-mid); }
+.copy-input::placeholder { color: var(--muted); opacity: 0.5; font-style: italic; }
+
+/* ── Hint + Toast ─────────────────────────────── */
+.hint {
+  margin-top: 18px; font-family: 'Lora', serif; font-size: 12px; font-style: italic;
+  color: var(--indigo); opacity: 0.4; text-align: center; letter-spacing: 0.04em;
+}
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--indigo); color: var(--gold-cream);
+  font-family: 'Libre Baskerville', serif; font-size: 11px; letter-spacing: 0.12em;
+  padding: 10px 26px; border: 1px solid var(--gold-mid);
+  opacity: 0; transition: all 0.3s ease; pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Print ───────────────────────────────────── */
+@media print {
+  body { background: white !important; padding: 0 !important; }
+  .toolbar, .hint, .page-badge { display: none !important; }
+  .pages-container { gap: 0 !important; }
+  .page-card { box-shadow: none !important; max-width: 100% !important; page-break-after: always; }
+  .page-card:last-child { page-break-after: avoid; }
+  .writing-area::before { color: rgba(168,124,42,0.03) !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Toolbar ──────────────────────────────── -->
+<div class="toolbar">
+  <div class="toolbar-left">
+    <span class="toolbar-label">Swar Chaitanya Arts &nbsp;—&nbsp; Letterhead (3 Pages)</span>
+    <div class="page-nav">
+      <span class="page-pill active" onclick="goPage(1,this)">Page 1 — Letterhead</span>
+      <span class="page-pill"        onclick="goPage(2,this)">Page 2 — Writing Sheet</span>
+      <span class="page-pill"        onclick="goPage(3,this)">Page 3 — Closing</span>
+    </div>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-print" onclick="window.print()">Print / PDF</button>
+    <button class="btn btn-docx"  onclick="downloadDocx()">⬇&nbsp; Download DOCX</button>
+  </div>
+</div>
+
+<div class="pages-container">
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — FULL LETTERHEAD
+══════════════════════════════════════════ -->
+<div class="page-card" id="page1">
+  <div class="page-badge">Page 1 — Letterhead</div>
+
+  <div class="stripe-top">
+    <span class="stripe-top-text">✦ &nbsp; Naad &nbsp;·&nbsp; Taal &nbsp;·&nbsp; Kaavya &nbsp;·&nbsp; Abhinay &nbsp; ✦</span>
+  </div>
+  <div class="gold-rule-thick"></div>
+
+  <div class="identity">
+    <div class="logo">
+      <span class="logo-initials">SCA</span>
+      <span class="logo-year">Est. 2009</span>
+    </div>
+    <div class="vert-divider"></div>
+    <div class="company">
+      <div class="company-name">Swar Chaitanya Arts</div>
+      <div class="company-tagline">
+        <span class="tagline-orn">◆</span>Nurturing the Soul of Indian Classical Arts<span class="tagline-orn">◆</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="orn-divider">
+    <div style="display:flex;flex-direction:column;gap:5px;flex:1;">
+      <div class="orn-line"></div><div class="orn-line-thin"></div>
+    </div>
+    <div class="orn-diamonds">
+      <div class="orn-row1">◆ ◆ ◆</div>
+      <div class="orn-row2">◇ ◇ ◇ ◇ ◇</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px;flex:1;">
+      <div class="orn-line"></div><div class="orn-line-thin"></div>
+    </div>
+  </div>
+
+  <div class="contact-strip">
+    <div class="contact-address">12, Raag Bhavan, Shantiniketan Road, Pune – 411 001, Maharashtra, India</div>
+    <div class="contact-line">
+      <span class="c-label">T</span>+91 98765 43210
+      <span class="c-sep">◆</span>
+      <span class="c-label">E</span>info@swarchaitanyaarts.in
+      <span class="c-sep">◆</span>
+      <span class="c-label">W</span>www.swarchaitanyaarts.in
+    </div>
+  </div>
+
+  <div class="header-rule"></div>
+
+  <div class="letter-body">
+    <div class="meta-row">
+      <div class="meta-group">
+        <span class="meta-label">Date</span>
+        <input class="meta-input" type="text" placeholder="DD Month YYYY" id="f-date">
+      </div>
+      <div class="meta-group right">
+        <span class="meta-label">Ref. No.</span>
+        <input class="meta-input right" type="text" placeholder="SCA / 2025–26 / 001" id="f-ref">
+      </div>
+    </div>
+
+    <div class="to-block">
+      <div class="meta-label to-label">To</div>
+      <input class="to-input to-name" type="text" placeholder="Name of Recipient / Honourable Director" id="f-to1">
+      <input class="to-input" type="text" placeholder="Organisation / Institution Name" id="f-to2">
+      <input class="to-input" type="text" placeholder="Address, City – PIN Code, State" id="f-to3">
+    </div>
+
+    <div class="subject-block">
+      <span class="subject-label">Sub :</span>
+      <input class="subject-input" type="text" placeholder="Enter subject of the letter…" id="f-sub">
+    </div>
+
+    <div class="salutation">Respected Sir / Madam,</div>
+
+    <div class="letter-content"
+      contenteditable="true" id="f-body"
+      data-placeholder="Begin your letter here… (continue writing on Page 2)"
+      spellcheck="false"></div>
+
+    <div class="continued-hint">↓ &ensp; Continued on Page 2</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-top-rule"></div>
+  <div class="footer-orn">◇ ◆ ◇ ◆ ◇ ◆ ◇</div>
+  <div class="footer-regs">
+    <span class="f-label">GSTIN</span>27AABCS1234F1Z5<span class="f-sep">·</span>
+    <span class="f-label">PAN</span>AABCS1234F<span class="f-sep">·</span>
+    <span class="f-label">MSME</span>MH-PN-0090876<span class="f-sep">·</span>
+    <span class="f-label">CIN</span>U74999MH2009PTC123456
+  </div>
+  <div class="footer-social">
+    Est. 2009 <span class="f-sep">·</span>
+    <span class="handle">@swarchaitanyaarts</span>
+    <span class="f-sep">|</span> Facebook <span class="f-sep">|</span> Instagram <span class="f-sep">|</span> YouTube
+  </div>
+  <div class="footer-band">
+    <span class="footer-band-text">— Excellence in the Timeless Tradition of Indian Arts —</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — MIDDLE WRITING SHEET
+══════════════════════════════════════════ -->
+<div class="page-card" id="page2">
+  <div class="page-badge">Page 2 — Writing Sheet</div>
+
+  <!-- Slim bar -->
+  <div class="mid-top-bar">
+    <span class="mid-bar-name">Swar Chaitanya Arts</span>
+    <div class="mid-bar-right">
+      <span class="mid-bar-ref" id="p2-ref-live">Ref: SCA / 2025–26 / 001</span>
+      <span class="mid-bar-pgnum">Sheet 2 of 3</span>
+    </div>
+  </div>
+  <div class="mid-gold-accent"></div>
+
+  <!-- Full-page writing area -->
+  <div class="writing-area">
+    <!-- Left margin rule -->
+    <div class="margin-rule"></div>
+    <!-- Small ornament on margin -->
+    <div class="margin-ornament">◆<br>│<br>│<br>◆</div>
+
+    <!-- The actual writing lines -->
+    <div class="writing-lines"
+      contenteditable="true"
+      id="f-mid"
+      data-placeholder="Continue writing here…"
+      spellcheck="false"></div>
+  </div>
+
+  <!-- Bottom strip -->
+  <div class="mid-bottom-strip">
+    <span class="mid-bottom-diamond">◇</span>
+    <span class="mid-bottom-text">Swar Chaitanya Arts &nbsp;·&nbsp; Continuation Sheet &nbsp;·&nbsp; Page 2 of 3</span>
+    <span class="mid-bottom-diamond">◇</span>
+  </div>
+
+  <!-- Minimal footer for writing page -->
+  <div class="footer-top-rule"></div>
+  <div class="footer-orn">◇ ◆ ◇ ◆ ◇ ◆ ◇</div>
+  <div class="footer-regs">
+    <span class="f-label">GSTIN</span>27AABCS1234F1Z5<span class="f-sep">·</span>
+    <span class="f-label">PAN</span>AABCS1234F<span class="f-sep">·</span>
+    <span class="f-label">MSME</span>MH-PN-0090876<span class="f-sep">·</span>
+    <span class="f-label">CIN</span>U74999MH2009PTC123456
+  </div>
+  <div class="footer-social">
+    Est. 2009 <span class="f-sep">·</span>
+    <span class="handle">@swarchaitanyaarts</span>
+    <span class="f-sep">|</span> Facebook <span class="f-sep">|</span> Instagram <span class="f-sep">|</span> YouTube
+  </div>
+  <div class="footer-band">
+    <span class="footer-band-text">— Excellence in the Timeless Tradition of Indian Arts —</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — CLOSING / FINAL
+══════════════════════════════════════════ -->
+<div class="page-card" id="page3">
+  <div class="page-badge">Page 3 — Closing</div>
+
+  <div class="stripe-top">
+    <span class="stripe-top-text">✦ &nbsp; Swar Chaitanya Arts &nbsp;·&nbsp; Official Correspondence &nbsp; ✦</span>
+  </div>
+  <div class="gold-rule-thick"></div>
+
+  <div class="compact-header">
+    <div class="compact-logo">
+      <div class="compact-medallion">
+        <span class="compact-sca">SCA</span>
+      </div>
+      <div>
+        <div class="compact-name">Swar Chaitanya Arts</div>
+        <div class="compact-tagline">Nurturing the Soul of Indian Classical Arts</div>
+      </div>
+    </div>
+    <div class="compact-page-info">
+      <div class="compact-page-num">Final Sheet — Page 3 of 3</div>
+      <div class="compact-page-ref" id="p3-ref-live">Ref. No.: SCA / 2025–26 / 001</div>
+      <div class="compact-page-ref" id="p3-date-live">Date: —</div>
+    </div>
+  </div>
+
+  <div class="compact-rule"></div>
+
+  <div class="p3-body">
+
+    <div class="continuation-note">
+      ↳ Final page — letter dated <span id="p3-date-span">—</span> &ensp;·&ensp; Ref. <span id="p3-ref-span">SCA / 2025–26 / 001</span>
+    </div>
+
+    <div class="letter-content tall"
+      contenteditable="true" id="f-body3"
+      data-placeholder="Complete your letter here — closing paragraphs…"
+      spellcheck="false"></div>
+
+    <div class="closing-section">
+      <div class="closing-text">Yours faithfully,</div>
+      <div class="signature-block">
+        <div class="sig-space"></div>
+        <hr class="sig-rule-line">
+        <div class="sig-name">Authorised Signatory</div>
+        <div class="sig-company">Swar Chaitanya Arts</div>
+        <div class="sig-seal">Seal &amp; Stamp :</div>
+      </div>
+    </div>
+
+    <div class="enclosure-block">
+      <div class="enc-label">Enclosures</div>
+      <input class="enc-input" type="text" placeholder="1. Document / Certificate Name" id="f-enc1">
+      <input class="enc-input" type="text" placeholder="2. Document / Certificate Name" id="f-enc2">
+      <input class="enc-input" type="text" placeholder="3. Document / Certificate Name" id="f-enc3">
+    </div>
+
+    <div class="copy-block">
+      <span class="copy-label">Copy to :</span>
+      <input class="copy-input" type="text" placeholder="Name / Designation (if applicable)" id="f-copy">
+    </div>
+
+  </div>
+
+  <div class="footer-top-rule"></div>
+  <div class="footer-orn">◇ ◆ ◇ ◆ ◇ ◆ ◇</div>
+  <div class="footer-regs">
+    <span class="f-label">GSTIN</span>27AABCS1234F1Z5<span class="f-sep">·</span>
+    <span class="f-label">PAN</span>AABCS1234F<span class="f-sep">·</span>
+    <span class="f-label">MSME</span>MH-PN-0090876<span class="f-sep">·</span>
+    <span class="f-label">CIN</span>U74999MH2009PTC123456
+  </div>
+  <div class="footer-social">
+    Est. 2009 <span class="f-sep">·</span>
+    <span class="handle">@swarchaitanyaarts</span>
+    <span class="f-sep">|</span> Facebook <span class="f-sep">|</span> Instagram <span class="f-sep">|</span> YouTube
+  </div>
+  <div class="footer-band">
+    <span class="footer-band-text">— Excellence in the Timeless Tradition of Indian Arts —</span>
+  </div>
+</div>
+
+</div><!-- /.pages-container -->
+
+<p class="hint">✦ &ensp; Click any field or lined area to write &ensp;·&ensp; Scroll down to see all 3 pages &ensp;·&ensp; Download as DOCX when ready &ensp; ✦</p>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Live sync ───────────────────────────────────────── */
+document.getElementById('f-date').addEventListener('input', function() {
+  const v = this.value || '—';
+  document.getElementById('p3-date-live').textContent = 'Date: ' + v;
+  document.getElementById('p3-date-span').textContent = v;
+});
+document.getElementById('f-ref').addEventListener('input', function() {
+  const v = this.value || 'SCA / 2025–26 / ____';
+  document.getElementById('p2-ref-live').textContent  = 'Ref: ' + v;
+  document.getElementById('p3-ref-live').textContent  = 'Ref. No.: ' + v;
+  document.getElementById('p3-ref-span').textContent  = v;
+});
+
+/* ── Page nav ────────────────────────────────────────── */
+function goPage(n, el) {
+  document.querySelectorAll('.page-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('page' + n).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── Toast ───────────────────────────────────────────── */
+function toast(msg, ms = 2800) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), ms);
+}
+
+/* ── Values ──────────────────────────────────────────── */
+function vals() {
+  return {
+    date:  document.getElementById('f-date').value  || '________________',
+    ref:   document.getElementById('f-ref').value   || 'SCA / 2025–26 / ____',
+    to1:   document.getElementById('f-to1').value   || 'Name of Recipient',
+    to2:   document.getElementById('f-to2').value   || 'Organisation / Institution',
+    to3:   document.getElementById('f-to3').value   || 'Address, City – PIN',
+    sub:   document.getElementById('f-sub').value   || '',
+    body:  document.getElementById('f-body').innerText.trim()  || '',
+    mid:   document.getElementById('f-mid').innerText.trim()   || '',
+    body3: document.getElementById('f-body3').innerText.trim() || '',
+    enc1:  document.getElementById('f-enc1').value  || '',
+    enc2:  document.getElementById('f-enc2').value  || '',
+    enc3:  document.getElementById('f-enc3').value  || '',
+    copy:  document.getElementById('f-copy').value  || '',
+  };
+}
+
+/* ── Build DOCX HTML (3 pages) ───────────────────────── */
+function buildDocxHtml(v) {
+  const encLines = [v.enc1, v.enc2, v.enc3].filter(Boolean)
+    .map((e, i) => `<div class="enc-line">${i+1}. ${e}</div>`).join('');
+
+  /* Generate 22 ruled lines for the middle page */
+  const midLines = Array.from({length: 22}, () =>
+    `<div class="ruled-line">${'&nbsp;'}</div>`).join('');
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+  body { font-family:Georgia,'Times New Roman',serif; font-size:12pt; color:#1E1E2E; margin:0; padding:0; line-height:1.6; }
+
+  /* STRIPE */
+  .stripe { background:#1C2040; padding:5pt 36pt; text-align:center; border-bottom:2pt solid #A87C2A; }
+  .stripe p { font-style:italic; font-size:8.5pt; color:#F7EDD8; letter-spacing:3pt; margin:0; }
+  .gold-bar { background:#A87C2A; height:3pt; }
+
+  /* PAGE 1 HEADER */
+  .identity { padding:18pt 36pt 0; }
+  table.id-t { width:100%; border-collapse:collapse; }
+  .logo-td { width:62pt; text-align:center; vertical-align:middle; }
+  .logo-c { display:inline-block; width:54pt; height:54pt; border-radius:50%; background:#1C2040; border:2pt solid #A87C2A; text-align:center; padding-top:10pt; }
+  .logo-sca { display:block; color:#D4B060; font-size:15pt; font-weight:bold; letter-spacing:1pt; }
+  .logo-est { display:block; color:#A87C2A; font-size:6pt; letter-spacing:2pt; margin-top:1pt; }
+  .div-td { width:18pt; text-align:center; vertical-align:middle; }
+  .vd { display:inline-block; width:1pt; height:50pt; background:#A87C2A; }
+  .name-td { vertical-align:middle; padding-left:6pt; }
+  .co-name { font-size:22pt; font-weight:bold; color:#1C2040; margin:0 0 4pt; line-height:1.1; }
+  .tagline { font-size:10.5pt; font-style:italic; color:#6E2030; margin:0; }
+  .t-orn { color:#A87C2A; margin:0 5pt; font-style:normal; }
+  .orn-row { margin:12pt 36pt 8pt; text-align:center; border-top:1pt solid #A87C2A; border-bottom:1pt solid #C49A3C; padding:3pt 0; color:#A87C2A; font-size:10pt; letter-spacing:4pt; }
+  .contact { text-align:center; padding:0 36pt 10pt; }
+  .contact p { font-size:10pt; color:#333348; margin:2pt 0; line-height:1.5; }
+  .c-lbl { color:#72748A; font-weight:bold; font-size:8.5pt; text-transform:uppercase; letter-spacing:1pt; margin-right:2pt; }
+  .c-sep { color:#A87C2A; margin:0 8pt; }
+  .h-rule { border-top:4pt solid #1C2040; border-bottom:1pt solid #D4B060; padding-top:3pt; margin:0; }
+
+  /* BODY (pages 1 & 3) */
+  .body-sec { padding:20pt 36pt 18pt; }
+  table.meta-t { width:100%; margin-bottom:16pt; border-collapse:collapse; }
+  .m-lbl { font-size:8pt; color:#72748A; letter-spacing:2pt; text-transform:uppercase; font-weight:bold; margin-bottom:2pt; }
+  .m-val { font-size:11.5pt; color:#1E1E2E; border-bottom:0.5pt solid #DDD5C4; padding-bottom:2pt; }
+  .rt { text-align:right; }
+  .to-name { font-size:12.5pt; font-weight:bold; color:#1C2040; border-bottom:0.5pt solid #DDD5C4; padding:3pt 0; display:block; margin-bottom:5pt; }
+  .to-line  { font-size:12pt; color:#1E1E2E; border-bottom:0.5pt solid #DDD5C4; padding:3pt 0; display:block; margin-bottom:5pt; }
+  .sub-row  { border-bottom:1.5pt solid #D4B060; padding-bottom:5pt; margin:14pt 0 16pt; }
+  .sub-lbl  { font-size:9pt; font-weight:bold; color:#1C2040; letter-spacing:1.5pt; text-transform:uppercase; margin-right:8pt; }
+  .sub-val  { font-size:12pt; color:#1E1E2E; }
+  .salut    { font-style:italic; font-size:12.5pt; margin:0 0 14pt; color:#333348; }
+  .body-txt { font-size:12pt; line-height:1.9; color:#333348; min-height:80pt; margin-bottom:10pt; white-space:pre-wrap; }
+  .cont-hint { font-style:italic; font-size:10pt; color:#72748A; text-align:right; margin-top:6pt; }
+  .cont-note { font-size:10pt; font-style:italic; color:#72748A; margin-bottom:12pt; padding-bottom:8pt; border-bottom:1pt dashed #DDD5C4; }
+  .closing  { font-style:italic; font-size:12pt; color:#333348; margin-bottom:50pt; }
+  .sig-rule { border-top:1pt solid #D4B060; width:160pt; margin-bottom:6pt; }
+  .sig-name { font-size:11pt; font-weight:bold; color:#1C2040; letter-spacing:1pt; margin-bottom:3pt; }
+  .sig-co   { font-size:11pt; font-style:italic; color:#A87C2A; margin-bottom:22pt; }
+  .sig-seal { font-size:10pt; font-style:italic; color:#72748A; }
+  .enc-block { margin-top:20pt; padding:10pt 14pt; border-left:3pt solid #C49A3C; }
+  .enc-lbl  { font-size:8.5pt; font-weight:bold; color:#1C2040; letter-spacing:2pt; text-transform:uppercase; margin-bottom:6pt; }
+  .enc-line { font-size:11pt; color:#1E1E2E; margin-bottom:4pt; }
+  .copy-row { margin-top:16pt; padding-top:12pt; border-top:0.5pt solid #DDD5C4; font-size:11pt; }
+  .copy-lbl { font-size:8.5pt; font-weight:bold; color:#72748A; letter-spacing:2pt; text-transform:uppercase; margin-right:8pt; }
+
+  /* PAGE BREAK */
+  .page-break { page-break-after:always; }
+
+  /* PAGE 2 — MIDDLE WRITING */
+  .mid-bar { background:#1C2040; padding:5pt 36pt; border-bottom:2pt solid #A87C2A; }
+  table.mid-bar-t { width:100%; border-collapse:collapse; }
+  .mb-name { font-size:13pt; font-weight:bold; color:#F7EDD8; letter-spacing:1pt; }
+  .mb-pg   { font-size:9pt; font-style:italic; color:#D4B060; letter-spacing:2pt; }
+  .mb-ref  { font-size:9pt; font-style:italic; color:#D4B060; opacity:0.75; }
+  .mid-gold { background:#A87C2A; height:2pt; }
+
+  /* Writing lines wrapper */
+  .writing-wrapper { padding:28pt 40pt 28pt 60pt; position:relative; }
+
+  /* Left margin rule via a thin table column */
+  table.writing-t { width:100%; border-collapse:collapse; }
+  .margin-col { width:2pt; border-right:1.2pt solid #C8A85A; vertical-align:top; padding:0; opacity:0.5; }
+  .lines-col  { padding-left:16pt; vertical-align:top; }
+
+  /* Each ruled line */
+  .ruled-line {
+    display:block;
+    font-size:13pt;
+    line-height:1;
+    height:28pt;
+    border-bottom:0.7pt solid #D8CEBC;
+    color:#333348;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .mid-bottom { text-align:center; padding:7pt 36pt; border-top:0.5pt solid #DDD5C4; font-style:italic; font-size:9pt; color:#72748A; letter-spacing:1.5pt; }
+
+  /* COMPACT HEADER (page 3) */
+  .compact-hdr { padding:14pt 36pt 12pt; }
+  table.ch-t { width:100%; border-collapse:collapse; }
+  .ch-logo-td { width:50pt; vertical-align:middle; text-align:center; }
+  .ch-c { display:inline-block; width:34pt; height:34pt; border-radius:50%; background:#1C2040; border:1.5pt solid #A87C2A; text-align:center; padding-top:8pt; }
+  .ch-sca { display:block; color:#D4B060; font-size:10pt; font-weight:bold; }
+  .ch-name-td { vertical-align:middle; padding-left:8pt; }
+  .ch-name { font-size:16pt; font-weight:bold; color:#1C2040; margin:0 0 2pt; }
+  .ch-tag  { font-size:9.5pt; font-style:italic; color:#6E2030; margin:0; }
+  .ch-info-td { text-align:right; vertical-align:middle; }
+  .ch-pg-lbl { font-size:8pt; color:#72748A; text-transform:uppercase; letter-spacing:2pt; font-weight:bold; margin-bottom:2pt; }
+  .ch-pg-ref { font-size:10pt; font-style:italic; color:#72748A; }
+  .compact-rule { margin:0; border-top:3pt solid #1C2040; border-bottom:1pt solid #D4B060; padding-top:3pt; }
+
+  /* FOOTER */
+  .f-top  { margin:0 36pt; border-top:1pt solid #D4B060; border-bottom:3pt solid #1C2040; padding-top:3pt; }
+  .f-orn  { text-align:center; padding:7pt 36pt 5pt; color:#C49A3C; font-size:9pt; letter-spacing:8pt; }
+  .f-regs { text-align:center; font-size:9pt; color:#333348; padding:0 36pt 5pt; }
+  .f-lbl  { color:#72748A; font-weight:bold; font-size:8pt; text-transform:uppercase; letter-spacing:1pt; margin-right:2pt; }
+  .f-sep  { color:#A87C2A; margin:0 7pt; }
+  .f-soc  { text-align:center; font-size:9pt; color:#72748A; padding:0 36pt 11pt; }
+  .f-hnd  { color:#A87C2A; font-style:italic; }
+  .f-band { background:#1C2040; padding:6pt 36pt; text-align:center; border-top:1.5pt solid #A87C2A; }
+  .f-band p { font-size:9pt; font-style:italic; color:#F7EDD8; letter-spacing:2.5pt; margin:0; }
+</style></head><body>
+
+<!-- PAGE 1 -->
+<div class="stripe"><p>✦ &nbsp; Naad &nbsp;·&nbsp; Taal &nbsp;·&nbsp; Kaavya &nbsp;·&nbsp; Abhinay &nbsp; ✦</p></div>
+<div class="gold-bar"></div>
+<div class="identity">
+  <table class="id-t"><tr>
+    <td class="logo-td"><div class="logo-c"><span class="logo-sca">SCA</span><span class="logo-est">EST. 2009</span></div></td>
+    <td class="div-td"><div class="vd"></div></td>
+    <td class="name-td">
+      <p class="co-name">Swar Chaitanya Arts</p>
+      <p class="tagline"><span class="t-orn">◆</span>Nurturing the Soul of Indian Classical Arts<span class="t-orn">◆</span></p>
+    </td>
+  </tr></table>
+</div>
+<div class="orn-row">◆ &nbsp; ◆ &nbsp; ◆ &nbsp; ◇ &nbsp; ◆ &nbsp; ◆ &nbsp; ◆</div>
+<div class="contact">
+  <p>12, Raag Bhavan, Shantiniketan Road, Pune – 411 001, Maharashtra, India</p>
+  <p><span class="c-lbl">T</span>+91 98765 43210<span class="c-sep">◆</span><span class="c-lbl">E</span>info@swarchaitanyaarts.in<span class="c-sep">◆</span><span class="c-lbl">W</span>www.swarchaitanyaarts.in</p>
+</div>
+<div class="h-rule"></div>
+<div class="body-sec">
+  <table class="meta-t"><tr>
+    <td style="width:50%"><div class="m-lbl">Date</div><div class="m-val">${v.date}</div></td>
+    <td style="width:50%;text-align:right"><div class="m-lbl">Ref. No.</div><div class="m-val rt">${v.ref}</div></td>
+  </tr></table>
+  <div class="m-lbl" style="margin-bottom:5pt">To</div>
+  <span class="to-name">${v.to1}</span>
+  <span class="to-line">${v.to2}</span>
+  <span class="to-line">${v.to3}</span>
+  <div class="sub-row" style="margin-top:14pt"><span class="sub-lbl">Sub :</span><span class="sub-val"> ${v.sub}</span></div>
+  <p class="salut">Respected Sir / Madam,</p>
+  <div class="body-txt">${v.body || '&nbsp;'}</div>
+  <p class="cont-hint">↓ Continued on Page 2</p>
+</div>
+<div class="f-top"></div><div class="f-orn">◇ ◆ ◇ ◆ ◇ ◆ ◇</div>
+<div class="f-regs"><span class="f-lbl">GSTIN</span>27AABCS1234F1Z5<span class="f-sep">·</span><span class="f-lbl">PAN</span>AABCS1234F<span class="f-sep">·</span><span class="f-lbl">MSME</span>MH-PN-0090876<span class="f-sep">·</span><span class="f-lbl">CIN</span>U74999MH2009PTC123456</div>
+<div class="f-soc">Est. 2009 &nbsp;·&nbsp; <span class="f-hnd">@swarchaitanyaarts</span> &nbsp;|&nbsp; Facebook &nbsp;|&nbsp; Instagram &nbsp;|&nbsp; YouTube</div>
+<div class="f-band"><p>— Excellence in the Timeless Tradition of Indian Arts —</p></div>
+<div class="page-break"></div>
+
+<!-- PAGE 2 — MIDDLE WRITING SHEET -->
+<div class="mid-bar">
+  <table class="mid-bar-t"><tr>
+    <td><span class="mb-name">Swar Chaitanya Arts</span></td>
+    <td style="text-align:right"><span class="mb-ref">Ref: ${v.ref}</span> &nbsp;&nbsp; <span class="mb-pg">Sheet 2 of 3</span></td>
+  </tr></table>
+</div>
+<div class="mid-gold"></div>
+<div class="writing-wrapper">
+  <table class="writing-t"><tr>
+    <td class="margin-col">&nbsp;</td>
+    <td class="lines-col">
+      ${v.mid
+        ? v.mid.split('\n').map(line =>
+            `<div class="ruled-line">${line || '&nbsp;'}</div>`
+          ).join('')
+        : midLines
+      }
+    </td>
+  </tr></table>
+</div>
+<div class="mid-bottom">◇ &nbsp;·&nbsp; Swar Chaitanya Arts &nbsp;·&nbsp; Continuation Sheet &nbsp;·&nbsp; Page 2 of 3 &nbsp;·&nbsp; ◇</div>
+<div class="f-top"></div><div class="f-orn">◇ ◆ ◇ ◆ ◇ ◆ ◇</div>
+<div class="f-regs"><span class="f-lbl">GSTIN</span>27AABCS1234F1Z5<span class="f-sep">·</span><span class="f-lbl">PAN</span>AABCS1234F<span class="f-sep">·</span><span class="f-lbl">MSME</span>MH-PN-0090876<span class="f-sep">·</span><span class="f-lbl">CIN</span>U74999MH2009PTC123456</div>
+<div class="f-soc">Est. 2009 &nbsp;·&nbsp; <span class="f-hnd">@swarchaitanyaarts</span> &nbsp;|&nbsp; Facebook &nbsp;|&nbsp; Instagram &nbsp;|&nbsp; YouTube</div>
+<div class="f-band"><p>— Excellence in the Timeless Tradition of Indian Arts —</p></div>
+<div class="page-break"></div>
+
+<!-- PAGE 3 — CLOSING -->
+<div class="stripe"><p>✦ &nbsp; Swar Chaitanya Arts &nbsp;·&nbsp; Official Correspondence &nbsp; ✦</p></div>
+<div class="gold-bar"></div>
+<div class="compact-hdr">
+  <table class="ch-t"><tr>
+    <td class="ch-logo-td"><div class="ch-c"><span class="ch-sca">SCA</span></div></td>
+    <td class="ch-name-td"><p class="ch-name">Swar Chaitanya Arts</p><p class="ch-tag">Nurturing the Soul of Indian Classical Arts</p></td>
+    <td class="ch-info-td">
+      <div class="ch-pg-lbl">Final Sheet — Page 3 of 3</div>
+      <div class="ch-pg-ref">Ref: ${v.ref}</div>
+      <div class="ch-pg-ref">Date: ${v.date}</div>
+    </td>
+  </tr></table>
+</div>
+<div class="compact-rule"></div>
+<div class="body-sec">
+  <p class="cont-note">↳ Final page — letter dated ${v.date} &nbsp;·&nbsp; Ref. ${v.ref}</p>
+  <div class="body-txt">${v.body3 || '&nbsp;'}</div>
+  <p class="closing">Yours faithfully,</p>
+  <div class="sig-rule"></div>
+  <div class="sig-name">Authorised Signatory</div>
+  <div class="sig-co">Swar Chaitanya Arts</div>
+  <div class="sig-seal">Seal &amp; Stamp :</div>
+  ${encLines ? `<div class="enc-block"><div class="enc-lbl">Enclosures</div>${encLines}</div>` : ''}
+  ${v.copy ? `<div class="copy-row"><span class="copy-lbl">Copy to :</span>${v.copy}</div>` : ''}
+</div>
+<div class="f-top"></div><div class="f-orn">◇ ◆ ◇ ◆ ◇ ◆ ◇</div>
+<div class="f-regs"><span class="f-lbl">GSTIN</span>27AABCS1234F1Z5<span class="f-sep">·</span><span class="f-lbl">PAN</span>AABCS1234F<span class="f-sep">·</span><span class="f-lbl">MSME</span>MH-PN-0090876<span class="f-sep">·</span><span class="f-lbl">CIN</span>U74999MH2009PTC123456</div>
+<div class="f-soc">Est. 2009 &nbsp;·&nbsp; <span class="f-hnd">@swarchaitanyaarts</span> &nbsp;|&nbsp; Facebook &nbsp;|&nbsp; Instagram &nbsp;|&nbsp; YouTube</div>
+<div class="f-band"><p>— Excellence in the Timeless Tradition of Indian Arts —</p></div>
+
+</body></html>`;
+}
+
+/* ── Download DOCX ───────────────────────────────────── */
+async function downloadDocx() {
+  toast('Preparing 3-page DOCX…');
+  const v = vals();
+  const html = buildDocxHtml(v);
+
+  async function tryLoad(src) {
+    return new Promise((res, rej) => {
+      if (window.htmlDocx) return res();
+      const s = document.createElement('script');
+      s.src = src; s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  try {
+    await tryLoad('https://cdn.jsdelivr.net/gh/evidenceprime/html-docx-js/dist/html_docx.js');
+    const blob = window.htmlDocx.asBlob(html, {
+      orientation: 'portrait',
+      margins: { top: 720, right: 1080, bottom: 720, left: 1080 }
+    });
+    saveAs(blob, 'SwarChaitanyaArts_Letterhead_3Pages.docx');
+    toast('✓ 3-Page DOCX Downloaded!');
+  } catch(e1) {
+    try {
+      await tryLoad('https://unpkg.com/html-docx-js/dist/html_docx.js');
+      const blob = window.htmlDocx.asBlob(html);
+      saveAs(blob, 'SwarChaitanyaArts_Letterhead_3Pages.docx');
+      toast('✓ 3-Page DOCX Downloaded!');
+    } catch(e2) {
+      const blob = new Blob([html], { type: 'application/msword' });
+      saveAs(blob, 'SwarChaitanyaArts_Letterhead_3Pages.doc');
+      toast('✓ Saved as .doc (opens in Word)');
+    }
+  }
+}
+</script>
+</body>
+</html>
