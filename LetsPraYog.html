@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prayog – Designing Moments, Defining Memories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  /* =============================================
+     THEME VARIABLES — DARK (default) & LIGHT
+  ============================================= */
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --gold-dark: #8b6914;
+    --rose: #c4767a;
+  }
+
+  [data-theme="dark"] {
+    --cream: #fdf6ec;
+    --dark: #1a1209;
+    --dark2: #2c1f0a;
+    --charcoal: #3a3228;
+    --text-muted: #8a7a60;
+    --bg-body: #1a1209;
+    --bg-alt: #2c1f0a;
+    --bg-alt2: #251500;
+    --bg-section: #1a1209;
+    --bg-card: #2a1c0c;
+    --bg-gallery: #221508;
+    --bg-social: #2c1f0a;
+    --bg-contact: #1a1209;
+    --bg-stats: #1a1209;
+    --bg-testimonials: #241809;
+    --text-body: #fdf6ec;
+    --text-secondary: #c9b99a;
+    --text-muted-var: #8a7a60;
+    --text-heading: #fdf6ec;
+    --sec-title-color: #fdf6ec;
+    --svc-card-bg: #2a1c0c;
+    --svc-card-hover: #321f0d;
+    --input-bg: rgba(255,255,255,0.05);
+    --input-border: rgba(58,50,40,0.4);
+    --contact-bg: #1a1209;
+    --footer-bg: #111008;
+    --border-subtle: rgba(201,168,76,0.15);
+    --nav-bg: rgba(26,18,9,0.96);
+  }
+
+  [data-theme="light"] {
+    --cream: #fdf6ec;
+    --dark: #1a1209;
+    --dark2: #2c1f0a;
+    --charcoal: #3a3228;
+    --text-muted: #7a6a50;
+    --bg-body: #fdf6ec;
+    --bg-alt: #f5e9d4;
+    --bg-alt2: #efe0c4;
+    --bg-section: #fdf6ec;
+    --bg-card: #ffffff;
+    --bg-gallery: #f0e8d8;
+    --bg-social: #2c1f0a;
+    --bg-contact: #fdf6ec;
+    --bg-stats: #1a1209;
+    --bg-testimonials: #f0e8d8;
+    --text-body: #2a1a08;
+    --text-secondary: #5c3d1a;
+    --text-muted-var: #7a6a50;
+    --text-heading: #1a1209;
+    --sec-title-color: #1a1209;
+    --svc-card-bg: #ffffff;
+    --svc-card-hover: #fffaf3;
+    --input-bg: #fff;
+    --input-border: rgba(58,50,40,0.18);
+    --contact-bg: #fdf6ec;
+    --footer-bg: #1a1209;
+    --border-subtle: rgba(201,168,76,0.25);
+    --nav-bg: rgba(253,246,236,0.97);
+  }
+
+  /* =============================================
+     BASE RESET
+  ============================================= */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Josefin Sans', sans-serif;
+    background: var(--bg-body);
+    color: var(--text-body);
+    overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.5;
+  }
+
+  /* =============================================
+     THEME TOGGLE BUTTON
+  ============================================= */
+  .theme-toggle {
+    position: fixed;
+    bottom: 96px;
+    right: 28px;
+    z-index: 997;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+  }
+  .theme-toggle:hover { transform: scale(1.12) rotate(15deg); }
+  [data-theme="dark"] .t-sun { display: block; }
+  [data-theme="dark"] .t-moon { display: none; }
+  [data-theme="light"] .t-sun { display: none; }
+  [data-theme="light"] .t-moon { display: block; }
+
+  /* =============================================
+     NAV
+  ============================================= */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 18px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    padding: 12px 5%;
+    box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+  }
+  .nav-logo {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.4rem; color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.72rem; letter-spacing: 2.5px;
+    text-transform: uppercase; color: #fff;
+    text-decoration: none; opacity: 0.8;
+    transition: all 0.3s; position: relative;
+  }
+  [data-theme="light"] nav.scrolled .nav-links a { color: var(--dark); }
+  .nav-links a::after {
+    content: ''; position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold-light); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark)) !important;
+    color: var(--dark) !important; padding: 9px 22px !important;
+    opacity: 1 !important; font-weight: 600 !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; }
+  .nav-toggle span { display: block; width: 24px; height: 1px; background: var(--gold); }
+
+  /* =============================================
+     HERO
+  ============================================= */
+  .hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; background: #1a1209;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%,rgba(201,168,76,0.12) 0%,transparent 60%),
+                radial-gradient(ellipse at 80% 20%,rgba(196,118,122,0.07) 0%,transparent 50%),
+                linear-gradient(180deg,#1a1209 0%,#2c1f0a 100%);
+  }
+  .hero-dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px,rgba(201,168,76,0.12) 1px,transparent 0);
+    background-size: 40px 40px; opacity: 0.5;
+  }
+  .hero-border { position: absolute; inset: 60px; border: 1px solid rgba(201,168,76,0.12); pointer-events: none; }
+  .hero-border::after { content: ''; position: absolute; inset: 18px; border: 1px solid rgba(201,168,76,0.07); }
+  .hero-img-bg {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: repeat(4,1fr); grid-template-rows: repeat(2,1fr);
+    opacity: 0.07;
+  }
+  .hero-img-bg img { width:100%; height:100%; object-fit:cover; filter:grayscale(100%); }
+  .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; animation: fadeUp 1.2s ease both; }
+  .hero-eyebrow {
+    font-size: 0.68rem; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 25px;
+    display: flex; align-items: center; justify-content: center; gap: 15px;
+  }
+  .hero-eyebrow::before,.hero-eyebrow::after { content:''; display:inline-block; width:50px; height:1px; background:var(--gold); }
+  .hero-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(5rem,13vw,12rem); color: var(--gold);
+    line-height: 0.9; text-shadow: 0 0 100px rgba(201,168,76,0.25);
+    animation: fadeUp 1.2s 0.15s ease both;
+  }
+  .hero-sub {
+    font-size: clamp(0.65rem,1.5vw,0.9rem); letter-spacing: 6px;
+    text-transform: uppercase; color: rgba(255,255,255,0.5);
+    margin: 15px 0 25px; animation: fadeUp 1.2s 0.3s ease both;
+  }
+  .hero-quote {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(1rem,2.3vw,1.6rem); color: rgba(255,255,255,0.8);
+    margin-bottom: 15px; font-weight: 300;
+    animation: fadeUp 1.2s 0.4s ease both;
+  }
+  .hero-founders {
+    font-size: 0.65rem; letter-spacing: 3px;
+    color: rgba(201,168,76,0.6); text-transform: uppercase;
+    margin-bottom: 50px; animation: fadeUp 1.2s 0.5s ease both;
+  }
+  .hero-btns { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; animation:fadeUp 1.2s 0.65s ease both; }
+  .btn-gold {
+    background: linear-gradient(135deg,var(--gold),var(--gold-dark));
+    color: var(--dark); padding: 14px 38px; font-size: 0.72rem;
+    letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none;
+    font-weight: 600;
+    clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+    transition: all 0.3s; display: inline-block;
+  }
+  .btn-gold:hover { box-shadow: 0 0 30px rgba(201,168,76,0.5); transform: translateY(-2px); }
+  .btn-ghost {
+    border: 1px solid rgba(201,168,76,0.4); color: var(--gold-light);
+    padding: 14px 38px; font-size: 0.72rem;
+    letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none;
+    font-weight: 300;
+    clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+    transition: all 0.3s; display: inline-block;
+  }
+  .btn-ghost:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+  .scroll-down { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); text-align:center; animation:bob 2s infinite; }
+  .scroll-down span { display:block; font-size:0.58rem; letter-spacing:3px; color:rgba(255,255,255,0.35); text-transform:uppercase; margin-bottom:8px; }
+  .scroll-line { width:1px; height:50px; background:linear-gradient(to bottom,var(--gold),transparent); margin:0 auto; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(35px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes bob { 0%,100% { transform:translateX(-50%) translateY(0); } 50% { transform:translateX(-50%) translateY(8px); } }
+
+  /* =============================================
+     STATS — always dark bg
+  ============================================= */
+  .stats { background:#1a1209; display:grid; grid-template-columns:repeat(4,1fr); }
+  .stat { text-align:center; padding:45px 20px; border-right:1px solid rgba(201,168,76,0.15); }
+  .stat:last-child { border-right:none; }
+  .stat-num { font-family:'Cormorant Garamond',serif; font-size:3.2rem; color:var(--gold); font-weight:300; }
+  .stat-lbl { font-size:0.62rem; letter-spacing:3px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-top:5px; }
+
+  /* =============================================
+     SECTION HEADERS
+  ============================================= */
+  section { padding: 90px 5%; }
+  .sec-hd { text-align:center; margin-bottom:5px; }
+  .sec-eyebrow {
+    font-size:0.65rem; letter-spacing:5px; text-transform:uppercase;
+    color:var(--gold); margin-bottom:14px;
+    display:flex; align-items:center; justify-content:center; gap:14px;
+  }
+  .sec-eyebrow::before,.sec-eyebrow::after { content:''; display:inline-block; width:40px; height:1px; background:var(--gold); }
+  .sec-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2rem,5vw,3.6rem);
+    color:var(--sec-title-color); font-weight:300; line-height:1.1;
+  }
+  .sec-title em { font-style:italic; color:var(--gold-dark); }
+  .sec-title-light { color:var(--cream) !important; }
+  .sec-title-light em { color:var(--gold) !important; }
+  .sec-desc {
+    font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+    color:var(--text-muted-var); margin-top:14px;
+    max-width:580px; margin-inline:auto; line-height:1.75;
+  }
+  .sec-desc-light { color:rgba(255,255,255,0.45) !important; }
+
+  /* =============================================
+     SERVICES — 3-col grid from card services
+  ============================================= */
+  #services { background:var(--bg-section); }
+  .services-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:2px;
+  }
+  .svc-card {
+    background:var(--svc-card-bg); padding:45px 32px;
+    text-align:center; border-bottom:3px solid transparent;
+    transition:all 0.4s; position:relative; overflow:hidden;
+  }
+  .svc-card::before {
+    content:''; position:absolute; top:0;left:0;right:0;
+    height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    opacity:0; transition:opacity 0.4s;
+  }
+  .svc-card:hover { border-bottom-color:var(--gold); transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,0.12); }
+  .svc-card:hover::before { opacity:1; }
+  .svc-icon { font-size:2.3rem; margin-bottom:18px; display:block; }
+  .svc-name { font-family:'Cormorant Garamond',serif; font-size:1.55rem; color:var(--text-heading); margin-bottom:10px; }
+  .svc-desc { font-size:0.78rem; color:var(--text-muted-var); line-height:1.85; }
+  .svc-tag { display:inline-block; margin-top:16px; font-size:0.62rem; letter-spacing:2px; color:var(--gold-dark); text-transform:uppercase; border-bottom:1px solid var(--gold-light); padding-bottom:2px; }
+
+  /* =============================================
+     GALLERY
+  ============================================= */
+  #gallery { background:var(--bg-gallery); }
+  .filter-bar { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:45px; }
+  .fbtn {
+    padding:8px 20px; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase;
+    border:1px solid rgba(201,168,76,0.35); background:transparent;
+    color:var(--text-muted-var); cursor:pointer; transition:all 0.3s;
+    font-family:'Josefin Sans',sans-serif;
+  }
+  .fbtn:hover,.fbtn.active { background:var(--dark); border-color:var(--dark); color:var(--gold); }
+  .gal-grid { columns:4; column-gap:10px; }
+  .gal-item { break-inside:avoid; margin-bottom:10px; position:relative; overflow:hidden; cursor:pointer; display:block; }
+  .gal-item.hide { display:none; }
+  .gal-item img { width:100%; display:block; transition:transform 0.5s; filter:brightness(0.93); }
+  .gal-item:hover img { transform:scale(1.06); filter:brightness(1); }
+  .gal-over {
+    position:absolute; inset:0;
+    background:linear-gradient(to top,rgba(26,18,9,0.88) 0%,transparent 60%);
+    opacity:0; transition:opacity 0.4s;
+    display:flex; flex-direction:column; justify-content:flex-end; padding:18px;
+  }
+  .gal-item:hover .gal-over { opacity:1; }
+  .gal-title { font-family:'Cormorant Garamond',serif; font-size:1rem; color:#fff; font-style:italic; }
+  .gal-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+  .gtag { font-size:0.55rem; letter-spacing:1.5px; padding:3px 8px; background:rgba(201,168,76,0.85); color:var(--dark); text-transform:uppercase; }
+
+  /* LIGHTBOX */
+  .lbx { position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:10000; display:none; align-items:center; justify-content:center; padding:20px; }
+  .lbx.open { display:flex; }
+  .lbx-in { position:relative; max-width:90vw; max-height:90vh; text-align:center; }
+  .lbx-in img { max-width:100%; max-height:80vh; object-fit:contain; border:1px solid rgba(201,168,76,0.15); }
+  .lbx-close { position:absolute; top:-40px; right:0; background:none; border:none; color:var(--gold); font-size:1.2rem; cursor:pointer; font-family:'Josefin Sans',sans-serif; letter-spacing:2px; }
+  .lbx-info { padding:14px 0; color:rgba(255,255,255,0.6); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1rem; }
+  .lbx-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.3); color:var(--gold); width:42px; height:42px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem; transition:all 0.3s; }
+  .lbx-nav:hover { background:rgba(201,168,76,0.4); }
+  .lbx-prev { left:-60px; }
+  .lbx-next { right:-60px; }
+
+  /* FILE NAMING */
+  .file-guide { background:var(--dark); border:1px solid rgba(201,168,76,0.18); padding:40px; margin-top:60px; }
+  .file-guide h3 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--gold); margin-bottom:8px; font-weight:400; }
+  .file-guide p { font-size:0.76rem; color:rgba(255,255,255,0.4); margin-bottom:25px; line-height:1.8; }
+  .fg-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; }
+  .fg-tag { font-size:0.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:7px; }
+  .fg-examples { font-size:0.72rem; color:rgba(255,255,255,0.4); line-height:1.9; font-family:monospace; }
+  code { color:var(--gold); }
+
+  /* =============================================
+     CANVAS OF CELEBRATION — NEW SECTION
+  ============================================= */
+  #canvas { background:var(--bg-section); }
+  .video-tabs { display:flex; gap:0; margin-bottom:32px; border-bottom:1px solid rgba(201,168,76,0.2); }
+  .vtab-btn {
+    padding:12px 28px; background:transparent; border:none;
+    border-bottom:2px solid transparent; margin-bottom:-1px;
+    color:var(--text-muted-var); font-family:'Josefin Sans',sans-serif;
+    font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .vtab-btn.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .vpanel { display:none; }
+  .vpanel.active { display:block; }
+  .video-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .video-card { background:var(--svc-card-bg); border:1px solid rgba(201,168,76,0.15); overflow:hidden; transition:transform 0.3s,box-shadow 0.3s; }
+  .video-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.3); }
+  .video-embed { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; }
+  .video-embed iframe { position:absolute; top:0;left:0; width:100%;height:100%; border:none; }
+  .video-card-body { padding:16px 20px; }
+  .video-card-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--text-heading); margin-bottom:4px; }
+  .video-card-sub { font-size:0.65rem; color:var(--text-muted-var); letter-spacing:0.1em; text-transform:uppercase; }
+  .ig-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .ig-placeholder {
+    background:var(--svc-card-bg); border:1px solid rgba(201,168,76,0.15);
+    padding:40px 24px; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:12px; min-height:200px; justify-content:center;
+  }
+  .ig-placeholder .ig-icon { font-size:2rem; }
+  .ig-placeholder p { font-size:0.72rem; color:var(--text-muted-var); line-height:1.7; }
+  .ig-placeholder a { color:var(--gold); font-size:0.68rem; border-bottom:1px solid var(--gold); padding-bottom:2px; }
+
+  /* =============================================
+     FOUNDERS
+  ============================================= */
+  #founders { background:var(--dark); }
+  .founders-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; max-width:880px; margin:0 auto; }
+  .founder-card { text-align:center; }
+  .fa-wrap { width:150px; height:150px; margin:0 auto 22px; position:relative; }
+  .fa-wrap::before { content:''; position:absolute; inset:-5px; border:1px solid rgba(201,168,76,0.5); border-radius:50%; }
+  .fa-wrap::after { content:''; position:absolute; inset:-14px; border:1px dashed rgba(201,168,76,0.2); border-radius:50%; }
+  .fa-ph {
+    width:100%; height:100%; border-radius:50%;
+    background:linear-gradient(135deg,#2c1f0a,#3a2810);
+    border:2px solid var(--gold-dark);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Great Vibes',cursive; font-size:3.5rem; color:var(--gold);
+    overflow:hidden;
+  }
+  .fa-ph img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
+  .founder-name { font-family:'Great Vibes',cursive; font-size:2.4rem; color:var(--gold); margin-bottom:4px; }
+  .founder-role { font-size:0.62rem; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:18px; }
+  .founder-bio { font-family:'Cormorant Garamond',serif; font-size:1.02rem; font-style:italic; color:rgba(255,255,255,0.6); line-height:1.8; }
+  .vision-block { max-width:720px; margin:70px auto 0; text-align:center; padding:50px 45px; border:1px solid rgba(201,168,76,0.18); position:relative; }
+  .vision-block::before { content:'"'; position:absolute; top:-28px; left:50%; transform:translateX(-50%); font-family:'Great Vibes',cursive; font-size:5rem; color:var(--gold); line-height:1; }
+  .vision-text { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-style:italic; color:rgba(255,255,255,0.75); line-height:1.75; font-weight:300; }
+  .vision-sign { margin-top:25px; font-family:'Great Vibes',cursive; font-size:1.8rem; color:var(--gold); }
+  .vision-sub { font-size:0.62rem; letter-spacing:4px; text-transform:uppercase; color:rgba(201,168,76,0.45); margin-top:6px; }
+
+  /* =============================================
+     PROCESS / COLLABORATIONS
+  ============================================= */
+  #process { background:var(--bg-section); }
+  .process-steps { display:grid; grid-template-columns:repeat(5,1fr); max-width:1100px; margin:0 auto; position:relative; }
+  .process-steps::before { content:''; position:absolute; top:44px; left:10%; right:10%; height:1px; background:linear-gradient(90deg,transparent,var(--gold-light),transparent); }
+  .proc-step { text-align:center; padding:30px 12px; }
+  .step-num { width:48px; height:48px; border-radius:50%; border:1px solid var(--gold); background:var(--bg-section); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--gold-dark); font-style:italic; position:relative; z-index:1; }
+  .step-name { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--text-heading); margin-bottom:8px; }
+  .step-desc { font-size:0.7rem; color:var(--text-muted-var); line-height:1.7; }
+
+  /* =============================================
+     REVIEWS / TESTIMONIALS — ENHANCED 3-TAB
+  ============================================= */
+  #testimonials { background:var(--bg-testimonials); }
+  .review-tabs { display:flex; gap:0; margin-bottom:40px; border-bottom:1px solid rgba(201,168,76,0.2); }
+  .rtab-btn {
+    padding:12px 28px; background:transparent; border:none;
+    border-bottom:2px solid transparent; margin-bottom:-1px;
+    color:var(--text-muted-var); font-family:'Josefin Sans',sans-serif;
+    font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .rtab-btn.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .rpanel { display:none; }
+  .rpanel.active { display:block; }
+
+  /* Text reviews */
+  .testi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:22px; max-width:1080px; margin:0 auto; }
+  .testi-card { background:var(--svc-card-bg); padding:38px 32px; border-left:3px solid var(--gold); position:relative; }
+  .testi-stars { color:var(--gold); font-size:0.85rem; margin-bottom:12px; }
+  .testi-quote { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; color:var(--text-muted-var); line-height:1.8; margin-bottom:22px; }
+  .testi-name { font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-heading); }
+  .testi-event { font-size:0.65rem; color:var(--text-muted-var); letter-spacing:1px; margin-top:4px; }
+  .testi-card::before { content:'"'; position:absolute; top:18px; right:26px; font-family:'Great Vibes',cursive; font-size:4rem; color:var(--gold-light); line-height:1; }
+
+  /* Media/screenshot reviews */
+  .media-reviews-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .media-review-item { position:relative; border:1px solid rgba(201,168,76,0.2); overflow:hidden; cursor:pointer; background:var(--svc-card-bg); transition:border-color 0.3s,transform 0.3s; }
+  .media-review-item:hover { border-color:var(--gold); transform:translateY(-4px); }
+  .media-placeholder { width:100%; aspect-ratio:9/16; background:var(--bg-gallery); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--text-muted-var); font-size:0.65rem; letter-spacing:0.1em; text-align:center; padding:16px; }
+  .media-placeholder .mp-icon { font-size:2rem; }
+  .media-placeholder code { font-size:0.6rem; color:var(--gold); background:rgba(201,168,76,0.1); padding:2px 6px; }
+  .media-review-overlay { position:absolute; inset:0; background:rgba(26,18,9,0.85); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:16px; opacity:0; transition:opacity 0.3s; }
+  .media-review-item:hover .media-review-overlay { opacity:1; }
+  .media-source { font-size:0.62rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; margin-bottom:4px; }
+  .media-name { font-family:'Cormorant Garamond',serif; font-size:1rem; color:#fff; }
+
+  /* Video reviews */
+  .video-reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .video-review-card { background:var(--svc-card-bg); border:1px solid rgba(201,168,76,0.15); overflow:hidden; }
+  .video-review-embed { position:relative; padding-bottom:56.25%; height:0; }
+  .video-review-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+  .video-review-body { padding:16px 20px; }
+  .video-review-author { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--text-heading); }
+  .video-review-event { font-size:0.62rem; color:var(--text-muted-var); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px; }
+
+  /* =============================================
+     SOCIAL / FOLLOW US
+  ============================================= */
+  #social { background:var(--dark2); }
+  .insta-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:7px; max-width:1100px; margin:0 auto 50px; }
+  .insta-it { aspect-ratio:1; overflow:hidden; cursor:pointer; position:relative; }
+  .insta-it img { width:100%; height:100%; object-fit:cover; filter:brightness(0.82); transition:all 0.4s; }
+  .insta-it:hover img { transform:scale(1.09); filter:brightness(1); }
+  .insta-ov { position:absolute; inset:0; background:rgba(201,168,76,0.7); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s; font-size:1.5rem; }
+  .insta-it:hover .insta-ov { opacity:1; }
+  .social-row { display:flex; align-items:center; justify-content:center; gap:50px; flex-wrap:wrap; max-width:800px; margin:0 auto; }
+  .qr-wrap { text-align:center; }
+  .qr-box { width:155px; height:155px; border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; margin:0 auto; position:relative; overflow:hidden; cursor:pointer; }
+  .qr-box::before,.qr-box::after { content:''; position:absolute; width:18px; height:18px; border:3px solid var(--gold); z-index:1; }
+  .qr-box::before { top:5px; left:5px; border-right:none; border-bottom:none; }
+  .qr-box::after { bottom:5px; right:5px; border-left:none; border-top:none; }
+  .qr-inner { text-align:center; padding:10px; }
+  .qr-grid { display:grid; grid-template-columns:repeat(7,9px); gap:2px; margin:0 auto; }
+  .qr-c { width:9px; height:9px; background:var(--gold); border-radius:1px; }
+  .qr-c.e { background:transparent; }
+  .qr-lbl { font-size:0.58rem; letter-spacing:2px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-top:10px; }
+  .qr-hint { font-size:0.55rem; letter-spacing:1px; color:rgba(201,168,76,0.5); margin-top:4px; text-transform:uppercase; }
+  .soc-links { display:flex; flex-direction:column; gap:12px; }
+  .soc-link { display:flex; align-items:center; gap:14px; text-decoration:none; padding:13px 22px; border:1px solid rgba(201,168,76,0.18); transition:all 0.3s; }
+  .soc-link:hover { border-color:var(--gold); background:rgba(201,168,76,0.05); }
+  .soc-icon { font-size:1.25rem; }
+  .soc-nm { font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
+  .soc-handle { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:rgba(255,255,255,0.65); }
+  .soc-arr { color:rgba(255,255,255,0.25); font-size:0.8rem; }
+
+  /* =============================================
+     CONTACT — DUAL MODE (Classic + Spin Wheel)
+  ============================================= */
+  #contact { background:var(--bg-contact); }
+
+  .contact-mode-switcher {
+    display:flex; max-width:420px; margin:0 auto 50px;
+    border:1px solid rgba(201,168,76,0.3); overflow:hidden;
+  }
+  .cmode-btn {
+    flex:1; padding:0px 16px; background:transparent; border:none;
+    border-right:1px solid rgba(201,168,76,0.3);
+    color:var(--text-muted-var); font-family:'Josefin Sans',sans-serif;
+    font-size:1rem; letter-spacing:0.15em; text-transform:uppercase;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .cmode-btn:last-child { border-right:none; }
+  .cmode-btn.active { background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:#1a1209; font-weight:600; }
+
+  .cpanel { display:none; }
+  .cpanel.active { display:block; }
+
+  /* Classic form */
+  .contact-grid { display:grid; grid-template-columns:1fr 1.2fr; gap:75px; max-width:980px; margin:0 auto; }
+  .contact-info-title { font-family:'Cormorant Garamond',serif; font-size:1.9rem; color:var(--text-heading); margin-bottom:28px; font-weight:300; }
+  .c-detail { display:flex; align-items:flex-start; gap:14px; margin-bottom:20px; }
+  .c-icon { font-size:1rem; margin-top:2px; color:var(--gold-dark); }
+  .c-lbl { font-size:0.58rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--text-muted-var); margin-bottom:3px; }
+  .c-val { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--text-heading); }
+  .c-val a { color:inherit; text-decoration:none; }
+  .c-val a:hover { color:var(--gold-dark); }
+  .wa-btn { display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#fff; padding:13px 28px; text-decoration:none; font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; font-weight:600; margin-top:22px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:all 0.3s; }
+  .wa-btn:hover { background:#1ebe5d; box-shadow:0 8px 25px rgba(37,211,102,0.4); transform:translateY(-2px); }
+  .f-group { margin-bottom:18px; }
+  .f-group label { display:block; font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted-var); margin-bottom:7px; }
+  .f-group input,.f-group select,.f-group textarea { width:100%; padding:12px 16px; border:1px solid var(--input-border); background:var(--input-bg); font-family:'Josefin Sans',sans-serif; font-size:0.83rem; color:var(--text-heading); outline:none; transition:border-color 0.3s; }
+  .f-group input:focus,.f-group select:focus,.f-group textarea:focus { border-color:var(--gold); }
+  .f-group select option { background:var(--bg-card); color:var(--text-heading); }
+  .f-group textarea { height:105px; resize:vertical; }
+  .f-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .f-submit { width:100%; padding:15px; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); border:none; font-family:'Josefin Sans',sans-serif; font-size:0.72rem; letter-spacing:2.5px; text-transform:uppercase; font-weight:600; color:var(--dark); cursor:pointer; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:all 0.3s; }
+  .f-submit:hover { box-shadow:0 8px 25px rgba(201,168,76,0.4); }
+  .f-success { display:none; color:var(--gold-dark); font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; margin-top:15px; text-align:center; }
+
+  /* Spin Wheel */
+  .gamified-wrap { max-width:680px; margin:0 auto; text-align:center; }
+  .gamified-wrap h3 { font-family:'Cormorant Garamond',serif; font-size:2.2rem; color:var(--text-heading); font-weight:300; margin-bottom:10px; }
+  .gamified-wrap h3 em { font-style:italic; color:var(--gold); }
+  .gamified-wrap .gwsub { font-size:0.78rem; color:var(--text-muted-var); line-height:1.8; margin-bottom:36px; }
+  .wheel-wrap { position:relative; width:300px; margin:0 auto 28px; }
+  .wheel-pointer { position:absolute; top:-16px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:20px solid var(--gold); z-index:2; }
+  #discountWheel { border-radius:50%; border:4px solid var(--gold); box-shadow:0 0 30px rgba(201,168,76,0.3); display:block; }
+  .spin-btn { padding:14px 40px; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:#1a1209; border:none; font-family:'Josefin Sans',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:600; cursor:pointer; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:all 0.3s; }
+  .spin-btn:hover { box-shadow:0 8px 25px rgba(201,168,76,0.4); transform:translateY(-2px); }
+  .spin-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
+  .discount-result { display:none; background:var(--svc-card-bg); border:1px solid var(--gold); padding:28px 32px; margin-top:28px; }
+  .discount-result.show { display:block; }
+  .disc-won-label { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted-var); margin-bottom:8px; }
+  .disc-pct { font-family:'Cormorant Garamond',serif; font-size:4.5rem; color:var(--gold); line-height:1; }
+  .disc-off { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted-var); margin-bottom:12px; }
+  .coupon-code { font-family:'Courier New',monospace; font-size:1.3rem; color:var(--text-heading); background:rgba(201,168,76,0.08); padding:8px 20px; display:inline-block; letter-spacing:0.2em; margin:10px 0; border:1px dashed rgba(201,168,76,0.4); }
+  .coupon-expiry { font-size:0.62rem; color:var(--text-muted-var); margin-bottom:20px; }
+  .wa-claim-btn { display:inline-flex; align-items:center; gap:8px; padding:14px 32px; background:#25D366; color:#fff; border:none; font-family:'Josefin Sans',sans-serif; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; cursor:pointer; text-decoration:none; transition:all 0.3s; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); }
+  .wa-claim-btn:hover { background:#1ebe5d; box-shadow:0 8px 25px rgba(37,211,102,0.4); transform:translateY(-2px); }
+
+  /* =============================================
+     FOOTER — with nav columns
+  ============================================= */
+  footer { background:var(--footer-bg); padding:55px 5% 28px; }
+  .footer-top { display:grid; grid-template-columns:1fr 2fr; gap:60px; margin-bottom:48px; }
+  .footer-brand { text-align:left; }
+  .foot-logo { font-family:'Great Vibes',cursive; font-size:3.2rem; color:var(--gold); }
+  .foot-tag { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem; color:rgba(255,255,255,0.35); margin:8px 0 24px; }
+  .foot-socials { display:flex; gap:12px; }
+  .foot-soc-icon { width:36px; height:36px; border:1px solid rgba(201,168,76,0.25); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:0.9rem; text-decoration:none; transition:all 0.2s; }
+  .foot-soc-icon:hover { border-color:var(--gold); color:var(--gold); }
+  .footer-nav { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+  .fn-col h4 { font-family:'Josefin Sans',sans-serif; font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  .fn-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .fn-col a { font-size:0.78rem; color:rgba(255,255,255,0.35); letter-spacing:0.05em; text-decoration:none; transition:color 0.2s; }
+  .fn-col a:hover { color:var(--gold); }
+  .foot-div { height:1px; background:linear-gradient(90deg,transparent,rgba(201,168,76,0.25),transparent); margin-bottom:28px; }
+  .footer-bottom { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .foot-copy { font-size:0.62rem; color:rgba(255,255,255,0.2); letter-spacing:1px; }
+  .foot-copy span { color:var(--gold-dark); }
+  .foot-bottom-links { display:flex; gap:20px; }
+  .foot-bottom-links a { font-size:0.62rem; color:rgba(255,255,255,0.2); letter-spacing:0.1em; text-decoration:none; transition:color 0.2s; }
+  .foot-bottom-links a:hover { color:var(--gold); }
+
+  /* =============================================
+     FLOATING WHATSAPP
+  ============================================= */
+  .wa-float { position:fixed; bottom:28px; right:28px; width:56px; height:56px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; z-index:998; box-shadow:0 6px 20px rgba(37,211,102,0.45); animation:pulse 2.5s infinite; transition:transform 0.3s; }
+  .wa-float:hover { transform:scale(1.12); animation:none; }
+  @keyframes pulse { 0%,100% { box-shadow:0 6px 20px rgba(37,211,102,0.45); } 50% { box-shadow:0 6px 35px rgba(37,211,102,0.7),0 0 0 8px rgba(37,211,102,0.12); } }
+
+  /* =============================================
+     SCROLL REVEAL
+  ============================================= */
+  .rv { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease,transform 0.7s ease; }
+  .rv.in { opacity:1; transform:translateY(0); }
+
+  /* =============================================
+     RESPONSIVE
+  ============================================= */
+  @media(max-width:1000px) { .gal-grid { columns:3; } .video-grid,.ig-grid,.video-reviews-grid { grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:850px) {
+    .nav-toggle { display:flex; }
+    .nav-links { position:fixed; top:0; right:-100%; height:100vh; width:270px; background:#1a1209; flex-direction:column; justify-content:center; align-items:center; gap:38px; transition:right 0.4s; z-index:998; }
+    .nav-links.open { right:0; }
+    .nav-links a { font-size:0.85rem; color:#fff; }
+    .stats { grid-template-columns:repeat(2,1fr); }
+    .stat:nth-child(2) { border-right:none; }
+    .stat:nth-child(3) { border-top:1px solid rgba(201,168,76,0.12); }
+    .process-steps { grid-template-columns:repeat(3,1fr); }
+    .insta-grid { grid-template-columns:repeat(3,1fr); }
+    .founders-grid { grid-template-columns:1fr; gap:40px; max-width:420px; }
+    .contact-grid { grid-template-columns:1fr; gap:45px; }
+    .footer-top { grid-template-columns:1fr; gap:32px; }
+    .footer-nav { grid-template-columns:repeat(2,1fr); }
+    .media-reviews-grid { grid-template-columns:repeat(2,1fr); }
+  }
+  @media(max-width:600px) {
+    .gal-grid { columns:2; }
+    .process-steps { grid-template-columns:repeat(2,1fr); }
+    .f-row { grid-template-columns:1fr; }
+    .hero-border { display:none; }
+    .insta-grid { grid-template-columns:repeat(2,1fr); }
+    .social-row { gap:30px; }
+    .lbx-prev,.lbx-next { display:none; }
+    .video-grid,.ig-grid,.video-reviews-grid { grid-template-columns:1fr; }
+    .footer-nav { grid-template-columns:1fr; }
+    .media-reviews-grid { grid-template-columns:repeat(2,1fr); }
+    .footer-bottom { flex-direction:column; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" id="themeToggle" title="Toggle theme">
+  <span class="t-sun">☀️</span>
+  <span class="t-moon">🌙</span>
+</button>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/919769541114?text=Hello%20Prayog!%20I%20saw%20your%20website%20and%20would%20love%20to%20enquire%20about%20your%20event%20services." class="wa-float" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<!-- NAV PraYog -->
+<nav id="nav">
+  <a href="#home" class="nav-logo">
+    <img src="./prayog_logo_soft_shadow.png" alt="Prayog Logo" style="height: 66px; margin-right: 10px;">
+    
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#canvas">Canvas</a></li>
+    <li><a href="#founders">About</a></li>
+    <li><a href="#process">Collaborations</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#social">Follow Us</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <div class="nav-toggle" id="nt"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO PraYog-->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-border"></div>
+  <div class="hero-img-bg">
+    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=400&q=50" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1609190152695-3478df29bda9?w=400&q=50" alt="" loading="lazy">
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Mumbai's Premier Event Management</div>
+    <h1 class="hero-title">
+      <img src="./prayog_logo_soft_shadow.png" alt="Prayog Logo" style="height: 250px; margin-right: 10px;">
+    </h1>
+    <div class="hero-sub">Designing Moments, Defining Memories</div>
+    <p class="hero-quote">Mr. Prashant &amp; Mr. Yogesh — crafting emotions into unforgettable spaces</p>
+    <div class="hero-founders">✦ PRA(shant) + YOG(esh) = PraYog — A Creative Experiment in Elegance ✦</div>
+    <div class="hero-btns">
+      <a href="#gallery" class="btn-gold">View Our Work</a>
+      <a href="#contact" class="btn-ghost">Get a Free Quote</a>
+    </div>
+  </div>
+  <div class="scroll-down"><span>Explore</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Events Managed</div></div>
+  <div class="stat"><div class="stat-num">8+</div><div class="stat-lbl">Years of Excellence</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Happy Clients</div></div>
+  <div class="stat"><div class="stat-num">50+</div><div class="stat-lbl">Unique Themes</div></div>
+</div>
+
+<!-- SERVICES — from visiting card -->
+<section id="services">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">Complete Event Management</div>
+    <h2 class="sec-title">Events We <em>Transform</em></h2>
+    <p class="sec-desc">From intimate gatherings to grand destination celebrations — we bring every vision to life with artful precision.</p>
+  </div>
+  <div class="services-grid rv">
+    <div class="svc-card"><span class="svc-icon">🎂</span><div class="svc-name">Theme Birthdays &amp; Celebrations</div><p class="svc-desc">Custom themed setups with balloon artistry, statement backdrops, table arrangements and ambient lighting for every age and personality.</p><span class="svc-tag">Themes · Balloons · Backdrop</span></div>
+    <div class="svc-card"><span class="svc-icon">🌸</span><div class="svc-name">Mehndi &amp; Sangeet Ceremonies</div><p class="svc-desc">Vibrant, culturally rich setups bursting with colour, floral elegance and joyful energy — the perfect pre-wedding celebrations.</p><span class="svc-tag">Floral · Drapes · Colour</span></div>
+    <div class="svc-card"><span class="svc-icon">💍</span><div class="svc-name">Dream Destination Weddings</div><p class="svc-desc">Enchanting mandaps, floral canopies, royal dining setups and stage décor that tells your love story with grandeur and grace.</p><span class="svc-tag">Mandap · Stage · Floral</span></div>
+    <div class="svc-card"><span class="svc-icon">✈️</span><div class="svc-name">Destination Celebrations</div><p class="svc-desc">Taking PraYog anywhere your heart desires — full end-to-end event management for destination weddings, parties, and milestone celebrations.</p><span class="svc-tag">Pan-India · Travel · Full Setup</span></div>
+    <div class="svc-card"><span class="svc-icon">🎤</span><div class="svc-name">Engaging Anchors &amp; Dynamic DJs</div><p class="svc-desc">High-energy emcees and expert DJs who keep your guests entertained and the celebration alive all night long.</p><span class="svc-tag">MC · DJ · Entertainment</span></div>
+    <div class="svc-card"><span class="svc-icon">💡</span><div class="svc-name">Lights &amp; Sound Arrangements</div><p class="svc-desc">Stunning lighting design and crystal-clear sound setups that transform any venue into a breathtaking sensory experience.</p><span class="svc-tag">LED · Ambient · Surround Sound</span></div>
+    <div class="svc-card"><span class="svc-icon">👑</span><div class="svc-name">Bride &amp; Groom Entries</div><p class="svc-desc">Memorable, cinematic entry experiences — smoke effects, flower showers, choreographed reveals and grand surprises that leave everyone speechless.</p><span class="svc-tag">Grand Entry · Effects · Choreography</span></div>
+    <div class="svc-card"><span class="svc-icon">🏢</span><div class="svc-name">Corporate Events</div><p class="svc-desc">Sleek, professional setups for product launches, award nights, seminars and team milestone celebrations — on brand, on time.</p><span class="svc-tag">Stage · Branding · Awards</span></div>
+    <div class="svc-card"><span class="svc-icon">🪔</span><div class="svc-name">Festival Decorations</div><p class="svc-desc">Navratri, Diwali, Ganpati and all seasonal décor — vibrant, traditional and contemporary styles executed beautifully for every occasion.</p><span class="svc-tag">Festival · Traditional · Vibrant</span></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">Our Portfolio</div>
+    <h2 class="sec-title">A Canvas of <em>Celebrations</em></h2>
+    <p class="sec-desc">Browse through our creations. Click any image to view full size. Filter by category to find inspiration for your event.</p>
+  </div>
+  <div class="filter-bar rv" id="filterBar">
+    <button class="fbtn active" data-f="all">All Events</button>
+    <button class="fbtn" data-f="wedding">Wedding</button>
+    <button class="fbtn" data-f="birthday">Birthday</button>
+    <button class="fbtn" data-f="babyshower">Baby Shower</button>
+    <button class="fbtn" data-f="engagement">Engagement</button>
+    <button class="fbtn" data-f="corporate">Corporate</button>
+    <button class="fbtn" data-f="festival">Festival</button>
+    <button class="fbtn" data-f="floral">Floral</button>
+    <button class="fbtn" data-f="balloon">Balloon</button>
+    <button class="fbtn" data-f="stage">Stage</button>
+  </div>
+  <div class="gal-grid" id="galGrid">
+    <div class="gal-item" data-t="wedding floral stage" onclick="openLbx(0)"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80" alt="Royal Wedding Mandap" loading="lazy"><div class="gal-over"><div class="gal-title">Royal Wedding Mandap</div><div class="gal-tags"><span class="gtag">Wedding</span><span class="gtag">Floral</span><span class="gtag">Stage</span></div></div></div>
+    <div class="gal-item" data-t="wedding floral" onclick="openLbx(1)"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&q=80" alt="Floral Arch Wedding" loading="lazy"><div class="gal-over"><div class="gal-title">Floral Arch Wedding</div><div class="gal-tags"><span class="gtag">Wedding</span><span class="gtag">Floral</span></div></div></div>
+    <div class="gal-item" data-t="birthday balloon" onclick="openLbx(2)"><img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80" alt="Pastel Birthday Wonderland" loading="lazy"><div class="gal-over"><div class="gal-title">Pastel Birthday Wonderland</div><div class="gal-tags"><span class="gtag">Birthday</span><span class="gtag">Balloon</span></div></div></div>
+    <div class="gal-item" data-t="wedding stage" onclick="openLbx(3)"><img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80" alt="Grand Wedding Stage" loading="lazy"><div class="gal-over"><div class="gal-title">Grand Wedding Stage</div><div class="gal-tags"><span class="gtag">Wedding</span><span class="gtag">Stage</span></div></div></div>
+    <div class="gal-item" data-t="corporate stage" onclick="openLbx(4)"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80" alt="Corporate Award Night" loading="lazy"><div class="gal-over"><div class="gal-title">Corporate Award Night</div><div class="gal-tags"><span class="gtag">Corporate</span><span class="gtag">Stage</span></div></div></div>
+    <div class="gal-item" data-t="engagement floral romantic" onclick="openLbx(5)"><img src="https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=600&q=80" alt="Rose Garden Engagement" loading="lazy"><div class="gal-over"><div class="gal-title">Rose Garden Engagement</div><div class="gal-tags"><span class="gtag">Engagement</span><span class="gtag">Floral</span></div></div></div>
+    <div class="gal-item" data-t="babyshower floral pastel" onclick="openLbx(6)"><img src="https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&q=80" alt="Dreamy Baby Shower" loading="lazy"><div class="gal-over"><div class="gal-title">Dreamy Baby Shower</div><div class="gal-tags"><span class="gtag">Baby Shower</span><span class="gtag">Floral</span></div></div></div>
+    <div class="gal-item" data-t="festival traditional" onclick="openLbx(7)"><img src="https://images.unsplash.com/photo-1609190152695-3478df29bda9?w=600&q=80" alt="Navratri Celebration" loading="lazy"><div class="gal-over"><div class="gal-title">Navratri Celebration</div><div class="gal-tags"><span class="gtag">Festival</span><span class="gtag">Traditional</span></div></div></div>
+    <div class="gal-item" data-t="wedding floral romantic" onclick="openLbx(8)"><img src="https://images.unsplash.com/photo-1583939411023-14783179e581?w=600&q=80" alt="Bridal Entry Setup" loading="lazy"><div class="gal-over"><div class="gal-title">Bridal Entry Setup</div><div class="gal-tags"><span class="gtag">Wedding</span><span class="gtag">Romantic</span></div></div></div>
+    <div class="gal-item" data-t="birthday balloon theme" onclick="openLbx(9)"><img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80" alt="Unicorn Theme Birthday" loading="lazy"><div class="gal-over"><div class="gal-title">Unicorn Theme Birthday</div><div class="gal-tags"><span class="gtag">Birthday</span><span class="gtag">Balloon</span><span class="gtag">Theme</span></div></div></div>
+    <div class="gal-item" data-t="corporate stage branding" onclick="openLbx(10)"><img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600&q=80" alt="Product Launch Stage" loading="lazy"><div class="gal-over"><div class="gal-title">Product Launch Stage</div><div class="gal-tags"><span class="gtag">Corporate</span><span class="gtag">Stage</span></div></div></div>
+    <div class="gal-item" data-t="wedding floral luxury" onclick="openLbx(11)"><img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&q=80" alt="White Luxury Wedding" loading="lazy"><div class="gal-over"><div class="gal-title">White Luxury Wedding</div><div class="gal-tags"><span class="gtag">Wedding</span><span class="gtag">Luxury</span></div></div></div>
+    <div class="gal-item" data-t="engagement floral romantic" onclick="openLbx(12)"><img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600&q=80" alt="Intimate Ring Ceremony" loading="lazy"><div class="gal-over"><div class="gal-title">Intimate Ring Ceremony</div><div class="gal-tags"><span class="gtag">Engagement</span><span class="gtag">Floral</span></div></div></div>
+    <div class="gal-item" data-t="festival vibrant traditional" onclick="openLbx(13)"><img src="https://images.unsplash.com/photo-1547493496-acb7b9718e69?w=600&q=80" alt="Diwali Spectacular" loading="lazy"><div class="gal-over"><div class="gal-title">Diwali Spectacular</div><div class="gal-tags"><span class="gtag">Festival</span><span class="gtag">Vibrant</span></div></div></div>
+    <div class="gal-item" data-t="babyshower balloon pastel" onclick="openLbx(14)"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Pink Cloud Baby Shower" loading="lazy"><div class="gal-over"><div class="gal-title">Pink Cloud Baby Shower</div><div class="gal-tags"><span class="gtag">Baby Shower</span><span class="gtag">Balloon</span></div></div></div>
+    <div class="gal-item" data-t="birthday stage milestone" onclick="openLbx(15)"><img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=80" alt="Golden 50th Celebration" loading="lazy"><div class="gal-over"><div class="gal-title">Golden 50th Celebration</div><div class="gal-tags"><span class="gtag">Birthday</span><span class="gtag">Stage</span></div></div></div>
+  </div>
+  <!-- File naming guide -->
+  <div class="file-guide rv">
+    <h3>📁 How to Upload Your Own Images</h3>
+    <p>Upload your photos to a folder named <code>images/</code> in the same location as this HTML file. Name files using this pattern: <code>CATEGORY-description.jpg</code> — then edit the gallery section to replace the Unsplash URLs with your image paths.</p>
+    <div class="fg-grid">
+      <div><div class="fg-tag">💍 Wedding</div><div class="fg-examples">wedding-mandap-001.jpg<br>wedding_floral_arch.jpg<br>wedding_stage_royal.jpg</div></div>
+      <div><div class="fg-tag">🎂 Birthday</div><div class="fg-examples">birthday-balloon-pink.jpg<br>birthday_theme_unicorn.jpg<br>birthday_milestone_50.jpg</div></div>
+      <div><div class="fg-tag">🌸 Mehndi/Sangeet</div><div class="fg-examples">mehndi-setup-2024.jpg<br>sangeet_floral_arch.jpg<br>mehndi_vibrant_colour.jpg</div></div>
+      <div><div class="fg-tag">🏢 Corporate</div><div class="fg-examples">corporate-stage-launch.jpg<br>corporate_award_night.jpg<br>corporate_branding_setup.jpg</div></div>
+      <div><div class="fg-tag">👑 Entries</div><div class="fg-examples">entry-bride-floral.jpg<br>entry_groom_smoke.jpg<br>entry_couple_grand.jpg</div></div>
+      <div><div class="fg-tag">🎊 Festival</div><div class="fg-examples">festival-navratri-2024.jpg<br>festival_diwali_lights.jpg<br>festival_ganpati_decor.jpg</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lbx" id="lbx" onclick="closeLbx()">
+  <div class="lbx-in" onclick="event.stopPropagation()">
+    <button class="lbx-close" onclick="closeLbx()">✕ Close</button>
+    <button class="lbx-nav lbx-prev" onclick="navLbx(-1)">‹</button>
+    <img id="lbxImg" src="" alt="">
+    <button class="lbx-nav lbx-next" onclick="navLbx(1)">›</button>
+    <div class="lbx-info" id="lbxInfo"></div>
+  </div>
+</div>
+
+<!-- CANVAS OF CELEBRATION — new section -->
+<section id="canvas">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">In Motion</div>
+    <h2 class="sec-title">Canvas of <em>Celebration</em></h2>
+    <p class="sec-desc">Watch our events come alive — from time-lapse setups to real moments of joy captured on video.</p>
+  </div>
+  <div class="video-tabs rv">
+    <button class="vtab-btn active" data-vt="youtube">▶ YouTube</button>
+    <button class="vtab-btn" data-vt="instagram">📸 Instagram Reels</button>
+  </div>
+  <div class="vpanel active" id="vp-youtube">
+    <div class="video-grid rv">
+      <div class="video-card">
+        <div class="video-embed">
+          <!-- Replace VIDEO_ID_1 with your actual YouTube video ID -->
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_1?rel=0&modestbranding=1" allowfullscreen loading="lazy" title="PraYog Highlights"></iframe>
+        </div>
+        <div class="video-card-body"><div class="video-card-title">Grand Wedding Setup</div><div class="video-card-sub">Time-lapse · 2024</div></div>
+      </div>
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_2?rel=0&modestbranding=1" allowfullscreen loading="lazy" title="Birthday Setup"></iframe>
+        </div>
+        <div class="video-card-body"><div class="video-card-title">Dreamy Birthday Setup</div><div class="video-card-sub">Highlight Reel · 2024</div></div>
+      </div>
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_3?rel=0&modestbranding=1" allowfullscreen loading="lazy" title="Corporate Event"></iframe>
+        </div>
+        <div class="video-card-body"><div class="video-card-title">Corporate Event Stage</div><div class="video-card-sub">Behind the Scenes · 2024</div></div>
+      </div>
+    </div>
+    <p style="margin-top:20px;font-size:0.68rem;color:var(--text-muted-var);text-align:center;">Replace <code>VIDEO_ID_1</code>, <code>VIDEO_ID_2</code>, <code>VIDEO_ID_3</code> with your actual YouTube video IDs.</p>
+  </div>
+  <div class="vpanel" id="vp-instagram">
+    <div class="ig-grid rv">
+      <div class="ig-placeholder"><span class="ig-icon">📸</span><p>Paste your Instagram Reel embed code here.</p><a href="https://instagram.com/prayog_events" target="_blank" rel="noopener">@prayog_events on Instagram ↗</a></div>
+      <div class="ig-placeholder"><span class="ig-icon">🎬</span><p>Replace this with your second Instagram Reel embed code.</p><a href="https://instagram.com/prayog_events" target="_blank" rel="noopener">View Reel ↗</a></div>
+      <div class="ig-placeholder"><span class="ig-icon">✨</span><p>Add more Instagram Reels by pasting their embed codes here.</p><a href="https://instagram.com/prayog_events" target="_blank" rel="noopener">View Reel ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section id="founders">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">The Masterminds</div>
+    <h2 class="sec-title sec-title-light">The Duo Behind <em>Prayog</em></h2>
+    <p class="sec-desc sec-desc-light">Two creative souls, one extraordinary vision — turning blank spaces into breathtaking stories.</p>
+  </div>
+  <div class="founders-grid rv">
+    <div class="founder-card">
+      <div class="fa-wrap">
+        <!-- To add photo: replace the letter inside .fa-ph with <img src="images/prashant.jpg" alt="Prashant"> -->
+        <div class="fa-ph">P</div>
+      </div>
+      <div class="founder-name">Prashant</div>
+      <div class="founder-role">Co-Founder · Creative Director</div>
+      <p class="founder-bio">"Every event is a blank canvas. My job is to paint it with emotions — colour, light and detail so perfect that guests feel the love before a single word is spoken."</p>
+    </div>
+    <div class="founder-card">
+      <div class="fa-wrap">
+        <!-- To add photo: replace the letter inside .fa-ph with <img src="images/yogesh.jpg" alt="Yogesh"> -->
+        <div class="fa-ph">Y</div>
+      </div>
+      <div class="founder-name">Yogesh</div>
+      <div class="founder-role">Co-Founder · Execution Head</div>
+      <p class="founder-bio">"Ideas are beautiful, but flawless execution is an art. I ensure every flower, every light, every arrangement is exactly where it should be — always on time, always beyond expectation."</p>
+    </div>
+  </div>
+  <div class="vision-block rv">
+    <p class="vision-text">At Prayog, we believe decoration is not about things — it's about feelings. Our vision is to create spaces where families cry with joy, couples fall deeper in love, and guests lose themselves in wonder. We experiment, we innovate, and we pour our hearts into every single event.</p>
+    <div class="vision-sign">Prashant &amp; Yogesh</div>
+    <div class="vision-sub">PR + AYO = Prayog — An Experiment in Elegance</div>
+  </div>
+</section>
+
+<!-- PROCESS / COLLABORATIONS -->
+<section id="process">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">How We Work</div>
+    <h2 class="sec-title">Our <em>Collaborations</em></h2>
+    <p class="sec-desc">A seamless journey — you dream it, we deliver it, you celebrate it.</p>
+  </div>
+  <div class="process-steps rv">
+    <div class="proc-step"><div class="step-num">I</div><div class="step-name">Consultation</div><p class="step-desc">Share your vision, theme &amp; budget. We listen deeply and understand your story.</p></div>
+    <div class="proc-step"><div class="step-num">II</div><div class="step-name">Concept Design</div><p class="step-desc">We craft a unique mood board, layout plan and material palette for your event.</p></div>
+    <div class="proc-step"><div class="step-num">III</div><div class="step-name">Approval</div><p class="step-desc">Review, refine, and approve. You stay in complete control of every decision.</p></div>
+    <div class="proc-step"><div class="step-num">IV</div><div class="step-name">Setup Day</div><p class="step-desc">Our expert team transforms the venue meticulously — down to the last petal.</p></div>
+    <div class="proc-step"><div class="step-num">V</div><div class="step-name">Celebrate!</div><p class="step-desc">You step in, you gasp, and your guests are speechless. Mission accomplished.</p></div>
+  </div>
+</section>
+
+<!-- REVIEWS / TESTIMONIALS — 3 tabs -->
+<section id="testimonials">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">Client Love</div>
+    <h2 class="sec-title">Words That <em>Warm Us</em></h2>
+    <p class="sec-desc">Real stories from real celebrations — the reviews that fuel our passion every day.</p>
+  </div>
+  <div class="review-tabs rv">
+    <button class="rtab-btn active" data-rt="text">✍ Written Reviews</button>
+    <button class="rtab-btn" data-rt="media">📱 Social Proof</button>
+    <button class="rtab-btn" data-rt="video">🎥 Video Reviews</button>
+  </div>
+
+  <!-- Written reviews -->
+  <div class="rpanel active" id="rp-text">
+    <div class="testi-grid rv">
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">Prashant and Yogesh turned our wedding mandap into something from a fairy tale. Every single guest complimented the décor. We still get goosebumps looking at the photos!</p><div class="testi-name">Riya &amp; Arjun Sharma</div><div class="testi-event">Wedding · Thane, 2024</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">My daughter's first birthday was pure magic. The balloon canopy and floral wall were Instagram-worthy. Prayog delivered beyond our imagination — and perfectly on time!</p><div class="testi-name">Sunita Mehta</div><div class="testi-event">Birthday · Navi Mumbai, 2024</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">We hired Prayog for our company annual day and the stage setup was world-class. Professional, creative and extremely well coordinated. Highly recommended for corporates!</p><div class="testi-name">Rajeev Kulkarni</div><div class="testi-event">Corporate Event · Mumbai, 2023</div></div>
+    </div>
+  </div>
+
+  <!-- Media / screenshot reviews -->
+  <div class="rpanel" id="rp-media">
+    <p style="font-size:0.75rem;color:var(--text-muted-var);margin-bottom:24px;line-height:1.8;text-align:center;">Real screenshots from WhatsApp, Google Reviews &amp; Instagram — unfiltered client words.</p>
+    <div class="media-reviews-grid rv">
+      <div class="media-review-item">
+        <div class="media-placeholder">
+          <span class="mp-icon">💬</span>
+          <strong style="font-size:0.72rem;color:var(--text-muted-var)">WhatsApp Review</strong>
+          <p>Add screenshot:<br><code>reviews/wa_1.jpg</code></p>
+        </div>
+        <div class="media-review-overlay"><div class="media-source">💬 WhatsApp</div><div class="media-name">Client Review</div></div>
+      </div>
+      <div class="media-review-item">
+        <div class="media-placeholder">
+          <span class="mp-icon">⭐</span>
+          <strong style="font-size:0.72rem;color:var(--text-muted-var)">Google Review</strong>
+          <p>Add screenshot:<br><code>reviews/google_1.jpg</code></p>
+        </div>
+        <div class="media-review-overlay"><div class="media-source">⭐ Google</div><div class="media-name">5-Star Review</div></div>
+      </div>
+      <div class="media-review-item">
+        <div class="media-placeholder">
+          <span class="mp-icon">📸</span>
+          <strong style="font-size:0.72rem;color:var(--text-muted-var)">Instagram Mention</strong>
+          <p>Add screenshot:<br><code>reviews/insta_1.jpg</code></p>
+        </div>
+        <div class="media-review-overlay"><div class="media-source">📸 Instagram</div><div class="media-name">Client Post</div></div>
+      </div>
+      <div class="media-review-item">
+        <div class="media-placeholder">
+          <span class="mp-icon">💬</span>
+          <strong style="font-size:0.72rem;color:var(--text-muted-var)">WhatsApp Review</strong>
+          <p>Add screenshot:<br><code>reviews/wa_2.jpg</code></p>
+        </div>
+        <div class="media-review-overlay"><div class="media-source">💬 WhatsApp</div><div class="media-name">Client Review</div></div>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:0.65rem;color:var(--text-muted-var);text-align:center;">To activate: replace each <code>.media-placeholder</code> div with <code>&lt;img src="reviews/your-screenshot.jpg" style="width:100%;aspect-ratio:9/16;object-fit:cover"&gt;</code></p>
+  </div>
+
+  <!-- Video reviews -->
+  <div class="rpanel" id="rp-video">
+    <p style="font-size:0.75rem;color:var(--text-muted-var);margin-bottom:24px;line-height:1.8;text-align:center;">Video testimonials from happy clients — in their own words.</p>
+    <div class="video-reviews-grid rv">
+      <div class="video-review-card">
+        <div class="video-review-embed">
+          <!-- Replace VIDEO_REVIEW_1 with YouTube video ID -->
+          <iframe src="https://www.youtube.com/embed/VIDEO_REVIEW_1?rel=0" allowfullscreen loading="lazy" title="Client Testimonial"></iframe>
+        </div>
+        <div class="video-review-body"><div class="video-review-author">Client Name</div><div class="video-review-event">Wedding · 2024</div></div>
+      </div>
+      <div class="video-review-card">
+        <div class="video-review-embed">
+          <iframe src="https://www.youtube.com/embed/VIDEO_REVIEW_2?rel=0" allowfullscreen loading="lazy" title="Client Testimonial 2"></iframe>
+        </div>
+        <div class="video-review-body"><div class="video-review-author">Client Name</div><div class="video-review-event">Birthday · 2024</div></div>
+      </div>
+      <div class="video-review-card">
+        <div class="video-review-embed">
+          <iframe src="https://www.youtube.com/embed/VIDEO_REVIEW_3?rel=0" allowfullscreen loading="lazy" title="Client Testimonial 3"></iframe>
+        </div>
+        <div class="video-review-body"><div class="video-review-author">Client Name</div><div class="video-review-event">Corporate · 2024</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL / FOLLOW US -->
+<section id="social">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">Follow Our Journey</div>
+    <h2 class="sec-title sec-title-light">Find Us — <em>Follow Us</em></h2>
+    <p class="sec-desc sec-desc-light">Daily doses of decoration inspiration. Follow, DM, and get inspired for your big day.</p>
+  </div>
+  <div class="insta-grid rv">
+    <div class="insta-it"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=300&q=70" alt="" loading="lazy"><div class="insta-ov">📷</div></div>
+    <div class="insta-it"><img src="https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=300&q=70" alt="" loading="lazy"><div class="insta-ov">📷</div></div>
+    <div class="insta-it"><img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=300&q=70" alt="" loading="lazy"><div class="insta-ov">📷</div></div>
+    <div class="insta-it"><img src="https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=300&q=70" alt="" loading="lazy"><div class="insta-ov">📷</div></div>
+    <div class="insta-it"><img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=300&q=70" alt="" loading="lazy"><div class="insta-ov">📷</div></div>
+    <div class="insta-it"><img src="https://images.unsplash.com/photo-1583939411023-14783179e581?w=300&q=70" alt="" loading="lazy"><div class="insta-ov">📷</div></div>
+  </div>
+  <div class="social-row rv">
+    <div class="qr-wrap">
+      <!-- To add your real QR: replace .qr-box with <img src="images/qr-instagram.png" style="width:155px;height:155px;border:2px solid var(--gold)"> -->
+      <div class="qr-box" onclick="window.open('https://www.instagram.com/prayog_events','_blank')">
+        <div class="qr-inner"><div class="qr-grid" id="qrGrid"></div></div>
+      </div>
+      <div class="qr-lbl">Scan to Visit Instagram</div>
+      <div class="qr-hint">→ Replace with your real QR image</div>
+    </div>
+    <div class="soc-links">
+      <a href="https://www.instagram.com/prayog_events" target="_blank" class="soc-link"><span class="soc-icon">📸</span><div><div class="soc-nm">Instagram</div><div class="soc-handle">@prayog_events</div></div><span class="soc-arr">→</span></a>
+      <a href="https://wa.me/919769541114" target="_blank" class="soc-link"><span class="soc-icon">💬</span><div><div class="soc-nm">WhatsApp</div><div class="soc-handle">+91 97695 41114</div></div><span class="soc-arr">→</span></a>
+      <a href="tel:+919769541114" class="soc-link"><span class="soc-icon">📞</span><div><div class="soc-nm">Call Us</div><div class="soc-handle">+91 97695 41114</div></div><span class="soc-arr">→</span></a>
+      <a href="mailto:hello@prayogevents.com" class="soc-link"><span class="soc-icon">✉️</span><div><div class="soc-nm">Email</div><div class="soc-handle">hello@prayogevents.com</div></div><span class="soc-arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT — DUAL MODE -->
+<section id="contact">
+  <div class="sec-hd rv">
+    <div class="sec-eyebrow">Begin Your Story</div>
+    <h2 class="sec-title">Let's Create <em>Magic Together</em></h2>
+    <p class="sec-desc">Tell us about your event. We'll get back to you within 24 hours with ideas and a personalised quote.</p>
+     <img src="./SpecialOffer.png" alt="Special Offer Banner" style="width:100%; max-width:300px; margin-top:10px;">
+  </div>
+
+  <div class="contact-mode-switcher rv">
+    <!-- <button class="cmode-btn active" data-cm="form">📋 Classic Form</button> -->
+    <button class="cmode-btn" data-cm="wheel">🎡 Spin &amp; Win a Discount, Before Connect!</button>
+    </div>
+
+  
+
+  <!-- Classic Form 
+  <div class="cpanel active" id="cm-form">
+    <div class="contact-grid rv">
+      <div>
+        <div class="contact-info-title">Talk to Us</div>
+        <div class="c-detail"><span class="c-icon">📍</span><div><div class="c-lbl">Location</div><div class="c-val">1004, Shubh Labh Apartment, Labh wing<br>90 Feet Road, Mulund (East), Mumbai 400081<br><span style="font-size:0.85rem;color:var(--text-muted-var)">Serving Thane · Navi Mumbai · Pune</span></div></div></div>
+        <div class="c-detail"><span class="c-icon">📞</span><div><div class="c-lbl">Phone / WhatsApp</div><div class="c-val"><a href="tel:+919769541114">+91 97695 41114</a> &nbsp;·&nbsp; <a href="tel:+919326063638">+91 93260 63638</a><br><a href="tel:+919867721216">+91 98677 21216</a></div></div></div>
+        <div class="c-detail"><span class="c-icon">✉️</span><div><div class="c-lbl">Email</div><div class="c-val"><a href="mailto:hello@prayogevents.com">hello@prayogevents.com</a></div></div></div>
+        <div class="c-detail"><span class="c-icon">🕐</span><div><div class="c-lbl">Working Hours</div><div class="c-val">Mon–Sat: 9 AM – 8 PM<br>Sunday: By Appointment Only</div></div></div>
+        <a href="https://wa.me/919769541114?text=Hello%20Prayog!%20I%20want%20to%20enquire%20about%20event%20services." class="wa-btn" target="_blank">💬 Chat on WhatsApp</a>
+      </div>
+      <div>
+        <form id="inqForm" onsubmit="submitForm(event)">
+          <div class="f-row">
+            <div class="f-group"><label>Your Name *</label><input type="text" id="fn" placeholder="e.g. Priya Sharma" required></div>
+            <div class="f-group"><label>Phone / WhatsApp *</label><input type="tel" id="fp" placeholder="+91 98765 43210" required></div>
+          </div>
+          <div class="f-group"><label>Event Type *</label>
+            <select id="fe" required>
+              <option value="">Select Event Type</option>
+              <option>Theme Birthday &amp; Celebration</option>
+              <option>Mehndi / Sangeet Ceremony</option>
+              <option>Wedding</option>
+              <option>Destination Wedding</option>
+              <option>Anchor / DJ</option>
+              <option>Lights &amp; Sound</option>
+              <option>Bride &amp; Groom Entry</option>
+              <option>Corporate Event</option>
+              <option>Festival Decoration</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>Event Date</label><input type="date" id="fd"></div>
+            <div class="f-group"><label>Approximate Budget</label>
+              <select id="fb">
+                <option value="">Select Range</option>
+                <option>₹5,000 – ₹15,000</option><option>₹15,000 – ₹30,000</option>
+                <option>₹30,000 – ₹60,000</option><option>₹60,000 – ₹1,00,000</option><option>₹1,00,000+</option>
+              </select>
+            </div>
+          </div>
+          <div class="f-group"><label>Venue / Location</label><input type="text" id="fv" placeholder="e.g. Thane, banquet hall name or home venue"></div>
+          <div class="f-group"><label>Tell Us Your Vision</label><textarea id="fvi" placeholder="Describe your theme, colour preferences, special requirements, number of guests..."></textarea></div>
+          <button type="submit" class="f-submit">✦ Send Inquiry to Prayog</button>
+        </form>
+        <p class="f-success" id="fSuccess">Thank you! We'll contact you within 24 hours. ✦</p>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Spin Wheel -->
+  <div class="cpanel" id="cm-wheel">
+    <div class="gamified-wrap rv">
+      <h3>Spin the Wheel,<br><em>Win a Discount!</em></h3>
+      <p class="gwsub">Give the wheel a spin before you enquire! Win up to 30% off on your event package. Your coupon code will be auto-included in your WhatsApp message.</p>
+      <div class="wheel-wrap">
+        <div class="wheel-pointer"></div>
+        <canvas id="discountWheel" width="300" height="300"></canvas>
+      </div>
+      <br>
+      <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 Spin for Discount!</button>
+      <div class="discount-result" id="discountResult">
+        <div class="disc-won-label">🎉 Congratulations! You won</div>
+        <div class="disc-pct" id="discPct">15%</div>
+        <div class="disc-off">OFF on your booking</div>
+        <div class="coupon-code" id="couponCode">PRAYOG-XXXX</div>
+        <div class="coupon-expiry" id="couponExpiry">Valid for 48 hours</div>
+        <a href="#" id="waClaimBtn" class="wa-claim-btn" target="_blank">💬 Claim on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER — with nav columns mirroring top nav -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="foot-logo"><img src="./prayog_logo_soft_shadow.png" alt="Prayog Logo" style="height: 66px; margin-right: 10px;"></div>
+      <div class="foot-tag">Designing Moments, Defining Memories</div>
+      <div class="foot-socials">
+        <a href="https://www.instagram.com/prayog_events" target="_blank" class="foot-soc-icon" title="Instagram">📸</a>
+        <a href="https://wa.me/919769541114" target="_blank" class="foot-soc-icon" title="WhatsApp">💬</a>
+        <a href="tel:+919769541114" class="foot-soc-icon" title="Call">📞</a>
+        <a href="mailto:hello@prayogevents.com" class="foot-soc-icon" title="Email">✉️</a>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <div class="fn-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Theme Birthdays</a></li>
+          <li><a href="#services">Mehndi &amp; Sangeet</a></li>
+          <li><a href="#services">Weddings</a></li>
+          <li><a href="#services">Destination Celebrations</a></li>
+          <li><a href="#services">Anchors &amp; DJs</a></li>
+          <li><a href="#services">Lights &amp; Sound</a></li>
+          <li><a href="#services">Bride &amp; Groom Entries</a></li>
+          <li><a href="#services">Corporate Events</a></li>
+          <li><a href="#services">Festival Décor</a></li>
+        </ul>
+      </div>
+      <div class="fn-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#canvas">Canvas of Celebration</a></li>
+          <li><a href="#founders">About Us</a></li>
+          <li><a href="#process">Collaborations</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="#social">Follow Us</a></li>
+        </ul>
+      </div>
+      <div class="fn-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#contact">Get a Free Quote</a></li>
+          <li><a href="tel:+919769541114">+91 97695 41114</a></li>
+          <li><a href="tel:+919326063638">+91 93260 63638</a></li>
+          <li><a href="tel:+919867721216">+91 98677 21216</a></li>
+          <li><a href="https://wa.me/919769541114" target="_blank">WhatsApp Us</a></li>
+          <li><a href="mailto:hello@prayogevents.com">hello@prayogevents.com</a></li>
+          <li><a href="#">Mulund (East), Mumbai 400081</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot-div"></div>
+  <div class="footer-bottom">
+    <div class="foot-copy">© 2025 Prayog Event Decorators, Mumbai. All Rights Reserved. Made with <span>♥</span> by Prashant &amp; Yogesh.</div>
+    <div class="foot-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---- THEME TOGGLE ---- */
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('prayog-theme') || 'dark';
+html.setAttribute('data-theme', savedTheme);
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('prayog-theme', next);
+});
+
+/* ---- NAV SCROLL ---- */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
+});
+
+/* ---- NAV TOGGLE (mobile) ---- */
+document.getElementById('nt').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+/* ---- SMOOTH SCROLL ---- */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+
+/* ---- GALLERY FILTER ---- */
+document.querySelectorAll('.fbtn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const f = this.dataset.f;
+    document.querySelectorAll('.gal-item').forEach(item => {
+      item.classList.toggle('hide', f !== 'all' && !item.dataset.t.includes(f));
+    });
+  });
+});
+
+/* ---- LIGHTBOX ---- */
+const galItems = document.querySelectorAll('.gal-item');
+let currentIdx = 0;
+function openLbx(idx) {
+  currentIdx = idx;
+  showLbxItem(idx);
+  document.getElementById('lbx').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function showLbxItem(idx) {
+  const item = galItems[idx];
+  if (!item) return;
+  const img = item.querySelector('img');
+  const title = item.querySelector('.gal-title').textContent;
+  const tags = [...item.querySelectorAll('.gtag')].map(t => t.textContent).join(' · ');
+  document.getElementById('lbxImg').src = img.src.replace('w=600','w=1200');
+  document.getElementById('lbxInfo').textContent = title + ' — ' + tags;
+}
+function navLbx(dir) {
+  currentIdx = (currentIdx + dir + galItems.length) % galItems.length;
+  showLbxItem(currentIdx);
+}
+function closeLbx() {
+  document.getElementById('lbx').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLbx();
+  if (e.key === 'ArrowLeft') navLbx(-1);
+  if (e.key === 'ArrowRight') navLbx(1);
+});
+
+/* ---- VIDEO TABS ---- */
+document.querySelectorAll('.vtab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.vtab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.vpanel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('vp-' + btn.dataset.vt).classList.add('active');
+  });
+});
+
+/* ---- REVIEW TABS ---- */
+document.querySelectorAll('.rtab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.rtab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.rpanel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('rp-' + btn.dataset.rt).classList.add('active');
+  });
+});
+
+/* ---- CONTACT MODE ---- */
+document.querySelectorAll('.cmode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cmode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.cpanel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('cm-' + btn.dataset.cm).classList.add('active');
+    if (btn.dataset.cm === 'wheel') drawWheel(currentAngle);
+  });
+});
+
+/* ---- FORM SUBMIT ---- */
+function submitForm(e) {
+  e.preventDefault();
+  const name = document.getElementById('fn').value;
+  const phone = document.getElementById('fp').value;
+  const evt = document.getElementById('fe').value;
+  const date = document.getElementById('fd').value;
+  const budget = document.getElementById('fb').value;
+  const venue = document.getElementById('fv').value;
+  const vision = document.getElementById('fvi').value;
+  const msg = `Hello PraYog! 🌸\n\nNew Enquiry from website:\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Event:* ${evt}\n*Date:* ${date||'TBD'}\n*Budget:* ${budget||'TBD'}\n*Venue:* ${venue||'TBD'}\n*Vision:* ${vision||'TBD'}\n\nPlease get in touch!`;
+  document.getElementById('inqForm').style.display = 'none';
+  document.getElementById('fSuccess').style.display = 'block';
+  setTimeout(() => window.open('https://wa.me/919769541114?text=' + encodeURIComponent(msg), '_blank'), 600);
+}
+
+/* ---- DISCOUNT WHEEL ---- */
+const segments = [
+  { label:'5%',  color:'#c9a84c', value:5  },
+  { label:'10%', color:'#8b6914', value:10 },
+  { label:'15%', color:'#c9a84c', value:15 },
+  { label:'20%', color:'#8b6914', value:20 },
+  { label:'10%', color:'#c9a84c', value:10 },
+  { label:'25%', color:'#8b6914', value:25 },
+  { label:'5%',  color:'#c9a84c', value:5  },
+  { label:'30%', color:'#8b6914', value:30 },
+];
+const canvas = document.getElementById('discountWheel');
+const ctx = canvas ? canvas.getContext('2d') : null;
+const numSeg = segments.length;
+const arcSize = (2 * Math.PI) / numSeg;
+let currentAngle = 0;
+let isSpinning = false;
+
+function drawWheel(angle) {
+  if (!ctx) return;
+  ctx.clearRect(0,0,300,300);
+  const cx = 150, cy = 150, r = 146;
+  for (let i = 0; i < numSeg; i++) {
+    const s = angle + i * arcSize, end = s + arcSize;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,s,end); ctx.closePath();
+    ctx.fillStyle = segments[i].color; ctx.fill();
+    ctx.strokeStyle = '#1a1209'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(s + arcSize/2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fdf6ec';
+    ctx.font = 'bold 15px Josefin Sans, sans-serif';
+    ctx.fillText(segments[i].label, r - 14, 5);
+    ctx.restore();
+  }
+  // Center
+  ctx.beginPath(); ctx.arc(cx,cy,26,0,2*Math.PI);
+  ctx.fillStyle = '#1a1209'; ctx.fill();
+  ctx.strokeStyle = '#c9a84c'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = '9px Josefin Sans, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('SPIN', cx, cy+4);
+}
+drawWheel(0);
+
+function generateCoupon(val) {
+  const t = new Date();
+  const ts = t.getHours().toString().padStart(2,'0') + t.getMinutes().toString().padStart(2,'0');
+  return `PRAYOG-${val}-${ts}`;
+}
+
+function spinWheel() {
+  if (isSpinning) return;
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = true;
+  document.getElementById('discountResult').classList.remove('show');
+  const extra = (5 + Math.random()*5) * 2 * Math.PI;
+  const duration = 4000;
+  const start = performance.now();
+  const startAngle = currentAngle;
+  function ease(t) { return 1 - Math.pow(1-t,4); }
+  function animate(now) {
+    const p = Math.min((now-start)/duration, 1);
+    currentAngle = startAngle + extra * ease(p);
+    drawWheel(currentAngle);
+    if (p < 1) { requestAnimationFrame(animate); }
+    else { isSpinning = false; showResult(); }
+  }
+  requestAnimationFrame(animate);
+}
+
+function showResult() {
+  const norm = ((-currentAngle - Math.PI/2) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  const idx = Math.floor(norm / arcSize) % numSeg;
+  const won = segments[idx];
+  document.getElementById('discPct').textContent = won.value + '%';
+  const code = generateCoupon(won.value);
+  document.getElementById('couponCode').textContent = code;
+  const exp = new Date(Date.now() + 48*3600*1000);
+  document.getElementById('couponExpiry').textContent = 'Valid 48 hrs · Expires: ' +
+    exp.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const msg = `Hello PraYog! 🎉\n\nI just spun the Discount Wheel and won *${won.value}% OFF*!\n\n*Coupon Code:* ${code}\n\nI'd like to book an event and claim this discount. Please get in touch!`;
+  document.getElementById('waClaimBtn').href = 'https://wa.me/919769541114?text=' + encodeURIComponent(msg);
+  document.getElementById('discountResult').classList.add('show');
+  document.getElementById('spinBtn').disabled = false;
+  document.getElementById('spinBtn').textContent = '🔄 Spin Again';
+}
+
+/* ---- SCROLL REVEAL ---- */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+/* ---- QR DECORATIVE ---- */
+const p = [1,1,1,0,1,1,1,1,0,1,0,1,0,1,1,1,1,0,1,1,1,0,1,0,1,0,1,0,0,0,1,0,0,0,1,1,1,1,0,0,1,0,0,0,1,0,0,0,0,1,0,1,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,1,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const qg = document.getElementById('qrGrid');
+if (qg) p.forEach(c => { const d = document.createElement('div'); d.className = 'qr-c'+(c?'':' e'); qg.appendChild(d); });
+</script>
+</body>
+</html>
