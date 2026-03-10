@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Plus · Sponsor Pitch</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF8F2;
+    --warm-white: #FFFCF7;
+    --ink: #1A1208;
+    --ink-soft: #3D2E1A;
+    --amber: #E8841A;
+    --amber-light: #F5A94A;
+    --amber-pale: #FEF0DC;
+    --sage: #4A7C59;
+    --sage-light: #E8F2EC;
+    --coral: #E05C3A;
+    --coral-light: #FEF0EC;
+    --gold: #C9971A;
+    --gold-light: #FBF0D0;
+    --border: rgba(26,18,8,0.10);
+    --shadow: 0 4px 32px rgba(26,18,8,0.08);
+    --shadow-lg: 0 12px 60px rgba(26,18,8,0.13);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  #progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--amber), var(--coral)); width: 0%; z-index: 1000; transition: width 0.1s linear; border-radius: 0 2px 2px 0; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 999; padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; background: rgba(253,248,242,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; letter-spacing: -0.5px; color: var(--ink); }
+  .nav-logo span { color: var(--amber); }
+  .nav-pill { background: var(--amber); color: white; padding: 9px 22px; border-radius: 50px; font-size: 13px; font-weight: 600; letter-spacing: 0.3px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: none; }
+  .nav-pill:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,132,26,0.35); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
+  .hero-bg-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; pointer-events: none; }
+  .hbc1 { width: 700px; height: 700px; background: var(--amber-light); top: -200px; right: -200px; }
+  .hbc2 { width: 500px; height: 500px; background: #FFD580; bottom: -100px; left: -150px; }
+  .hbc3 { width: 300px; height: 300px; background: var(--coral); top: 40%; left: 20%; opacity: 0.12; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--amber-pale); border: 1px solid rgba(232,132,26,0.25); padding: 8px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--amber); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; }
+  .hero-badge::before { content: ''; width: 7px; height: 7px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(42px, 6vw, 88px); font-weight: 900; line-height: 1.05; letter-spacing: -2px; color: var(--ink); max-width: 880px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-title em { font-style: italic; color: var(--amber); position: relative; }
+  .hero-title em::after { content: ''; position: absolute; bottom: 4px; left: 0; right: 0; height: 3px; background: var(--amber); opacity: 0.3; border-radius: 2px; }
+  .hero-sub { font-size: 18px; font-weight: 300; line-height: 1.7; color: var(--ink-soft); max-width: 560px; margin: 28px auto 48px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-sub strong { font-weight: 600; color: var(--ink); }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+  .btn-primary { background: var(--ink); color: white; padding: 15px 32px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 20px rgba(26,18,8,0.2); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(26,18,8,0.3); }
+  .btn-outline { background: transparent; color: var(--ink); padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); transition: all 0.2s; }
+  .btn-outline:hover { border-color: var(--amber); color: var(--amber); }
+  .hero-scroll { margin-top: 80px; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 0.8s 1.2s forwards; color: var(--ink-soft); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .scroll-line { width: 1px; height: 48px; background: linear-gradient(var(--border), transparent); animation: scrollPulse 2s infinite; }
+  @keyframes scrollPulse { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1)} 100%{transform:scaleY(0);transform-origin:bottom} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  section { position: relative; }
+  .section-inner { max-width: 1100px; margin: 0 auto; padding: 100px 32px; }
+  .label { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--amber); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .label::before { content: ''; width: 24px; height: 1px; background: var(--amber); }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+  .section-body { font-size: 17px; line-height: 1.75; color: var(--ink-soft); max-width: 640px; }
+
+  /* PAIN */
+  .pain-section { background: var(--ink); color: white; }
+  .pain-section .section-title { color: white; }
+  .pain-section .section-body { color: rgba(255,255,255,0.65); }
+  .pain-section .label { color: var(--amber-light); }
+  .pain-section .label::before { background: var(--amber-light); }
+  .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; margin-top: 60px; border-radius: 20px; overflow: hidden; }
+  .pain-card { background: rgba(255,255,255,0.04); padding: 40px 36px; position: relative; transition: background 0.3s; opacity: 0; transform: translateY(20px); }
+  .pain-card:hover { background: rgba(255,255,255,0.07); }
+  .pain-card::before { content: attr(data-num); position: absolute; top: 28px; right: 32px; font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: rgba(255,255,255,0.05); line-height: 1; }
+  .pain-icon { font-size: 28px; margin-bottom: 18px; }
+  .pain-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: white; margin-bottom: 12px; line-height: 1.3; }
+  .pain-desc { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.55); }
+  .pain-tag { display: inline-block; margin-top: 16px; background: rgba(232,132,26,0.2); border: 1px solid rgba(232,132,26,0.3); color: var(--amber-light); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; }
+
+  /* COMPARE */
+  .compare-section { background: var(--warm-white); }
+  .compare-table { margin-top: 60px; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
+  .compare-header { display: grid; grid-template-columns: 2fr 1fr 1fr; background: var(--ink); }
+  .ch-cell { padding: 22px 28px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  .ch-cell.highlight { background: var(--amber); color: white; text-align: center; font-size: 14px; letter-spacing: 1px; }
+  .compare-row { display: grid; grid-template-columns: 2fr 1fr 1fr; border-bottom: 1px solid var(--border); transition: background 0.2s; }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row:hover { background: rgba(232,132,26,0.03); }
+  .cr-cell { padding: 20px 28px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); display: flex; align-items: center; }
+  .cr-cell.feature { font-weight: 500; color: var(--ink); }
+  .cr-cell.old { text-align: center; justify-content: center; }
+  .cr-cell.new { text-align: center; justify-content: center; background: rgba(232,132,26,0.04); font-weight: 600; color: var(--sage); }
+  .x-mark { color: var(--coral); font-size: 18px; }
+  .check-mark { color: var(--sage); font-size: 18px; }
+  .tag-new { background: var(--sage-light); color: var(--sage); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-left: 8px; }
+
+  /* ROI */
+  .roi-section { background: var(--amber); overflow: hidden; }
+  .roi-section .label { color: rgba(255,255,255,0.7); }
+  .roi-section .label::before { background: white; }
+  .roi-section .section-title { color: white; }
+  .roi-section .section-body { color: rgba(255,255,255,0.8); }
+  .roi-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 60px; }
+  .roi-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 36px 28px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
+  .roi-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); border-radius: 20px; }
+  .roi-card:hover { background: rgba(255,255,255,0.22); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,18,8,0.15); }
+  .roi-num { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: white; line-height: 1; margin-bottom: 8px; }
+  .roi-unit { font-size: 24px; color: rgba(255,255,255,0.6); }
+  .roi-label { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); line-height: 1.5; }
+
+  /* HOW */
+  .how-section { background: var(--cream); }
+  .steps-wrapper { margin-top: 70px; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
+  .steps-wrapper::before { content: ''; position: absolute; left: 36px; top: 0; bottom: 0; width: 1px; background: linear-gradient(var(--border), var(--amber), var(--border)); }
+  .step { display: grid; grid-template-columns: 72px 1fr; gap: 32px; padding: 40px 0; opacity: 0; transform: translateX(-20px); transition: all 0.6s ease; }
+  .step.visible { opacity: 1; transform: translateX(0); }
+  .step-num { width: 72px; height: 72px; background: white; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--amber); box-shadow: var(--shadow); flex-shrink: 0; position: relative; z-index: 1; transition: all 0.3s; }
+  .step:hover .step-num { background: var(--amber); color: white; box-shadow: 0 8px 30px rgba(232,132,26,0.3); transform: scale(1.08); }
+  .step-content { padding-top: 16px; }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
+  .step-desc { font-size: 15px; line-height: 1.7; color: var(--ink-soft); max-width: 540px; }
+  .step-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; background: var(--amber-pale); border: 1px solid rgba(232,132,26,0.2); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--amber); }
+
+  /* SLOT */
+  .slot-section { background: var(--warm-white); }
+  .slot-timeline { margin-top: 60px; position: relative; }
+  .slot-day { display: flex; gap: 0; background: var(--ink); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); margin-bottom: 40px; flex-wrap: wrap; }
+  .slot-hour { flex: 1; min-width: 60px; padding: 18px 10px; text-align: center; border-right: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; cursor: pointer; position: relative; }
+  .slot-hour:last-child { border-right: none; }
+  .slot-hour.active { background: var(--amber); transform: scaleY(1.08); z-index: 1; box-shadow: 0 0 30px rgba(232,132,26,0.5); }
+  .slot-hour.prime { background: rgba(232,132,26,0.15); }
+  .slot-hour.gold-slot { background: rgba(201,151,26,0.12); }
+  .slot-hour:hover:not(.active) { background: rgba(255,255,255,0.06); }
+  .slot-time { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+  .slot-hour.active .slot-time { color: rgba(255,255,255,0.85); }
+  .slot-brand { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 0.5px; }
+  .slot-hour.active .slot-brand { color: white; font-size: 10px; }
+  .slot-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); margin: 8px auto 0; }
+  .slot-hour.active .slot-dot { background: white; }
+  .slot-hour.prime .slot-dot { background: var(--amber); }
+  .slot-hour.gold-slot .slot-dot { background: var(--gold); }
+  .slot-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .si-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 28px; box-shadow: var(--shadow); transition: all 0.3s; }
+  .si-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .si-icon { font-size: 24px; margin-bottom: 12px; }
+  .si-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .si-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+
+  /* WALLET */
+  .wallet-section { background: var(--cream); }
+  .wallet-diagram { margin-top: 60px; display: grid; grid-template-columns: 1fr 80px 1fr; gap: 0; align-items: start; }
+  .wallet-side { display: flex; flex-direction: column; gap: 16px; }
+  .wallet-arrow { display: flex; align-items: center; justify-content: center; padding-top: 24px; }
+  .wa-inner { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .wa-line { width: 2px; height: 48px; background: var(--amber); }
+  .wa-dot { width: 10px; height: 10px; background: var(--amber); border-radius: 50%; }
+  .wallet-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); transition: all 0.3s; }
+  .wallet-card:hover { border-color: var(--amber); box-shadow: 0 8px 30px rgba(232,132,26,0.1); }
+  .wc-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .wc-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .wc-tag { display: inline-block; margin-top: 10px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+  .tag-amber { background: var(--amber-pale); color: var(--amber); }
+  .tag-sage { background: var(--sage-light); color: var(--sage); }
+  .tag-coral { background: var(--coral-light); color: var(--coral); }
+  .tag-gold { background: var(--gold-light); color: var(--gold); }
+
+  /* REVENUE */
+  .revenue-section { background: var(--ink); color: white; }
+  .revenue-section .section-title { color: white; }
+  .revenue-section .label { color: var(--amber-light); }
+  .revenue-section .label::before { background: var(--amber-light); }
+  .revenue-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-top: 60px; }
+  .rev-col-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: white; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .rev-col-title span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
+  .rev-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .rev-item:last-child { border-bottom: none; }
+  .rev-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .rev-name { font-size: 14px; font-weight: 600; color: white; }
+  .rev-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  /* WIN */
+  .win-section { background: var(--sage); color: white; }
+  .win-section .label { color: rgba(255,255,255,0.6); }
+  .win-section .label::before { background: white; }
+  .win-section .section-title { color: white; }
+  .win-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 60px; }
+  .win-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 36px 30px; transition: all 0.3s; }
+  .win-card:hover { background: rgba(255,255,255,0.16); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.15); }
+  .win-emoji { font-size: 32px; margin-bottom: 18px; }
+  .win-who { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+  .win-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: white; margin-bottom: 16px; letter-spacing: -0.5px; }
+  .win-list { list-style: none; }
+  .win-list li { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.75); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 8px; }
+  .win-list li::before { content: '→'; color: rgba(255,255,255,0.4); font-size: 12px; flex-shrink: 0; }
+  .win-list li:last-child { border-bottom: none; }
+
+  /* CTA */
+  .cta-section { background: var(--cream); text-align: center; }
+  .cta-box { max-width: 700px; margin: 0 auto; background: white; border: 1px solid var(--border); border-radius: 32px; padding: 70px 60px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+  .cta-box::before { content: ''; position: absolute; top: -1px; left: 30%; right: 30%; height: 3px; background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 46px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 18px; }
+  .cta-sub { font-size: 16px; color: var(--ink-soft); line-height: 1.7; margin-bottom: 40px; }
+  .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.4); text-align: center; padding: 40px 24px; font-size: 13px; }
+  footer strong { color: rgba(255,255,255,0.7); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .section-inner { padding: 70px 20px; }
+    .wallet-diagram { grid-template-columns: 1fr; }
+    .wallet-arrow { display: none; }
+    .compare-header, .compare-row { grid-template-columns: 1.5fr 1fr 1fr; }
+    .ch-cell, .cr-cell { padding: 14px 12px; font-size: 12px; }
+    .cta-box { padding: 50px 28px; }
+    .steps-wrapper::before { left: 28px; }
+    .step { grid-template-columns: 56px 1fr; gap: 20px; }
+    .step-num { width: 56px; height: 56px; font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-logo">Event<span>+</span></div>
+  <button class="nav-pill" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Book a Slot →</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle hbc1"></div>
+  <div class="hero-bg-circle hbc2"></div>
+  <div class="hero-bg-circle hbc3"></div>
+  <div class="hero-badge">Exclusive Sponsor Opportunity · Singing Concert</div>
+  <h1 class="hero-title">One Event.<br><em>Unlimited Reach.</em><br>The Whole Year.</h1>
+  <p class="hero-sub">Your brand investment doesn't vanish when the curtain falls. <strong>Event Plus</strong> turns a single concert sponsorship into a year-long, performance-driven customer acquisition engine.</p>
+  <div class="hero-ctas">
+    <button class="btn-primary" onclick="document.getElementById('pain').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+    <button class="btn-outline" onclick="document.getElementById('roi').scrollIntoView({behavior:'smooth'})">View ROI Numbers</button>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>scroll</div>
+</section>
+
+<!-- PAIN -->
+<section id="pain" class="pain-section">
+  <div class="section-inner">
+    <div class="label">The Hidden Problem</div>
+    <h2 class="section-title" style="color:white">What Your Last<br>Sponsorship Really Gave You</h2>
+    <p class="section-body reveal">Traditional event sponsorships are a one-night stand. You spend, you show up, it ends — and you're left with a banner photo and zero measurable customer relationships.</p>
+    <div class="pain-grid" id="painGrid">
+      <div class="pain-card" data-num="01"><div class="pain-icon">💸</div><div class="pain-title">Massive Spend, Zero Tracking</div><div class="pain-desc">You put ₹5–20L on the table. Crowds saw your logo. How many became customers? Nobody knows. Not even you.</div><span class="pain-tag">Untracked Spend</span></div>
+      <div class="pain-card" data-num="02"><div class="pain-icon">⏳</div><div class="pain-title">3-Hour Visibility Window</div><div class="pain-desc">The event ends. The crowd disperses. Your entire investment collapses into 3 hours of ambient awareness with zero follow-through.</div><span class="pain-tag">Zero Longevity</span></div>
+      <div class="pain-card" data-num="03"><div class="pain-icon">📊</div><div class="pain-title">No ROI. Just Vibes.</div><div class="pain-desc">Your finance team asks: "What did we get?" You say: "Brand awareness." That conversation is uncomfortable every single time.</div><span class="pain-tag">No Attribution</span></div>
+      <div class="pain-card" data-num="04"><div class="pain-icon">🔁</div><div class="pain-title">Repeat Purchase? Pure Luck.</div><div class="pain-desc">You handed out flyers, discount codes, QR stickers. Redemption rate? 0.3%. No system. No engineered repeat behavior.</div><span class="pain-tag">No Repeat Loop</span></div>
+      <div class="pain-card" data-num="05"><div class="pain-icon">🌊</div><div class="pain-title">Lost in the Logo Clutter</div><div class="pain-desc">Your logo was one of fourteen on the banner — same size as the parking vendor. You paid premium to become noise.</div><span class="pain-tag">Brand Dilution</span></div>
+      <div class="pain-card" data-num="06"><div class="pain-icon">📱</div><div class="pain-title">Digital World, Physical Play</div><div class="pain-desc">While competitors run 365-day digital campaigns with measurable ROAS, you're handing out pamphlets at a gate.</div><span class="pain-tag">Digital Gap</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="compare-section">
+  <div class="section-inner">
+    <div class="label reveal">The Real Comparison</div>
+    <h2 class="section-title reveal">Traditional Sponsorship<br>vs <em style="font-style:italic;color:var(--amber)">Event Plus</em></h2>
+    <p class="section-body reveal">Same budget. Radically different outcomes. Here's what the numbers actually look like side by side.</p>
+    <div class="compare-table reveal">
+      <div class="compare-header">
+        <div class="ch-cell">What You're Comparing</div>
+        <div class="ch-cell">Traditional Event</div>
+        <div class="ch-cell highlight">Event Plus ✦</div>
+      </div>
+      <div class="compare-row"><div class="cr-cell feature">Audience Reach Duration</div><div class="cr-cell old">3–5 hours</div><div class="cr-cell new">365 days <span class="tag-new">100x</span></div></div>
+      <div class="compare-row"><div class="cr-cell feature">Customer Identity Capture</div><div class="cr-cell old"><span class="x-mark">✗</span> None</div><div class="cr-cell new"><span class="check-mark">✓</span> Every buyer</div></div>
+      <div class="compare-row"><div class="cr-cell feature">Purchase Attribution</div><div class="cr-cell old"><span class="x-mark">✗</span> Zero</div><div class="cr-cell new"><span class="check-mark">✓</span> Full tracking</div></div>
+      <div class="compare-row"><div class="cr-cell feature">Repeat Purchase Engine</div><div class="cr-cell old"><span class="x-mark">✗</span> Random</div><div class="cr-cell new"><span class="check-mark">✓</span> Milestone-driven</div></div>
+      <div class="compare-row"><div class="cr-cell feature">Competitive Brand Slots</div><div class="cr-cell old">14+ brands, one banner</div><div class="cr-cell new">You own 1 hour. Exclusively.</div></div>
+      <div class="compare-row"><div class="cr-cell feature">Pay Model</div><div class="cr-cell old">Pay upfront. Hope.</div><div class="cr-cell new">Pay as you perform</div></div>
+      <div class="compare-row"><div class="cr-cell feature">Post-Event Marketing</div><div class="cr-cell old"><span class="x-mark">✗</span> Dead</div><div class="cr-cell new"><span class="check-mark">✓</span> Active for 12 months</div></div>
+      <div class="compare-row"><div class="cr-cell feature">ROI Justification</div><div class="cr-cell old">"Brand awareness"</div><div class="cr-cell new">Live dashboard + real GMV</div></div>
+      <div class="compare-row"><div class="cr-cell feature">Customer Loyalty Loop</div><div class="cr-cell old"><span class="x-mark">✗</span> None built</div><div class="cr-cell new"><span class="check-mark">✓</span> Engineered 3-purchase path</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section id="roi" class="roi-section">
+  <div class="section-inner">
+    <div class="label">Return on Investment</div>
+    <h2 class="section-title">Numbers That Make<br>Your CFO Smile</h2>
+    <p class="section-body reveal">Stop defending your sponsorship budget with gut feel. Event Plus delivers real, measurable numbers — before, during, and after every sales day.</p>
+    <div class="roi-cards reveal">
+      <div class="roi-card"><div class="roi-num" id="r1">100<span class="roi-unit">x</span></div><div class="roi-label">Longer active reach vs traditional event sponsorship</div></div>
+      <div class="roi-card"><div class="roi-num" id="r2">3</div><div class="roi-label">Engineered purchases per customer per year — not accidental</div></div>
+      <div class="roi-card"><div class="roi-num" id="r3">24</div><div class="roi-label">Premium exclusive hourly slots — you own one, fully</div></div>
+      <div class="roi-card"><div class="roi-num">0%</div><div class="roi-label">Wasted impressions — audience is pre-qualified event buyers</div></div>
+      <div class="roi-card"><div class="roi-num">∞</div><div class="roi-label">Customer wallet value never expires — returns compound forever</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="section-inner">
+    <div class="label reveal">Step by Step</div>
+    <h2 class="section-title reveal">How Event Plus<br>Actually Works</h2>
+    <p class="section-body reveal">A structured system, not a hope-based strategy. Here's the exact journey your brand takes.</p>
+    <div class="steps-wrapper">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">You Sponsor the Concert</div><div class="step-desc">You join Event Plus as a sponsor. This unlocks a brand wallet presence, digital listing, and — most importantly — access to the Sponsored Sales Day slot system. Every single attendee becomes a trackable potential customer, not just a face in the crowd.</div><div class="step-pill">🎟 One-time onboarding · Annual slot rights included</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Attendees Get a Benefit Wallet</div><div class="step-desc">Every ticket buyer receives a digital Loyalty Wallet linked to their Ticket ID. Their ticket isn't just an entry pass — it's an asset. It unlocks exclusive access to your brand's curated offers across the year. They're pre-motivated to buy from you.</div><div class="step-pill">💳 Ticket → Lifetime Wallet · Zero cold audience</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">You Book a Premium Sales Hour</div><div class="step-desc">On Sponsored Sales Day — a monthly or quarterly special event — you own one exclusive hour. No other brand runs during your slot. One hero offer, one countdown timer, one CTA. Pure focus. Pure conversion window. Up to 3 slots per year included.</div><div class="step-pill">⏱ 1 hour · 1 brand · 100% exclusive attention window</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Customers Complete 3 Milestones</div><div class="step-desc">The system engineers behavior. Customers are motivated to make 3 purchases within the year to unlock their full wallet value. Each purchase from you counts. You're not fighting for attention — you're the natural, rewarded choice in their journey.</div><div class="step-pill">🎯 Purchase 1 → 2 → 3 = Full unlock · Your brand wins every time</div></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><div class="step-title">You Only Pay More When You Win More</div><div class="step-desc">Base fee is predictable and affordable. But if your sales cross agreed thresholds, a performance-linked fee kicks in. It's the fairest model in sponsorship: low-risk entry, unlimited upside. You pay more only because you earned more.</div><div class="step-pill">📈 Base fee + % on GMV + success fee above threshold</div></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><div class="step-title">Your Budget Keeps Working, All Year</div><div class="step-desc">Spent ₹2L on sponsorship? That investment activates ecosystem tools across the entire year — wallet notifications, slot remarketing, cross-brand exposure, customer retargeting. Your budget doesn't expire at the event. It compounds month after month.</div><div class="step-pill">♾ 12-month activation · Your investment never expires</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLOT SECTION -->
+<section class="slot-section">
+  <div class="section-inner">
+    <div class="label reveal">The Scarcity Engine</div>
+    <h2 class="section-title reveal">24 Hours. 24 Brands.<br>You Own One.</h2>
+    <p class="section-body reveal">On Sponsored Sales Day, only one brand goes live per hour. No clutter. No competition. Just you, a live countdown, and thousands of pre-motivated wallet holders watching your one hero offer.</p>
+    <div class="slot-timeline reveal">
+      <div class="slot-day" id="slotDay"></div>
+      <div class="slot-info">
+        <div class="si-card"><div class="si-icon">🏆</div><div class="si-title">Platinum Slots · Prime Time</div><div class="si-desc">Evening hours 7–10 PM. Maximum wallet activity. Highest bid value. Reserved for premium sponsors first.</div></div>
+        <div class="si-card"><div class="si-icon">🥇</div><div class="si-title">Gold Slots · Lunch + Evening</div><div class="si-desc">1–3 PM and 6–7 PM. Strong traffic, high-intent buyers checking deals during breaks.</div></div>
+        <div class="si-card"><div class="si-icon">🥈</div><div class="si-title">Silver Slots · Morning</div><div class="si-desc">9 AM–12 PM. Morning intent buyers. Great for lifestyle, FMCG, and daily-use brand categories.</div></div>
+        <div class="si-card"><div class="si-icon">🔍</div><div class="si-title">Discovery Slots</div><div class="si-desc">Lower traffic windows. Affordable entry for brands testing the platform with minimal initial risk.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WALLET SECTION -->
+<section class="wallet-section">
+  <div class="section-inner">
+    <div class="label reveal">The Loyalty Engine</div>
+    <h2 class="section-title reveal">The Customer Wallet:<br>Your Permanent Shelf Space</h2>
+    <p class="section-body reveal">Traditional sponsorships get you a moment. Event Plus gives you a permanent position inside every customer's benefit wallet — active for life, compounding with every transaction.</p>
+    <div class="wallet-diagram reveal">
+      <div class="wallet-side">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:800;margin-bottom:8px;color:var(--ink)">Customer Journey</div>
+        <div class="wallet-card"><div class="wc-title">🎟 Buys Concert Ticket</div><div class="wc-desc">Receives Loyalty ID + Benefit Wallet. Ticket becomes a long-term asset, not a single-use expense.</div><span class="wc-tag tag-amber">Entry Point</span></div>
+        <div class="wallet-card"><div class="wc-title">🛒 1st Purchase</div><div class="wc-desc">Wallet partially unlocks. Customer sees real value — early reward creates strong motivation to continue.</div><span class="wc-tag tag-sage">Milestone 1</span></div>
+        <div class="wallet-card"><div class="wc-title">🛍 2nd Purchase</div><div class="wc-desc">More wallet value unlocks. Customer is now invested in completing the journey — churn risk drops to near zero.</div><span class="wc-tag tag-sage">Milestone 2</span></div>
+        <div class="wallet-card"><div class="wc-title">🎁 3rd Purchase — Full Unlock</div><div class="wc-desc">Full ticket-value eligibility unlocked. Any unused value carries forward to lifetime. Customer becomes loyal indefinitely.</div><span class="wc-tag tag-gold">Lifetime Member</span></div>
+      </div>
+      <div class="wallet-arrow"><div class="wa-inner"><div class="wa-dot"></div><div class="wa-line"></div><div class="wa-dot"></div><div class="wa-line"></div><div class="wa-dot"></div><div class="wa-line"></div><div class="wa-dot"></div></div></div>
+      <div class="wallet-side">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:800;margin-bottom:8px;color:var(--ink)">Your Brand Advantage</div>
+        <div class="wallet-card"><div class="wc-title">📋 Pre-Qualified Audience</div><div class="wc-desc">Not shouting into the void. These customers already opted in. They want your deals — they need them to unlock wallet value.</div><span class="wc-tag tag-amber">Zero Cold Audience</span></div>
+        <div class="wallet-card"><div class="wc-title">🎯 Engineered Purchase Intent</div><div class="wc-desc">Purchases aren't random. The milestone system makes your brand a logical, rewarded choice at least 3 times a year.</div><span class="wc-tag tag-sage">Behavioral Design</span></div>
+        <div class="wallet-card"><div class="wc-title">📊 Full Data Visibility</div><div class="wc-desc">Live dashboard: sales, wallet redemptions, slot performance, customer repeat rate. Real numbers for real decisions.</div><span class="wc-tag tag-coral">Attribution Solved</span></div>
+        <div class="wallet-card"><div class="wc-title">♾ Lifetime Wallet Presence</div><div class="wc-desc">Unused wallet value never expires. Your brand stays relevant in the customer's ecosystem indefinitely — long after the concert.</div><span class="wc-tag tag-gold">Permanent Position</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE -->
+<section class="revenue-section">
+  <div class="section-inner">
+    <div class="label">Transparent Pricing</div>
+    <h2 class="section-title reveal">Simple. Fair.<br>Performance-Linked.</h2>
+    <p class="section-body reveal" style="color:rgba(255,255,255,0.6)">Four revenue layers — all designed so you pay more only when you earn more. No hidden surprises. No "awareness" invoices with no accountability.</p>
+    <div class="revenue-cols reveal">
+      <div class="rev-col">
+        <div class="rev-col-title"><span style="background:var(--amber)"></span>You Pay (Brand)</div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--amber)"></div><div class="rev-text"><div class="rev-name">Sponsorship Entry Fee</div><div class="rev-sub">One-time annual fee. Gets you ecosystem access + 3 slot rights included</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--amber-light)"></div><div class="rev-text"><div class="rev-name">Slot Booking Fee</div><div class="rev-sub">Per hourly slot used. Tiered by Platinum / Gold / Silver category</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--gold)"></div><div class="rev-text"><div class="rev-name">Auction Premium (Optional)</div><div class="rev-sub">Bid for top-tier slots. Market-driven. Only if you want the absolute best window</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--coral)"></div><div class="rev-text"><div class="rev-name">Performance Fee (Earned-Only)</div><div class="rev-sub">Applies only when your sales exceed agreed threshold. Tiered bands — you choose your risk appetite</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:#888"></div><div class="rev-text"><div class="rev-name">GMV Commission</div><div class="rev-sub">Small percentage on every transaction. You grow, the platform grows alongside you</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">Annual Maintenance (Optional)</div><div class="rev-sub">Preserve premium slot priority + category exclusivity + remarketing rights</div></div></div>
+      </div>
+      <div class="rev-col">
+        <div class="rev-col-title"><span style="background:var(--sage)"></span>You Get (Brand)</div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">3 Exclusive Sales Slots / Year</div><div class="rev-sub">1 hour. 1 brand. 1 hero offer. Full audience attention. Zero clutter.</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">Pre-Qualified Wallet Holders</div><div class="rev-sub">Audience with active motivation to buy from you — milestone-linked urgency</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">Live Sales Dashboard</div><div class="rev-sub">Real-time GMV, redemptions, conversion rate, customer data — full transparency</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">Engineered 3-Purchase Path</div><div class="rev-sub">Behavioral design that makes repeat buying the default — not the exception</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">12-Month Budget Activation</div><div class="rev-sub">Your investment works every single month — not just on the day of the event</div></div></div>
+        <div class="rev-item"><div class="rev-dot" style="background:var(--sage)"></div><div class="rev-text"><div class="rev-name">Lifetime Customer Wallet Presence</div><div class="rev-sub">Your brand stays relevant in every customer's ecosystem — indefinitely</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WIN -->
+<section class="win-section">
+  <div class="section-inner">
+    <div class="label">Everyone Wins</div>
+    <h2 class="section-title reveal">Designed for<br>Three Winners</h2>
+    <div class="win-grid reveal">
+      <div class="win-card">
+        <div class="win-emoji">🎵</div>
+        <div class="win-who">The Customer</div>
+        <div class="win-title">Their Ticket Pays Them Back</div>
+        <ul class="win-list">
+          <li>Ticket becomes a lifetime benefit wallet</li>
+          <li>3 purchases unlock full ticket value</li>
+          <li>Unused wallet value never expires</li>
+          <li>Access to premium brand-exclusive offers</li>
+          <li>Gamified milestone journey — not just shopping</li>
+          <li>Better value than any other retail channel</li>
+        </ul>
+      </div>
+      <div class="win-card">
+        <div class="win-emoji">🏷</div>
+        <div class="win-who">Your Brand</div>
+        <div class="win-title">Finally, ROI You Can Show</div>
+        <ul class="win-list">
+          <li>One exclusive sales hour — zero clutter</li>
+          <li>Pre-qualified, motivation-driven buyers</li>
+          <li>Live GMV tracking with real numbers</li>
+          <li>Engineered repeat purchase behavior</li>
+          <li>Pay more only when you earn more</li>
+          <li>365-day brand presence from one investment</li>
+        </ul>
+      </div>
+      <div class="win-card">
+        <div class="win-emoji">⚡</div>
+        <div class="win-who">Event Plus</div>
+        <div class="win-title">A Platform That Scales</div>
+        <ul class="win-list">
+          <li>Sponsorship + slot fee + auction revenue</li>
+          <li>GMV commission on every transaction</li>
+          <li>Success fee when brands exceed targets</li>
+          <li>Annual maintenance for slot retention</li>
+          <li>Recurring revenue across every event</li>
+          <li>Network effect as more brands join</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-inner" style="padding:100px 32px">
+    <div class="cta-box reveal">
+      <div class="label" style="justify-content:center;margin-bottom:24px">Limited Slots Available</div>
+      <h2 class="cta-title">Ready to Own<br>Your Hour?</h2>
+      <p class="cta-sub">Slot availability is finite. Every concert has exactly 24 slots, and your category competitors will move fast. Secure your preferred window before it goes to auction.</p>
+      <div class="cta-btns">
+        <button class="btn-primary" style="font-size:16px;padding:17px 38px">Get My Slot Now →</button>
+        <button class="btn-outline" style="font-size:16px;padding:16px 38px">Download Full Deck</button>
+      </div>
+      <p style="margin-top:28px;font-size:13px;color:var(--ink-soft);opacity:0.6">No long-term lock-in to start · Performance-linked pricing · Zero hidden risk</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>Event Plus</strong> · Scarcity-Led Sponsored Loyalty Marketplace<br>
+  <span style="margin-top:8px;display:block;opacity:0.5">Turning event audiences into year-long customers, one slot at a time.</span>
+</footer>
+
+<script>
+// PROGRESS BAR
+window.addEventListener('scroll', () => {
+  const s = window.scrollY, t = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (s/t*100)+'%';
+});
+
+// SCROLL REVEAL
+const allReveals = document.querySelectorAll('.reveal, .step');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), 80); } });
+}, { threshold: 0.12 });
+allReveals.forEach(el => obs.observe(el));
+
+// PAIN CARDS stagger
+const painGrid = document.getElementById('painGrid');
+const painObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    document.querySelectorAll('.pain-card').forEach((card, i) => {
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        card.style.opacity = '1'; card.style.transform = 'translateY(0)';
+      }, i * 100);
+    });
+    painObs.disconnect();
+  }
+}, { threshold: 0.1 });
+if (painGrid) painObs.observe(painGrid);
+
+// SLOT TIMELINE
+const slotData = [
+  {t:'9am',l:'Brand',type:'silver'},{t:'10am',l:'Brand',type:'silver'},{t:'11am',l:'Brand',type:'silver'},
+  {t:'12pm',l:'Brand',type:'silver'},{t:'1pm',l:'Brand',type:'prime'},{t:'2pm',l:'Brand',type:'prime'},
+  {t:'3pm',l:'Brand',type:'prime'},{t:'4pm',l:'Brand',type:'silver'},{t:'5pm',l:'Brand',type:'silver'},
+  {t:'6pm',l:'Brand',type:'gold-slot'},{t:'7pm',l:'YOUR BRAND ★',type:'active'},{t:'8pm',l:'Brand',type:'gold-slot'},
+  {t:'9pm',l:'Brand',type:'gold-slot'},{t:'10pm',l:'Brand',type:'silver'},{t:'11pm',l:'Brand',type:'silver'}
+];
+const slotDay = document.getElementById('slotDay');
+slotData.forEach(s => {
+  const d = document.createElement('div');
+  d.className = 'slot-hour '+s.type;
+  d.innerHTML = `<div class="slot-time">${s.t}</div><div class="slot-brand">${s.l}</div><div class="slot-dot"></div>`;
+  d.title = s.type==='active' ? '🎯 YOUR EXCLUSIVE SLOT — 1 hour, zero competition, all eyes on you' : s.type==='gold-slot' ? '🏆 Platinum Slot — Premium demand window' : s.type==='prime' ? '🥇 Gold Slot — Strong traffic' : '🥈 Silver Slot';
+  slotDay.appendChild(d);
+});
+</script>
+</body>
+</html>
