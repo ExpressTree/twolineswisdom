@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0a1628"/>
+<title>Pick · See · Trust · Take — Manifestation GPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#060d1a;--bg2:#0b1629;--bg3:#111e36;--surface:#13213d;--surface2:#19294d;--surface3:#1e3060;
+  --ink:#e8eef8;--ink2:#a8b9d4;--ink3:#667a99;
+  --gold:#c9a84c;--gold2:#e8c870;--gold3:#f5e4a8;--gold-dim:#5a4a20;
+  --teal:#26c5d4;--teal2:#7de8f0;--teal-dim:#0d3a40;
+  --rose:#e05c8a;--rose2:#f09ab8;--rose-dim:#3d1525;
+  --green:#3dd68c;--green2:#a8f0cc;--green-dim:#0d3a22;
+  --amber:#f0a020;--amber2:#f8c870;--amber-dim:#3d2a0a;
+  --radius:16px;--radius-sm:10px;--radius-lg:24px;--radius-xl:32px;
+  --shadow:0 8px 40px rgba(0,0,0,.5);--shadow-sm:0 4px 20px rgba(0,0,0,.35);
+  --glow-teal:0 0 30px rgba(38,197,212,.18);
+  --glow-gold:0 0 30px rgba(201,168,76,.18);
+  --font-display:'Cormorant Garamond',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --font-mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+button,input,textarea,select{font:inherit;color:inherit}
+img{display:block}
+::selection{background:rgba(38,197,212,.3)}
+
+/* ═══ STAR FIELD BG ═══ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background:radial-gradient(ellipse at 20% 20%,rgba(38,197,212,.06) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 80%,rgba(201,168,76,.06) 0%,transparent 60%),
+             radial-gradient(ellipse at 50% 0%,rgba(224,92,138,.04) 0%,transparent 50%),
+             var(--bg);
+}
+
+/* ═══ LAYOUT ═══ */
+.app{max-width:1200px;margin:0 auto;padding:0 16px 100px}
+
+/* ═══ TOPBAR ═══ */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(6,13,26,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(38,197,212,.12);
+  padding:0 16px;
+}
+.topbar-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:14px;
+  height:60px;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-display);font-size:20px;font-weight:600;
+  color:var(--gold2);letter-spacing:.02em;white-space:nowrap;
+}
+.logo-drop{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  display:grid;place-items:center;font-size:16px;flex-shrink:0;
+  box-shadow:var(--glow-teal);
+}
+.topbar-goal{
+  flex:1;overflow:hidden;
+  font-size:13px;color:var(--ink3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.topbar-goal strong{color:var(--teal2);font-weight:500}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+
+/* ═══ PILLS & BADGES ═══ */
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;
+  letter-spacing:.03em;white-space:nowrap;
+}
+.pill-teal{background:rgba(38,197,212,.15);color:var(--teal2);border:1px solid rgba(38,197,212,.3)}
+.pill-gold{background:rgba(201,168,76,.15);color:var(--gold2);border:1px solid rgba(201,168,76,.3)}
+.pill-green{background:rgba(61,214,140,.15);color:var(--green2);border:1px solid rgba(61,214,140,.3)}
+.pill-rose{background:rgba(224,92,138,.15);color:var(--rose2);border:1px solid rgba(224,92,138,.3)}
+.pill-amber{background:rgba(240,160,32,.15);color:var(--amber2);border:1px solid rgba(240,160,32,.3)}
+.pill-dim{background:rgba(255,255,255,.06);color:var(--ink2);border:1px solid rgba(255,255,255,.1)}
+
+/* ═══ BOTTOM NAV ═══ */
+.nav{
+  position:fixed;left:50%;bottom:12px;transform:translateX(-50%);
+  z-index:60;width:min(600px,calc(100% - 24px));
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+  padding:6px;border-radius:22px;
+  background:rgba(17,30,54,.95);border:1px solid rgba(38,197,212,.15);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);backdrop-filter:blur(20px);
+}
+.nav-btn{
+  border:none;background:transparent;border-radius:16px;
+  padding:9px 4px 7px;color:var(--ink3);
+  font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;
+  transition:all .2s ease;
+}
+.nav-btn .nav-icon{font-size:18px;line-height:1;transition:transform .2s ease}
+.nav-btn:hover{color:var(--ink2)}
+.nav-btn.active{background:rgba(38,197,212,.12);color:var(--teal2)}
+.nav-btn.active .nav-icon{transform:scale(1.1)}
+
+/* ═══ TABS ═══ */
+.tabscreen{display:none;padding-top:20px}
+.tabscreen.active{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ═══ CARDS ═══ */
+.card{
+  background:var(--surface);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius);
+  padding:20px;
+  transition:border-color .2s;
+}
+.card:hover{border-color:rgba(255,255,255,.12)}
+.card-glass{
+  background:rgba(19,33,61,.7);backdrop-filter:blur(12px);
+  border:1px solid rgba(38,197,212,.12);
+  border-radius:var(--radius-lg);padding:22px;
+}
+.card-glow{
+  background:linear-gradient(135deg,rgba(38,197,212,.08),rgba(201,168,76,.05));
+  border:1px solid rgba(38,197,212,.2);
+  border-radius:var(--radius-lg);padding:22px;
+  box-shadow:var(--glow-teal);
+}
+.card-dark{
+  background:linear-gradient(135deg,#0a1628,#0d1e3a);
+  border:1px solid rgba(38,197,212,.15);
+  border-radius:var(--radius-lg);padding:22px;
+  box-shadow:var(--shadow);
+}
+.card-gold{
+  background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(245,228,168,.05));
+  border:1px solid rgba(201,168,76,.25);
+  border-radius:var(--radius-lg);padding:22px;
+  box-shadow:var(--glow-gold);
+}
+.card-completed{
+  background:linear-gradient(135deg,rgba(61,214,140,.08),rgba(61,214,140,.03));
+  border:1px solid rgba(61,214,140,.2);
+  border-radius:var(--radius);padding:20px;
+}
+
+/* ═══ GRIDS ═══ */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
+
+/* ═══ TYPOGRAPHY ═══ */
+.display{font-family:var(--font-display);font-weight:300;letter-spacing:.02em}
+h1.display{font-size:clamp(28px,5vw,48px);line-height:1.1}
+h2.display{font-size:clamp(22px,3vw,32px);line-height:1.15}
+.section-title{
+  font-family:var(--font-display);font-size:22px;font-weight:400;
+  color:var(--gold3);letter-spacing:.05em;margin-bottom:4px;
+}
+.section-sub{font-size:13px;color:var(--ink3);margin-bottom:18px}
+.card-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.card-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
+.num-big{font-size:36px;font-weight:600;line-height:1;font-family:var(--font-display)}
+.num-med{font-size:24px;font-weight:600;line-height:1}
+.muted{color:var(--ink2)}
+.faint{color:var(--ink3)}
+.small{font-size:12px}
+.tiny{font-size:11px}
+.italic{font-style:italic;font-family:var(--font-display)}
+.mono{font-family:var(--font-mono)}
+
+/* ═══ BUTTONS ═══ */
+.btn{
+  border:none;border-radius:var(--radius-sm);
+  padding:11px 18px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s ease;display:inline-flex;align-items:center;gap:6px;
+  white-space:nowrap;
+}
+.btn-primary{background:linear-gradient(135deg,var(--teal),#1ab0bd);color:#060d1a;box-shadow:0 8px 24px rgba(38,197,212,.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(38,197,212,.35)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#b8932a);color:#060d1a;box-shadow:0 8px 24px rgba(201,168,76,.2)}
+.btn-gold:hover{transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--ink2)}
+.btn-ghost:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+.btn-sm{padding:7px 12px;font-size:12px;border-radius:8px}
+.btn-icon{width:38px;height:38px;padding:0;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);font-size:16px;cursor:pointer;transition:all .2s;display:grid;place-items:center}
+.btn-icon:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* ═══ FORMS ═══ */
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.form-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
+.form-hint{font-size:11px;color:var(--ink3);margin-top:3px;font-style:italic}
+.field{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);
+  padding:11px 14px;color:var(--ink);
+  transition:border-color .2s,box-shadow .2s;outline:none;
+  font-size:14px;
+}
+.field:focus{border-color:rgba(38,197,212,.5);box-shadow:0 0 0 3px rgba(38,197,212,.1)}
+.field::placeholder{color:var(--ink3)}
+textarea.field{min-height:80px;resize:vertical;line-height:1.6}
+select.field{cursor:pointer}
+select.field option{background:#111e36;color:var(--ink)}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ═══ PROGRESS / BARS ═══ */
+.bar-track{height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;transition:width .5s ease}
+.bar-teal{background:linear-gradient(90deg,var(--teal),var(--teal2))}
+.bar-gold{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.bar-green{background:linear-gradient(90deg,var(--green),var(--green2))}
+.bar-rose{background:linear-gradient(90deg,var(--rose),var(--rose2))}
+
+/* ═══ WATER GLASS ═══ */
+.water-ritual-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+.water-glass{
+  width:100px;height:180px;
+  border:3px solid rgba(38,197,212,.4);
+  border-top:none;
+  border-radius:0 0 40px 40px;
+  position:relative;overflow:hidden;
+  background:rgba(38,197,212,.04);
+  box-shadow:0 0 40px rgba(38,197,212,.1),inset 0 0 20px rgba(38,197,212,.05);
+}
+.water-glass::after{
+  content:'';position:absolute;left:-10%;bottom:0;width:120%;
+  height:var(--level,0%);
+  background:linear-gradient(180deg,rgba(38,197,212,.4),rgba(38,197,212,.7));
+  border-radius:40% 40% 0 0;
+  transition:height .6s cubic-bezier(.4,0,.2,1);
+}
+.water-glass::before{
+  content:'';position:absolute;left:-10%;bottom:0;width:120%;
+  height:var(--level,0%);
+  background:rgba(120,240,255,.15);
+  border-radius:40% 40% 0 0;
+  transition:height .6s cubic-bezier(.4,0,.2,1);
+  transform:translateY(-10px);
+}
+.sip-buttons{display:flex;flex-direction:column;gap:10px;width:100%}
+.sip-btn{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;
+  transition:all .25s ease;display:flex;align-items:flex-start;gap:12px;
+}
+.sip-btn:hover{background:rgba(38,197,212,.08);border-color:rgba(38,197,212,.3)}
+.sip-btn.active{background:rgba(38,197,212,.12);border-color:rgba(38,197,212,.4);box-shadow:0 0 20px rgba(38,197,212,.1)}
+.sip-btn.done{background:rgba(61,214,140,.08);border-color:rgba(61,214,140,.3)}
+.sip-num{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-size:11px;font-weight:700;
+  background:rgba(38,197,212,.15);color:var(--teal2);
+  border:1px solid rgba(38,197,212,.25);
+}
+.sip-btn.done .sip-num{background:rgba(61,214,140,.2);color:var(--green2);border-color:rgba(61,214,140,.4)}
+
+/* ═══ XS-XXXL LADDER ═══ */
+.size-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.size-tile{
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  padding:10px 6px;text-align:center;cursor:pointer;background:rgba(255,255,255,.04);
+  transition:all .2s;
+}
+.size-tile:hover{border-color:rgba(38,197,212,.3);background:rgba(38,197,212,.06)}
+.size-tile.active{
+  background:linear-gradient(135deg,rgba(38,197,212,.2),rgba(201,168,76,.1));
+  border-color:rgba(38,197,212,.4);color:var(--teal2);
+}
+.size-tile b{display:block;font-size:13px;font-weight:700}
+.size-tile small{font-size:9px;color:var(--ink3);display:block;margin-top:3px}
+.size-tile.active small{color:var(--teal)}
+
+/* ═══ GOAL CARDS ═══ */
+.goal-card{
+  background:var(--surface);border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius-lg);padding:20px;
+  transition:all .2s;cursor:pointer;
+}
+.goal-card:hover{border-color:rgba(38,197,212,.2);box-shadow:0 4px 30px rgba(0,0,0,.3)}
+.goal-card.active-goal{
+  border-color:rgba(38,197,212,.3);
+  background:linear-gradient(135deg,rgba(13,33,61,.9),rgba(19,42,80,.8));
+  box-shadow:0 0 40px rgba(38,197,212,.08);
+}
+.goal-card.completed-goal{
+  border-color:rgba(61,214,140,.2);
+  background:linear-gradient(135deg,rgba(13,58,34,.7),rgba(13,33,61,.8));
+}
+.goal-card.parked-goal{
+  opacity:.65;border-color:rgba(255,255,255,.06);
+}
+
+/* ═══ TIMELINE ═══ */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{
+  content:'';position:absolute;left:8px;top:6px;bottom:6px;
+  width:2px;background:linear-gradient(180deg,rgba(38,197,212,.4),rgba(38,197,212,.05));
+  border-radius:2px;
+}
+.timeline-event{
+  position:relative;margin-bottom:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);padding:14px 16px;
+}
+.timeline-event::before{
+  content:'';position:absolute;left:-20px;top:18px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--teal);border:2px solid var(--bg);
+  box-shadow:0 0 10px rgba(38,197,212,.5);
+}
+
+/* ═══ MODAL / DIALOG ═══ */
+dialog{
+  border:none;border-radius:var(--radius-xl);padding:0;
+  width:min(740px,calc(100vw - 24px));
+  background:var(--bg2);color:var(--ink);
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+dialog::backdrop{
+  background:rgba(4,8,18,.75);backdrop-filter:blur(8px);
+}
+.modal-head{
+  padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-display);font-size:20px;font-weight:400;
+  color:var(--gold3);
+}
+.modal-body{padding:22px;max-height:80vh;overflow-y:auto}
+.modal-body::-webkit-scrollbar{width:4px}
+.modal-body::-webkit-scrollbar-track{background:transparent}
+.modal-body::-webkit-scrollbar-thumb{background:rgba(38,197,212,.3);border-radius:4px}
+
+/* ═══ TOAST ═══ */
+.toast{
+  position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);
+  background:rgba(17,30,54,.98);color:var(--ink);border:1px solid rgba(38,197,212,.3);
+  border-radius:999px;padding:10px 20px;z-index:200;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);font-size:13px;font-weight:500;
+  opacity:0;pointer-events:none;transition:all .3s ease;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══ INSIGHT CARD ═══ */
+.insight-row{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.insight-row:last-child{border-bottom:none;padding-bottom:0}
+.insight-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+.insight-i-teal{background:rgba(38,197,212,.15)}
+.insight-i-gold{background:rgba(201,168,76,.15)}
+.insight-i-green{background:rgba(61,214,140,.15)}
+.insight-i-rose{background:rgba(224,92,138,.15)}
+
+/* ═══ STAT TILE ═══ */
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px;text-align:center}
+.stat .num{font-family:var(--font-display);font-size:32px;font-weight:300;line-height:1;margin-bottom:4px}
+.stat .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
+
+/* ═══ QUOTE BLOCK ═══ */
+.quote{
+  border-left:3px solid var(--gold);padding:12px 16px;
+  background:rgba(201,168,76,.06);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-family:var(--font-display);font-size:16px;font-style:italic;
+  color:var(--gold3);line-height:1.6;
+}
+
+/* ═══ DAILY LOOP SECTION ═══ */
+.loop-header{
+  background:linear-gradient(90deg,rgba(38,197,212,.1),transparent);
+  border-left:3px solid var(--teal);padding:14px 18px;border-radius:0 12px 12px 0;
+  margin-bottom:16px;
+}
+
+/* ═══ FAB ═══ */
+.fab{
+  position:fixed;right:20px;bottom:90px;z-index:55;
+  width:54px;height:54px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--teal),#1ab0bd);
+  color:#060d1a;font-size:26px;font-weight:700;
+  box-shadow:0 12px 40px rgba(38,197,212,.35);
+  cursor:pointer;transition:all .2s;display:grid;place-items:center;
+}
+.fab:hover{transform:scale(1.08);box-shadow:0 16px 50px rgba(38,197,212,.45)}
+
+/* ═══ EMPTY STATE ═══ */
+.empty{
+  padding:40px 20px;text-align:center;
+  border:1px dashed rgba(255,255,255,.1);border-radius:var(--radius-lg);
+  color:var(--ink3);
+}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:.5}
+
+/* ═══ DIVIDER ═══ */
+.divider{height:1px;background:rgba(255,255,255,.07);margin:16px 0}
+
+/* ═══ CHECKMARK EFFECT ═══ */
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.pop{animation:pop .25s ease}
+
+/* ═══ SCORE RING ═══ */
+.score-ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring-val{position:absolute;text-align:center}
+
+/* ═══ TAG ═══ */
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:3px 8px;font-size:11px;color:var(--ink2);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:800px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .fg2{grid-template-columns:1fr}
+  .size-grid{grid-template-columns:repeat(4,1fr)}
+  .app{padding-left:12px;padding-right:12px}
+  .card{padding:16px}
+  .card-glass,.card-glow,.card-dark,.card-gold{padding:16px}
+  .topbar-goal{display:none}
+}
+@media(max-width:480px){
+  .size-grid{grid-template-columns:repeat(4,1fr)}
+  .nav-btn{font-size:9px;padding:8px 2px 6px}
+}
+@media print{
+  .nav,.fab,.topbar .topbar-actions,.btn,.btn-icon{display:none!important}
+  body{background:#fff;color:#000}
+  .card,.card-glass,.card-glow,.card-dark,.card-gold{background:#fff;box-shadow:none;break-inside:avoid;color:#000;border-color:#ccc}
+  .tabscreen{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">
+      <div class="logo-drop">💧</div>
+      <span>Water Loop</span>
+    </div>
+    <div class="topbar-goal" id="topbarGoal">
+      <span class="faint">No active manifestation</span>
+    </div>
+    <div class="topbar-actions">
+      <span class="pill pill-dim" id="streakPill">0 day streak</span>
+      <button class="btn-icon" onclick="openSettingsModal()" title="Settings">⚙️</button>
+    </div>
+  </div>
+</div>
+
+<main class="app">
+  <section id="today" class="tabscreen active"></section>
+  <section id="goals" class="tabscreen"></section>
+  <section id="journey" class="tabscreen"></section>
+  <section id="insights" class="tabscreen"></section>
+  <section id="proof" class="tabscreen"></section>
+</main>
+
+<!-- FAB -->
+<button class="fab" onclick="openGoalModal(null)" title="New Manifestation">+</button>
+
+<!-- BOTTOM NAV -->
+<nav class="nav">
+  <button class="nav-btn active" data-tab="today" onclick="switchTab('today',this)">
+    <span class="nav-icon">💧</span>Today
+  </button>
+  <button class="nav-btn" data-tab="goals" onclick="switchTab('goals',this)">
+    <span class="nav-icon">🎯</span>Goals
+  </button>
+  <button class="nav-btn" data-tab="journey" onclick="switchTab('journey',this)">
+    <span class="nav-icon">🪜</span>Journey
+  </button>
+  <button class="nav-btn" data-tab="insights" onclick="switchTab('insights',this)">
+    <span class="nav-icon">✦</span>Insights
+  </button>
+  <button class="nav-btn" data-tab="proof" onclick="switchTab('proof',this)">
+    <span class="nav-icon">🙏</span>Proof
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══ GOAL MODAL ═══ -->
+<dialog id="goalDialog">
+  <div class="modal-head">
+    <span id="goalModalTitle">New Manifestation Cycle</span>
+    <button class="btn-icon" onclick="goalDialog.close()">✕</button>
+  </div>
+  <div class="modal-body">
+    <form id="goalForm" class="stack" onsubmit="saveGoal(event)">
+      <input type="hidden" name="id" value=""/>
+
+      <div class="quote" style="margin-bottom:4px">
+        <span class="small">One-Goal Rule: One active mission at a time. Previous active goal will be parked.</span>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Goal Title</label>
+          <input class="field" name="title" required placeholder="e.g. Save my first ₹5,000"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Life Area</label>
+          <select class="field" name="area">
+            <option>Money</option><option>Health</option><option>Career</option>
+            <option>Relationship</option><option>Discipline</option><option>Spiritual</option>
+            <option>Business</option><option>Education</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Challenge Size (XS → XXXL)</label>
+        <div class="size-grid" id="goalSizePicker"></div>
+        <input type="hidden" name="size" value="XS"/>
+        <div class="form-hint">Start small. Every large win is built on smaller repeated credibility.</div>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input class="field" type="date" name="start"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Date</label>
+          <input class="field" type="date" name="target"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">🎯 Pick It — What exactly am I manifesting?</label>
+        <textarea class="field" name="pick" required placeholder="Write one precise sentence. Not vague, not grand. Just clear."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Why it matters to me NOW</label>
+        <textarea class="field" name="why" placeholder="Not someday. Not eventually. Why right now?"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">How will I know it is working?</label>
+        <input class="field" name="successMeasure" placeholder="Define the visible sign of progress"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">👁 See It — One clean scene of proof</label>
+        <textarea class="field" name="seeScene" required placeholder="What do I see, feel, and do when this becomes real? One simple scene."></textarea>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Old weakening thought</label>
+          <textarea class="field" name="oldThought" placeholder="e.g. Nothing works for me."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🧘 Trust It — Stabilising sentence</label>
+          <textarea class="field" name="trustSentence" required placeholder="e.g. I only need to stay with this one cycle today."></textarea>
+        </div>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Main obstacle</label>
+          <textarea class="field" name="obstacle" placeholder="What usually stops me?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🧹 Clear It — If-Then plan</label>
+          <textarea class="field" name="ifThen" required placeholder="If [obstacle], then I will [response]..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">⚡ Take It — Smallest daily undeniable action</label>
+        <textarea class="field" name="dailyAction" required placeholder="What is the one action I will do no matter what?"></textarea>
+      </div>
+
+      <div class="row">
+        <button class="btn btn-primary" type="submit">✦ Start Manifestation</button>
+        <button class="btn btn-ghost" type="button" onclick="goalDialog.close()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ═══ LOG MODAL ═══ -->
+<dialog id="logDialog">
+  <div class="modal-head">
+    <span>Evening Reflection</span>
+    <button class="btn-icon" onclick="logDialog.close()">✕</button>
+  </div>
+  <div class="modal-body">
+    <form id="logForm" class="stack" onsubmit="saveLog(event)">
+      <input type="hidden" name="goalId"/>
+      <input type="hidden" name="date"/>
+
+      <div class="quote">
+        <span class="small italic">Did I take action today? Did I notice any sign, shift, or opening? Will I continue tomorrow?</span>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Action done today?</label>
+          <select class="field" name="actionDone">
+            <option value="1">✅ Yes, I took action</option>
+            <option value="0">⚠️ Missed — will adjust</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Water loops completed</label>
+          <input class="field" type="number" name="waterLoops" min="0" max="20" value="0" placeholder="0"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sign, shift, or opening noticed</label>
+        <textarea class="field" name="signs" placeholder="Even small: a moment of calmness, a useful idea, an unexpected message..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Lesson or insight today</label>
+        <textarea class="field" name="lesson" placeholder="What did this day teach me?"></textarea>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Clarity today (1-10)</label>
+          <input class="field" type="number" name="clarity" min="1" max="10" value="7"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Emotional steadiness (1-10)</label>
+          <input class="field" type="number" name="steadiness" min="1" max="10" value="7"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Cycle status</label>
+        <select class="field" name="status">
+          <option value="Continue">Continue — Same goal, moving forward</option>
+          <option value="Adjust">Adjust — Tweaking approach or target</option>
+          <option value="Complete">Complete — Cycle achieved! 🎉</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <button class="btn btn-primary" type="submit">Save Reflection</button>
+        <button class="btn btn-ghost" type="button" onclick="logDialog.close()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ═══ SETTINGS MODAL ═══ -->
+<dialog id="settingsDialog">
+  <div class="modal-head">
+    <span>Profile & Settings</span>
+    <button class="btn-icon" onclick="settingsDialog.close()">✕</button>
+  </div>
+  <div class="modal-body">
+    <form id="settingsForm" class="stack" onsubmit="saveSettings(event)">
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="field" id="settingName" name="name" placeholder="Your name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Daily Water Target (glasses)</label>
+          <input class="field" id="settingWater" name="waterTarget" type="number" min="2" max="20" value="8"/>
+        </div>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group">
+          <label class="form-label">Reminder Interval (minutes)</label>
+          <input class="field" id="settingInterval" name="interval" type="number" min="15" max="480" value="120"/>
+        </div>
+        <div class="form-group" style="justify-content:flex-end;flex-direction:row;align-items:center;gap:10px;padding-top:26px">
+          <label class="form-label" style="margin:0">Enable Reminders</label>
+          <input type="checkbox" id="settingReminders" name="reminders" style="width:18px;height:18px;cursor:pointer;accent-color:var(--teal)"/>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="card-label mt8">Data Management</div>
+      <div class="row mt8">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export Backup</button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+          ⬆ Import Backup <input type="file" accept=".json" onchange="importData(event)" style="display:none"/>
+        </label>
+        <button type="button" class="btn btn-sm" style="background:rgba(224,92,138,.15);color:var(--rose2);border:1px solid rgba(224,92,138,.3)" onclick="clearAllData()">🗑 Clear All</button>
+      </div>
+
+      <div class="row mt16">
+        <button class="btn btn-primary" type="submit">Save Settings</button>
+        <button class="btn btn-ghost" type="button" onclick="settingsDialog.close()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ═══ VIEW GOAL MODAL ═══ -->
+<dialog id="viewGoalDialog">
+  <div class="modal-head">
+    <span id="viewGoalTitle">Goal Details</span>
+    <button class="btn-icon" onclick="viewGoalDialog.close()">✕</button>
+  </div>
+  <div class="modal-body" id="viewGoalBody"></div>
+</dialog>
+
+<script>
+// ════════════════════════════════════════════
+// DATA & STATE
+// ════════════════════════════════════════════
+const KEY = 'pstT_v3';
+const LEVELS = {
+  XS:{label:'XS',days:7,caption:'1–7 days',goal:'Build Proof'},
+  S:{label:'S',days:14,caption:'1–2 weeks',goal:'Build Confidence'},
+  M:{label:'M',days:30,caption:'~1 month',goal:'Build Momentum'},
+  L:{label:'L',days:75,caption:'2–3 months',goal:'Build Identity'},
+  XL:{label:'XL',days:150,caption:'3–6 months',goal:'Build Direction'},
+  XXL:{label:'XXL',days:270,caption:'6–12 months',goal:'Transform Life'},
+  XXXL:{label:'XXXL',days:400,caption:'1+ year',goal:'Legacy Change'}
+};
+
+const defaultState = () => ({
+  goals: [],
+  logs: [],
+  sip: {goalId: null, step: 0, date: '', loops: 0},
+  profile: {name: '', photo: ''},
+  settings: {interval: 120, waterTarget: 8, reminders: false},
+});
+
+let state = (() => {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) return {...defaultState(), ...JSON.parse(raw)};
+  } catch(e){}
+  return defaultState();
+})();
+
+let reminderTimer = null;
+
+function persist() { localStorage.setItem(KEY, JSON.stringify(state)); renderAll(); }
+
+// ════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const todayISO = () => new Date().toISOString().slice(0,10);
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const addDays = (iso, n) => { const d = new Date(iso); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); };
+const diffDays = (a,b) => Math.round((new Date(b)-new Date(a))/(86400000));
+const clamp = (v,mn,mx) => Math.max(mn, Math.min(mx, v));
+
+function toast(msg, dur=3000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+function activeGoal() { return state.goals.find(g => g.status === 'active'); }
+function goalLogs(id) { return state.logs.filter(l => l.goalId === id); }
+
+function goalMetric(g) {
+  if (!g) return {score:0, days:0, actions:0, loops:0, effort:0, required:0, pct:0};
+  const logs = goalLogs(g.id);
+  const days = Math.max(1, diffDays(g.start, todayISO()) + 1);
+  const actions = logs.filter(l => +l.actionDone).length;
+  const loops = logs.reduce((s,l) => s + (+l.waterLoops||0), 0);
+  const required = Math.max(1, diffDays(g.start, g.target));
+  const pct = clamp(Math.round(days/required*100), 0, 100);
+  const avgClarity = logs.length ? logs.reduce((s,l)=>s+(+l.clarity||5),0)/logs.length : 5;
+  const avgStead = logs.length ? logs.reduce((s,l)=>s+(+l.steadiness||5),0)/logs.length : 5;
+  const actionRate = clamp(Math.round(actions/days*100), 0, 100);
+  const loopRate = clamp(Math.round(loops/Math.max(1,days*state.settings.waterTarget)*100), 0, 100);
+  const score = Math.round((actionRate*.4 + loopRate*.2 + avgClarity/10*20 + avgStead/10*20));
+  const effort = +(actions/days).toFixed(1);
+  return {score, days, actions, loops, effort, required, pct, avgClarity:avgClarity.toFixed(1), avgStead:avgStead.toFixed(1)};
+}
+
+function calcStreak() {
+  const logs = state.logs.filter(l => +l.actionDone);
+  if (!logs.length) return 0;
+  const dates = [...new Set(logs.map(l=>l.date))].sort((a,b)=>b.localeCompare(a));
+  let streak = 0, cur = todayISO();
+  for (const d of dates) {
+    if (d === cur || d === addDays(cur,-1)) { streak++; cur = d; }
+    else break;
+  }
+  return streak;
+}
+
+// ════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tabscreen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
+}
+
+// ════════════════════════════════════════════
+// RENDER TOP
+// ════════════════════════════════════════════
+function renderTop() {
+  const g = activeGoal();
+  const streak = calcStreak();
+  const topbar = document.getElementById('topbarGoal');
+  if (g) {
+    topbar.innerHTML = `<span class="pill pill-${g.status==='active'?'teal':'dim'} small" style="margin-right:8px">${LEVELS[g.size||'XS'].label}</span><strong>${esc(g.title)}</strong>`;
+  } else {
+    topbar.innerHTML = `<span class="faint">No active manifestation — tap + to begin</span>`;
+  }
+  document.getElementById('streakPill').textContent = streak ? `🔥 ${streak} day streak` : '0 day streak';
+  document.getElementById('streakPill').className = streak >= 3 ? 'pill pill-gold' : 'pill pill-dim';
+}
+
+// ════════════════════════════════════════════
+// TODAY TAB
+// ════════════════════════════════════════════
+function renderToday() {
+  const el = document.getElementById('today');
+  const g = activeGoal();
+  const today = todayISO();
+  const todayLog = state.logs.find(l => l.goalId === g?.id && l.date === today);
+  const m = g ? goalMetric(g) : null;
+  const name = state.profile.name || 'Manifestor';
+  const hr = new Date().getHours();
+  const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+
+  if (!g) {
+    el.innerHTML = `
+      <div style="text-align:center;padding:60px 20px">
+        <div style="font-size:64px;margin-bottom:20px">💧</div>
+        <h2 class="display" style="color:var(--gold3);margin-bottom:12px">Begin Your First Cycle</h2>
+        <p class="muted" style="max-width:400px;margin:0 auto 28px;line-height:1.7">
+          You do not need to master the universe today.<br/>You only need to master your next glass of water.
+        </p>
+        <button class="btn btn-primary" onclick="openGoalModal(null)">✦ Start Manifestation</button>
+        <div class="quote" style="max-width:460px;margin:32px auto 0">
+          Pick It · See It · Trust It · Take It · Clear It · Repeat.
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Determine sip state
+  if (!state.sip || state.sip.goalId !== g.id || state.sip.date !== today) {
+    state.sip = {goalId:g.id, step:0, date:today, loops:state.sip?.date===today ? state.sip.loops : 0};
+  }
+  const sipStep = state.sip.step || 0;
+  const sipLabels = [
+    {key:'Pick It', emoji:'🎯', q:'What exactly am I manifesting right now?', answer:g.pick},
+    {key:'See It', emoji:'👁', q:'What does it look like when it becomes real?', answer:g.seeScene},
+    {key:'Trust It', emoji:'🧘', q:'Can I stay calm, open, and ready for it?', answer:g.trustSentence},
+    {key:'Take It', emoji:'⚡', q:'What is the next real action?', answer:g.dailyAction},
+    {key:'Clear It', emoji:'🧹', q:'What may stop me, and what will I do then?', answer:g.ifThen},
+  ];
+  const waterLvl = clamp(Math.round((sipStep / 4) * 100), 0, 100);
+  const daysLeft = diffDays(today, g.target);
+
+  el.innerHTML = `
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card-glow">
+      <div class="faint small">${greeting}, ${esc(name)}</div>
+      <h2 class="display mt8" style="color:var(--gold3);font-size:26px">${esc(g.title)}</h2>
+      <div class="row mt12">
+        <span class="pill pill-teal">${LEVELS[g.size||'XS'].label} · ${LEVELS[g.size||'XS'].goal}</span>
+        <span class="pill pill-dim">${daysLeft >= 0 ? daysLeft+' days left' : Math.abs(daysLeft)+' days overdue'}</span>
+      </div>
+      <div class="mt16">
+        <div class="between small faint" style="margin-bottom:6px">
+          <span>Cycle Progress</span><span>${m.pct}%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bar-teal" style="width:${m.pct}%"></div></div>
+      </div>
+      <div class="g4 mt16">
+        <div class="stat"><div class="num" style="color:var(--teal2)">${m.days}</div><div class="lbl">Days</div></div>
+        <div class="stat"><div class="num" style="color:var(--gold2)">${m.actions}</div><div class="lbl">Actions</div></div>
+        <div class="stat"><div class="num" style="color:var(--rose2)">${m.loops}</div><div class="lbl">Loops</div></div>
+        <div class="stat"><div class="num" style="color:var(--green2)">${m.score}</div><div class="lbl">Score</div></div>
+      </div>
+    </div>
+
+    <div class="card-dark">
+      <div class="card-label mb-2">Today's Water Loop</div>
+      <div class="water-ritual-wrap mt12">
+        <div class="water-glass" style="--level:${waterLvl}%"></div>
+        <div class="small faint">${sipStep}/4 sips · ${state.sip.loops||0} loops today</div>
+      </div>
+      <div class="row mt16" style="justify-content:center">
+        ${sipStep >= 4
+          ? `<button class="btn btn-gold btn-sm" onclick="completeSipLoop()">✦ Complete Loop (${state.sip.loops||0})</button>`
+          : `<button class="btn btn-primary btn-sm" onclick="advanceSip()">💧 Sip ${sipStep+1}: ${sipLabels[sipStep].key}</button>`
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="card-glass" style="margin-bottom:16px">
+    <div class="loop-header">
+      <div class="card-title">4-Sip Water Loop</div>
+      <div class="faint small">Tap each sip to run the cycle. Repeat with every glass.</div>
+    </div>
+    <div class="sip-buttons">
+      ${sipLabels.map((s,i) => `
+        <button class="sip-btn ${i < sipStep ? 'done' : i === sipStep ? 'active' : ''}"
+                onclick="tapSip(${i})">
+          <div class="sip-num">${i < sipStep ? '✓' : i+1}</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:${i < sipStep ? 'var(--green2)' : i === sipStep ? 'var(--teal2)' : 'var(--ink2)'}">${s.emoji} ${s.key}</div>
+            <div class="tiny faint" style="margin-top:2px">${s.q}</div>
+            ${i === sipStep || i < sipStep ? `<div class="small" style="margin-top:6px;color:var(--ink2);font-style:italic;line-height:1.5">${esc(s.answer)}</div>` : ''}
+          </div>
+        </button>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">🌅 Morning Activation</div>
+      <div class="faint small mt8" style="line-height:1.6">Read your intention out loud. Write today's target action. Give the day emotional direction.</div>
+      <div class="quote mt12">${esc(g.pick)}</div>
+      <div class="divider"></div>
+      <div class="card-label">Today's Action</div>
+      <div class="small muted mt8" style="line-height:1.6">${esc(g.dailyAction)}</div>
+      <button class="btn btn-primary btn-sm mt12" onclick="openLogModal('${g.id}', '${today}')">
+        ${todayLog ? '✎ Edit' : '+'} Evening Reflection
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌙 Tonight's Questions</div>
+      <div class="stack mt12">
+        ${['Did I take today\'s action?','Did I sabotage myself anywhere?','Did I notice any sign or shift?','Do I return tomorrow?']
+          .map(q => `<div class="small" style="display:flex;gap:8px;align-items:flex-start;color:var(--ink2)"><span style="color:var(--teal);margin-top:1px">◆</span>${q}</div>`).join('')}
+      </div>
+      ${todayLog ? `
+        <div class="divider"></div>
+        <div class="pill pill-green small">Reflection logged ✓</div>
+        ${todayLog.signs ? `<div class="small muted mt8"><strong style="color:var(--ink2)">Sign:</strong> ${esc(todayLog.signs)}</div>` : ''}
+      ` : `
+        <div class="quote mt12" style="font-size:13px">One imperfect day does not cancel your direction. Return tomorrow.</div>
+      `}
+    </div>
+  </div>
+
+  <div class="card-gold mt16">
+    <div class="between">
+      <div>
+        <div class="card-title" style="color:var(--gold2)">If-Then Response Plan</div>
+        <div class="faint small mt4">If you do not plan for the obstacle, the obstacle becomes the master.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="g2">
+      <div>
+        <div class="card-label">Main Obstacle</div>
+        <div class="small muted mt8" style="line-height:1.5">${esc(g.obstacle||'Not defined')}</div>
+      </div>
+      <div>
+        <div class="card-label">My Response</div>
+        <div class="small muted mt8" style="line-height:1.5;color:var(--gold3)">${esc(g.ifThen)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function tapSip(i) {
+  if (!state.sip || state.sip.step !== i) return;
+  state.sip.step = Math.min(i + 1, 4);
+  localStorage.setItem(KEY, JSON.stringify(state));
+  renderToday();
+  if (state.sip.step === 4) toast('4 sips complete! 💧 Your loop is alive. Take the action.');
+}
+
+function advanceSip() {
+  const step = state.sip?.step || 0;
+  tapSip(step);
+}
+
+function completeSipLoop() {
+  state.sip.step = 0;
+  state.sip.loops = (state.sip.loops || 0) + 1;
+  localStorage.setItem(KEY, JSON.stringify(state));
+  toast(`Loop ${state.sip.loops} complete! 🌊 Water builds momentum.`);
+  renderToday();
+}
+
+// ════════════════════════════════════════════
+// GOALS TAB
+// ════════════════════════════════════════════
+function renderGoals() {
+  const el = document.getElementById('goals');
+  const active = state.goals.filter(g => g.status === 'active');
+  const parked = state.goals.filter(g => g.status === 'parked');
+  const completed = state.goals.filter(g => g.status === 'completed');
+
+  const renderGoalCard = (g) => {
+    const m = goalMetric(g);
+    const isActive = g.status === 'active';
+    const isCompleted = g.status === 'completed';
+    const statusClass = isActive ? 'active-goal' : isCompleted ? 'completed-goal' : 'parked-goal';
+    const pillClass = isActive ? 'pill-teal' : isCompleted ? 'pill-green' : 'pill-dim';
+    const pillLabel = isActive ? 'Active' : isCompleted ? 'Completed ✓' : 'Parked';
+
+    return `
+    <div class="goal-card ${statusClass}" onclick="openViewGoal('${g.id}')">
+      <div class="between" style="margin-bottom:10px">
+        <div style="font-size:13px;font-weight:600;color:var(--ink2)">${esc(g.area||'Goal')}</div>
+        <div class="row" style="gap:6px">
+          <span class="pill pill-dim small">${LEVELS[g.size||'XS'].label}</span>
+          <span class="pill ${pillClass} small">${pillLabel}</span>
+        </div>
+      </div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px;line-height:1.4">${esc(g.title)}</div>
+      <div class="small faint" style="margin-bottom:12px;line-height:1.5">${esc((g.pick||'').slice(0,100))}${g.pick?.length>100?'…':''}</div>
+      <div class="between small faint" style="margin-bottom:6px">
+        <span>${m.pct}% through cycle</span>
+        <span>${m.actions} actions · ${m.loops} loops</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill ${isCompleted?'bar-green':isActive?'bar-teal':'bar-fill'}" style="width:${m.pct}%;background:${isCompleted?'var(--green)':isActive?'linear-gradient(90deg,var(--teal),var(--teal2))':'rgba(255,255,255,.2)'}"></div></div>
+      <div class="row mt12" onclick="event.stopPropagation()">
+        ${!isActive && !isCompleted ? `<button class="btn btn-ghost btn-sm" onclick="makeGoalActive('${g.id}')">▶ Activate</button>` : ''}
+        ${isActive ? `<button class="btn btn-primary btn-sm" onclick="openLogModal('${g.id}','${todayISO()}')">+ Reflect</button>` : ''}
+        <button class="btn btn-ghost btn-sm" onclick="openGoalModal('${g.id}')">✎ Edit</button>
+        ${isActive && !isCompleted ? `<button class="btn btn-sm" style="background:rgba(61,214,140,.15);color:var(--green2);border:1px solid rgba(61,214,140,.3)" onclick="completeGoalPrompt('${g.id}')">🎉 Complete</button>` : ''}
+        <button class="btn btn-sm" style="background:rgba(224,92,138,.1);color:var(--rose2);border:1px solid rgba(224,92,138,.25)" onclick="deleteGoal('${g.id}')">✕</button>
+      </div>
+    </div>`;
+  };
+
+  el.innerHTML = `
+  <div class="between" style="margin-bottom:20px">
+    <div>
+      <div class="section-title">Manifestation Goals</div>
+      <div class="section-sub">Your current and past manifestation cycles</div>
+    </div>
+    <button class="btn btn-primary" onclick="openGoalModal(null)">+ New Cycle</button>
+  </div>
+
+  ${active.length ? `
+    <div class="card-label" style="margin-bottom:10px">Active Mission</div>
+    ${active.map(renderGoalCard).join('')}
+  ` : `
+    <div class="empty"><div class="empty-icon">🎯</div><div>No active goal. One goal at a time — start now.</div><button class="btn btn-primary mt12" onclick="openGoalModal(null)">Begin Manifestation</button></div>
+  `}
+
+  ${parked.length ? `
+    <div class="card-label mt20" style="margin-bottom:10px">Parked Goals (${parked.length})</div>
+    <div class="stack">${parked.map(renderGoalCard).join('')}</div>
+  ` : ''}
+
+  ${completed.length ? `
+    <div class="card-label mt20" style="margin-bottom:10px">Manifested ✦ (${completed.length})</div>
+    <div class="stack">${completed.map(renderGoalCard).join('')}</div>
+  ` : ''}`;
+}
+
+function makeGoalActive(id) {
+  state.goals.forEach(g => { if (g.status === 'active') g.status = 'parked'; if (g.id === id) g.status = 'active'; });
+  state.sip = {goalId:id, step:0, date:todayISO(), loops:0};
+  toast('Goal activated. One goal, one loop. 💧');
+  persist();
+}
+
+function completeGoalPrompt(id) {
+  if (!confirm('Mark this manifestation cycle as COMPLETE? 🎉')) return;
+  const g = state.goals.find(x => x.id === id);
+  if (!g) return;
+  g.status = 'completed';
+  g.completedAt = new Date().toISOString();
+  toast('🎉 Cycle complete! Acknowledge this. You manifested it.');
+  persist();
+}
+
+function deleteGoal(id) {
+  if (!confirm('Delete this goal and all its logs?')) return;
+  state.goals = state.goals.filter(g => g.id !== id);
+  state.logs = state.logs.filter(l => l.goalId !== id);
+  toast('Goal removed.');
+  persist();
+}
+
+// ════════════════════════════════════════════
+// JOURNEY TAB
+// ════════════════════════════════════════════
+function renderJourney() {
+  const el = document.getElementById('journey');
+  const filterSel = document.getElementById('journeyFilter')?.value || 'all';
+  const logs = state.logs
+    .filter(l => filterSel === 'all' || l.goalId === filterSel)
+    .sort((a,b) => b.date.localeCompare(a.date)||b.createdAt.localeCompare(a.createdAt));
+
+  const goalOptions = state.goals.map(g => `<option value="${g.id}">${esc(g.title)}</option>`).join('');
+
+  el.innerHTML = `
+  <div class="between" style="margin-bottom:20px">
+    <div>
+      <div class="section-title">The Journey Timeline</div>
+      <div class="section-sub">Your evidence bank. Every log is proof of progress.</div>
+    </div>
+    <select class="field" id="journeyFilter" style="width:auto;min-width:160px" onchange="renderJourney()">
+      <option value="all">All Goals</option>
+      ${goalOptions}
+    </select>
+  </div>
+
+  <div class="g2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-label">Result Log Rule</div>
+      <div class="faint small mt8" style="line-height:1.6">
+        Record date, action, sign or shift, lesson, and Continue/Adjust/Complete.
+        <br/>Your log becomes your evidence bank. When doubt rises, your log speaks back.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total Entries</div>
+      <div class="num-big mt8" style="color:var(--teal2)">${state.logs.length}</div>
+      <div class="faint small">days of evidence collected</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    ${logs.length ? logs.map(l => {
+      const g = state.goals.find(x => x.id === l.goalId);
+      const statusColor = l.status==='Complete'?'var(--green2)':l.status==='Adjust'?'var(--amber2)':'var(--teal2)';
+      const statusPill = l.status==='Complete'?'pill-green':l.status==='Adjust'?'pill-amber':'pill-teal';
+      return `
+      <div class="timeline-event">
+        <div class="between" style="margin-bottom:8px">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink)">${esc(g?.title||'Goal')}</div>
+            <div class="tiny faint">${l.date}</div>
+          </div>
+          <div class="row" style="gap:6px">
+            <span class="pill ${statusPill} small">${l.status||'Continue'}</span>
+            ${+l.actionDone ? `<span class="pill pill-green small">✓ Action</span>` : `<span class="pill pill-amber small">⚠ Missed</span>`}
+          </div>
+        </div>
+        ${l.signs ? `<div class="small" style="margin-bottom:6px;color:var(--ink2);line-height:1.5"><strong style="color:var(--gold2)">Sign/Shift:</strong> ${esc(l.signs)}</div>` : ''}
+        ${l.lesson ? `<div class="small" style="color:var(--ink2);line-height:1.5"><strong style="color:var(--teal2)">Lesson:</strong> ${esc(l.lesson)}</div>` : ''}
+        <div class="row mt8" style="gap:10px">
+          ${l.waterLoops ? `<span class="tag">💧 ${l.waterLoops} loops</span>` : ''}
+          ${l.clarity ? `<span class="tag">Clarity: ${l.clarity}/10</span>` : ''}
+          ${l.steadiness ? `<span class="tag">Steadiness: ${l.steadiness}/10</span>` : ''}
+          <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="deleteLog('${l.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('') : `<div class="empty"><div class="empty-icon">📖</div><div>No logs yet. Complete tonight's reflection on the Today tab.</div></div>`}
+  </div>`;
+
+  const sel = document.getElementById('journeyFilter');
+  if (sel) sel.value = filterSel;
+}
+
+function deleteLog(id) {
+  if (!confirm('Delete this log entry?')) return;
+  state.logs = state.logs.filter(l => l.id !== id);
+  toast('Log removed.');
+  persist();
+}
+
+// ════════════════════════════════════════════
+// INSIGHTS TAB
+// ════════════════════════════════════════════
+function renderInsights() {
+  const el = document.getElementById('insights');
+  const g = activeGoal();
+
+  if (!g) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">✦</div><div>Create an active goal to see your manifestation insights.</div></div>`;
+    return;
+  }
+
+  const m = goalMetric(g);
+  const logs = goalLogs(g.id);
+  const totalGoals = state.goals.length;
+  const doneGoals = state.goals.filter(x=>x.status==='completed').length;
+  const streak = calcStreak();
+
+  // Guidance
+  const guidance = [];
+  if (m.actions / Math.max(1,m.days) < 0.5) guidance.push({icon:'⚡',cls:'insight-i-rose',title:'Take It',body:'Action rate is low. Shrink the action until it becomes undeniable. Something tiny still counts.'});
+  if (+m.avgStead < 6) guidance.push({icon:'🧘',cls:'insight-i-teal',title:'Trust It',body:'Emotional steadiness is weak. Repeat the trust sentence before deciding or quitting today.'});
+  if (m.loops / Math.max(1,m.days) < 2) guidance.push({icon:'💧',cls:'insight-i-gold',title:'Water Loop',body:'Link the ritual to every glass. More loops mean more reminders to return to your intention.'});
+  if (m.days > 3 && logs.filter(l=>l.signs).length < 2) guidance.push({icon:'👁',cls:'insight-i-teal',title:'See It',body:'Recognition is low. Look for small signs: calmness, courage, clarity, an unexpected opening.'});
+  if (!guidance.length) guidance.push({icon:'✦',cls:'insight-i-gold',title:'Continue',body:'Your loop is alive. Keep the same goal until the checkpoint or completion. Momentum is building.'});
+
+  const scoreDash = (360 * m.score / 100).toFixed(1);
+  const scoreColor = m.score >= 70 ? '#3dd68c' : m.score >= 40 ? '#c9a84c' : '#e05c8a';
+
+  el.innerHTML = `
+  <div class="between" style="margin-bottom:20px">
+    <div>
+      <div class="section-title">Manifestation Insights</div>
+      <div class="section-sub">Your clarity, consistency, and inner alignment at a glance</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card-dark" style="display:flex;align-items:center;gap:24px">
+      <div class="score-ring">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="${scoreColor}" stroke-width="8"
+            stroke-dasharray="${scoreDash} 360" stroke-linecap="round"
+            style="filter:drop-shadow(0 0 8px ${scoreColor}88)"/>
+        </svg>
+        <div class="score-ring-val">
+          <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:${scoreColor}">${m.score}</div>
+          <div style="font-size:10px;color:var(--ink3)">SCORE</div>
+        </div>
+      </div>
+      <div>
+        <div class="card-title">Manifestation Health</div>
+        <div class="faint small mt4">Based on actions, water loops, clarity, and consistency</div>
+        <div class="row mt12">
+          <span class="pill ${m.score>=70?'pill-green':m.score>=40?'pill-gold':'pill-rose'} small">
+            ${m.score>=70?'Flowing ✦':m.score>=40?'Building':'Needs Focus'}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Overall Stats</div>
+      <div class="g2 mt12" style="gap:10px">
+        <div class="stat"><div class="num" style="color:var(--teal2)">${m.days}</div><div class="lbl">Days In</div></div>
+        <div class="stat"><div class="num" style="color:var(--gold2)">${m.actions}</div><div class="lbl">Actions</div></div>
+        <div class="stat"><div class="num" style="color:var(--rose2)">${m.loops}</div><div class="lbl">Loops</div></div>
+        <div class="stat"><div class="num" style="color:var(--green2)">${streak}</div><div class="lbl">Streak</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-label">Average Ratings</div>
+      <div class="stack mt12">
+        <div>
+          <div class="between small faint" style="margin-bottom:5px"><span>Clarity</span><span>${m.avgClarity}/10</span></div>
+          <div class="bar-track"><div class="bar-fill bar-teal" style="width:${+m.avgClarity*10}%"></div></div>
+        </div>
+        <div>
+          <div class="between small faint" style="margin-bottom:5px"><span>Steadiness</span><span>${m.avgStead}/10</span></div>
+          <div class="bar-track"><div class="bar-fill bar-gold" style="width:${+m.avgStead*10}%"></div></div>
+        </div>
+        <div>
+          <div class="between small faint" style="margin-bottom:5px"><span>Action Rate</span><span>${Math.round(m.actions/m.days*100)}%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:${Math.round(m.actions/m.days*100)}%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">XS → XXXL Ladder</div>
+      <div class="size-grid mt12" style="grid-template-columns:repeat(4,1fr)">
+        ${Object.entries(LEVELS).map(([k,v])=>`
+          <div class="size-tile ${g.size===k?'active':''}">
+            <b>${k}</b>
+            <small>${v.goal}</small>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Personal Guidance from the Loop</div>
+    <div class="mt12">
+      ${guidance.map(g=>`
+        <div class="insight-row">
+          <div class="insight-icon ${g.cls}">${g.icon}</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink)">${g.title}</div>
+            <div class="small faint mt4" style="line-height:1.5">${g.body}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="g3 mt16">
+    <div class="stat card"><div class="num" style="color:var(--teal2)">${totalGoals}</div><div class="lbl">Total Cycles</div></div>
+    <div class="stat card"><div class="num" style="color:var(--green2)">${doneGoals}</div><div class="lbl">Manifested</div></div>
+    <div class="stat card"><div class="num" style="color:var(--gold2)">${state.logs.length}</div><div class="lbl">Log Entries</div></div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════
+// PROOF TAB
+// ════════════════════════════════════════════
+function renderProof() {
+  const el = document.getElementById('proof');
+  const completed = state.goals.filter(g => g.status === 'completed');
+  const name = state.profile.name || 'I';
+
+  el.innerHTML = `
+  <div class="section-title">Your Manifestation Proof</div>
+  <div class="section-sub">Every completed cycle is evidence. Acknowledge it. Celebrate it.</div>
+
+  <div class="g2 mt16">
+    <div class="card-glow">
+      <div class="card-title">Manifested Outcomes</div>
+      <div class="num-big mt8" style="color:var(--gold2)">${completed.length}</div>
+      <div class="faint small">cycles brought into reality</div>
+      <div class="divider"></div>
+      <div class="quote" style="font-size:14px">
+        Before life changes loudly, it usually changes quietly. Respect every small proof.
+      </div>
+    </div>
+
+    <div class="card-dark">
+      <div class="card-title">Thank You Note Generator</div>
+      <div class="faint small mt4">Complete a cycle to generate your gratitude proof note to share.</div>
+      ${completed.length ? `
+        <select class="field mt12" id="shareGoalSelect" onchange="updateShareNote()">
+          ${completed.map(g=>`<option value="${g.id}">${esc(g.title)}</option>`).join('')}
+        </select>
+        <div id="shareNoteBox" class="mt12" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;font-size:12px;line-height:1.7;color:var(--ink2);max-height:160px;overflow-y:auto;white-space:pre-wrap;font-family:var(--font-mono)"></div>
+        <div class="row mt12">
+          <button class="btn btn-gold btn-sm" onclick="copyShareNote()">Copy Note</button>
+          <button class="btn btn-ghost btn-sm" onclick="window.print()">Print</button>
+        </div>
+      ` : `<div class="faint small mt12">Complete your first cycle to unlock this.</div>`}
+    </div>
+  </div>
+
+  <div class="stack mt16">
+    ${completed.length ? completed.map(g => {
+      const m = goalMetric(g);
+      return `
+      <div class="card-completed">
+        <div class="between" style="margin-bottom:10px">
+          <div>
+            <div class="small faint">${g.area||''} · ${LEVELS[g.size||'XS'].label}</div>
+            <div style="font-size:16px;font-weight:600;margin-top:4px">${esc(g.title)}</div>
+          </div>
+          <span class="pill pill-green">Manifested ✦</span>
+        </div>
+        <div class="small muted" style="line-height:1.5;margin-bottom:12px;font-style:italic">${esc(g.pick)}</div>
+        <div class="row" style="gap:8px">
+          <span class="tag">📅 ${m.days} days</span>
+          <span class="tag">⚡ ${m.actions} actions</span>
+          <span class="tag">💧 ${m.loops} loops</span>
+          <span class="tag">Score: ${m.score}</span>
+        </div>
+        ${g.completedAt ? `<div class="tiny faint mt8">Completed ${new Date(g.completedAt).toLocaleDateString()}</div>` : ''}
+      </div>`;
+    }).join('') : `<div class="empty"><div class="empty-icon">🙏</div><div>No completed cycles yet. Keep the loop running until one cycle closes with proof.</div></div>`}
+  </div>`;
+
+  // Set initial share note
+  setTimeout(updateShareNote, 100);
+}
+
+function updateShareNote() {
+  const sel = document.getElementById('shareGoalSelect');
+  if (!sel) return;
+  const g = state.goals.find(x => x.id === sel.value);
+  if (!g) return;
+  const m = goalMetric(g);
+  const name = state.profile.name || 'I';
+  const note = `${name} completed a Water Loop manifestation cycle.\n\n🎯 I picked: ${g.pick}\n👁 I saw: ${g.seeScene}\n🧘 I trusted through: ${g.trustSentence}\n⚡ I took: ${m.actions} visible actions over ${m.days} days\n💧 Water loops completed: ${m.loops}\n🧹 I cleared: ${g.ifThen}\n🏆 Level: ${g.size}\n\n🙏 Thank you, Universe. This cycle is complete.\nOne glass at a time. One goal at a time. One completed cycle at a time.`;
+  const box = document.getElementById('shareNoteBox');
+  if (box) box.textContent = note;
+}
+
+function copyShareNote() {
+  const box = document.getElementById('shareNoteBox');
+  if (!box) return;
+  navigator.clipboard.writeText(box.textContent).then(() => toast('Share note copied! 🙏'));
+}
+
+// ════════════════════════════════════════════
+// GOAL MODAL
+// ════════════════════════════════════════════
+function buildSizePicker(active='XS', formEl) {
+  const el = document.getElementById('goalSizePicker');
+  if (!el) return;
+  el.innerHTML = Object.entries(LEVELS).map(([k,v]) => `
+    <div class="size-tile ${active===k?'active':''}" onclick="pickSize('${k}')">
+      <b>${k}</b>
+      <small>${v.caption}</small>
+    </div>`).join('');
+  if (formEl) formEl.size.value = active;
+}
+
+function pickSize(k) {
+  const f = document.getElementById('goalForm');
+  if (!f) return;
+  f.size.value = k;
+  const start = f.start.value || todayISO();
+  f.target.value = addDays(start, LEVELS[k].days);
+  buildSizePicker(k, f);
+}
+
+function openGoalModal(id) {
+  const f = document.getElementById('goalForm');
+  f.reset();
+  const today = todayISO();
+  f.start.value = today;
+  f.id.value = '';
+
+  if (id) {
+    const g = state.goals.find(x => x.id === id);
+    if (!g) return;
+    f.id.value = g.id;
+    f.title.value = g.title || '';
+    f.area.value = g.area || 'Other';
+    f.start.value = g.start || today;
+    f.target.value = g.target || '';
+    f.pick.value = g.pick || '';
+    f.why.value = g.why || '';
+    f.successMeasure.value = g.successMeasure || '';
+    f.seeScene.value = g.seeScene || '';
+    f.oldThought.value = g.oldThought || '';
+    f.trustSentence.value = g.trustSentence || '';
+    f.obstacle.value = g.obstacle || '';
+    f.ifThen.value = g.ifThen || '';
+    f.dailyAction.value = g.dailyAction || '';
+    buildSizePicker(g.size || 'XS', f);
+    document.getElementById('goalModalTitle').textContent = 'Edit Manifestation';
+  } else {
+    f.target.value = addDays(today, LEVELS['XS'].days);
+    buildSizePicker('XS', f);
+    document.getElementById('goalModalTitle').textContent = 'New Manifestation Cycle';
+  }
+  document.getElementById('goalDialog').showModal();
+}
+
+function saveGoal(e) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const size = fd.get('size') || 'XS';
+  const start = fd.get('start') || todayISO();
+  const editId = fd.get('id');
+
+  if (editId) {
+    // Edit existing
+    const g = state.goals.find(x => x.id === editId);
+    if (g) {
+      g.title = fd.get('title'); g.area = fd.get('area'); g.size = size;
+      g.start = start; g.target = fd.get('target') || addDays(start, LEVELS[size].days);
+      g.pick = fd.get('pick'); g.why = fd.get('why'); g.successMeasure = fd.get('successMeasure');
+      g.seeScene = fd.get('seeScene'); g.oldThought = fd.get('oldThought');
+      g.trustSentence = fd.get('trustSentence'); g.obstacle = fd.get('obstacle');
+      g.ifThen = fd.get('ifThen'); g.dailyAction = fd.get('dailyAction');
+      toast('Goal updated. ✦');
+    }
+  } else {
+    state.goals.forEach(g => { if (g.status === 'active') g.status = 'parked'; });
+    const g = {
+      id: uid(), createdAt: new Date().toISOString(), status: 'active',
+      title: fd.get('title'), area: fd.get('area'), size,
+      start, target: fd.get('target') || addDays(start, LEVELS[size].days),
+      pick: fd.get('pick'), why: fd.get('why'), successMeasure: fd.get('successMeasure'),
+      seeScene: fd.get('seeScene'), oldThought: fd.get('oldThought'),
+      trustSentence: fd.get('trustSentence'), obstacle: fd.get('obstacle'),
+      ifThen: fd.get('ifThen'), dailyAction: fd.get('dailyAction')
+    };
+    state.goals.unshift(g);
+    state.sip = {goalId: g.id, step: 0, date: todayISO(), loops: 0};
+    toast('Manifestation cycle started. Pick. See. Trust. Take. 💧');
+  }
+  document.getElementById('goalDialog').close();
+  persist();
+}
+
+// ════════════════════════════════════════════
+// LOG MODAL
+// ════════════════════════════════════════════
+function openLogModal(goalId, date) {
+  const f = document.getElementById('logForm');
+  const existing = state.logs.find(l => l.goalId === goalId && l.date === date);
+  f.reset();
+  f.goalId.value = goalId;
+  f.date.value = date;
+  if (existing) {
+    f.actionDone.value = existing.actionDone;
+    f.waterLoops.value = existing.waterLoops || 0;
+    f.signs.value = existing.signs || '';
+    f.lesson.value = existing.lesson || '';
+    f.clarity.value = existing.clarity || 7;
+    f.steadiness.value = existing.steadiness || 7;
+    f.status.value = existing.status || 'Continue';
+  }
+  document.getElementById('logDialog').showModal();
+}
+
+function saveLog(e) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const goalId = fd.get('goalId');
+  const date = fd.get('date');
+  const existing = state.logs.find(l => l.goalId === goalId && l.date === date);
+  const log = {
+    id: existing?.id || uid(),
+    createdAt: existing?.createdAt || new Date().toISOString(),
+    goalId, date,
+    actionDone: fd.get('actionDone') || '0',
+    waterLoops: fd.get('waterLoops') || '0',
+    signs: fd.get('signs'),
+    lesson: fd.get('lesson'),
+    clarity: fd.get('clarity') || '7',
+    steadiness: fd.get('steadiness') || '7',
+    status: fd.get('status') || 'Continue'
+  };
+  if (existing) { Object.assign(existing, log); }
+  else { state.logs.unshift(log); }
+  if (log.status === 'Complete') completeGoalPrompt(goalId);
+  document.getElementById('logDialog').close();
+  toast('Reflection saved. The evidence bank grows. 📖');
+  persist();
+}
+
+// ════════════════════════════════════════════
+// VIEW GOAL MODAL
+// ════════════════════════════════════════════
+function openViewGoal(id) {
+  const g = state.goals.find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('viewGoalTitle').textContent = g.title;
+  document.getElementById('viewGoalBody').innerHTML = `
+    <div class="stack">
+      <div class="row">
+        <span class="pill pill-teal">${LEVELS[g.size||'XS'].label} · ${LEVELS[g.size||'XS'].goal}</span>
+        <span class="pill ${g.status==='active'?'pill-teal':g.status==='completed'?'pill-green':'pill-dim'}">${g.status}</span>
+        <span class="tag">${g.area}</span>
+      </div>
+      <div class="g2">
+        <div><div class="card-label">Start</div><div class="small muted mt4">${g.start}</div></div>
+        <div><div class="card-label">Target</div><div class="small muted mt4">${g.target}</div></div>
+      </div>
+      ${[
+        ['🎯 Pick It', g.pick],
+        ['Why It Matters', g.why],
+        ['Success Measure', g.successMeasure],
+        ['👁 See It', g.seeScene],
+        ['Old Thought', g.oldThought],
+        ['🧘 Trust It', g.trustSentence],
+        ['Main Obstacle', g.obstacle],
+        ['🧹 Clear It (If-Then)', g.ifThen],
+        ['⚡ Take It', g.dailyAction]
+      ].filter(([,v])=>v).map(([k,v])=>`
+        <div>
+          <div class="card-label">${k}</div>
+          <div class="small muted mt6" style="line-height:1.6">${esc(v)}</div>
+        </div>
+        <div class="divider"></div>
+      `).join('')}
+      <div class="row">
+        <button class="btn btn-primary btn-sm" onclick="openGoalModal('${g.id}');viewGoalDialog.close()">✎ Edit</button>
+        ${g.status!=='active'&&g.status!=='completed' ? `<button class="btn btn-gold btn-sm" onclick="makeGoalActive('${g.id}');viewGoalDialog.close()">▶ Activate</button>` : ''}
+        <button class="btn btn-ghost btn-sm" onclick="viewGoalDialog.close()">Close</button>
+      </div>
+    </div>`;
+  document.getElementById('viewGoalDialog').showModal();
+}
+
+// ════════════════════════════════════════════
+// SETTINGS
+// ════════════════════════════════════════════
+function openSettingsModal() {
+  document.getElementById('settingName').value = state.profile.name || '';
+  document.getElementById('settingWater').value = state.settings.waterTarget || 8;
+  document.getElementById('settingInterval').value = state.settings.interval || 120;
+  document.getElementById('settingReminders').checked = !!state.settings.reminders;
+  document.getElementById('settingsDialog').showModal();
+}
+
+function saveSettings(e) {
+  e.preventDefault();
+  state.profile.name = document.getElementById('settingName').value;
+  state.settings.waterTarget = +document.getElementById('settingWater').value || 8;
+  state.settings.interval = +document.getElementById('settingInterval').value || 120;
+  state.settings.reminders = document.getElementById('settingReminders').checked;
+  document.getElementById('settingsDialog').close();
+  toast('Settings saved. ✦');
+  setupReminder();
+  persist();
+}
+
+// ════════════════════════════════════════════
+// REMINDERS
+// ════════════════════════════════════════════
+function setupReminder() {
+  if (reminderTimer) clearInterval(reminderTimer);
+  if (!state.settings.reminders) return;
+  reminderTimer = setInterval(() => {
+    const g = activeGoal();
+    if (!g) return;
+    const msg = '💧 Drink water. Pick it. See it. Trust it. Take it.';
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('Water Loop Reminder', {body: msg, icon: '💧'});
+    } else {
+      toast(msg, 5000);
+    }
+  }, (state.settings.interval || 120) * 60 * 1000);
+}
+
+// ════════════════════════════════════════════
+// DATA MANAGEMENT
+// ════════════════════════════════════════════
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `waterloop_backup_${todayISO()}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Backup exported. ✦');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      state = {...defaultState(), ...data};
+      persist();
+      toast('Backup imported successfully. ✦');
+    } catch(err) { alert('Invalid backup file. Please use a valid JSON export.'); }
+  };
+  r.readAsText(file);
+}
+
+function clearAllData() {
+  if (!confirm('This will permanently delete all goals, logs, and settings. Cannot be undone.\n\nContinue?')) return;
+  localStorage.removeItem(KEY);
+  state = defaultState();
+  persist();
+  toast('All data cleared. Starting fresh.');
+}
+
+// ════════════════════════════════════════════
+// DATE CHANGE LISTENER
+// ════════════════════════════════════════════
+document.addEventListener('change', e => {
+  if (e.target?.name === 'start') {
+    const f = document.getElementById('goalForm');
+    if (f && f.start?.value) {
+      f.target.value = addDays(f.start.value, LEVELS[f.size?.value || 'XS'].days);
+    }
+  }
+});
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+function renderAll() {
+  renderTop();
+  const activeTab = document.querySelector('.tabscreen.active')?.id || 'today';
+  renderToday();
+  renderGoals();
+  renderJourney();
+  renderInsights();
+  renderProof();
+}
+
+setupReminder();
+renderAll();
+</script>
+</body>
+</html>
