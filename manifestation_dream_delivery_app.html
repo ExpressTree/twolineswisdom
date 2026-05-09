@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AbundanceCart — Universe Delivery of Dreams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --font:'Plus Jakarta Sans','Aptos','Segoe UI Variable',system-ui,sans-serif;
+      --mono:'DM Mono','Consolas',monospace;
+      --deep:#003135;--teal:#024950;--emerald:#178b5b;--lime:#a4d637;--ice-lime:#cfe98f;--cyan:#0fa4af;--ice:#afdde5;--rust:#964734;
+      --bg:#003135;--panel:#023f45;--panel2:#024950;--surface:#002a2e;--surface2:#075b63;
+      --ink:#f2fdff;--muted:#b9e3e8;--subtle:#7fb8c0;--line:rgba(175,221,229,.14);--line-hi:rgba(175,221,229,.26);
+      --brand:#0fa4af;--brand2:#a4d637;--brand3:#178b5b;--danger:#b35a42;--gold:#cfe98f;
+      --shadow:0 24px 70px rgba(0,18,20,.58);--shadow2:0 10px 28px rgba(0,18,20,.44);
+      --radius:20px;--radius-xl:28px;--pill:999px;--transition:.18s cubic-bezier(.4,0,.2,1);
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:var(--font);background:radial-gradient(circle at 14% 9%,rgba(175,221,229,.18),transparent 30%),radial-gradient(circle at 82% 18%,rgba(164,214,55,.20),transparent 32%),radial-gradient(circle at 50% 72%,rgba(15,164,175,.17),transparent 34%),linear-gradient(135deg,#001f23 0%,var(--bg) 42%,#003c32 100%);color:var(--ink);min-height:100vh;line-height:1.6;overflow-x:hidden}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(175,221,229,.22);border-radius:99px}
+    .app{display:grid;grid-template-columns:292px 1fr;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:22px 18px;background:linear-gradient(180deg,rgba(0,49,53,.98) 0%,rgba(2,73,80,.96) 58%,rgba(0,42,46,.98) 100%);backdrop-filter:blur(18px);border-right:1px solid var(--line);overflow:auto;box-shadow:12px 0 36px rgba(0,18,20,.30)}.main{padding:28px;overflow:hidden}.mobile-top{display:none;background:rgba(0,49,53,.88);color:var(--ink);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:22px}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--ice-lime) 68%,var(--emerald));display:grid;place-items:center;color:var(--deep);box-shadow:0 0 24px rgba(15,164,175,.26);font-size:24px;font-weight:950}.brand h1{margin:0;font-size:20px;letter-spacing:-.04em;line-height:1;color:var(--ink);font-weight:900}.brand small{color:var(--brand2);font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.16em}.nav{display:grid;gap:8px;margin:22px 0}.nav button{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:transparent;color:var(--muted);font-weight:800;text-align:left;border:1px solid transparent;transition:all var(--transition)}.nav button.active{background:rgba(15,164,175,.18);color:var(--cyan);border-color:var(--line-hi);box-shadow:inset 3px 0 0 var(--cyan),0 10px 22px rgba(15,164,175,.10)}.nav button:hover:not(.active){background:rgba(175,221,229,.08);color:var(--ink);border-color:var(--line)}.side-card{border:1px solid var(--line);background:rgba(2,63,69,.82);border-radius:20px;padding:16px;margin-top:16px;box-shadow:var(--shadow2)}.side-card h3{margin:0 0 8px;font-size:14px;color:var(--ink);font-weight:850}.side-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .hero{position:relative;overflow:hidden;border-radius:var(--radius-xl);padding:30px;background:linear-gradient(135deg,rgba(15,164,175,.23) 0%,rgba(2,73,80,.82) 48%,rgba(0,49,53,.96) 100%),radial-gradient(circle at 72% 18%,rgba(207,233,143,.24),transparent 34%),var(--panel);color:var(--ink);box-shadow:var(--shadow);margin-bottom:20px;border:1px solid var(--line-hi)}.hero:after{content:"";position:absolute;right:-110px;top:-120px;width:320px;height:320px;border-radius:50%;background:rgba(175,221,229,.14)}.hero:before{content:"";position:absolute;right:90px;bottom:-70px;width:190px;height:190px;border-radius:50%;background:rgba(164,214,55,.12)}.hero-content{position:relative;z-index:2;display:grid;grid-template-columns:1.3fr .7fr;gap:20px;align-items:end}.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:950;color:var(--brand2)}.hero h2{margin:8px 0 10px;font-size:42px;line-height:1.05;letter-spacing:-.06em;color:var(--ink);font-weight:900}.hero p{margin:0;max-width:760px;color:var(--muted);font-size:15px;line-height:1.7}.hero-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+    .btn{border-radius:var(--pill);padding:10px 16px;font-weight:850;background:var(--panel2);color:var(--ink);box-shadow:var(--shadow2);display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);transition:all var(--transition)}.btn:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}.btn.primary{background:linear-gradient(135deg,var(--cyan),var(--ice-lime));color:var(--deep);border-color:transparent}.btn.gold{background:linear-gradient(135deg,var(--lime),var(--ice-lime));color:var(--deep);border-color:transparent}.btn.ghost{background:rgba(175,221,229,.08);color:var(--ink);border:1px solid var(--line-hi)}.btn.soft{background:rgba(175,221,229,.10);color:var(--muted);box-shadow:none;border:1px solid var(--line)}.btn.green{background:var(--emerald);color:#fff;border-color:transparent}.btn.red{background:var(--danger);color:#fff;border-color:transparent}.btn.small{padding:7px 12px;border-radius:var(--pill);font-size:12px}.btn.primary:hover,.btn.gold:hover,.btn.green:hover,.btn.red:hover{filter:brightness(1.08);color:inherit}
+    .grid{display:grid;gap:16px}.grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:rgba(2,63,69,.86);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow2);padding:18px;color:var(--ink)}.card.white{background:rgba(0,42,46,.92)}.stat{padding:18px}.stat .num{font-size:30px;font-weight:900;letter-spacing:-.06em;color:var(--ink)}.stat .label{color:var(--brand2);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.12em}.stat .hint{margin-top:7px;color:var(--muted);font-size:13px}.section{display:none}.section.active{display:block}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 12px}.section-title h2{margin:0;font-size:24px;letter-spacing:-.04em;color:var(--ink);font-weight:900}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .form{display:grid;gap:12px}.field{display:grid;gap:7px}.field label{font-size:11px;font-weight:900;color:var(--brand2);text-transform:uppercase;letter-spacing:.1em}.field input,.field textarea,.field select{border:1px solid var(--line-hi);background:var(--surface);border-radius:14px;padding:12px 14px;outline:none;color:var(--ink);width:100%;font-weight:600}.field textarea{min-height:96px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(15,164,175,.22)}.field input::placeholder,.field textarea::placeholder{color:rgba(185,227,232,.52)}.field select option{background:var(--surface);color:var(--ink)}.size-row{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.size-pill{border:1px solid var(--line);background:var(--panel2);border-radius:16px;padding:12px 8px;text-align:center;font-weight:950;color:var(--muted);transition:all var(--transition)}.size-pill:hover{border-color:var(--cyan);color:var(--cyan)}.size-pill.active{background:linear-gradient(135deg,var(--cyan),var(--ice-lime));color:var(--deep);border-color:transparent;box-shadow:0 12px 26px rgba(15,164,175,.18)}.size-pill small{display:block;color:inherit;opacity:.70;font-weight:800;font-size:10px;margin-top:3px}
+    .dream-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.dream-card{position:relative;overflow:hidden;background:rgba(2,63,69,.92);border:1px solid var(--line);border-radius:var(--radius-xl);padding:16px;box-shadow:var(--shadow2);display:grid;gap:12px;color:var(--ink);transition:all var(--transition)}.dream-card:hover{transform:translateY(-2px);border-color:var(--line-hi)}.dream-card.delivered{background:linear-gradient(135deg,rgba(23,139,91,.28),rgba(2,63,69,.94))}.dream-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.dream-title{font-size:18px;font-weight:900;letter-spacing:-.04em;margin:0;color:var(--ink)}.dream-meta{font-size:13px;color:var(--muted);line-height:1.45}.dream-img{width:100%;height:130px;object-fit:cover;border-radius:18px;background:var(--surface2);border:1px solid var(--line)}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;background:rgba(175,221,229,.10);color:var(--muted);border:1px solid var(--line)}.badge.purple{background:rgba(15,164,175,.16);color:var(--cyan);border-color:rgba(15,164,175,.25)}.badge.green{background:rgba(23,139,91,.20);color:#64d6c6;border-color:rgba(100,214,198,.20)}.badge.gold{background:rgba(164,214,55,.18);color:var(--ice-lime);border-color:rgba(164,214,55,.26)}.badge.red{background:rgba(179,90,66,.20);color:#ffb19f;border-color:rgba(179,90,66,.26)}
+    .progress{height:10px;background:var(--surface2);border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--lime),var(--ice-lime));border-radius:999px;transition:width .5s ease}.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.step{text-align:center;font-size:10px;color:var(--muted);font-weight:850}.step .dot{width:16px;height:16px;border-radius:50%;background:var(--surface2);margin:0 auto 5px;border:1px solid var(--line)}.step.active .dot{background:var(--lime);box-shadow:0 0 0 4px rgba(164,214,55,.16),0 0 14px rgba(164,214,55,.24)}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line-hi);border-radius:22px;background:rgba(2,73,80,.45)}.quote{font-size:18px;line-height:1.55;font-weight:800;letter-spacing:-.02em;color:var(--ink)}.quote small{display:block;margin-top:10px;color:var(--brand2);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.12em}.mini{font-size:12px;color:var(--muted);line-height:1.45}.pill-line{display:flex;flex-wrap:wrap;gap:8px}.hidden-file{display:none}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar input,.toolbar select{border:1px solid var(--line-hi);background:var(--surface);border-radius:14px;padding:10px 12px;color:var(--ink);font-weight:650}.toolbar select option{background:var(--surface);color:var(--ink)}
+    .modal{position:fixed;inset:0;background:rgba(0,18,20,.68);display:none;align-items:center;justify-content:center;padding:18px;z-index:99;backdrop-filter:blur(8px)}.modal.show{display:flex}.modal-card{width:min(760px,100%);max-height:90vh;overflow:auto;background:linear-gradient(180deg,var(--panel),var(--surface));border:1px solid var(--line-hi);border-radius:var(--radius-xl);padding:22px;box-shadow:var(--shadow);color:var(--ink)}.log-list{display:grid;gap:10px;max-height:330px;overflow:auto}.log{border:1px solid var(--line);background:rgba(0,42,46,.88);border-radius:16px;padding:12px;color:var(--ink)}.log strong{font-size:13px}.log p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.45}.timeline{display:grid;gap:12px}.timeline-item{display:grid;grid-template-columns:116px 1fr;gap:12px;align-items:start}.timeline-date{font-weight:900;color:var(--lime);font-size:12px}.timeline-content{border-left:3px solid var(--cyan);padding-left:12px}.store-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}.store-item{background:rgba(2,63,69,.90);border:1px solid var(--line);border-radius:20px;padding:14px;text-align:center;box-shadow:var(--shadow2);color:var(--ink)}.store-item h3{margin:8px 0 4px;font-size:18px}.store-item p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}.store-icon{font-size:26px}.water{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}.drop{height:42px;border-radius:14px;border:1px solid rgba(175,221,229,.22);background:rgba(175,221,229,.10);color:var(--muted);font-weight:900}.drop.done{background:linear-gradient(135deg,var(--cyan),var(--ice-lime));color:var(--deep);border-color:transparent}.toast{position:fixed;bottom:20px;right:20px;background:var(--surface);color:var(--ink);border:1px solid var(--line-hi);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;z-index:100}.toast.show{opacity:1;transform:translateY(0)}.danger-zone{border-color:rgba(179,90,66,.36);background:rgba(179,90,66,.12)}.ai-box{background:linear-gradient(135deg,rgba(15,164,175,.16),rgba(164,214,55,.10));border:1px solid var(--line-hi);border-radius:var(--radius);padding:16px}
+    @media(max-width:1180px){.dream-list{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.cols-4{grid-template-columns:repeat(2,1fr)}.store-grid{grid-template-columns:repeat(4,1fr)}}@media(max-width:860px){.app{grid-template-columns:1fr}.sidebar{position:fixed;left:-310px;z-index:80;width:292px;transition:.25s}.sidebar.open{left:0}.main{padding:16px}.mobile-top{display:flex;position:sticky;top:0;z-index:60;background:rgba(0,49,53,.88);backdrop-filter:blur(12px);padding:10px 0;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.hero{border-radius:24px;padding:22px}.hero-content{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.hero h2{font-size:34px}.grid.cols-3,.grid.cols-2,.dream-list{grid-template-columns:1fr}.size-row{grid-template-columns:repeat(4,1fr)}.store-grid{grid-template-columns:repeat(2,1fr)}.timeline-item{grid-template-columns:1fr}.water{grid-template-columns:repeat(4,1fr)}}@media(max-width:520px){.grid.cols-4{grid-template-columns:1fr}.size-row{grid-template-columns:repeat(2,1fr)}.store-grid{grid-template-columns:1fr}.hero h2{font-size:28px}.toolbar{display:grid}.toolbar input,.toolbar select,.toolbar button{width:100%}}
+  
+    /* Softer typography: refined, less bulky */
+    .brand h1,.hero h2,.section-title h2,.dream-title{font-weight:780}.btn,.nav button,.stat .label,.field label,.badge,.size-pill{font-weight:720}.stat .num{font-weight:760}.quote{font-weight:650}.dream-meta,.mini,.side-card p,.section-title p{font-weight:450}.store-item h3{font-weight:720}strong{font-weight:700}
+    .reveal-modal{position:fixed;inset:0;background:rgba(0,18,20,.76);display:none;align-items:center;justify-content:center;padding:18px;z-index:120;backdrop-filter:blur(10px)}.reveal-modal.show{display:flex}.reveal-card{width:min(620px,100%);background:radial-gradient(circle at 50% 0%,rgba(207,233,143,.22),transparent 35%),linear-gradient(180deg,var(--panel),var(--surface));border:1px solid var(--line-hi);border-radius:32px;padding:28px;box-shadow:var(--shadow);text-align:center;color:var(--ink);position:relative;overflow:hidden}.reveal-card:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(175,221,229,.10) 1px,transparent 2px);background-size:26px 26px;animation:stars 18s linear infinite;opacity:.65}.reveal-card>*{position:relative;z-index:1}@keyframes stars{from{transform:translateY(0)}to{transform:translateY(60px)}}.reveal-icon{width:72px;height:72px;margin:0 auto 14px;border-radius:22px;background:linear-gradient(135deg,var(--cyan),var(--ice-lime));display:grid;place-items:center;color:var(--deep);font-size:34px;box-shadow:0 0 36px rgba(15,164,175,.28)}.reveal-title{font-size:28px;line-height:1.08;letter-spacing:-.04em;margin:0 0 8px;font-weight:760}.reveal-sub{color:var(--muted);font-size:14px;margin:0 auto 18px;max-width:470px}.reveal-date{border:1px solid var(--line-hi);background:rgba(175,221,229,.08);border-radius:22px;padding:16px;margin:16px 0}.reveal-date small{display:block;color:var(--brand2);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px}.reveal-date strong{display:block;font-size:24px;color:var(--ink);letter-spacing:-.03em}.reveal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+  
+    .dream-img-btn{position:relative;width:100%;padding:0;border:0;background:transparent;border-radius:18px;overflow:hidden;text-align:left;display:block}.dream-img-btn:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,18,20,.60));opacity:.0;transition:opacity var(--transition)}.dream-img-btn span{position:absolute;left:12px;bottom:10px;z-index:2;background:rgba(0,49,53,.72);border:1px solid var(--line-hi);color:var(--ice-lime);border-radius:999px;padding:5px 10px;font-size:10px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;opacity:0;transform:translateY(4px);transition:all var(--transition)}.dream-img-btn:hover:after,.dream-img-btn:hover span{opacity:1}.dream-img-btn:hover span{transform:translateY(0)}
+    .image-modal{position:fixed;inset:0;background:rgba(0,18,20,.78);display:none;align-items:center;justify-content:center;padding:18px;z-index:130;backdrop-filter:blur(10px)}.image-modal.show{display:flex}.image-card{width:min(920px,100%);max-height:92vh;overflow:auto;background:linear-gradient(180deg,var(--panel),var(--surface));border:1px solid var(--line-hi);border-radius:30px;padding:18px;box-shadow:var(--shadow);color:var(--ink)}.image-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.image-head h2{margin:0;font-size:20px;letter-spacing:-.03em;font-weight:760}.image-preview{width:100%;max-height:64vh;object-fit:contain;border-radius:22px;background:var(--surface);border:1px solid var(--line)}.image-quote{margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(90deg,rgba(15,164,175,.15),rgba(164,214,55,.10));font-size:17px;line-height:1.55;font-weight:620;color:var(--ink);text-align:center}.image-quote small{display:block;margin-top:8px;color:var(--brand2);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.13em}
+  </style>
+</head>
+<body>
+  <div class="mobile-top">
+    <button class="btn soft" onclick="toggleMenu()">☰ Menu</button>
+    <strong>AbundanceCart</strong>
+    <button class="btn small gold" onclick="showSection('order')">+ Dream</button>
+  </div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="logo">∞</div>
+        <div>
+          <small>Universe Store</small>
+          <h1>AbundanceCart</h1>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="active" onclick="showSection('dashboard')">🏠 Dream Dashboard</button>
+        <button onclick="showSection('order')">🛒 Place Dream Order</button>
+        <button onclick="showSection('store')">✨ Dream Size Store</button>
+        <button onclick="showSection('journal')">📦 Delivery Journey</button>
+        <button onclick="showSection('ritual')">💧 Water Trust Ritual</button>
+        <button onclick="showSection('settings')">⚙️ Data & Settings</button>
+      </div>
+      <div class="side-card">
+        <h3>Law of Detachment</h3>
+        <p>Place the order. Receive the confirmation. Take aligned action. Stop standing at the mailbox.</p>
+      </div>
+      <div class="side-card">
+        <h3>Today’s Mantra</h3>
+        <p id="sideMantra">I trust the timing. I prepare myself to receive.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-content">
+          <div>
+            <div class="eyebrow">Unlimited stock of dreams</div>
+            <h2>Order your dream. Let the Universe pick the delivery date.</h2>
+            <p>AbundanceCart turns manifestation into a simple dream-commerce journey: place your dream order, receive a random universe delivery date, track daily aligned action, practice detachment, and prepare yourself to receive.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn primary" onclick="showSection('order')">🛒 Place Order</button>
+            <button class="btn ghost" onclick="showSection('dashboard')">📍 Track Dreams</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="section active">
+        <div class="grid cols-4" id="stats"></div>
+        <div class="section-title">
+          <div>
+            <h2>Your Dream Orders</h2>
+            <p>Track countdown, effort, detachment, daily logs, and delivery readiness.</p>
+          </div>
+          <div class="toolbar">
+            <input id="searchDream" placeholder="Search dreams..." oninput="renderDreams()" />
+            <select id="filterStatus" onchange="renderDreams()">
+              <option value="all">All status</option>
+              <option value="active">Active</option>
+              <option value="delivered">Delivered</option>
+              <option value="due">Due / Review</option>
+            </select>
+          </div>
+        </div>
+        <div id="dreamList" class="dream-list"></div>
+      </section>
+
+      <section id="order" class="section">
+        <div class="section-title">
+          <div>
+            <h2>Place a Dream Order</h2>
+            <p>Only the dream, size, identity, and first action are selected by the user. Delivery timing belongs to the Universe Engine.</p>
+          </div>
+        </div>
+        <div class="grid cols-2">
+          <div class="card white">
+            <form class="form" id="dreamForm">
+              <div class="field">
+                <label>Dream Title</label>
+                <input id="dreamTitle" required placeholder="Example: Buy my first car, heal relationship, launch a course..." />
+              </div>
+              <div class="field">
+                <label>Dream Category</label>
+                <select id="dreamCategory">
+                  <option>Health</option><option>Wealth</option><option>Career</option><option>Relationship</option><option>Business</option><option>Spiritual Growth</option><option>Travel</option><option>Learning</option><option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Dream Size</label>
+                <div class="size-row" id="sizeSelector"></div>
+              </div>
+              <div class="field">
+                <label>Why do you want this dream?</label>
+                <textarea id="dreamWhy" placeholder="Write the emotional reason behind this dream..."></textarea>
+              </div>
+              <div class="field">
+                <label>Identity to become</label>
+                <input id="dreamIdentity" placeholder="Example: I am a disciplined creator who receives with gratitude." />
+              </div>
+              <div class="field">
+                <label>First aligned action</label>
+                <input id="firstAction" placeholder="Example: I will spend 20 minutes today planning the first step." />
+              </div>
+              <div class="field">
+                <label>Dream Image / Vision Board</label>
+                <input id="dreamImage" type="file" accept="image/*" />
+                <p class="mini">Images are stored only in this browser. Use small images for better performance.</p>
+              </div>
+              <button class="btn gold" type="submit">🛒 Place Dream Order</button>
+            </form>
+          </div>
+          <div class="card ai-box">
+            <h2 style="margin-top:0">🧠 Universe AI-style Assistant</h2>
+            <p class="mini">This assistant works locally. It estimates dream size, effort rhythm, and daily action suggestions using simple rules.</p>
+            <div class="field">
+              <label>Paste your dream for quick guidance</label>
+              <textarea id="aiInput" placeholder="Describe the dream here..."></textarea>
+            </div>
+            <button class="btn" onclick="runAssistant()">Suggest Size & Actions</button>
+            <div id="aiResult" style="margin-top:14px"></div>
+            <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+            <div id="quoteBox" class="quote"></div>
+            <div class="toolbar" style="margin-top:12px">
+              <button class="btn small soft" onclick="loadQuote(true)">Get Online Quote</button>
+              <button class="btn small soft" onclick="loadQuote(false)">Refresh Local Quote</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="store" class="section">
+        <div class="section-title">
+          <div>
+            <h2>Dream Size Store</h2>
+            <p>Choose a dream size like a product size. Bigger dreams receive longer delivery windows and higher action requirements.</p>
+          </div>
+        </div>
+        <div class="store-grid" id="storeGrid"></div>
+        <div class="card" style="margin-top:16px">
+          <h2 style="margin-top:0">How AbundanceCart Works</h2>
+          <div class="timeline">
+            <div class="timeline-item"><div class="timeline-date">Step 1</div><div class="timeline-content"><strong>Pick</strong><p class="mini">Choose your dream and dream size: XS to XXXL.</p></div></div>
+            <div class="timeline-item"><div class="timeline-date">Step 2</div><div class="timeline-content"><strong>See</strong><p class="mini">Upload a vision image and write the identity you are becoming.</p></div></div>
+            <div class="timeline-item"><div class="timeline-date">Step 3</div><div class="timeline-content"><strong>Trust</strong><p class="mini">The Universe Engine randomly selects a delivery date from the size-based calendar window.</p></div></div>
+            <div class="timeline-item"><div class="timeline-date">Step 4</div><div class="timeline-content"><strong>Take</strong><p class="mini">Complete daily aligned actions without obsessing over the result.</p></div></div>
+            <div class="timeline-item"><div class="timeline-date">Step 5</div><div class="timeline-content"><strong>Receive</strong><p class="mini">When it manifests, mark as delivered and write a thank-you note to the Universe.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="journal" class="section">
+        <div class="section-title">
+          <div>
+            <h2>Delivery Journey Timeline</h2>
+            <p>All dreams arranged as order timelines. Open any order to add actions, trust notes, image evidence, or gratitude notes.</p>
+          </div>
+        </div>
+        <div id="journalTimeline" class="grid"></div>
+      </section>
+
+      <section id="ritual" class="section">
+        <div class="section-title">
+          <div>
+            <h2>Water Trust Ritual</h2>
+            <p>Every sip becomes a tiny trust anchor: “I have placed the order. I am calm. I take aligned action.”</p>
+          </div>
+          <button class="btn soft" onclick="resetWater()">Reset Today</button>
+        </div>
+        <div class="grid cols-2">
+          <div class="card white">
+            <h2 style="margin-top:0">Today’s 8 Sip Anchors</h2>
+            <div class="water" id="waterDrops"></div>
+            <p class="mini" style="margin-top:12px">Use this as a gentle reminder, not a medical hydration tracker.</p>
+          </div>
+          <div class="card">
+            <h2 style="margin-top:0">Sip Statement</h2>
+            <p class="quote">“I already placed the order. I do not need to chase. I prepare, act, trust, and receive.”</p>
+            <div class="field">
+              <label>Custom daily affirmation</label>
+              <textarea id="customAffirmation" placeholder="Write your own affirmation..." oninput="saveSettings()"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="settings" class="section">
+        <div class="section-title">
+          <div>
+            <h2>Data & Settings</h2>
+            <p>Local-first data. Export your dream orders as JSON and import them later on another device.</p>
+          </div>
+        </div>
+        <div class="grid cols-2">
+          <div class="card white">
+            <h2 style="margin-top:0">Backup & Restore</h2>
+            <div class="toolbar">
+              <button class="btn" onclick="exportData()">Export JSON</button>
+              <button class="btn soft" onclick="document.getElementById('importFile').click()">Import JSON</button>
+              <input class="hidden-file" id="importFile" type="file" accept="application/json" onchange="importData(event)" />
+            </div>
+            <p class="mini">Your data stays in your browser unless you export it.</p>
+          </div>
+          <div class="card danger-zone">
+            <h2 style="margin-top:0">Reset Application</h2>
+            <p class="mini">This will remove all dream orders, logs, and local settings from this browser.</p>
+            <button class="btn red" onclick="resetAll()">Clear All Data</button>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h2 style="margin-top:0">Important Note</h2>
+          <p class="mini">This application is a reflection, motivation, and action-tracking tool. It does not guarantee outcomes. It supports the practice of intention, aligned effort, gratitude, and emotional detachment.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="dreamModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <h2 id="modalTitle" style="margin:0"></h2>
+        <button class="btn small soft" onclick="hideModal()">Close</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="revealModal" class="reveal-modal" onclick="closeReveal(event)">
+    <div class="reveal-card" onclick="event.stopPropagation()">
+      <div class="reveal-icon">✦</div>
+      <h2 class="reveal-title">Universe Delivery Date Revealed</h2>
+      <p class="reveal-sub">Your dream order is confirmed. You do not choose the timeline. You trust it, prepare for it, and take aligned action.</p>
+      <div class="reveal-date">
+        <small>Expected Universe Delivery</small>
+        <strong id="revealDateText">—</strong>
+      </div>
+      <p class="mini" id="revealDreamText"></p>
+      <div class="reveal-actions">
+        <button class="btn primary" onclick="trackRevealedDream()">Track This Dream</button>
+        <button class="btn soft" onclick="hideReveal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="imageModal" class="image-modal" onclick="closeImageViewer(event)">
+    <div class="image-card" onclick="event.stopPropagation()">
+      <div class="image-head">
+        <h2 id="imageModalTitle">Dream Visualization</h2>
+        <button class="btn small soft" onclick="hideImageViewer()">Close</button>
+      </div>
+      <img id="imageModalImg" class="image-preview" alt="Dream visualization">
+      <div id="imageModalQuote" class="image-quote"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script>
+const SIZE_RULES={
+  XS:{label:'XS',days:[1,7],actions:3,icon:'🌱',desc:'Tiny shift, quick win, one simple habit.'},
+  S:{label:'S',days:[7,21],actions:7,icon:'🪴',desc:'Small dream, visible movement within weeks.'},
+  M:{label:'M',days:[21,45],actions:14,icon:'🌼',desc:'Medium goal requiring consistent action.'},
+  L:{label:'L',days:[45,90],actions:30,icon:'🌳',desc:'Life upgrade with planning and patience.'},
+  XL:{label:'XL',days:[90,180],actions:60,icon:'🏔️',desc:'Major transformation and identity shift.'},
+  XXL:{label:'XXL',days:[180,365],actions:100,icon:'🚀',desc:'Big dream requiring deep commitment.'},
+  XXXL:{label:'XXXL',days:[365,720],actions:180,icon:'🌌',desc:'Legacy-level dream with long devotion.'}
+};
+const QUOTES=[
+  {q:'Detach from the timeline. Attach to the daily action.',a:'AbundanceCart'},
+  {q:'Your job is not to panic at the mailbox. Your job is to become ready to receive.',a:'Universe Reminder'},
+  {q:'Faith is calm repetition. Action is your shipping partner.',a:'Manifestation Note'},
+  {q:'The dream arrives through the person you become while waiting.',a:'Daily Trust'},
+  {q:'Place the order, bless the process, and move like it is already on the way.',a:'Law of Detachment'},
+  {q:'A calm mind is a magnetic address for the dream.',a:'Abundance Principle'},
+  {q:'You are not waiting empty-handed. You are preparing the receiver.',a:'Universe Dispatch'},
+  {q:'The smallest aligned action is proof that the order is active.',a:'Dream Logistics'}
+];
+let state={dreams:[],settings:{affirmation:''},water:{date:todayKey(),count:0}};
+let selectedSize='M';
+let activeDreamId=null;
+let lastRevealedDreamId=null;
+
+function todayKey(){return new Date().toISOString().slice(0,10)}
+function uid(){return 'DREAM-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7).toUpperCase()}
+function save(){localStorage.setItem('abundanceCartState',JSON.stringify(state));}
+function load(){try{const raw=localStorage.getItem('abundanceCartState');if(raw)state={...state,...JSON.parse(raw)};}catch(e){console.warn(e)} if(!state.water||state.water.date!==todayKey())state.water={date:todayKey(),count:0};}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function fmtDate(d){return new Date(d).toLocaleString(undefined,{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+function daysBetween(a,b){return Math.ceil((new Date(b)-new Date(a))/(1000*60*60*24))}
+function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
+function randomDelivery(size){const rule=SIZE_RULES[size];const now=new Date();let day=rule.days[0]+Math.floor(Math.random()*(rule.days[1]-rule.days[0]+1));day=Math.max(1,day);const d=new Date(now);d.setDate(d.getDate()+day);d.setHours(6+Math.floor(Math.random()*17));d.setMinutes([0,11,22,33,44,55][Math.floor(Math.random()*6)]);d.setSeconds(0);d.setMilliseconds(0);if(d.toDateString()===now.toDateString()){d.setDate(d.getDate()+1)}return d.toISOString();}
+function progressOf(dream){if(dream.status==='delivered')return 100;const total=Math.max(1,new Date(dream.deliveryDate)-new Date(dream.createdAt));const done=Date.now()-new Date(dream.createdAt);const timePct=clamp((done/total)*100,0,100);const actionPct=clamp((actionCount(dream)/SIZE_RULES[dream.size].actions)*100,0,100);return Math.round((timePct*.45)+(actionPct*.55));}
+function actionCount(dream){return (dream.logs||[]).filter(l=>l.type==='action').length + (dream.firstActionDone?1:0)}
+function statusText(dream){if(dream.status==='delivered')return 'Delivered';const left=daysBetween(new Date(),dream.deliveryDate);if(left<=0)return 'Due / Review';const p=progressOf(dream);if(p<15)return 'Order Confirmed';if(p<38)return 'Trust Packed';if(p<65)return 'Effort Shipped';if(p<92)return 'In Universe Transit';return 'Out for Delivery';}
+function stepIndex(dream){const s=statusText(dream);return ['Order Confirmed','Trust Packed','Effort Shipped','In Universe Transit','Out for Delivery','Due / Review','Delivered'].indexOf(s)}
+function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));[...document.querySelectorAll('.nav button')].find(b=>b.textContent.toLowerCase().includes(id==='dashboard'?'dashboard':id==='order'?'place':id==='store'?'store':id==='journal'?'journey':id==='ritual'?'ritual':'settings'))?.classList.add('active');document.getElementById('sidebar').classList.remove('open');renderAll();}
+function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
+function initSizeSelector(){const wrap=document.getElementById('sizeSelector');wrap.innerHTML=Object.keys(SIZE_RULES).map(k=>`<button type="button" class="size-pill ${k===selectedSize?'active':''}" onclick="selectSize('${k}')">${SIZE_RULES[k].icon}<br>${k}<small>${SIZE_RULES[k].days[0]}-${SIZE_RULES[k].days[1]} days</small></button>`).join('')}
+function selectSize(k){selectedSize=k;initSizeSelector();}
+function renderStore(){document.getElementById('storeGrid').innerHTML=Object.entries(SIZE_RULES).map(([k,r])=>`<div class="store-item"><div class="store-icon">${r.icon}</div><h3>${k}</h3><p><strong>${r.days[0]}-${r.days[1]} days</strong></p><p>${r.desc}</p><p style="margin-top:8px"><span class="badge purple">${r.actions} actions</span></p></div>`).join('')}
+function renderStats(){const active=state.dreams.filter(d=>d.status!=='delivered').length;const delivered=state.dreams.filter(d=>d.status==='delivered').length;const actions=state.dreams.reduce((s,d)=>s+actionCount(d),0);const due=state.dreams.filter(d=>d.status!=='delivered'&&new Date(d.deliveryDate)<=new Date()).length;document.getElementById('stats').innerHTML=`
+  <div class="card stat"><div class="label">Total Dream Orders</div><div class="num">${state.dreams.length}</div><div class="hint">Unlimited dream stock available</div></div>
+  <div class="card stat"><div class="label">Active Deliveries</div><div class="num">${active}</div><div class="hint">Currently in universe transit</div></div>
+  <div class="card stat"><div class="label">Aligned Actions</div><div class="num">${actions}</div><div class="hint">Proof of trust through effort</div></div>
+  <div class="card stat"><div class="label">Delivered / Due</div><div class="num">${delivered}/${due}</div><div class="hint">Gratitude or review pending</div></div>`}
+function renderDreams(){const q=(document.getElementById('searchDream')?.value||'').toLowerCase();const f=document.getElementById('filterStatus')?.value||'all';let dreams=[...state.dreams].sort((a,b)=>new Date(a.deliveryDate)-new Date(b.deliveryDate));dreams=dreams.filter(d=>!q||d.title.toLowerCase().includes(q)||d.category.toLowerCase().includes(q));dreams=dreams.filter(d=>f==='all'||(f==='active'&&d.status!=='delivered')||(f==='delivered'&&d.status==='delivered')||(f==='due'&&d.status!=='delivered'&&new Date(d.deliveryDate)<=new Date()));const list=document.getElementById('dreamList');if(!dreams.length){list.innerHTML='<div class="empty" style="grid-column:1/-1"><h3>No dream orders yet</h3><p>Place your first dream order and let the Universe select the delivery date.</p><button class="btn gold" onclick="showSection(\'order\')">Place First Dream</button></div>';return;}list.innerHTML=dreams.map(d=>dreamCard(d)).join('')}
+function dreamCard(d){const left=daysBetween(new Date(),d.deliveryDate);const p=progressOf(d);const status=statusText(d);const idx=Math.min(4,Math.max(0,stepIndex(d)));const badge=status==='Delivered'?'green':status.includes('Due')?'red':status.includes('Out')?'gold':'purple';return `<div class="dream-card ${d.status==='delivered'?'delivered':''}">${d.image?`<button type="button" class="dream-img-btn" onclick="openImageViewer('${d.id}')"><img class="dream-img" src="${d.image}" alt="Dream image"><span>Visualize Bigger</span></button>`:''}<div class="dream-top"><div><h3 class="dream-title">${escapeHtml(d.title)}</h3><div class="dream-meta">${d.category} • ${d.size} Dream • Order ID ${d.id.slice(-6)}</div></div><span class="badge ${badge}">${status}</span></div><div><div class="dream-meta">Universe delivery date</div><strong>${fmtDate(d.deliveryDate)}</strong></div><div class="grid cols-2" style="gap:8px"><div><div class="dream-meta">Countdown</div><strong>${d.status==='delivered'?'Received':left>0?left+' days left':'Review today'}</strong></div><div><div class="dream-meta">Actions</div><strong>${actionCount(d)}/${SIZE_RULES[d.size].actions}</strong></div></div><div><div class="progress"><div class="bar" style="width:${p}%"></div></div><div class="dream-meta" style="margin-top:5px">${p}% delivery readiness</div></div><div class="journey">${['Ordered','Trust','Action','Transit','Receive'].map((s,i)=>`<div class="step ${i<=idx?'active':''}"><div class="dot"></div>${s}</div>`).join('')}</div><div class="toolbar"><button class="btn small" onclick="openDream('${d.id}')">Open</button><button class="btn small soft" onclick="quickAction('${d.id}')">+ Action</button>${d.status!=='delivered'?`<button class="btn small green" onclick="markDelivered('${d.id}')">Delivered</button>`:''}</div></div>`}
+function renderJournal(){const box=document.getElementById('journalTimeline');if(!state.dreams.length){box.innerHTML='<div class="empty"><h3>No timeline yet</h3><p>Your dream delivery journey will appear after your first order.</p></div>';return;}box.innerHTML=[...state.dreams].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)).map(d=>`<div class="card white"><div class="timeline-item"><div class="timeline-date">${new Date(d.createdAt).toLocaleDateString()}</div><div class="timeline-content"><h3 style="margin:0 0 6px">${escapeHtml(d.title)}</h3><p class="mini">Placed as <strong>${d.size}</strong> dream. Universe delivery: <strong>${fmtDate(d.deliveryDate)}</strong>. Status: <strong>${statusText(d)}</strong>.</p><div class="pill-line" style="margin-top:10px"><span class="badge purple">${actionCount(d)} actions</span><span class="badge gold">${progressOf(d)}% ready</span><span class="badge">${d.logs?.length||0} notes</span></div><button class="btn small" style="margin-top:12px" onclick="openDream('${d.id}')">Open journey</button></div></div></div>`).join('')}
+function renderWater(){const wrap=document.getElementById('waterDrops');wrap.innerHTML=Array.from({length:8},(_,i)=>`<button class="drop ${i<state.water.count?'done':''}" onclick="sipWater(${i+1})">💧 ${i+1}</button>`).join('');document.getElementById('customAffirmation').value=state.settings.affirmation||''}
+function sipWater(n){state.water.count=Math.max(state.water.count,n);save();renderWater();toast('Sip logged: trust the order, take the action.');}
+function resetWater(){state.water={date:todayKey(),count:0};save();renderWater();toast('Water ritual reset for today.');}
+function saveSettings(){state.settings.affirmation=document.getElementById('customAffirmation').value;save();}
+async function createDream(e){
+  e.preventDefault();
+  const file=document.getElementById('dreamImage').files[0];
+  const image=await readImage(file);
+  const dream={
+    id:uid(),
+    title:document.getElementById('dreamTitle').value.trim(),
+    category:document.getElementById('dreamCategory').value,
+    size:selectedSize,
+    why:document.getElementById('dreamWhy').value.trim(),
+    identity:document.getElementById('dreamIdentity').value.trim(),
+    firstAction:document.getElementById('firstAction').value.trim(),
+    firstActionDone:false,
+    image:image,
+    createdAt:new Date().toISOString(),
+    deliveryDate:randomDelivery(selectedSize),
+    status:'active',
+    logs:[],
+    gratitude:''
+  };
+  state.dreams.unshift(dream);
+  save();
+  document.getElementById('dreamForm').reset();
+  selectedSize='M';
+  initSizeSelector();
+  toast('Dream order confirmed. Universe delivery date revealed.');
+  showSection('dashboard');
+  showReveal(dream.id);
+}
+function showReveal(id){
+  const d=state.dreams.find(x=>x.id===id);
+  if(!d)return;
+  lastRevealedDreamId=id;
+  document.getElementById('revealDateText').textContent=fmtDate(d.deliveryDate);
+  document.getElementById('revealDreamText').textContent='Order confirmed for “'+d.title+'” · '+d.size+' dream · '+SIZE_RULES[d.size].actions+' aligned actions before delivery review.';
+  document.getElementById('revealModal').classList.add('show');
+}
+function hideReveal(){document.getElementById('revealModal').classList.remove('show')}
+function closeReveal(e){if(e.target.id==='revealModal')hideReveal()}
+function trackRevealedDream(){const id=lastRevealedDreamId;hideReveal();if(id)openDream(id)}
+function openImageViewer(id){
+  const d=state.dreams.find(x=>x.id===id);
+  if(!d||!d.image){toast('No dream image available for this order.');return;}
+  const q=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('imageModalTitle').textContent=d.title||'Dream Visualization';
+  document.getElementById('imageModalImg').src=d.image;
+  document.getElementById('imageModalQuote').innerHTML='“'+escapeHtml(q.q)+'”<small>'+escapeHtml(q.a)+'</small>';
+  document.getElementById('imageModal').classList.add('show');
+}
+function hideImageViewer(){document.getElementById('imageModal').classList.remove('show')}
+function closeImageViewer(e){if(e.target.id==='imageModal')hideImageViewer()}
+function readImage(file){return new Promise(res=>{if(!file)return res('');const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>res('');r.readAsDataURL(file);})}
+function openDream(id){activeDreamId=id;const d=state.dreams.find(x=>x.id===id);if(!d)return;document.getElementById('modalTitle').textContent=d.title;document.getElementById('modalBody').innerHTML=dreamDetail(d);document.getElementById('dreamModal').classList.add('show')}
+function dreamDetail(d){
+  const p=progressOf(d);
+  const logs=(d.logs||[]).slice().reverse().map(l=>`<div class="log"><strong>${l.type==='action'?'✅ Action':l.type==='trust'?'🧘 Trust Note':l.type==='gratitude'?'🙏 Gratitude':'📝 Note'} • ${new Date(l.date).toLocaleString()}</strong><p>${escapeHtml(l.text)}</p></div>`).join('')||'<div class="empty"><p>No journey notes yet.</p></div>';
+  const imageBlock=d.image
+    ? `<div class="card white" style="margin-top:14px"><h3 style="margin-top:0">Dream Visualization Image</h3><button type="button" class="dream-img-btn" onclick="openImageViewer('${d.id}')"><img class="dream-img" src="${d.image}" alt="Dream image"><span>Visualize Bigger</span></button><div class="toolbar" style="margin-top:12px"><button class="btn small" onclick="document.getElementById('editImageFile_${d.id}').click()">Change Image</button><button class="btn small soft" onclick="openImageViewer('${d.id}')">View Bigger</button><button class="btn small red" onclick="removeDreamImage('${d.id}')">Remove Image</button></div><input class="hidden-file" id="editImageFile_${d.id}" type="file" accept="image/*" onchange="updateDreamImage('${d.id}',this)"><p class="mini" style="margin-top:8px">You can update the goal image anytime after saving the dream.</p></div>`
+    : `<div class="card white" style="margin-top:14px"><h3 style="margin-top:0">Dream Visualization Image</h3><div class="empty"><p>No image added yet. Add a visual anchor for this dream.</p></div><div class="toolbar" style="margin-top:12px"><button class="btn small gold" onclick="document.getElementById('editImageFile_${d.id}').click()">Add Image</button></div><input class="hidden-file" id="editImageFile_${d.id}" type="file" accept="image/*" onchange="updateDreamImage('${d.id}',this)"></div>`;
+  return `<div class="grid cols-2" style="margin-top:16px"><div class="card"><div class="label">Order Details</div><p><strong>Category:</strong> ${d.category}</p><p><strong>Size:</strong> ${d.size} • ${SIZE_RULES[d.size].desc}</p><p><strong>Placed:</strong> ${fmtDate(d.createdAt)}</p><p><strong>Delivery:</strong> ${fmtDate(d.deliveryDate)}</p><p><strong>Status:</strong> ${statusText(d)}</p><div class="progress"><div class="bar" style="width:${p}%"></div></div><p class="mini">${p}% delivery readiness • ${actionCount(d)}/${SIZE_RULES[d.size].actions} actions</p></div><div class="card"><div class="label">Identity & Reason</div><p><strong>Why:</strong> ${escapeHtml(d.why||'Not written')}</p><p><strong>Identity:</strong> ${escapeHtml(d.identity||'Not written')}</p><p><strong>First action:</strong> ${escapeHtml(d.firstAction||'Not written')}</p><button class="btn small soft" onclick="toggleFirstAction('${d.id}')">${d.firstActionDone?'Undo first action':'Mark first action done'}</button></div></div>${imageBlock}<div class="card white" style="margin-top:14px"><h3 style="margin-top:0">Add Journey Update</h3><div class="grid cols-3"><button class="btn small" onclick="addTypedLog('action')">+ Aligned Action</button><button class="btn small soft" onclick="addTypedLog('trust')">+ Trust Note</button><button class="btn small gold" onclick="addTypedLog('gratitude')">+ Gratitude</button></div><div class="field" style="margin-top:10px"><textarea id="newLogText" placeholder="What did you do, feel, trust, release, or receive today?"></textarea></div></div><div class="card" style="margin-top:14px"><h3 style="margin-top:0">Journey Logs</h3><div class="log-list">${logs}</div></div><div class="toolbar" style="margin-top:14px"><button class="btn green" onclick="markDelivered('${d.id}')">Mark as Delivered</button><button class="btn soft" onclick="downloadDream('${d.id}')">Download Order Slip</button><button class="btn red" onclick="deleteDream('${d.id}')">Delete Dream</button></div>`;
+}
+function updateDreamImage(id,input){
+  const d=state.dreams.find(x=>x.id===id);
+  const file=input&&input.files&&input.files[0];
+  if(!d||!file)return;
+  const r=new FileReader();
+  r.onload=function(){
+    d.image=r.result;
+    save();
+    openDream(id);
+    renderAll();
+    toast('Dream image updated.');
+  };
+  r.onerror=function(){toast('Unable to update image. Please try another image.')};
+  r.readAsDataURL(file);
+}
+function removeDreamImage(id){
+  const d=state.dreams.find(x=>x.id===id);
+  if(!d)return;
+  if(!confirm('Remove the image from this dream order?'))return;
+  d.image='';
+  save();
+  openDream(id);
+  renderAll();
+  toast('Dream image removed.');
+}
+function addTypedLog(type){const d=state.dreams.find(x=>x.id===activeDreamId);const text=document.getElementById('newLogText').value.trim();if(!d||!text){toast('Write a journey update first.');return;}d.logs=d.logs||[];d.logs.push({type,text,date:new Date().toISOString()});save();openDream(d.id);renderAll();toast('Journey update added.');}
+function quickAction(id){const d=state.dreams.find(x=>x.id===id);if(!d)return;const text=prompt('What aligned action did you take today?');if(!text)return;d.logs=d.logs||[];d.logs.push({type:'action',text,date:new Date().toISOString()});save();renderAll();toast('Aligned action added.');}
+function toggleFirstAction(id){const d=state.dreams.find(x=>x.id===id);if(!d)return;d.firstActionDone=!d.firstActionDone;save();openDream(id);renderAll();}
+function markDelivered(id){const d=state.dreams.find(x=>x.id===id);if(!d)return;const note=prompt('Write a thank-you note to the Universe for this delivered dream:')||'';d.status='delivered';d.gratitude=note;d.logs=d.logs||[];d.logs.push({type:'gratitude',text:note||'Thank you Universe. I received with gratitude.',date:new Date().toISOString()});save();renderAll();if(document.getElementById('dreamModal').classList.contains('show'))openDream(id);toast('Dream marked as delivered. Gratitude saved.');}
+function deleteDream(id){if(!confirm('Delete this dream order?'))return;state.dreams=state.dreams.filter(d=>d.id!==id);save();hideModal();renderAll();toast('Dream deleted.');}
+function hideModal(){document.getElementById('dreamModal').classList.remove('show')}
+function closeModal(e){if(e.target.id==='dreamModal')hideModal()}
+function downloadDream(id){const d=state.dreams.find(x=>x.id===id);if(!d)return;const text=`ABUNDANCECART DREAM ORDER\n\nOrder ID: ${d.id}\nDream: ${d.title}\nCategory: ${d.category}\nSize: ${d.size}\nPlaced: ${fmtDate(d.createdAt)}\nUniverse Delivery: ${fmtDate(d.deliveryDate)}\nStatus: ${statusText(d)}\n\nWhy:\n${d.why||''}\n\nIdentity:\n${d.identity||''}\n\nFirst Action:\n${d.firstAction||''}\n\nGratitude:\n${d.gratitude||''}`;downloadText(`${d.title.replace(/[^a-z0-9]/gi,'_').toLowerCase()}_dream_order.txt`,text)}
+function exportData(){downloadText('abundancecart_backup.json',JSON.stringify(state,null,2));}
+function importData(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(!data.dreams)throw new Error('Invalid file');state=data;save();renderAll();toast('Backup imported.');}catch(err){alert('Invalid JSON backup file.')}};r.readAsText(file);}
+function downloadText(name,text){const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function resetAll(){if(!confirm('Clear all AbundanceCart data from this browser?'))return;localStorage.removeItem('abundanceCartState');state={dreams:[],settings:{affirmation:''},water:{date:todayKey(),count:0}};renderAll();toast('All data cleared.');}
+function runAssistant(){const t=(document.getElementById('aiInput').value||document.getElementById('dreamTitle').value||'').toLowerCase();if(!t.trim()){toast('Describe a dream first.');return;}let score=1;['business','house','home','marriage','crore','million','startup','global','freedom','debt','career change','body transformation','wealth','brand','company'].forEach(w=>{if(t.includes(w))score+=1});if(t.length>120)score+=1;if(t.length>220)score+=1;const sizes=['XS','S','M','L','XL','XXL','XXXL'];const suggested=sizes[clamp(score,0,6)];const rule=SIZE_RULES[suggested];document.getElementById('aiResult').innerHTML=`<div class="card white"><span class="badge purple">Suggested Size: ${suggested}</span><h3>${rule.icon} ${rule.days[0]}-${rule.days[1]} day delivery window</h3><p class="mini">Recommended action rhythm: ${rule.actions} aligned actions before delivery review.</p><div class="pill-line"><button class="btn small" onclick="selectSize('${suggested}')">Use ${suggested}</button><span class="badge gold">Trust + Action</span><span class="badge green">Detach from timeline</span></div><ul class="mini"><li>Write one identity statement for this dream.</li><li>Take one visible action within 24 hours.</li><li>Log proof of effort instead of checking for results.</li></ul></div>`}
+async function loadQuote(online){const box=document.getElementById('quoteBox');if(online){box.innerHTML='Loading online quote...';try{const res=await fetch('https://api.quotable.io/random?tags=inspirational|success|wisdom');const data=await res.json();box.innerHTML=`“${escapeHtml(data.content)}”<small>${escapeHtml(data.author||'Online quote')}</small>`;return;}catch(e){box.innerHTML='Online quote unavailable. Showing local quote.';setTimeout(()=>loadQuote(false),700);return;}}const q=QUOTES[Math.floor(Math.random()*QUOTES.length)];box.innerHTML=`“${q.q}”<small>${q.a}</small>`;document.getElementById('sideMantra').textContent=q.q;}
+function escapeHtml(str){return String(str||'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function renderAll(){renderStats();renderDreams();renderStore();renderJournal();renderWater();}
+document.getElementById('dreamForm').addEventListener('submit',createDream);
+load();initSizeSelector();renderAll();loadQuote(false);setInterval(renderAll,60000);
+</script>
+</body>
+</html>
