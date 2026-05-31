@@ -146,10 +146,15 @@ th,td{border-bottom:1px solid #eee;padding:10px 11px;text-align:left;vertical-al
       <p class="subtitle">A Kindle-style clean reading version of ThePearlMind 4.0 — built for directional holding, structured action, signal discipline, and calm execution during live market hours.</p>
       <div class="cta">
         <h2>🔐 Complete Your Access / Payment</h2>
-        <form>
-            <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_SAbFIvjA9HdCLt" async>
-              </script>
-          </form>
+        <div class="razorpay-embed-btn" data-url="https://rzp.io/rzp/thepearlmindMonthlyAccess" data-text="ThePearlMind 4.0 - Pay Now" data-color="#528FF0" data-size="large">
+        <script>
+          (function(){
+            var d=document; var x=!d.getElementById('razorpay-embed-btn-js')
+            if(x){ var s=d.createElement('script'); s.defer=!0;s.id='razorpay-embed-btn-js';
+            s.src='https://cdn.razorpay.com/static/embed_btn/bundle.js';d.body.appendChild(s);} else{var rzp=window['__rzp__'];
+            rzp && rzp.init && rzp.init()}})();
+        </script>
+      </div>
     
     
       </div>
