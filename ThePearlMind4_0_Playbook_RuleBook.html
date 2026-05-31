@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ThePearlMind 4.0 – Trend Holding Playbook RuleBook</title>
+<style>
+/* =========================================================
+   ThePearlMind 4.0 – Kindle Style RuleBook
+   Clean, printable, collapsible, single-file HTML
+========================================================= */
+:root{
+  --bg:#fafafa;
+  --bg-alt:#ffffff;
+  --card:#ffffff;
+  --ink:#171717;
+  --muted:#4d4d4d;
+  --soft:#6b7280;
+  --gold:#c47a00;
+  --gold-dark:#8a5400;
+  --gold-soft:#ffecd2;
+  --gold-pale:#fff8e6;
+  --border:#e6e6e6;
+  --shadow:0 4px 16px rgba(0,0,0,.08);
+  --shadow-strong:0 10px 28px rgba(0,0,0,.12);
+  --radius:16px;
+  --green-dark:#047857;
+  --green-light:#bbf7d0;
+  --red-dark:#b91c1c;
+  --red-light:#fecaca;
+  --gray:#e5e7eb;
+  --gray-text:#374151;
+  --blue-soft:#eef6ff;
+  --blue:#1d4ed8;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#fff6e8 0%,#fafafa 36%,#f7f7f7 100%);
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.68;
+  padding:24px 12px 44px;
+  display:flex;
+  justify-content:center;
+}
+.shell{
+  width:100%;
+  max-width:980px;
+  background:var(--bg-alt);
+  border:1px solid #ddd;
+  border-radius:22px;
+  box-shadow:var(--shadow-strong);
+  overflow:hidden;
+}
+.shell-inner{padding:28px 26px 34px;background:var(--bg-alt)}
+.page-header{text-align:center;margin-bottom:16px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:6px 15px;border-radius:999px;
+  border:1px solid var(--gold);background:var(--gold-soft);
+  color:var(--gold-dark);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+}
+.title{font-size:clamp(1.8rem,3vw,2.55rem);line-height:1.25;margin:14px 0 8px;color:var(--ink)}
+.subtitle{max-width:760px;margin:0 auto 12px;color:var(--muted);font-size:.98rem;line-height:1.7}
+.meta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.86rem;margin-top:8px}
+.meta-label{color:var(--gold-dark);font-weight:700}
+.divider{height:2px;max-width:480px;background:#ddd;margin:22px auto}
+.cta{
+  margin:26px auto 12px;padding:18px;border:1px solid #ead7b9;border-radius:18px;
+  background:linear-gradient(180deg,#fffaf2,#fff3df);max-width:650px;
+}
+.cta h2{margin:0 0 9px;color:var(--gold-dark);font-size:1.1rem;line-height:1.35}
+.cta p{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.payment-button{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  border:1px solid #072654;background:#072654;color:white;
+  min-height:43px;padding:8px 20px;border-radius:8px;
+  font-family:Arial,sans-serif;font-weight:800;text-decoration:none;font-style:italic;
+  box-shadow:0 6px 16px rgba(7,38,84,.18);
+}
+.payment-button small{display:block;font-size:9px;font-weight:500;opacity:.72;font-style:normal;line-height:1}
+.toolbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0 20px}
+.tool-btn{
+  border:1px solid var(--gold);background:var(--gold-soft);color:var(--gold-dark);
+  border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;font-family:Georgia,"Times New Roman",serif;
+}
+.tool-btn:hover{background:#ffe1b5}
+.disclaimer-box{
+  background:var(--gold-soft);border:1px solid var(--gold);border-radius:14px;
+  padding:16px 18px;margin-bottom:20px;color:var(--ink);font-size:.92rem;line-height:1.65;
+}
+.disclaimer-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold-dark);font-weight:800;margin-bottom:5px}
+.snapshot{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 22px}
+.snapshot-card{
+  border:1px solid var(--border);border-radius:16px;background:#fff;padding:14px 14px 13px;box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+.snapshot-card .kicker{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold-dark);font-weight:800;margin-bottom:4px}
+.snapshot-card strong{display:block;font-size:1rem;line-height:1.35;margin-bottom:4px}
+.snapshot-card span{font-size:.86rem;color:var(--muted);line-height:1.45;display:block}
+.slides{display:flex;flex-direction:column;gap:14px}
+.slide-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);transition:.25s ease;overflow:hidden;
+}
+.slide-card.open{background:var(--gold-pale);border-color:#ffcc80;box-shadow:0 6px 22px rgba(0,0,0,.1)}
+.slide-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:14px;cursor:pointer;user-select:none}
+.slide-main{display:flex;align-items:center;gap:10px;min-width:0}
+.slide-pill{background:var(--gold-soft);padding:4px 10px;border-radius:999px;border:1px solid var(--gold);color:var(--gold-dark);font-size:.75rem;font-weight:700;white-space:nowrap}
+.slide-title{font-size:1rem;font-weight:800;letter-spacing:.35px;color:var(--ink)}
+.slide-toggle{min-width:28px;width:28px;height:28px;border-radius:50%;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--gold-dark);font-weight:bold;transition:.3s ease}
+.slide-card.open .slide-toggle{transform:rotate(90deg);border-color:var(--gold)}
+.slide-body{max-height:0;overflow:hidden;padding:0 18px;transition:max-height .35s ease,padding-bottom .25s ease}
+.slide-card.open .slide-body{padding-bottom:18px}
+.slide-content{padding-top:8px;color:var(--ink);font-size:1rem;line-height:1.65}
+.script-label{color:var(--gold-dark);font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:inline-block}
+.script{font-style:italic;color:#333;margin-top:0}
+p{margin:13px 0 8px}.bullet-list{padding-left:23px;margin-top:6px}.bullet-list li{margin-bottom:7px}.note{font-size:.92rem;color:#555;margin-top:11px;margin-bottom:6px;border-left:3px solid var(--gold);padding-left:12px;background:#fff7e8;border-radius:0 8px 8px 0}
+.rule-box{background:white;border:1px solid #ead7b9;border-radius:14px;padding:13px 14px;margin:12px 0}
+.rule-box strong{color:var(--gold-dark)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mini-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+.mini-card h4{margin:0 0 7px;font-size:.98rem;color:var(--gold-dark)}
+.signal-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;background:#fff;margin:12px 0 16px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;line-height:1.45;background:#fff;min-width:760px}
+th,td{border-bottom:1px solid #eee;padding:10px 11px;text-align:left;vertical-align:top}th{background:#fff3df;color:var(--gold-dark);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}tr:last-child td{border-bottom:0}
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:3px 9px;font-size:.74rem;font-weight:900;font-family:Arial,sans-serif;white-space:nowrap}
+.dark-green{background:#064e3b;color:#fff}.dark-red{background:#7f1d1d;color:#fff}.light-green{background:#bbf7d0;color:#064e3b;border:1px solid #4ade80}.light-red{background:#fecaca;color:#7f1d1d;border:1px solid #f87171}.gray-badge{background:var(--gray);color:var(--gray-text);border:1px solid #cbd5e1}.blue-badge{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}.risk-badge{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+.symbol{font-family:Arial,sans-serif;font-weight:900;font-size:1rem;white-space:nowrap}.order{font-family:Arial,sans-serif;font-weight:800;color:#111827;white-space:nowrap}.terms{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}.term{background:#fff;border:1px solid var(--border);border-radius:14px;padding:11px 12px}.term b{color:var(--gold-dark);display:block;margin-bottom:3px}.term span{font-size:.9rem;color:var(--muted)}
+.protocol-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:13px 0}.protocol-step{background:#fff;border:1px solid #ead7b9;border-radius:14px;padding:12px;text-align:center}.protocol-step b{display:block;color:var(--gold-dark);font-size:.88rem}.protocol-step span{display:block;color:var(--muted);font-size:.82rem;line-height:1.4;margin-top:4px}.footer-note{margin-top:26px;font-size:.85rem;text-align:center;color:#555}.footer-note span{color:var(--gold-dark);font-weight:700}.print-note{display:none}
+@media(max-width:800px){body{padding:12px 8px 28px;font-size:16px}.shell-inner{padding:20px 14px}.snapshot{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}.terms{grid-template-columns:1fr}.protocol-strip{grid-template-columns:1fr 1fr}.slide-header{padding:13px 14px}.slide-title{font-size:.94rem}.slide-pill{font-size:.7rem}.cta{padding:14px}}
+@media(max-width:480px){.protocol-strip{grid-template-columns:1fr}.slide-main{align-items:flex-start}.slide-header{align-items:flex-start}.title{font-size:1.65rem}}
+@media print{
+  body{background:white;padding:0;display:block;font-size:14px}.shell{max-width:none;border:0;box-shadow:none;border-radius:0}.shell-inner{padding:10mm}.toolbar,.payment-button{display:none}.cta{display:none}.slide-card{break-inside:avoid;box-shadow:none;border-color:#ccc;background:white}.slide-body{max-height:none!important;overflow:visible!important;padding-bottom:12px!important}.slide-toggle{display:none}.slide-card.open{background:white}.print-note{display:block}.snapshot{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="shell-inner">
+    <header class="page-header">
+      <div class="eyebrow"><span>🌊 THEPEARLMIND™ 4.0</span></div>
+      <h1 class="title">Trend Holding Playbook RuleBook</h1>
+      <p class="subtitle">A Kindle-style clean reading version of ThePearlMind 4.0 — built for directional holding, structured action, signal discipline, and calm execution during live market hours.</p>
+      <div class="cta">
+        <h2>🔐 Complete Your Access / Payment</h2>
+        <div class="razorpay-embed-btn" data-url="https://rzp.io/rzp/thepearlmindMonthlyAccess" data-text="ThePearlMind 4.0 - Pay Now" data-color="#528FF0" data-size="large">
+        <script>
+          (function(){
+            var d=document; var x=!d.getElementById('razorpay-embed-btn-js')
+            if(x){ var s=d.createElement('script'); s.defer=!0;s.id='razorpay-embed-btn-js';
+            s.src='https://cdn.razorpay.com/static/embed_btn/bundle.js';d.body.appendChild(s);} else{var rzp=window['__rzp__'];
+            rzp && rzp.init && rzp.init()}})();
+        </script>
+      </div>
+    
+    
+      </div>
+      <div class="meta">
+        <span><span class="meta-label">Prepared for:</span> ThePearlMind 4.0 Batch</span>
+        <span><span class="meta-label">Format:</span> Collapsible Playbook RuleBook</span>
+        <span><span class="meta-label">Mode:</span> Trend Holding</span>
+      </div>
+    </header>
+
+    <div class="divider"></div>
+
+    <div class="disclaimer-box">
+      <div class="disclaimer-title">Educational Notice</div>
+      ThePearlMind 4.0 framework teaches <strong>discipline, directional holding and structured decision-making</strong>. It is not financial advice, not a tip system, and not a SEBI-registered advisory. This is a <strong>psychological hand-holding tool</strong> for educational training. Participants remain fully responsible for their own trading decisions.
+    </div>
+
+    <div class="snapshot">
+      <div class="snapshot-card"><div class="kicker">Core Shift</div><strong>From fixed 40/40 to trend holding</strong><span>Profit side stays open until trend reversal; loss discipline remains strict.</span></div>
+      <div class="snapshot-card"><div class="kicker">Risk Template</div><strong>+ Until Trend Continues / –90</strong><span>Maximum educational loss per decision is –90 or around –10% of option premium.</span></div>
+      <div class="snapshot-card"><div class="kicker">Market Mode</div><strong>Active during market hours</strong><span>4.0 helps the trader stay with signals through the day without fear.</span></div>
+    </div>
+
+    <div class="toolbar">
+      <button class="tool-btn" id="expandAll">Expand All</button>
+      <button class="tool-btn" id="collapseAll">Collapse All</button>
+      <button class="tool-btn" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+    <section class="slides">
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 1</span><div class="slide-title">Core Trading Principles — Trend Holding Framework</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“ThePearlMind 4.0 is not built to predict every tick. It is built to help the trader stay with the trend as long as the signal allows.”</p>
+          <p><strong>Principle 1 — Stay in the Trend as per Signal</strong></p>
+          <ul class="bullet-list">
+            <li>Every signal has a dedicated meaning and a dedicated action.</li>
+            <li>The model is a clarity framework, not a tip system.</li>
+            <li>The trader’s job is not to guess; the trader’s job is to follow the correct symbol, color and action.</li>
+          </ul>
+          <p><strong>Principle 2 — Use the + Until Trend Continues / –90 Template</strong></p>
+          <ul class="bullet-list">
+            <li>Profit side remains open until the model shows trend reversal.</li>
+            <li>–90, or approximately –10% of the option premium, is the maximum educational loss per decision.</li>
+            <li>No jackpot chasing. The purpose is structured trend participation.</li>
+          </ul>
+          <p><strong>Principle 3 — Active Market Hours, High Signal Clarity</strong></p>
+          <ul class="bullet-list">
+            <li>There can be many trades per day, week or month.</li>
+            <li>The major focus is to stay active during market hours without fear.</li>
+            <li>Outcome is measured through correct trend-following behaviour, not emotional PnL reactions.</li>
+          </ul>
+          <p class="note">The shift from 2.0 to 4.0 is simple: do not just catch 40 points — learn to hold the active trend with controlled risk.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 2</span><div class="slide-title">ThePearlMind 4.0 Signal Playbook — Trader Action Table</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“In 4.0, the symbol decides the action. The trader does not improvise during live market pressure.”</p>
+          <div class="signal-table-wrap">
+            <table>
+              <thead><tr><th>Chart Symbol</th><th>Color</th><th>Meaning</th><th>Expected Action</th><th>Order / Trade</th><th>Alert Action</th></tr></thead>
+              <tbody>
+                <tr><td class="symbol">⬆ @ hh:mm</td><td><span class="badge dark-green">Dark GREEN</span></td><td>Fresh bullish actionable entry</td><td>Open new upward position</td><td class="order">Place CE order</td><td><span class="badge dark-green">CE</span></td></tr>
+                <tr><td class="symbol">⬇ @ hh:mm</td><td><span class="badge dark-red">Dark RED</span></td><td>Fresh bearish actionable entry</td><td>Open new downward position</td><td class="order">Place PE order</td><td><span class="badge dark-red">PE</span></td></tr>
+                <tr><td class="symbol">X @ hh:mm</td><td><span class="badge light-green">Light GREEN</span></td><td>Exit active RED / PE position inside ChopLock</td><td>Close existing downward trade only</td><td class="order">Exit PE</td><td><span class="badge blue-badge">X</span></td></tr>
+                <tr><td class="symbol">X @ hh:mm</td><td><span class="badge light-red">Light RED</span></td><td>Exit active GREEN / CE position inside ChopLock</td><td>Close existing upward trade only</td><td class="order">Exit CE</td><td><span class="badge blue-badge">X</span></td></tr>
+                <tr><td class="symbol">X + ⬆ @ hh:mm</td><td><span class="badge dark-green">Dark GREEN</span></td><td>Bullish reversal signal</td><td>Close existing RED / PE and open new upward position</td><td class="order">Exit PE + Place CE</td><td><span class="badge dark-green">X + CE</span></td></tr>
+                <tr><td class="symbol">X + ⬇ @ hh:mm</td><td><span class="badge dark-red">Dark RED</span></td><td>Bearish reversal signal</td><td>Close existing GREEN / CE and open new downward position</td><td class="order">Exit CE + Place PE</td><td><span class="badge dark-red">X + PE</span></td></tr>
+                <tr><td class="symbol">⬆ or ⬇</td><td><span class="badge gray-badge">Gray</span></td><td>Inside ChopLock / choppy phase</td><td>Ignore — no trade</td><td class="order">No order</td><td><span class="badge gray-badge">None</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="terms">
+            <div class="term"><b>CE</b><span>Call / upward trade.</span></div>
+            <div class="term"><b>PE</b><span>Put / downward trade.</span></div>
+            <div class="term"><b>X</b><span>Close existing position.</span></div>
+            <div class="term"><b>Gray Signals</b><span>Ignored: no alert, no trade, no trend-leg counting.</span></div>
+          </div>
+          <p class="note">The trader should not convert gray/choppy movement into an emotional options-buying decision.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 3</span><div class="slide-title">Entry Principles — When & How You Begin</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“Entry is not about catching tops or bottoms. In 4.0, entry is about acting quickly when the signal becomes clear.”</p>
+          <p><strong>Principle 4 — Enter Only on Clear Entry Conditions</strong></p>
+          <ul class="bullet-list">
+            <li>Arrow appears.</li>
+            <li>Confirmation line stabilises.</li>
+            <li>Option premium should be close to ₹800 where possible.</li>
+            <li>Avoid midway or chasing entries after large moves.</li>
+          </ul>
+          <p><strong>Principle 5 — The One-Minute Action Window</strong></p>
+          <ul class="bullet-list">
+            <li>4.0 does not keep the trader waiting for 3 minutes like 2.0.</li>
+            <li>Use approximately one minute to confirm direction, strike and mental readiness.</li>
+            <li>The purpose is quicker entry so the trader can capture more points in the trending direction.</li>
+          </ul>
+          <p><strong>Principle 6 — Direction Coding</strong></p>
+          <ul class="bullet-list">
+            <li><span class="badge dark-green">Green</span> = Upward direction.</li>
+            <li><span class="badge dark-red">Red</span> = Downward direction.</li>
+            <li><span class="badge gray-badge">Gray</span> = Sluggish / ChopLock / neutral for options buyers.</li>
+            <li><span class="badge light-green">Light Green</span> or <span class="badge light-red">Light Red</span> = exit/reversal context, not fresh new entry by itself.</li>
+          </ul>
+          <div class="grid-2">
+            <div class="mini-card"><h4>ATM Option Stability</h4><p>ATM options around ₹700–₹800 premium are preferred for educational consistency. OTM is used to explain decay risk.</p></div>
+            <div class="mini-card"><h4>Expiry Selection</h4><p>1st–19th: current month expiry. 20th–month-end: next month expiry.</p></div>
+          </div>
+          <p class="note">In 4.0, speed is useful only after clarity. Fast action without signal discipline is still emotional trading.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 4</span><div class="slide-title">Exit Principles — Trend Reversal, Trailing and Controlled Loss</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“ThePearlMind 4.0 teaches the trader to hold winning trends while keeping the losing side controlled.”</p>
+          <p><strong>Principle 7 — Profit Side Remains Open Until Trend Reversal</strong></p>
+          <ul class="bullet-list">
+            <li>Unlike 2.0, profit is not automatically closed at +40.</li>
+            <li>If profit goes beyond 80 points, the position can be trailed with approximately –10% of the option premium.</li>
+            <li>The objective is to stay with the trend until the model shows an opposite-color reversal or exit condition.</li>
+          </ul>
+          <p><strong>Principle 8 — Exit Only When Trend Reversal Appears</strong></p>
+          <ul class="bullet-list">
+            <li>Exit the position when the model shows a valid signal of the opposite color.</li>
+            <li>Light signal inside ChopLock can mean closing the active position only.</li>
+            <li>Dark reversal signal can mean closing the existing position and opening the opposite side.</li>
+          </ul>
+          <p><strong>Principle 9 — –90 Maximum Educational Loss</strong></p>
+          <ul class="bullet-list">
+            <li>–90 is the maximum educational loss per decision.</li>
+            <li>No widening of stop-loss.</li>
+            <li>Oversized losses such as –140/–150 may happen due to random moves beyond rule boundaries, but they should not become normal behaviour.</li>
+          </ul>
+          <p class="note">A strong trader is not the one who avoids every loss. A strong trader is the one who prevents one loss from becoming account damage.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 5</span><div class="slide-title">Avoid Principles — What Not to Do in 4.0</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“Most traders lose not because the signal was absent, but because discipline was absent.”</p>
+          <p><strong>Principle 10 — Follow Time and Session Boundaries</strong></p>
+          <ul class="bullet-list">
+            <li>First-candle action can be taken depending on the color of the trend.</li>
+            <li>No trades after <strong>15:28 IST</strong>.</li>
+            <li>New day, new trade. No carry forward.</li>
+          </ul>
+          <p><strong>Principle 11 — Avoid Weak-Capital Trading</strong></p>
+          <ul class="bullet-list">
+            <li>Avoid trading with cut-to-cut capital.</li>
+            <li>Suggested peaceful capital: at least ₹1,00,000 to trade 1 lot.</li>
+            <li>Capital pressure creates emotional exits and revenge entries.</li>
+          </ul>
+          <p><strong>Principle 12 — Do Not Mix Extra Indicators Mid-Session</strong></p>
+          <ul class="bullet-list">
+            <li>Do not mix ThePearlMind with extra indicators during live execution.</li>
+            <li>The model will show trend continuation; kindly follow the right color for the right action.</li>
+            <li>Gray signals mean sluggish trending / ChopLock and are not good for options buyers.</li>
+          </ul>
+          <p><strong>Principle 13 — No Revenge Trading</strong></p>
+          <ul class="bullet-list">
+            <li>After a loss, the mind wants to recover.</li>
+            <li>This is when maximum damage can happen.</li>
+            <li>The market is <strong>Nirantar</strong>; many future trends will come.</li>
+          </ul>
+          <p class="note">A missed trade is not a disaster. A revenge trade can become one.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 6</span><div class="slide-title">Position Sizing, Scaling and Mid-Trade Discipline</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“Scaling is not proof of confidence. Scaling is proof of past discipline.”</p>
+          <p><strong>Principle 14 — Start with 1 Lot Until Discipline Proves Itself</strong></p>
+          <ul class="bullet-list">
+            <li>Start with 1 lot until a full discipline cycle is completed.</li>
+            <li>No sudden lot-size increase.</li>
+            <li>Scaling must be earned, not forced.</li>
+          </ul>
+          <p><strong>Principle 15 — Scaling Trigger</strong></p>
+          <ul class="bullet-list">
+            <li>After earning around ₹1,00,000 through consistent trend-following behaviour, scaling may be considered.</li>
+            <li>The focus is not one lucky trade; the focus is repeatable behaviour.</li>
+          </ul>
+          <p><strong>Principle 16 — Trust the Rule After Correct Entry</strong></p>
+          <ul class="bullet-list">
+            <li>If entered correctly, trust the rule.</li>
+            <li>Let TP or SL hit based on the defined execution logic.</li>
+            <li>No midway panic exit.</li>
+          </ul>
+          <p class="note">Lot size is not mood. Lot size reflects past behaviour.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Section 7</span><div class="slide-title">Mindset, Decision Quality and Community Discipline</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Intent</span>
+          <p class="script">“ThePearlMind 4.0 is a mirror. It shows whether the trader can follow structure when the market is moving.”</p>
+          <p><strong>Principle 17 — Expect Clarity, Not Certainty</strong></p>
+          <ul class="bullet-list">
+            <li>The model gives clarity windows, not guarantees.</li>
+            <li>Every window can become <strong>+ unlimited</strong> or <strong>–90</strong>.</li>
+            <li>The lesson is in behaviour, not only outcome.</li>
+          </ul>
+          <p><strong>Principle 18 — Trend-Following Decisions Create Stability</strong></p>
+          <ul class="bullet-list">
+            <li>Trend-following decisions create greater stability.</li>
+            <li>Remove big stop losses when the market goes against you.</li>
+            <li>Do not allow one decision to damage the trader’s identity.</li>
+          </ul>
+          <p><strong>Principle 19 — PnL Sharing, Challenge and Leaderboard</strong></p>
+          <ul class="bullet-list">
+            <li>PnL sharing may be used for challenge, leaderboard or subscription offer evaluation.</li>
+            <li>Sharing should be treated as a self-audit mechanism, not a promise of reward.</li>
+            <li>Community-level results should be handled transparently and responsibly.</li>
+          </ul>
+          <p><strong>Principle 20 — Performance-Linked Offers and Responsibility</strong></p>
+          <ul class="bullet-list">
+            <li>Performance-linked offers are fairness mechanisms, not promises.</li>
+            <li>All trading decisions rest with the participant, not with the tool.</li>
+            <li>ThePearlMind does not change your life. You change your life when you follow rules.</li>
+          </ul>
+          <p class="note">The goal of 4.0 is not more excitement. The goal is better holding, better exits, and better behaviour inside uncertainty.</p>
+        </div></div>
+      </article>
+
+      <article class="slide-card open">
+        <div class="slide-header"><div class="slide-main"><span class="slide-pill">Quick Protocol</span><div class="slide-title">One-Page Execution Flow</div></div><div class="slide-toggle">➤</div></div>
+        <div class="slide-body"><div class="slide-content">
+          <span class="script-label">Live Market Flow</span>
+          <div class="protocol-strip">
+            <div class="protocol-step"><b>1. See Symbol</b><span>Arrow, X, X+Arrow, or Gray.</span></div>
+            <div class="protocol-step"><b>2. Confirm Color</b><span>Dark Green, Dark Red, Light, or Gray.</span></div>
+            <div class="protocol-step"><b>3. Take Action</b><span>CE, PE, Exit, Reverse, or Ignore.</span></div>
+            <div class="protocol-step"><b>4. Control Risk</b><span>Hold trend, respect –90 / –10% premium discipline.</span></div>
+          </div>
+          <div class="rule-box"><strong>Golden Rule:</strong> The trader should not invent a new rule during live pressure. The signal table already defines the action.</div>
+        </div></div>
+      </article>
+
+    </section>
+
+    <p class="footer-note">ThePearlMind™ 4.0 RuleBook • Designed for <span>calm trend holding and disciplined execution</span>.</p>
+    <p class="print-note">Printed from ThePearlMind 4.0 Trend Holding Playbook RuleBook.</p>
+  </div>
+</div>
+<script>
+(function(){
+  const cards = Array.from(document.querySelectorAll('.slide-card'));
+  function setBodyHeight(card, open){
+    const body = card.querySelector('.slide-body');
+    if(!body) return;
+    body.style.maxHeight = open ? body.scrollHeight + 'px' : '0';
+  }
+  function refresh(){cards.forEach(card => setBodyHeight(card, card.classList.contains('open')))}
+  cards.forEach(function(card){
+    const header = card.querySelector('.slide-header');
+    header.addEventListener('click', function(){card.classList.toggle('open');setBodyHeight(card, card.classList.contains('open'));});
+  });
+  document.getElementById('expandAll').addEventListener('click', function(){cards.forEach(card => card.classList.add('open'));refresh();});
+  document.getElementById('collapseAll').addEventListener('click', function(){cards.forEach(card => card.classList.remove('open'));refresh();});
+  window.addEventListener('resize', refresh);
+  setTimeout(refresh, 80);
+})();
+</script>
+</body>
+</html>
