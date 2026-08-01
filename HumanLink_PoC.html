@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10233b" />
+  <meta name="description" content="HumanLink privacy-first identity exchange proof of concept" />
+  <title>HumanLink · Privacy-first identity exchange</title>
+  <script>
+/* HumanLink PoC — privacy-first 30-second identity exchange.
+   Demo only. Keys are stored in localStorage so the flow can be tested in one browser.
+   Production must use secure device keystores, authenticated APIs, signed tokens and audited key rotation. */
+
+const APP_VERSION = '1.0.0';
+const STORE_KEY = 'humanlink_poc_state_v1';
+const KEY_STORE_KEY = 'humanlink_poc_keys_v1';
+
+
+const STATIC_QR_MAP = {
+  'HL-7K3M-9Q2D': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACvElEQVR42u1cyY3jQBAjtwX42QImAIciZbAhLSakyUAdygZgoPs5QAvcRx/WYF47T1fpIUCW+SkTrCJVMoX/PtIv/OBwkIMc5CAHOchBrwliPxYAZWl3uBeSXE8CZXxh9+oZAW2SpAwA8ZMATupAELYcxB1BkiSvnh1Q6QLAvSzgXm7iHiv0TlJHk5HFq2cAtHyzlncBQIVQ3qpXzxkBnOOzWMFN58Ltw6tnjhFRAAqA7TgBIFQA56LEIKAA8uqZAiWS5AoA5SZsGX2Y+JMB7jib1fDqWdGIb1F2rN11pPsnu4J49QwxgtvH2nqFUE4qMVSl9QG1eKKss5N49V4chJYzbKotlGgnRKkJxaYKKQM6Zm5xePVenxGIkpSDJNX+6yNKOhD0zKra4Yx4fUY8ydDUomnEJMPz0hlhRiPQ+0KLsrcc1BvGlybijDCjEUes8+HGaB2abaJ1kvkVZ4SJyXLODHE4ii0H6YjXG64RZvKItGYQ8UGh3IT0+7EIBSDAkVaUmz/7NKQROWhcDs95xHkjXr2pa4QBjRjRZO4sQXkTt78EED8plAVK9OqZ0ohhM1oKESuGbgQN/wGfI0x6jZFHDFs6goo2bTojzHiNnlT26eHiPofxnCxxRlhgBOIYJS+iEHs7eQYVrhHWvEa4RpOXeDsDnkdYA53sWxFftvOR7vMxR1nA3atnZo4YenAAfYQ44tzYn0Ola4QVrzGP637E4EE/+RxhAtR3qPpVqErsS7ctsErrY0Hf0z8pr565rtHNxQi1L0JxCS+8egZAZb7UiSC9rxi7MwhCIsfc6dUzB0orgC2f1FEWSPnkc6xwr2EQtKmCe6zgHtVe/gQKOTYuvXomJsvnO11CWdtCRDslBiHtoRJYfDvfzmQ5vMbcpgKaKDyfekieWVoA0f+ZzEEOcpCDHOQgB/0Q9A/rz7FeWhWztwAAAABJRU5ErkJggg==',
+  'HL-4P8R-K6WM': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACzklEQVR42u1cwW3kMBAjTwLylIEUkFLkDq6kw5aUDqxSUkAA6RlAAu8hyXbud3muxg9jvV5+CGKGQ4+Xwn8f6Rd+cBjIQAYykIEMZKDnBHEcHiR9v8O9kNzRCJT5g93YWwQUJUkZAEIF9+Khx5uko993kiQZe+uAyigAUm7UY2tE/CCB4sG9lxFv7C0I4l5exD+9HjghbcAsFMbeCiD/z7VQGpW2DMb33jCqsbeiIoIAFABpdxXxg5gG45SKsbcSKJEkN4B/MsAdTrOJeHBH66OGsbdKjbgVgLQ5AGhE2kABX9T3CmHsrZBH7IVEIqkjfM1S0J2lE1A8kLZmecRKNaJ6RgFEcGJ6E4jwSSA0L6BRKDZ9ruQsywYlfpsr4vuLCABEqJ4IGTT2nh6EHkaOuFJCVIWkCh2hQspO90tJOoy9RRQRuyyGDqY2JB1BGjdMEWsoAlF1iOGAE2J2Nx30S2WYItapEcc5XMQ8FSHdxYDzcZcpYh1FBKnXiKt1AK5/10+miGV8RK8Hdx/R28QBjE5iNWIxRUhzuPhmMHC2kzGJmCIWAZW5C8HNdW1w75GUk5THusToLsbeCqBZBa7i8djGAg336S2MvecHnU/DvwjAV6XfeUTZUY1CqL57i0Rjb6E84oyfruDy9mlsYTrzEcuApDx2IRBzo47i0U+Pa7sSzfYjFsojQkUPKa/0soeZ+bQQNmus1DXi9wBCM8W+htHROkwRK+URl6M4ugTGE0/EaTBMEavMGtMguDrmULiKPlwUD6C8VsTD2Fupa5zTxIgd3H2zMs700mrEOqDbO13AtWzZu0YiiZgB7sbeaqCRXZeXPnUMlahCj83Ze5/L+Ij7EQRGNc7W0abLCHku6Rt7CyhivtOlRFeF8iokAkLZAIRPz5gBdntp7D2/s5yzxvh05lJjWSackYU5y2cH0f6ZzEAGMpCBDGQgA/0Q9BfDlmFTudrtnAAAAABJRU5ErkJggg==',
+  'HL-9T2N-V5QH': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACrklEQVR42u2cPY7jMAyFP64MpJSBHCBHkW8WzJH2BvZRcoAB5DKADG6hP0+6ndKiCiFy/Brm4ZF8kiLKf4/tD78YBjKQgQxkIAMZ6JogKWOqj3eRjymPxaI3CCioqmoEWfYJkUeC7ZGQxScAp6qqatEbB7QXAdCVQwgRCNEp7EU3zgpi0RsJtD0S+jU7ZZsP0a/ZackVFr0hQNPHWsLr1iwKp8AhFr0RGeEV2EHhLYTXlGCfEgBavrDoDQTaRERkBln2ohHyjCDP6FQWjtxqWPSuD0I/RwRdvWrJGj7VTqSN1aJ3fT9i2ac8sT0SpXrwb6nFBMjSKwqL3vU1YvWJqgcpP8vdZ6guRHlmGjEGI/LHQoGUs0ZJHb7wRbUSxBgxAiNCdIUCrWao3GiSUcXDGDEEI7pFnSlQJsCprpC5YRoxWNbolYLv8pAqSyxrDKgR7tR9FgrkdNLrTmPEOHVE+bmzWlSNWCHLQ80kxoiLg5qL/Rbdst/gkrDfVfAA/nsScHRnwqI3gh/RSskfdqWaHzEsI7IB0Ze5onCf9rYxYpxeo9uVjQdrf6kWlcaIcTSiL6MrWeNkYfLDvzJGDAAKzZLaHqkcrcvbXfutKAi20zVa93nuNHvN4KupbX7ESN2nbo+3EPTInabgFdnm70nhmMBHFFCx6A0CkmeEfO466FtU45GPRsgC9JPaFr2B/Ihzcjg7263NsKwxlEa0O1267resDPo1t7f2CcLL7muMU0cQVoD9Tq4ZNnFJQoScOnKv4dWiN1KvQb3Ela0IqqnddzMsawwJyjvf20ye5BkbafrVHove9bNGGwIC4e89ESLKNiPgYzukbdEbJGuo1q2tWG5pnPY1up9t5yNGAfU7XTIfomu2ImpZ0RVksehdHST2z2QGMpCBDGQgAxnol6B/xayrpMueR4AAAAAASUVORK5CYII='
+};
+
+const DEFAULT_DATA = {
+  version: APP_VERSION,
+  product: {
+    name: 'HumanLink',
+    tagline: 'Meet once. Stay connected. Share only with consent.',
+    demoNotice: 'Privacy-first connection exchange proof of concept'
+  },
+  users: [
+    {
+      id: 'usr_sanjay', code: 'HL-7K3M-9Q2D',
+      publicProfile: { displayName: 'Sanjay K.', role: 'Digital Operations Leader', organization: 'Enterprise Technology', city: 'Mumbai', purpose: 'Building simple systems for complex work', avatar: 'SK' },
+      privateSeed: { fullName: 'Sanjay Kadam', email: 'sanjay.demo@humanlink.local', phone: '+91 90000 00001', linkedin: 'linkedin.com/in/sanjay-demo', calendar: 'humanlink.local/book/sanjay', note: 'Private demonstration data. Not a real contact record.' }
+    },
+    {
+      id: 'usr_anaya', code: 'HL-4P8R-K6WM',
+      publicProfile: { displayName: 'Anaya M.', role: 'Product Strategy Lead', organization: 'Northstar Labs', city: 'Pune', purpose: 'Exploring privacy-safe professional networking', avatar: 'AM' },
+      privateSeed: { fullName: 'Anaya Mehta', email: 'anaya.demo@humanlink.local', phone: '+91 90000 00002', linkedin: 'linkedin.com/in/anaya-demo', calendar: 'humanlink.local/book/anaya', note: 'Private demonstration data. Not a real contact record.' }
+    },
+    {
+      id: 'usr_rohan', code: 'HL-9T2N-V5QH',
+      publicProfile: { displayName: 'Rohan D.', role: 'Community Builder', organization: 'PeopleGrid', city: 'Bengaluru', purpose: 'Helping event conversations continue after the event', avatar: 'RD' },
+      privateSeed: { fullName: 'Rohan Desai', email: 'rohan.demo@humanlink.local', phone: '+91 90000 00003', linkedin: 'linkedin.com/in/rohan-demo', calendar: 'humanlink.local/book/rohan', note: 'Private demonstration data. Not a real contact record.' }
+    }
+  ]
+};
+
+let state = null;
+let pendingApprovalRequestId = null;
+let exchangeTimer = null;
+let activeRoute = 'home';
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const nowIso = () => new Date().toISOString();
+const uid = (prefix = 'id') => `${prefix}_${crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}_${Math.random().toString(36).slice(2)}`}`;
+const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+const formatDate = value => value ? new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : '—';
+const formatRelative = value => {
+  if (!value) return '—';
+  const seconds = Math.round((new Date(value).getTime() - Date.now()) / 1000);
+  const abs = Math.abs(seconds);
+  if (abs < 60) return seconds <= 0 ? 'just now' : 'in a moment';
+  const minutes = Math.round(seconds / 60);
+  if (Math.abs(minutes) < 60) return new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' }).format(minutes, 'minute');
+  const hours = Math.round(minutes / 60);
+  if (Math.abs(hours) < 24) return new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' }).format(hours, 'hour');
+  const days = Math.round(hours / 24);
+  return new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' }).format(days, 'day');
+};
+
+function bytesToBase64(bytes) {
+  let binary = '';
+  const arr = bytes instanceof ArrayBuffer ? new Uint8Array(bytes) : new Uint8Array(bytes.buffer || bytes);
+  arr.forEach(b => { binary += String.fromCharCode(b); });
+  return btoa(binary);
+}
+
+function base64ToBytes(value) {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+async function sha256Text(value) {
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function generateIdentityKeys() {
+  const pair = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveKey']);
+  const deviceKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
+  return {
+    privateJwk: await crypto.subtle.exportKey('jwk', pair.privateKey),
+    publicJwk: await crypto.subtle.exportKey('jwk', pair.publicKey),
+    deviceKey: bytesToBase64(await crypto.subtle.exportKey('raw', deviceKey))
+  };
+}
+
+function loadKeyStore() {
+  try { return JSON.parse(localStorage.getItem(KEY_STORE_KEY) || '{}'); }
+  catch { return {}; }
+}
+
+function saveKeyStore(store) {
+  localStorage.setItem(KEY_STORE_KEY, JSON.stringify(store));
+}
+
+async function ensureKeysForUsers(users) {
+  const keys = loadKeyStore();
+  for (const user of users) {
+    if (!keys[user.id]) keys[user.id] = await generateIdentityKeys();
+  }
+  saveKeyStore(keys);
+  return keys;
+}
+
+async function importAesRaw(base64, usages) {
+  return crypto.subtle.importKey('raw', base64ToBytes(base64), { name: 'AES-GCM', length: 256 }, false, usages);
+}
+
+async function encryptWithAesKey(data, key) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const plaintext = new TextEncoder().encode(JSON.stringify(data));
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plaintext);
+  return { algorithm: 'AES-GCM-256', iv: bytesToBase64(iv), ciphertext: bytesToBase64(ciphertext) };
+}
+
+async function decryptWithAesKey(packet, key) {
+  const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: base64ToBytes(packet.iv) }, key, base64ToBytes(packet.ciphertext));
+  return JSON.parse(new TextDecoder().decode(plaintext));
+}
+
+async function encryptVault(userId, privateData) {
+  const keyStore = loadKeyStore();
+  const deviceKey = await importAesRaw(keyStore[userId].deviceKey, ['encrypt']);
+  return encryptWithAesKey(privateData, deviceKey);
+}
+
+async function decryptVault(userId) {
+  const user = state.users.find(u => u.id === userId);
+  if (!user?.vaultCipher) return {};
+  const keyStore = loadKeyStore();
+  const deviceKey = await importAesRaw(keyStore[userId].deviceKey, ['decrypt']);
+  return decryptWithAesKey(user.vaultCipher, deviceKey);
+}
+
+async function deriveRelationshipKey(privateJwk, publicJwk, usages) {
+  const privateKey = await crypto.subtle.importKey('jwk', privateJwk, { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']);
+  const publicKey = await crypto.subtle.importKey('jwk', publicJwk, { name: 'ECDH', namedCurve: 'P-256' }, false, []);
+  return crypto.subtle.deriveKey({ name: 'ECDH', public: publicKey }, privateKey, { name: 'AES-GCM', length: 256 }, false, usages);
+}
+
+async function createGrant(ownerId, granteeId, fields, expiryChoice) {
+  const owner = state.users.find(u => u.id === ownerId);
+  const grantee = state.users.find(u => u.id === granteeId);
+  const privateData = await decryptVault(ownerId);
+  const selectedData = Object.fromEntries(fields.filter(field => Object.prototype.hasOwnProperty.call(privateData, field)).map(field => [field, privateData[field]]));
+
+  const contentKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
+  const cipher = await encryptWithAesKey({ ownerCode: owner.code, sharedAt: nowIso(), fields: selectedData }, contentKey);
+  const rawContentKey = await crypto.subtle.exportKey('raw', contentKey);
+
+  const keys = loadKeyStore();
+  const relationshipKey = await deriveRelationshipKey(keys[ownerId].privateJwk, keys[granteeId].publicJwk, ['encrypt']);
+  const wrappedKey = await encryptWithAesKey({ key: bytesToBase64(rawContentKey) }, relationshipKey);
+
+  const expiryMs = { '24h': 86400000, '30d': 2592000000, '90d': 7776000000, never: null }[expiryChoice] ?? 2592000000;
+  const grant = {
+    id: uid('grant'), ownerId, granteeId, fields, createdAt: nowIso(),
+    expiresAt: expiryMs ? new Date(Date.now() + expiryMs).toISOString() : null,
+    revokedAt: null,
+    ownerPublicJwk: keys[ownerId].publicJwk,
+    granteePublicJwk: keys[granteeId].publicJwk,
+    ownerKeyFingerprint: (await sha256Text(JSON.stringify(keys[ownerId].publicJwk))).slice(0, 16).toUpperCase(),
+    cipher, wrappedKey,
+    protocol: 'ECDH P-256 → relationship AES-GCM key → wrapped per-grant AES-256 key'
+  };
+  state.grants.push(grant);
+  audit(ownerId, 'PRIVATE_GRANT_CREATED', `${fields.length} field(s) encrypted for ${grantee.code}`, grant.id);
+  audit(granteeId, 'PRIVATE_GRANT_RECEIVED', `Encrypted grant received from ${owner.code}`, grant.id);
+  persist();
+  return grant;
+}
+
+async function decryptGrant(grant, viewerId) {
+  if (grant.granteeId !== viewerId) throw new Error('This grant was not issued to the active identity.');
+  if (grant.revokedAt) throw new Error('Access has been revoked.');
+  if (grant.expiresAt && new Date(grant.expiresAt) < new Date()) throw new Error('Access has expired.');
+  const keys = loadKeyStore();
+  const relationshipKey = await deriveRelationshipKey(keys[viewerId].privateJwk, grant.ownerPublicJwk, ['decrypt']);
+  const wrapped = await decryptWithAesKey(grant.wrappedKey, relationshipKey);
+  const contentKey = await importAesRaw(wrapped.key, ['decrypt']);
+  return decryptWithAesKey(grant.cipher, contentKey);
+}
+
+function createFreshState() {
+  return {
+    version: APP_VERSION,
+    activeUserId: DEFAULT_DATA.users[0].id,
+    users: structuredClone(DEFAULT_DATA.users),
+    requests: [], connections: [], grants: [], audit: [],
+    settings: { demoStartedAt: nowIso(), compactMode: false }
+  };
+}
+
+async function initializeState() {
+  let loaded = null;
+  try { loaded = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch { loaded = null; }
+  state = loaded?.version === APP_VERSION ? loaded : createFreshState();
+  await ensureKeysForUsers(state.users);
+
+  let changed = false;
+  for (const user of state.users) {
+    if (!user.vaultCipher && user.privateSeed) {
+      user.vaultCipher = await encryptVault(user.id, user.privateSeed);
+      delete user.privateSeed;
+      changed = true;
+    }
+  }
+  if (!state.audit.length) {
+    state.users.forEach(user => audit(user.id, 'IDENTITY_READY', `Identity ${user.code} protected with a device key`, user.id, false));
+    changed = true;
+  }
+  if (changed) persist();
+}
+
+function persist() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+
+function audit(userId, action, message, objectId = null, save = true) {
+  state.audit.unshift({ id: uid('audit'), userId, action, message, objectId, createdAt: nowIso() });
+  state.audit = state.audit.slice(0, 120);
+  if (save) persist();
+}
+
+function activeUser() { return state.users.find(u => u.id === state.activeUserId); }
+function userById(id) { return state.users.find(u => u.id === id); }
+function userByCode(code) { return state.users.find(u => u.code.toUpperCase() === code.trim().toUpperCase()); }
+function incomingRequests() { return state.requests.filter(r => r.toId === state.activeUserId && r.status === 'pending'); }
+function outgoingRequests() { return state.requests.filter(r => r.fromId === state.activeUserId && r.status === 'pending'); }
+function activeConnections() { return state.connections.filter(c => c.members.includes(state.activeUserId) && !c.deletedAt); }
+function grantIsActive(g) { return !g.revokedAt && (!g.expiresAt || new Date(g.expiresAt) > new Date()); }
+
+function toast(message, tone = 'default') {
+  const el = $('#toast');
+  el.textContent = message;
+  el.dataset.tone = tone;
+  el.classList.add('show');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function openModal(id) { $(`#${id}`).classList.add('open'); document.body.classList.add('modal-open'); }
+function closeModal(id) { $(`#${id}`).classList.remove('open'); if (!$('.modal.open')) document.body.classList.remove('modal-open'); }
+
+function normalizeCodeInput(value) {
+  const raw = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (raw.startsWith('HL')) {
+    const body = raw.slice(2, 10);
+    return `HL-${body.slice(0, 4)}${body.length > 4 ? `-${body.slice(4, 8)}` : ''}`;
+  }
+  return value.toUpperCase();
+}
+
+function generatePeopleCode() {
+  const alphabet = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  let body = '';
+  const random = crypto.getRandomValues(new Uint8Array(8));
+  random.forEach(v => { body += alphabet[v % alphabet.length]; });
+  return `HL-${body.slice(0, 4)}-${body.slice(4)}`;
+}
+
+function generateHandshakeCode() {
+  const bytes = crypto.getRandomValues(new Uint32Array(1));
+  return String(100000 + (bytes[0] % 900000));
+}
+
+function routeTo(route) {
+  activeRoute = route;
+  $$('.view').forEach(view => view.classList.toggle('active', view.dataset.view === route));
+  $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.route === route));
+  const titles = { home: 'Identity', requests: 'Requests', connections: 'Connections', vault: 'Private Vault', architecture: 'Trust Model' };
+  $('#pageTitle').textContent = titles[route] || 'HumanLink';
+  renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderAll() {
+  renderHeader();
+  renderHome();
+  renderRequests();
+  renderConnections();
+  renderVault();
+  renderArchitecture();
+  updateBadges();
+}
+
+function renderHeader() {
+  const user = activeUser();
+  $('#activeAvatar').textContent = user.publicProfile.avatar;
+  $('#activeName').textContent = user.publicProfile.displayName;
+  $('#activeCodeMini').textContent = user.code;
+  $('#personaSelect').innerHTML = state.users.map(u => `<option value="${u.id}" ${u.id === user.id ? 'selected' : ''}>${escapeHtml(u.publicProfile.displayName)} · ${u.code}</option>`).join('');
+}
+
+function renderHome() {
+  const user = activeUser();
+  $('#identityAvatar').textContent = user.publicProfile.avatar;
+  $('#identityName').textContent = user.publicProfile.displayName;
+  $('#identityRole').textContent = user.publicProfile.role;
+  $('#identityOrg').textContent = user.publicProfile.organization;
+  $('#identityPurpose').textContent = user.publicProfile.purpose;
+  $('#identityCode').textContent = user.code;
+  $('#heroCity').textContent = user.publicProfile.city;
+  $('#publicFieldCount').textContent = Object.values(user.publicProfile).filter(Boolean).length;
+  $('#incomingCount').textContent = incomingRequests().length;
+  $('#connectionCount').textContent = activeConnections().length;
+  renderIdentityCodeGraphic($('#identityCodeGraphic'), user.code);
+
+  const recent = [...state.audit].filter(a => a.userId === user.id).slice(0, 4);
+  $('#recentActivity').innerHTML = recent.length ? recent.map(item => `
+    <div class="activity-row">
+      <span class="activity-icon">${activityIcon(item.action)}</span>
+      <div><strong>${escapeHtml(item.message)}</strong><small>${formatRelative(item.createdAt)}</small></div>
+    </div>`).join('') : emptyState('No activity yet', 'Exchange a code to start your relationship timeline.');
+}
+
+function activityIcon(action) {
+  if (action.includes('GRANT')) return '🔐';
+  if (action.includes('REQUEST')) return '↗';
+  if (action.includes('REVOK')) return '⛔';
+  if (action.includes('CONNECTION')) return '✓';
+  return '•';
+}
+
+function renderIdentityCodeGraphic(target, code) {
+  target.innerHTML = '';
+  if (STATIC_QR_MAP[code]) {
+    const img = document.createElement('img');
+    img.src = STATIC_QR_MAP[code];
+    img.alt = `QR code for ${code}`;
+    img.width = 164; img.height = 164;
+    target.appendChild(img);
+    target.dataset.kind = 'qr';
+    return;
+  }
+  const canvas = document.createElement('canvas');
+  canvas.width = 164; canvas.height = 164;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 164, 164);
+  const hash = [...code].reduce((a, c) => ((a << 5) - a + c.charCodeAt(0)) | 0, 0);
+  const size = 11, cell = 12, offset = 16;
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const bit = Math.abs(Math.sin(hash + x * 71 + y * 37)) > 0.42;
+      if (bit || (x < 3 && y < 3) || (x > 7 && y < 3) || (x < 3 && y > 7)) {
+        ctx.fillStyle = '#12243d'; ctx.fillRect(offset + x * cell, offset + y * cell, 9, 9);
+      }
+    }
+  }
+  target.appendChild(canvas);
+  target.dataset.kind = 'demo-matrix';
+  target.title = 'Offline visual fallback. The hosted version generates a standards-compliant QR code.';
+}
+
+function renderRequests() {
+  const incoming = state.requests.filter(r => r.toId === state.activeUserId).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const outgoing = state.requests.filter(r => r.fromId === state.activeUserId).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  $('#incomingRequests').innerHTML = incoming.length ? incoming.map(requestCard).join('') : emptyState('No incoming requests', 'Your private data remains sealed until you approve a request.');
+  $('#outgoingRequests').innerHTML = outgoing.length ? outgoing.map(outgoingCard).join('') : emptyState('No outgoing requests', 'Enter a HumanLink code to ask someone to connect.');
+}
+
+function requestCard(request) {
+  const from = userById(request.fromId);
+  const status = request.status;
+  return `<article class="request-card">
+    <div class="request-top">
+      <div class="avatar small">${escapeHtml(from.publicProfile.avatar)}</div>
+      <div class="request-main"><strong>${escapeHtml(from.publicProfile.displayName)}</strong><span>${escapeHtml(from.publicProfile.role)} · ${escapeHtml(from.publicProfile.organization)}</span><small>${formatRelative(request.createdAt)}</small></div>
+      <span class="status ${status}">${status}</span>
+    </div>
+    <p>${escapeHtml(request.message || 'Would like to stay connected.')}</p>
+    <div class="request-meta"><span>Shared with you: public identity only</span><span>No private fields exposed</span></div>
+    ${status === 'pending' ? `<div class="card-actions"><button class="btn btn-secondary" data-action="reject-request" data-id="${request.id}">Decline</button><button class="btn btn-primary" data-action="approve-request" data-id="${request.id}">Review & approve</button></div>` : `<div class="decision-note">${status === 'approved' ? `Approved ${formatRelative(request.decidedAt)}` : `Declined ${formatRelative(request.decidedAt)}`}</div>`}
+  </article>`;
+}
+
+function outgoingCard(request) {
+  const target = userById(request.toId);
+  return `<article class="request-card compact">
+    <div class="request-top"><div class="avatar small">${escapeHtml(target.publicProfile.avatar)}</div><div class="request-main"><strong>${escapeHtml(target.publicProfile.displayName)}</strong><span>${target.code}</span><small>${formatRelative(request.createdAt)}</small></div><span class="status ${request.status}">${request.status}</span></div>
+    <p>${escapeHtml(request.message)}</p>
+    ${request.status === 'pending' ? `<button class="text-btn danger" data-action="cancel-request" data-id="${request.id}">Cancel request</button>` : ''}
+  </article>`;
+}
+
+function renderConnections() {
+  const connections = activeConnections().sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  $('#connectionsList').innerHTML = connections.length ? connections.map(connectionCard).join('') : emptyState('No connections yet', 'A connection appears after a request is approved. Private access remains directional.');
+}
+
+function connectionCard(connection) {
+  const otherId = connection.members.find(id => id !== state.activeUserId);
+  const other = userById(otherId);
+  const availableToMe = state.grants.filter(g => g.ownerId === otherId && g.granteeId === state.activeUserId && grantIsActive(g));
+  const sharedByMe = state.grants.filter(g => g.ownerId === state.activeUserId && g.granteeId === otherId && grantIsActive(g));
+  const latestGrant = availableToMe[0];
+  return `<article class="connection-card">
+    <div class="connection-head">
+      <div class="avatar">${escapeHtml(other.publicProfile.avatar)}</div>
+      <div><strong>${escapeHtml(other.publicProfile.displayName)}</strong><span>${escapeHtml(other.publicProfile.role)}</span><small>${other.code} · Connected ${formatRelative(connection.createdAt)}</small></div>
+      <button class="icon-btn" data-action="connection-menu" data-id="${connection.id}" aria-label="Connection options">•••</button>
+    </div>
+    <div class="direction-grid">
+      <div class="direction-box"><span>They shared with you</span><strong>${availableToMe.length ? `${latestGrant.fields.length} private field${latestGrant.fields.length === 1 ? '' : 's'}` : 'Open identity only'}</strong><small>${latestGrant?.expiresAt ? `Expires ${formatDate(latestGrant.expiresAt)}` : availableToMe.length ? 'No expiry' : 'Request more only when needed'}</small></div>
+      <div class="direction-box"><span>You shared</span><strong>${sharedByMe.length ? `${sharedByMe[0].fields.length} private field${sharedByMe[0].fields.length === 1 ? '' : 's'}` : 'Open identity only'}</strong><small>${sharedByMe.length ? 'You can revoke anytime' : 'Your vault remains sealed'}</small></div>
+    </div>
+    <div class="card-actions">
+      ${availableToMe.length ? `<button class="btn btn-primary" data-action="unlock-grant" data-id="${latestGrant.id}">Unlock approved data</button>` : `<button class="btn btn-secondary" data-action="request-more" data-id="${otherId}">Request private access</button>`}
+      ${sharedByMe.length ? `<button class="btn btn-ghost danger" data-action="revoke-grant" data-id="${sharedByMe[0].id}">Revoke my grant</button>` : ''}
+    </div>
+  </article>`;
+}
+
+async function renderVault() {
+  const user = activeUser();
+  const grants = state.grants.filter(g => g.ownerId === user.id).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const keys = loadKeyStore();
+  const fingerprint = keys[user.id] ? (await sha256Text(JSON.stringify(keys[user.id].publicJwk))).slice(0, 24).toUpperCase().match(/.{1,4}/g).join(' ') : '—';
+  $('#keyFingerprint').textContent = fingerprint;
+  $('#vaultCipherPreview').textContent = `${user.vaultCipher.ciphertext.slice(0, 80)}…`;
+  $('#vaultSize').textContent = `${Math.round(user.vaultCipher.ciphertext.length * 0.75)} encrypted bytes`;
+  $('#grantCount').textContent = grants.filter(grantIsActive).length;
+  $('#vaultGrants').innerHTML = grants.length ? grants.map(g => {
+    const recipient = userById(g.granteeId);
+    return `<div class="grant-row"><div><strong>${escapeHtml(recipient.publicProfile.displayName)}</strong><span>${g.fields.join(', ')}</span><small>${g.revokedAt ? `Revoked ${formatRelative(g.revokedAt)}` : g.expiresAt ? `Expires ${formatDate(g.expiresAt)}` : 'No expiry'}</small></div><span class="status ${g.revokedAt ? 'declined' : grantIsActive(g) ? 'approved' : 'expired'}">${g.revokedAt ? 'revoked' : grantIsActive(g) ? 'active' : 'expired'}</span></div>`;
+  }).join('') : emptyState('No private grants issued', 'Approving a connection does not automatically reveal private data.');
+
+  const activity = state.audit.filter(a => a.userId === user.id).slice(0, 12);
+  $('#auditList').innerHTML = activity.map(a => `<div class="audit-row"><span>${activityIcon(a.action)}</span><div><strong>${escapeHtml(a.action.replaceAll('_', ' '))}</strong><p>${escapeHtml(a.message)}</p><small>${formatDate(a.createdAt)}</small></div></div>`).join('');
+}
+
+function renderArchitecture() {
+  const user = activeUser();
+  $('#architectureCode').textContent = user.code;
+  $('#architectureIncoming').textContent = incomingRequests().length;
+  $('#architectureGrants').textContent = state.grants.filter(g => g.ownerId === user.id && grantIsActive(g)).length;
+}
+
+function updateBadges() {
+  const count = incomingRequests().length;
+  const badge = $('#requestBadge');
+  badge.textContent = count;
+  badge.hidden = count === 0;
+}
+
+function emptyState(title, text) {
+  return `<div class="empty-state"><div class="empty-symbol">◇</div><strong>${escapeHtml(title)}</strong><p>${escapeHtml(text)}</p></div>`;
+}
+
+async function sendConnectionRequest(targetCode, message, intent = 'connect') {
+  const target = userByCode(targetCode);
+  if (!target) throw new Error('No demo identity was found for that code. Try one of the sample codes shown in the app.');
+  if (target.id === state.activeUserId) throw new Error('Use another identity code to demonstrate an exchange.');
+  const existingConnection = state.connections.find(c => c.members.includes(target.id) && c.members.includes(state.activeUserId) && !c.deletedAt);
+  const duplicate = state.requests.find(r => r.fromId === state.activeUserId && r.toId === target.id && r.status === 'pending');
+  if (duplicate) throw new Error('A request to this identity is already pending.');
+  const request = {
+    id: uid('req'), fromId: state.activeUserId, toId: target.id, createdAt: nowIso(), status: 'pending',
+    message: message || (intent === 'more' ? 'May I access selected private contact details?' : 'We just met. I would like to stay connected.'),
+    intent, existingConnectionId: existingConnection?.id || null,
+    senderOpenSnapshot: structuredClone(activeUser().publicProfile)
+  };
+  state.requests.unshift(request);
+  audit(state.activeUserId, 'REQUEST_SENT', `Connection request sent to ${target.code}`, request.id, false);
+  audit(target.id, 'REQUEST_RECEIVED', `Request received from ${activeUser().code}`, request.id, false);
+  persist();
+  renderAll();
+  return request;
+}
+
+function showApprovalModal(requestId) {
+  const request = state.requests.find(r => r.id === requestId);
+  if (!request || request.toId !== state.activeUserId || request.status !== 'pending') return;
+  pendingApprovalRequestId = requestId;
+  const sender = userById(request.fromId);
+  $('#approvalRequester').innerHTML = `<div class="avatar">${escapeHtml(sender.publicProfile.avatar)}</div><div><strong>${escapeHtml(sender.publicProfile.displayName)}</strong><span>${escapeHtml(sender.publicProfile.role)} · ${sender.code}</span></div>`;
+  $('#approvalMessage').textContent = request.message;
+  $$('#approvalForm input[type="checkbox"]').forEach(input => { input.checked = input.value === 'email' || input.value === 'linkedin'; });
+  $('#approvalLevel').value = 'selected';
+  $('#expiryChoice').value = '30d';
+  updateApprovalUI();
+  openModal('approvalModal');
+}
+
+function updateApprovalUI() {
+  const selected = $('#approvalLevel').value === 'selected';
+  $('#privateFieldSelector').classList.toggle('disabled', !selected);
+  $$('#privateFieldSelector input').forEach(input => { input.disabled = !selected; });
+  $('#expiryWrap').classList.toggle('disabled', !selected);
+  $('#expiryChoice').disabled = !selected;
+  $('#approvalSummary').textContent = selected
+    ? 'Only selected fields will be encrypted for this requester. This does not grant access in the opposite direction.'
+    : 'The connection will be approved, but your private vault will stay sealed.';
+}
+
+async function approvePendingRequest() {
+  const request = state.requests.find(r => r.id === pendingApprovalRequestId);
+  if (!request) return;
+  const level = $('#approvalLevel').value;
+  const fields = $$('#privateFieldSelector input:checked').map(input => input.value);
+  if (level === 'selected' && !fields.length) return toast('Select at least one private field or choose open identity only.', 'warn');
+
+  let connection = state.connections.find(c => c.members.includes(request.fromId) && c.members.includes(request.toId) && !c.deletedAt);
+  if (!connection) {
+    connection = { id: uid('con'), members: [request.fromId, request.toId], createdAt: nowIso(), updatedAt: nowIso(), sourceRequestId: request.id, notes: [] };
+    state.connections.unshift(connection);
+  } else connection.updatedAt = nowIso();
+
+  request.status = 'approved';
+  request.decidedAt = nowIso();
+  request.approvalLevel = level;
+  if (level === 'selected') request.grantId = (await createGrant(request.toId, request.fromId, fields, $('#expiryChoice').value)).id;
+  audit(request.toId, 'CONNECTION_APPROVED', `Approved connection with ${userById(request.fromId).code}`, connection.id, false);
+  audit(request.fromId, 'CONNECTION_CONFIRMED', `${userById(request.toId).code} approved your request`, connection.id, false);
+  persist();
+  closeModal('approvalModal');
+  pendingApprovalRequestId = null;
+  renderAll();
+  toast(level === 'selected' ? 'Connected. Selected private fields were encrypted for the requester.' : 'Connected with open identity only.', 'success');
+}
+
+function rejectRequest(requestId) {
+  const request = state.requests.find(r => r.id === requestId);
+  if (!request || request.toId !== state.activeUserId) return;
+  request.status = 'declined'; request.decidedAt = nowIso();
+  audit(request.toId, 'REQUEST_DECLINED', `Declined request from ${userById(request.fromId).code}`, request.id, false);
+  audit(request.fromId, 'REQUEST_DECLINED_BY_RECEIVER', `${userById(request.toId).code} declined the request`, request.id, false);
+  persist(); renderAll(); toast('Request declined. No private data was shared.');
+}
+
+async function showGrant(grantId) {
+  const grant = state.grants.find(g => g.id === grantId);
+  try {
+    const payload = await decryptGrant(grant, state.activeUserId);
+    const owner = userById(grant.ownerId);
+    $('#unlockedOwner').textContent = `${owner.publicProfile.displayName} · ${owner.code}`;
+    $('#unlockedFields').innerHTML = Object.entries(payload.fields).map(([key, value]) => `<div class="unlocked-row"><span>${escapeHtml(fieldLabel(key))}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
+    $('#unlockedPolicy').textContent = grant.expiresAt ? `Access expires ${formatDate(grant.expiresAt)}. The owner can revoke it earlier.` : 'No fixed expiry. The owner can revoke access at any time.';
+    $('#cipherInspector').textContent = JSON.stringify({ protocol: grant.protocol, keyFingerprint: grant.ownerKeyFingerprint, wrappedKey: grant.wrappedKey, encryptedPayload: grant.cipher }, null, 2);
+    audit(state.activeUserId, 'GRANT_DECRYPTED', `Approved data unlocked from ${owner.code}`, grant.id);
+    openModal('unlockedModal');
+  } catch (error) { toast(error.message, 'error'); }
+}
+
+function fieldLabel(field) {
+  return ({ fullName: 'Full name', email: 'Email', phone: 'Phone', linkedin: 'LinkedIn', calendar: 'Meeting link', note: 'Private note' })[field] || field;
+}
+
+function revokeGrant(grantId) {
+  const grant = state.grants.find(g => g.id === grantId);
+  if (!grant || grant.ownerId !== state.activeUserId || grant.revokedAt) return;
+  grant.revokedAt = nowIso();
+  audit(grant.ownerId, 'GRANT_REVOKED', `Revoked private access for ${userById(grant.granteeId).code}`, grant.id, false);
+  audit(grant.granteeId, 'GRANT_REVOKED_BY_OWNER', `${userById(grant.ownerId).code} revoked private access`, grant.id, false);
+  persist(); renderAll(); toast('Private access revoked immediately.', 'success');
+}
+
+async function saveVaultForm() {
+  const data = Object.fromEntries(new FormData($('#vaultEditForm')).entries());
+  activeUser().vaultCipher = await encryptVault(state.activeUserId, data);
+  audit(state.activeUserId, 'VAULT_UPDATED', 'Private vault re-encrypted after editing', state.activeUserId, false);
+  persist(); closeModal('vaultEditModal'); renderAll(); toast('Vault encrypted and saved.', 'success');
+}
+
+async function openVaultEditor() {
+  const data = await decryptVault(state.activeUserId);
+  Object.entries(data).forEach(([key, value]) => {
+    const input = $(`#vaultEditForm [name="${CSS.escape(key)}"]`);
+    if (input) input.value = value;
+  });
+  openModal('vaultEditModal');
+}
+
+async function createIdentity(form) {
+  const formData = Object.fromEntries(new FormData(form).entries());
+  const initials = formData.displayName.split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase();
+  const user = {
+    id: uid('usr'), code: generatePeopleCode(),
+    publicProfile: { displayName: formData.displayName, role: formData.role, organization: formData.organization || 'Independent', city: formData.city || 'Not shown', purpose: formData.purpose || 'Open to meaningful connections', avatar: initials },
+    privateSeed: { fullName: formData.fullName || formData.displayName, email: formData.email || '', phone: formData.phone || '', linkedin: formData.linkedin || '', calendar: formData.calendar || '', note: 'Created inside the HumanLink PoC.' }
+  };
+  state.users.push(user);
+  await ensureKeysForUsers(state.users);
+  user.vaultCipher = await encryptVault(user.id, user.privateSeed);
+  delete user.privateSeed;
+  state.activeUserId = user.id;
+  audit(user.id, 'IDENTITY_CREATED', `New identity ${user.code} created`, user.id, false);
+  persist(); closeModal('createIdentityModal'); form.reset(); renderAll(); toast(`Identity created: ${user.code}`, 'success');
+}
+
+function startExchangeMode() {
+  const code = generateHandshakeCode();
+  const expiresAt = Date.now() + 90000;
+  $('#handshakeCode').textContent = `${code.slice(0, 3)} ${code.slice(3)}`;
+  $('#handshakeOwner').textContent = activeUser().code;
+  $('#handshakeProgress').style.width = '100%';
+  $('#exchangeShareText').textContent = `Use ${activeUser().code} or temporary code ${code} to request a connection. No private data is inside this code.`;
+  clearInterval(exchangeTimer);
+  exchangeTimer = setInterval(() => {
+    const remaining = Math.max(0, expiresAt - Date.now());
+    $('#handshakeSeconds').textContent = String(Math.ceil(remaining / 1000));
+    $('#handshakeProgress').style.width = `${(remaining / 90000) * 100}%`;
+    if (!remaining) {
+      clearInterval(exchangeTimer);
+      $('#handshakeCode').textContent = 'EXPIRED';
+      $('#handshakeSeconds').textContent = '0';
+    }
+  }, 250);
+  openModal('exchangeModal');
+}
+
+async function shareIdentity() {
+  const user = activeUser();
+  const url = `https://humanlink.example/connect?code=${encodeURIComponent(user.code)}`;
+  const text = `Connect with ${user.publicProfile.displayName} using HumanLink code ${user.code}. The code contains no phone number or email.`;
+  try {
+    if (navigator.share) await navigator.share({ title: `HumanLink · ${user.code}`, text, url });
+    else {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      toast('Identity code copied.');
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') toast('Sharing was cancelled or unavailable.', 'warn');
+  }
+}
+
+function exportSnapshot() {
+  const payload = {
+    exportedAt: nowIso(), version: state.version,
+    privacyNote: 'Private profile values remain encrypted. Device and private identity keys are not included.',
+    state: structuredClone(state)
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `humanlink-encrypted-snapshot-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+  audit(state.activeUserId, 'SNAPSHOT_EXPORTED', 'Encrypted state snapshot exported', null);
+}
+
+function resetDemo() {
+  if (!confirm('Reset all demo requests, connections, grants and locally stored keys?')) return;
+  localStorage.removeItem(STORE_KEY); localStorage.removeItem(KEY_STORE_KEY);
+  location.reload();
+}
+
+function bindEvents() {
+  document.addEventListener('click', async event => {
+    const routeEl = event.target.closest('[data-route]');
+    if (routeEl) { event.preventDefault(); routeTo(routeEl.dataset.route); return; }
+    const actionEl = event.target.closest('[data-action]');
+    if (!actionEl) return;
+    const { action, id } = actionEl.dataset;
+    try {
+      if (action === 'open-connect') openModal('connectModal');
+      if (action === 'close-modal') closeModal(id);
+      if (action === 'share-identity') await shareIdentity();
+      if (action === 'copy-code') { await navigator.clipboard.writeText(activeUser().code); toast('HumanLink code copied.'); }
+      if (action === 'exchange-mode') startExchangeMode();
+      if (action === 'approve-request') showApprovalModal(id);
+      if (action === 'reject-request') rejectRequest(id);
+      if (action === 'cancel-request') { const r = state.requests.find(x => x.id === id); if (r) { r.status = 'cancelled'; r.decidedAt = nowIso(); persist(); renderAll(); } }
+      if (action === 'unlock-grant') await showGrant(id);
+      if (action === 'revoke-grant') revokeGrant(id);
+      if (action === 'request-more') { $('#connectCode').value = userById(id).code; $('#connectMessage').value = 'May I access selected private contact details?'; openModal('connectModal'); }
+      if (action === 'edit-vault') await openVaultEditor();
+      if (action === 'create-identity') openModal('createIdentityModal');
+      if (action === 'export-snapshot') exportSnapshot();
+      if (action === 'reset-demo') resetDemo();
+      if (action === 'switch-to-requester') { const request = state.requests.find(r => r.id === id); if (request) { state.activeUserId = request.fromId; persist(); closeModal('approvalModal'); routeTo('requests'); } }
+      if (action === 'inspect-cipher') $('#cipherInspectorWrap').classList.toggle('open');
+    } catch (error) { console.error(error); toast(error.message || 'Something went wrong.', 'error'); }
+  });
+
+  $('#personaSelect').addEventListener('change', event => { state.activeUserId = event.target.value; persist(); renderAll(); });
+  $('#approvalLevel').addEventListener('change', updateApprovalUI);
+  $('#connectCode').addEventListener('input', event => { event.target.value = normalizeCodeInput(event.target.value); });
+
+  $('#connectForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    try {
+      const code = $('#connectCode').value;
+      const message = $('#connectMessage').value;
+      await sendConnectionRequest(code, message);
+      closeModal('connectModal'); event.target.reset(); routeTo('requests'); toast('Request sent. The receiver decides what, if anything, to reveal.', 'success');
+    } catch (error) { toast(error.message, 'error'); }
+  });
+  $('#approvalForm').addEventListener('submit', async event => { event.preventDefault(); await approvePendingRequest(); });
+  $('#vaultEditForm').addEventListener('submit', async event => { event.preventDefault(); await saveVaultForm(); });
+  $('#createIdentityForm').addEventListener('submit', async event => { event.preventDefault(); await createIdentity(event.target); });
+
+  $$('.modal').forEach(modal => modal.addEventListener('click', event => { if (event.target === modal) closeModal(modal.id); }));
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') { const modal = $('.modal.open'); if (modal) closeModal(modal.id); } });
+}
+
+async function boot() {
+  if (!window.crypto?.subtle) {
+    document.body.innerHTML = '<main class="fatal"><h1>Secure browser required</h1><p>This PoC requires the Web Crypto API. Open it in a current version of Chrome, Edge, Firefox or Safari.</p></main>';
+    return;
+  }
+  await initializeState();
+  bindEvents();
+  renderAll();
+  routeTo('home');
+  $('#app').classList.add('ready');
+}
+
+document.addEventListener('DOMContentLoaded', boot);
+
+  </script>
+  <style>
+    :root {
+      --navy-950:#07111f; --navy-900:#0c192a; --navy-850:#10213a; --navy-800:#132944;
+      --navy-700:#1c385a; --gold:#ffbd2e; --gold-2:#f4a915; --cream:#fff8e8;
+      --ink:#152238; --muted:#6d7888; --line:#e5e9ef; --surface:#fff; --surface-2:#f6f7f9;
+      --good:#17795e; --good-soft:#e8f7f1; --warn:#a56900; --warn-soft:#fff3d5; --danger:#b33a4a; --danger-soft:#ffedf0;
+      --shadow:0 22px 60px rgba(18,34,61,.12); --shadow-soft:0 10px 30px rgba(18,34,61,.08);
+      --radius:24px; --radius-sm:16px;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:#eef0f3;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    button,input,textarea,select{font:inherit} button{cursor:pointer} a{color:inherit;text-decoration:none} [hidden]{display:none!important}
+    body.modal-open{overflow:hidden}.app{opacity:0;transition:.2s ease}.app.ready{opacity:1}
+    .shell{max-width:1440px;margin:0 auto;min-height:100vh;display:grid;grid-template-columns:270px 1fr;background:var(--surface)}
+    .sidebar{background:linear-gradient(180deg,var(--navy-950),var(--navy-850));color:#fff;padding:26px 20px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:10}
+    .brand{display:flex;align-items:center;gap:12px;padding:4px 8px 24px}.brand-mark{width:42px;height:42px;border:2px solid var(--gold);border-radius:14px;display:grid;place-items:center;position:relative;transform:rotate(-5deg)}
+    .brand-mark:before,.brand-mark:after{content:"";position:absolute;border:2px solid var(--gold);width:16px;height:22px;transform:skew(-18deg)}.brand-mark:before{left:8px}.brand-mark:after{right:6px;transform:skew(18deg)}
+    .brand-copy strong{display:block;font-size:18px;letter-spacing:.2px}.brand-copy span{display:block;color:#9eacc0;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+    .side-nav{display:grid;gap:7px}.nav-item{position:relative;border:0;background:transparent;color:#aeb9c8;border-radius:14px;padding:13px 14px;text-align:left;display:flex;align-items:center;gap:12px;font-weight:700;transition:.18s ease}.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.08);color:#fff}.nav-icon{width:23px;text-align:center;font-size:18px}.badge{margin-left:auto;background:var(--gold);color:var(--navy-950);min-width:22px;height:22px;border-radius:999px;display:grid;place-items:center;font-size:11px;font-weight:900}
+    .security-card{margin-top:auto;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:18px;padding:16px}.security-card strong{display:flex;align-items:center;gap:8px;font-size:13px}.security-card p{font-size:12px;line-height:1.55;color:#aeb9c8;margin:8px 0 0}.secure-dot{width:8px;height:8px;border-radius:50%;background:#52d7a4;box-shadow:0 0 0 5px rgba(82,215,164,.1)}
+    .main{min-width:0;background:linear-gradient(135deg,#fafbfc 0%,#f2f3f5 60%,#eceef1 100%)}
+    .topbar{height:86px;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:0 36px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:8}.topbar h1{font-size:22px;margin:0}.topbar-sub{font-size:12px;color:var(--muted);margin-top:3px}.persona{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:16px;padding:8px 10px;box-shadow:var(--shadow-soft)}.persona .avatar{width:38px;height:38px}.persona-info{min-width:115px}.persona-info strong,.persona-info span{display:block}.persona-info strong{font-size:13px}.persona-info span{font-size:10px;color:var(--muted);margin-top:2px}.persona select{border:0;background:transparent;color:var(--muted);max-width:190px;outline:none;font-size:12px}.content{padding:30px 36px 90px;max-width:1160px;margin:0 auto}.view{display:none}.view.active{display:block;animation:fadeUp .24s ease}@keyframes fadeUp{from{opacity:.1;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}.section-head h2{margin:0;font-size:25px;letter-spacing:-.5px}.section-head p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.5}.eyebrow{display:inline-block;font-size:11px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--warn);margin-bottom:8px}.head-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{border:0;border-radius:13px;padding:12px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:13px;min-height:44px;transition:.18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--gold);color:var(--navy-950);box-shadow:0 8px 18px rgba(255,189,46,.28)}.btn-secondary{background:var(--navy-850);color:#fff}.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.danger,.text-btn.danger{color:var(--danger)}.text-btn{border:0;background:transparent;padding:8px 0;font-size:12px;font-weight:800}.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+    .home-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);gap:22px}.identity-card{min-height:380px;position:relative;overflow:hidden;background:linear-gradient(145deg,#0b1b30,#183558 62%,#10233b);color:#fff;border-radius:30px;padding:28px;box-shadow:0 24px 60px rgba(12,25,42,.25)}.identity-card:after{content:"";position:absolute;left:0;right:0;bottom:0;height:15px;background:var(--gold)}.card-orbit{position:absolute;width:320px;height:320px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-105px;top:-80px}.card-orbit:after{content:"";position:absolute;inset:40px;border:1px solid rgba(255,189,46,.2);border-radius:50%}.card-topline{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}.card-brand{display:flex;align-items:center;gap:9px;font-size:12px;letter-spacing:1.5px;font-weight:900;text-transform:uppercase}.mini-mark{width:28px;height:28px;border:1.5px solid var(--gold);border-radius:9px;display:grid;place-items:center;color:var(--gold);font-size:12px}.privacy-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);padding:8px 11px;border-radius:999px;font-size:10px;color:#d5deea}.identity-body{display:grid;grid-template-columns:1fr 190px;gap:26px;align-items:center;margin-top:34px;position:relative;z-index:1}.identity-person{display:flex;gap:16px;align-items:center}.avatar{width:58px;height:58px;border-radius:18px;background:var(--gold);color:var(--navy-950);display:grid;place-items:center;font-weight:900;letter-spacing:.5px}.avatar.small{width:44px;height:44px;border-radius:14px;flex:0 0 auto}.identity-person h2{margin:0;font-size:28px;letter-spacing:-.6px}.identity-person p{margin:5px 0 0;color:#c8d2df;font-size:14px}.identity-org{font-size:12px!important;color:#8fa0b5!important}.identity-purpose{margin:24px 0 0;font-size:18px;line-height:1.5;max-width:520px;color:#f4f6f9}.identity-code-wrap{margin-top:24px}.identity-code-label{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:#91a2b8}.identity-code-value{font-size:22px;font-weight:900;letter-spacing:2px;margin-top:6px}.identity-meta{display:flex;gap:16px;margin-top:19px;color:#c7d0dc;font-size:11px}.code-panel{background:#fff;border-radius:22px;padding:13px;color:var(--ink);text-align:center}.code-graphic{width:164px;height:164px;margin:auto;display:grid;place-items:center;overflow:hidden}.code-graphic img,.code-graphic canvas{display:block;max-width:100%;border-radius:6px}.code-panel strong{display:block;font-size:11px;margin-top:7px}.code-panel span{display:block;font-size:9px;color:var(--muted);margin-top:3px}.card-actions-bar{display:flex;gap:10px;margin-top:26px;position:relative;z-index:1}.card-actions-bar .btn-ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#fff}
+    .side-stack{display:grid;gap:16px}.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow-soft)}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.panel-title h3{font-size:15px;margin:0}.panel-title span{font-size:11px;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--surface-2);border-radius:15px;padding:13px}.stat strong{display:block;font-size:20px}.stat span{display:block;color:var(--muted);font-size:10px;line-height:1.35;margin-top:4px}.activity-list{display:grid;gap:8px}.activity-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.activity-row:last-child{border-bottom:0}.activity-icon{width:28px;height:28px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto}.activity-row strong,.activity-row small{display:block}.activity-row strong{font-size:12px;line-height:1.4}.activity-row small{font-size:10px;color:var(--muted);margin-top:3px}.speed-panel{background:linear-gradient(135deg,var(--cream),#fff);border-color:#f4dfaa}.speed-time{display:flex;align-items:flex-end;gap:8px}.speed-time strong{font-size:36px;color:var(--navy-900)}.speed-time span{font-size:12px;color:var(--muted);padding-bottom:6px}.speed-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.speed-step{font-size:10px;font-weight:800;background:#fff;border:1px solid #f0dfb9;border-radius:12px;padding:10px;text-align:center}.speed-step b{display:block;color:var(--warn);margin-bottom:3px}
+    .request-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.column-title{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:900;margin:0 0 12px}.cards-list{display:grid;gap:14px}.request-card,.connection-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-soft)}.request-top{display:flex;align-items:center;gap:12px}.request-main{min-width:0;flex:1}.request-main strong,.request-main span,.request-main small{display:block}.request-main strong{font-size:14px}.request-main span{font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.request-main small{font-size:10px;color:#9aa3af;margin-top:4px}.status{font-size:9px;text-transform:uppercase;letter-spacing:.7px;padding:6px 8px;border-radius:999px;font-weight:900;background:var(--surface-2);color:var(--muted)}.status.pending{background:var(--warn-soft);color:var(--warn)}.status.approved{background:var(--good-soft);color:var(--good)}.status.declined,.status.revoked{background:var(--danger-soft);color:var(--danger)}.request-card>p{font-size:13px;line-height:1.55;margin:14px 0;color:#475367}.request-meta{display:flex;gap:8px;flex-wrap:wrap}.request-meta span{font-size:9px;border-radius:999px;background:var(--surface-2);padding:7px 9px;color:var(--muted)}.card-actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.card-actions .btn{flex:1}.decision-note{margin-top:12px;color:var(--muted);font-size:11px}.connection-head{display:flex;align-items:center;gap:12px}.connection-head>div:nth-child(2){flex:1}.connection-head strong,.connection-head span,.connection-head small{display:block}.connection-head strong{font-size:15px}.connection-head span{font-size:12px;color:var(--muted);margin-top:3px}.connection-head small{font-size:10px;color:#9ba4af;margin-top:4px}.direction-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.direction-box{background:var(--surface-2);border-radius:15px;padding:13px}.direction-box span,.direction-box strong,.direction-box small{display:block}.direction-box span{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:900}.direction-box strong{font-size:13px;margin-top:6px}.direction-box small{font-size:10px;line-height:1.45;color:var(--muted);margin-top:4px}
+    .vault-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px}.vault-card{background:linear-gradient(145deg,#101f35,#183657);color:#fff;border-radius:24px;padding:23px;box-shadow:var(--shadow)}.vault-card h3{margin:0}.vault-lock{width:56px;height:56px;border-radius:18px;background:rgba(255,189,46,.14);border:1px solid rgba(255,189,46,.3);display:grid;place-items:center;font-size:26px;margin-bottom:20px}.fingerprint{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1px;color:var(--gold);font-size:13px;word-break:break-word;margin-top:8px}.cipher-preview{background:#091526;border:1px solid rgba(255,255,255,.09);border-radius:15px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#92a4bb;font-size:10px;line-height:1.6;word-break:break-all;margin-top:16px}.vault-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.vault-metric{background:rgba(255,255,255,.06);border-radius:14px;padding:13px}.vault-metric strong,.vault-metric span{display:block}.vault-metric strong{font-size:18px}.vault-metric span{font-size:9px;color:#aeb9c8;margin-top:4px}.grant-row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.grant-row:last-child{border-bottom:0}.grant-row strong,.grant-row span,.grant-row small{display:block}.grant-row strong{font-size:13px}.grant-row span{font-size:11px;color:var(--muted);margin-top:4px}.grant-row small{font-size:10px;color:#9aa3af;margin-top:3px}.audit-list{display:grid;gap:0}.audit-row{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.audit-row:last-child{border-bottom:0}.audit-row>span{width:27px;height:27px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center}.audit-row strong{font-size:10px;letter-spacing:.5px}.audit-row p{font-size:11px;color:var(--muted);line-height:1.45;margin:3px 0}.audit-row small{font-size:9px;color:#9ba4af}
+    .architecture-hero{background:linear-gradient(135deg,var(--navy-950),var(--navy-700));color:#fff;border-radius:26px;padding:27px;position:relative;overflow:hidden}.architecture-hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:var(--gold);opacity:.08;right:-80px;top:-100px}.architecture-hero h2{margin:0;font-size:28px}.architecture-hero p{color:#c6d0dd;line-height:1.65;max-width:760px}.architecture-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.architecture-stats span{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 12px;font-size:11px}.flow-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}.flow-step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;position:relative}.flow-step b{width:30px;height:30px;border-radius:10px;background:var(--gold);display:grid;place-items:center;font-size:12px}.flow-step strong{display:block;font-size:13px;margin-top:14px}.flow-step p{font-size:11px;color:var(--muted);line-height:1.5;margin:6px 0 0}.flow-step:not(:last-child):after{content:"→";position:absolute;right:-11px;top:46%;z-index:2;color:var(--warn);font-weight:900}.principle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.principle{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.principle .p-icon{font-size:24px}.principle h3{font-size:14px;margin:11px 0 0}.principle p{font-size:11px;color:var(--muted);line-height:1.55;margin:6px 0 0}.warning-box{background:var(--warn-soft);border:1px solid #f2d489;border-radius:18px;padding:16px;margin-top:20px;font-size:12px;line-height:1.55;color:#6d4c00}
+    .empty-state{text-align:center;padding:30px 18px;color:var(--muted);background:#fff;border:1px dashed #d5dae1;border-radius:18px}.empty-state strong{display:block;color:var(--ink);font-size:13px}.empty-state p{font-size:11px;line-height:1.5;max-width:330px;margin:6px auto 0}.empty-symbol{font-size:25px;color:var(--gold);margin-bottom:8px}
+    .modal{position:fixed;inset:0;background:rgba(4,11,20,.63);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:20px;z-index:50}.modal.open{display:flex}.modal-card{background:#fff;border-radius:26px;width:min(100%,560px);max-height:92vh;overflow:auto;box-shadow:0 30px 90px rgba(0,0,0,.3);animation:sheetUp .2s ease}@keyframes sheetUp{from{transform:translateY(20px);opacity:.2}to{transform:none;opacity:1}}.modal-head{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line);z-index:2}.modal-head h3{margin:0;font-size:18px}.modal-body{padding:22px}.modal-footer{display:flex;gap:10px;padding:18px 22px;border-top:1px solid var(--line);position:sticky;bottom:0;background:#fff}.modal-footer .btn{flex:1}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:900;color:var(--muted)}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px 13px;outline:none;background:#fff;color:var(--ink)}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,189,46,.16)}.field textarea{min-height:80px;resize:vertical}.helper{font-size:10px;color:var(--muted);line-height:1.5}.sample-codes{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.sample-codes button{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:8px 10px;font-size:10px;font-weight:800}.requester-banner{display:flex;gap:12px;align-items:center;background:var(--surface-2);border-radius:16px;padding:13px}.requester-banner strong,.requester-banner span{display:block}.requester-banner strong{font-size:13px}.requester-banner span{font-size:10px;color:var(--muted);margin-top:3px}.approval-message{font-size:12px;color:var(--muted);line-height:1.5;margin:12px 0 18px}.radio-stack{display:grid;gap:8px}.radio-card{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:15px;padding:13px}.radio-card:has(input:checked){border-color:var(--gold);background:var(--cream)}.radio-card input{margin-top:3px}.radio-card strong,.radio-card span{display:block}.radio-card strong{font-size:12px}.radio-card span{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.45}.field-selector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.check-card{display:flex;gap:9px;align-items:center;background:var(--surface-2);border-radius:12px;padding:11px;font-size:11px;font-weight:700}.disabled{opacity:.42;pointer-events:none}.approval-summary{font-size:11px;line-height:1.5;color:var(--muted);background:#f7f8fa;border-radius:13px;padding:12px;margin-top:12px}.handshake{text-align:center}.handshake-shield{width:64px;height:64px;border-radius:22px;background:var(--navy-850);color:var(--gold);display:grid;place-items:center;font-size:28px;margin:0 auto}.handshake-code{font-size:42px;letter-spacing:6px;font-weight:900;color:var(--navy-900);margin-top:18px}.handshake p{font-size:12px;color:var(--muted);line-height:1.55}.timer-track{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:14px}.timer-bar{height:100%;background:var(--gold);transition:width .25s linear}.timer-copy{font-size:10px;color:var(--muted);margin-top:7px}.exchange-copy{background:var(--surface-2);border-radius:14px;padding:12px;font-size:11px;line-height:1.5;text-align:left;margin-top:15px}.unlocked-banner{background:var(--good-soft);border:1px solid #b9e9d5;border-radius:15px;padding:13px;color:var(--good);font-size:11px;line-height:1.5}.unlocked-fields{display:grid;gap:9px;margin-top:15px}.unlocked-row{border:1px solid var(--line);border-radius:13px;padding:12px}.unlocked-row span,.unlocked-row strong{display:block}.unlocked-row span{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}.unlocked-row strong{font-size:13px;margin-top:5px;word-break:break-word}.cipher-inspector-wrap{display:none;margin-top:14px}.cipher-inspector-wrap.open{display:block}.cipher-inspector{background:#0a1728;color:#96abc2;border-radius:13px;padding:13px;white-space:pre-wrap;word-break:break-all;font-size:9px;line-height:1.55;max-height:230px;overflow:auto}.fatal{max-width:600px;margin:80px auto;background:#fff;border-radius:24px;padding:30px}.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;background:var(--navy-900);color:#fff;padding:12px 16px;border-radius:13px;font-size:12px;font-weight:700;box-shadow:var(--shadow);z-index:100;transition:.2s ease;max-width:min(90vw,520px);text-align:center}.toast.show{transform:translate(-50%,0);opacity:1}.toast[data-tone="success"]{background:var(--good)}.toast[data-tone="error"]{background:var(--danger)}.toast[data-tone="warn"]{background:var(--warn)}
+    .mobile-nav{display:none}
+    @media(max-width:980px){.shell{grid-template-columns:1fr}.sidebar{display:none}.topbar{height:74px;padding:0 18px}.topbar-sub{display:none}.persona-info{display:none}.persona select{max-width:130px}.content{padding:20px 18px 94px}.home-grid,.vault-grid{grid-template-columns:1fr}.request-layout{grid-template-columns:1fr}.flow-grid{grid-template-columns:1fr 1fr}.flow-step:not(:last-child):after{display:none}.principle-grid{grid-template-columns:1fr 1fr}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:20;background:rgba(11,24,41,.95);backdrop-filter:blur(16px);border-radius:19px;padding:6px;box-shadow:0 16px 50px rgba(7,17,31,.35)}.mobile-nav .nav-item{padding:9px 4px;border-radius:13px;display:grid;place-items:center;gap:2px;text-align:center;font-size:9px}.mobile-nav .nav-icon{font-size:16px}.mobile-nav .badge{position:absolute;right:13px;top:4px;min-width:17px;height:17px;font-size:8px}}
+    @media(max-width:680px){.topbar h1{font-size:18px}.persona{padding:6px}.persona select{width:110px}.section-head{align-items:flex-start;flex-direction:column}.section-head h2{font-size:22px}.head-actions{width:100%}.head-actions .btn{flex:1}.identity-card{padding:20px;border-radius:24px}.identity-body{grid-template-columns:1fr;gap:18px}.identity-person h2{font-size:23px}.identity-purpose{font-size:15px}.code-panel{display:grid;grid-template-columns:110px 1fr;text-align:left;align-items:center}.code-graphic{width:100px;height:100px}.code-panel strong{font-size:12px}.card-actions-bar{display:grid;grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr}.stat{display:flex;align-items:center;justify-content:space-between}.speed-steps{grid-template-columns:1fr}.direction-grid{grid-template-columns:1fr}.flow-grid,.principle-grid{grid-template-columns:1fr}.form-grid,.field-selector{grid-template-columns:1fr}.modal{padding:0;align-items:flex-end}.modal-card{border-radius:24px 24px 0 0;max-height:94vh}.request-card,.connection-card{padding:15px}.card-actions{display:grid;grid-template-columns:1fr}.handshake-code{font-size:34px}.identity-meta{flex-wrap:wrap}.vault-metrics{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div id="app" class="app">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"></div><div class="brand-copy"><strong>HumanLink</strong><span>Consent identity</span></div></div>
+      <nav class="side-nav" aria-label="Primary navigation">
+        <button class="nav-item active" data-route="home"><span class="nav-icon">◈</span>Identity</button>
+        <button class="nav-item" data-route="requests"><span class="nav-icon">↔</span>Requests <span id="requestBadge" class="badge" hidden>0</span></button>
+        <button class="nav-item" data-route="connections"><span class="nav-icon">◎</span>Connections</button>
+        <button class="nav-item" data-route="vault"><span class="nav-icon">▣</span>Private Vault</button>
+        <button class="nav-item" data-route="architecture"><span class="nav-icon">⌁</span>Trust Model</button>
+      </nav>
+      <div class="security-card"><strong><span class="secure-dot"></span>Privacy mode active</strong><p>The shared code contains no phone number, email address or private profile data.</p></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><h1 id="pageTitle">Identity</h1><div class="topbar-sub">30-second connection exchange · directional private access</div></div>
+        <div class="persona">
+          <div id="activeAvatar" class="avatar">SK</div>
+          <div class="persona-info"><strong id="activeName">Sanjay K.</strong><span id="activeCodeMini">HL-7K3M-9Q2D</span></div>
+          <select id="personaSelect" aria-label="Switch demo identity"></select>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="view active" data-view="home">
+          <div class="section-head">
+            <div><span class="eyebrow">Your consent identity</span><h2>Share a code, not your contact details.</h2><p>The code starts a request. Nothing private is revealed until the receiver approves selected fields.</p></div>
+            <div class="head-actions"><button class="btn btn-ghost" data-action="create-identity">＋ Create identity</button><button class="btn btn-secondary" data-action="open-connect">Enter a code</button></div>
+          </div>
+          <div class="home-grid">
+            <article class="identity-card">
+              <div class="card-orbit"></div>
+              <div class="card-topline"><div class="card-brand"><span class="mini-mark">HL</span>HumanLink</div><div class="privacy-chip">No contact data embedded</div></div>
+              <div class="identity-body">
+                <div>
+                  <div class="identity-person"><div id="identityAvatar" class="avatar">SK</div><div><h2 id="identityName">Sanjay K.</h2><p id="identityRole">Digital Operations Leader</p><p id="identityOrg" class="identity-org">Enterprise Technology</p></div></div>
+                  <p id="identityPurpose" class="identity-purpose">Building simple systems for complex work</p>
+                  <div class="identity-code-wrap"><div class="identity-code-label">Unique HumanLink code</div><div id="identityCode" class="identity-code-value">HL-7K3M-9Q2D</div></div>
+                  <div class="identity-meta"><span>📍 <span id="heroCity">Mumbai</span></span><span>🔒 Request-gated</span><span>↔ Directional access</span></div>
+                </div>
+                <div class="code-panel"><div id="identityCodeGraphic" class="code-graphic"></div><div><strong>Scan to request connection</strong><span>Hosted version generates a signed QR</span></div></div>
+              </div>
+              <div class="card-actions-bar"><button class="btn btn-primary" data-action="exchange-mode">⚡ Connect in 30 seconds</button><button class="btn btn-ghost" data-action="share-identity">Share code</button><button class="btn btn-ghost" data-action="copy-code">Copy</button></div>
+            </article>
+
+            <div class="side-stack">
+              <article class="panel speed-panel"><div class="panel-title"><h3>30-second exchange</h3><span>Privacy-first</span></div><div class="speed-time"><strong>&lt;30</strong><span>seconds to stay connected</span></div><div class="speed-steps"><div class="speed-step"><b>01</b>Show code</div><div class="speed-step"><b>02</b>Send request</div><div class="speed-step"><b>03</b>Approve scope</div></div></article>
+              <article class="panel"><div class="panel-title"><h3>Current state</h3><span>Live demo</span></div><div class="stats"><div class="stat"><strong id="publicFieldCount">0</strong><span>open identity fields</span></div><div class="stat"><strong id="incomingCount">0</strong><span>requests waiting</span></div><div class="stat"><strong id="connectionCount">0</strong><span>approved connections</span></div></div></article>
+              <article class="panel"><div class="panel-title"><h3>Recent activity</h3><span>Audited</span></div><div id="recentActivity" class="activity-list"></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view="requests">
+          <div class="section-head"><div><span class="eyebrow">Consent inbox</span><h2>You decide what crosses the boundary.</h2><p>Approval can create a connection without releasing any private information.</p></div><div class="head-actions"><button class="btn btn-primary" data-action="open-connect">＋ New request</button></div></div>
+          <div class="request-layout"><div><h3 class="column-title">Incoming</h3><div id="incomingRequests" class="cards-list"></div></div><div><h3 class="column-title">Sent by you</h3><div id="outgoingRequests" class="cards-list"></div></div></div>
+        </section>
+
+        <section class="view" data-view="connections">
+          <div class="section-head"><div><span class="eyebrow">Relationship memory</span><h2>Connected does not mean fully exposed.</h2><p>Each direction has a separate permission state, expiry and revocation control.</p></div><div class="head-actions"><button class="btn btn-secondary" data-action="open-connect">Connect another person</button></div></div>
+          <div id="connectionsList" class="cards-list"></div>
+        </section>
+
+        <section class="view" data-view="vault">
+          <div class="section-head"><div><span class="eyebrow">Encrypted private data</span><h2>Your contact details stay inside your vault.</h2><p>A receiver can release selected fields to one requester without making them public.</p></div><div class="head-actions"><button class="btn btn-ghost" data-action="export-snapshot">Export encrypted JSON</button><button class="btn btn-primary" data-action="edit-vault">Edit vault</button></div></div>
+          <div class="vault-grid">
+            <div>
+              <article class="vault-card"><div class="vault-lock">⌾</div><h3>Device-protected private vault</h3><p style="color:#b9c5d4;font-size:12px;line-height:1.6">Private values are encrypted with AES-GCM. Relationship grants use a separate per-grant content key wrapped through an ECDH-derived key.</p><div class="fingerprint" id="keyFingerprint">Loading…</div><div class="cipher-preview" id="vaultCipherPreview">Loading encrypted payload…</div><div class="vault-metrics"><div class="vault-metric"><strong id="vaultSize">—</strong><span>encrypted vault size</span></div><div class="vault-metric"><strong id="grantCount">0</strong><span>active private grants</span></div></div></article>
+              <article class="panel" style="margin-top:20px"><div class="panel-title"><h3>Private grants you issued</h3><span>Directional</span></div><div id="vaultGrants"></div></article>
+            </div>
+            <article class="panel"><div class="panel-title"><h3>Security audit</h3><span>Latest 12</span></div><div id="auditList" class="audit-list"></div></article>
+          </div>
+        </section>
+
+        <section class="view" data-view="architecture">
+          <div class="architecture-hero"><span class="eyebrow" style="color:var(--gold)">PoC trust architecture</span><h2>One public code. Separate consent for every relationship.</h2><p>The identity code is a locator—not a container for personal information. A requester first sees only the open profile. The receiver may approve the connection, choose private fields, define an expiry and revoke access later.</p><div class="architecture-stats"><span>Active code: <b id="architectureCode">—</b></span><span>Pending requests: <b id="architectureIncoming">0</b></span><span>Private grants issued: <b id="architectureGrants">0</b></span></div></div>
+          <div class="flow-grid"><div class="flow-step"><b>1</b><strong>Share locator</strong><p>QR, NFC or memorable HumanLink code contains only a routing identity.</p></div><div class="flow-step"><b>2</b><strong>Request consent</strong><p>The requester shares an open identity and purpose for connecting.</p></div><div class="flow-step"><b>3</b><strong>Approve scope</strong><p>The receiver chooses open-only or selected private fields and expiry.</p></div><div class="flow-step"><b>4</b><strong>Encrypt grant</strong><p>A fresh AES content key encrypts the approved payload for that requester.</p></div><div class="flow-step"><b>5</b><strong>Revoke anytime</strong><p>The owner can invalidate the relationship grant without changing the public code.</p></div></div>
+          <div class="principle-grid"><article class="principle"><div class="p-icon">↔</div><h3>Directional by default</h3><p>Approving another person does not automatically give you access to their private vault. They must separately approve you.</p></article><article class="principle"><div class="p-icon">🔑</div><h3>Per-relationship keying</h3><p>Each approved private package has its own content key. A compromise of one grant should not expose every relationship.</p></article><article class="principle"><div class="p-icon">◌</div><h3>Public updates without exposure</h3><p>Open profile updates can continue to sync while phone, email and meeting links remain sealed.</p></article></div>
+          <div class="warning-box"><strong>Important production boundary:</strong> this browser PoC stores demonstration private keys in localStorage so multiple people can be simulated on one device. A real deployment must use secure device keystores, authenticated backend services, signed and expiring tokens, anti-abuse controls, account recovery, legal consent records, rate limits and independent security review.</div>
+          <div style="margin-top:18px"><button class="text-btn danger" data-action="reset-demo">Reset complete demo</button></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button class="nav-item active" data-route="home"><span class="nav-icon">◈</span>Identity</button><button class="nav-item" data-route="requests"><span class="nav-icon">↔</span>Requests</button><button class="nav-item" data-route="connections"><span class="nav-icon">◎</span>People</button><button class="nav-item" data-route="vault"><span class="nav-icon">▣</span>Vault</button><button class="nav-item" data-route="architecture"><span class="nav-icon">⌁</span>Trust</button>
+  </nav>
+</div>
+
+<div id="connectModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="connectTitle"><div class="modal-card"><div class="modal-head"><h3 id="connectTitle">Connect using a HumanLink code</h3><button class="icon-btn" data-action="close-modal" data-id="connectModal">×</button></div><form id="connectForm"><div class="modal-body"><div class="form-grid"><div class="field full"><label for="connectCode">Unique code</label><input id="connectCode" name="code" placeholder="HL-XXXX-XXXX" maxlength="12" required autocomplete="off" /><div class="helper">The code locates an identity. It does not expose phone or email.</div></div><div class="field full"><label for="connectMessage">Why are you connecting?</label><textarea id="connectMessage" name="message" placeholder="We met at the event. I would like to continue our discussion."></textarea></div></div><div class="sample-codes"><button type="button" onclick="document.getElementById('connectCode').value='HL-4P8R-K6WM'">Anaya demo</button><button type="button" onclick="document.getElementById('connectCode').value='HL-9T2N-V5QH'">Rohan demo</button><button type="button" onclick="document.getElementById('connectCode').value='HL-7K3M-9Q2D'">Sanjay demo</button></div></div><div class="modal-footer"><button type="button" class="btn btn-ghost" data-action="close-modal" data-id="connectModal">Cancel</button><button type="submit" class="btn btn-primary">Send private request</button></div></form></div></div>
+
+<div id="approvalModal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><h3>Review connection request</h3><button class="icon-btn" data-action="close-modal" data-id="approvalModal">×</button></div><form id="approvalForm"><div class="modal-body"><div id="approvalRequester" class="requester-banner"></div><p id="approvalMessage" class="approval-message"></p><div class="field"><label>Approval level</label><select id="approvalLevel"><option value="open">Approve connection · open identity only</option><option value="selected" selected>Approve + selected private fields</option></select></div><div id="privateFieldSelector" class="field-selector"><label class="check-card"><input type="checkbox" value="fullName">Full name</label><label class="check-card"><input type="checkbox" value="email">Email</label><label class="check-card"><input type="checkbox" value="phone">Phone</label><label class="check-card"><input type="checkbox" value="linkedin">LinkedIn</label><label class="check-card"><input type="checkbox" value="calendar">Meeting link</label><label class="check-card"><input type="checkbox" value="note">Private note</label></div><div id="expiryWrap" class="field" style="margin-top:13px"><label>Private access expiry</label><select id="expiryChoice"><option value="24h">24 hours</option><option value="30d" selected>30 days</option><option value="90d">90 days</option><option value="never">Until revoked</option></select></div><div id="approvalSummary" class="approval-summary"></div></div><div class="modal-footer"><button type="button" class="btn btn-ghost" data-action="close-modal" data-id="approvalModal">Not now</button><button type="submit" class="btn btn-primary">Approve securely</button></div></form></div></div>
+
+<div id="exchangeModal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><h3>30-second exchange mode</h3><button class="icon-btn" data-action="close-modal" data-id="exchangeModal">×</button></div><div class="modal-body handshake"><div class="handshake-shield">⌁</div><div id="handshakeCode" class="handshake-code">000 000</div><p>Temporary meeting code linked to <strong id="handshakeOwner">—</strong>. In production this code would be verified by the backend and expire automatically.</p><div class="timer-track"><div id="handshakeProgress" class="timer-bar"></div></div><div class="timer-copy">Expires in <span id="handshakeSeconds">90</span> seconds</div><div id="exchangeShareText" class="exchange-copy"></div></div><div class="modal-footer"><button class="btn btn-ghost" data-action="copy-code">Copy permanent code</button><button class="btn btn-primary" data-action="share-identity">Share identity</button></div></div></div>
+
+<div id="unlockedModal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><h3>Approved private information</h3><button class="icon-btn" data-action="close-modal" data-id="unlockedModal">×</button></div><div class="modal-body"><div class="unlocked-banner">Decrypted locally for <strong id="unlockedOwner"></strong>. This access works only for the approved grantee identity.</div><div id="unlockedFields" class="unlocked-fields"></div><p id="unlockedPolicy" class="helper" style="margin-top:13px"></p><button class="text-btn" data-action="inspect-cipher">View encrypted packet and wrapped key</button><div id="cipherInspectorWrap" class="cipher-inspector-wrap"><pre id="cipherInspector" class="cipher-inspector"></pre></div></div><div class="modal-footer"><button class="btn btn-primary" data-action="close-modal" data-id="unlockedModal">Done</button></div></div></div>
+
+<div id="vaultEditModal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><h3>Edit private vault</h3><button class="icon-btn" data-action="close-modal" data-id="vaultEditModal">×</button></div><form id="vaultEditForm"><div class="modal-body"><div class="form-grid"><div class="field full"><label>Full name</label><input name="fullName"></div><div class="field"><label>Email</label><input name="email" type="email"></div><div class="field"><label>Phone</label><input name="phone"></div><div class="field"><label>LinkedIn</label><input name="linkedin"></div><div class="field"><label>Meeting link</label><input name="calendar"></div><div class="field full"><label>Private note</label><textarea name="note"></textarea></div></div><p class="helper">Saving re-encrypts the full vault. No private value is placed inside your public HumanLink code.</p></div><div class="modal-footer"><button type="button" class="btn btn-ghost" data-action="close-modal" data-id="vaultEditModal">Cancel</button><button type="submit" class="btn btn-primary">Encrypt & save</button></div></form></div></div>
+
+<div id="createIdentityModal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><h3>Create a new consent identity</h3><button class="icon-btn" data-action="close-modal" data-id="createIdentityModal">×</button></div><form id="createIdentityForm"><div class="modal-body"><div class="form-grid"><div class="field"><label>Public display name</label><input name="displayName" placeholder="Aarav P." required></div><div class="field"><label>Role</label><input name="role" placeholder="Product Designer" required></div><div class="field"><label>Organization</label><input name="organization" placeholder="Studio or company"></div><div class="field"><label>City</label><input name="city" placeholder="Mumbai"></div><div class="field full"><label>Public purpose statement</label><input name="purpose" placeholder="Open to meaningful product conversations"></div><div class="field full"><label>Private full name</label><input name="fullName"></div><div class="field"><label>Private email</label><input name="email" type="email"></div><div class="field"><label>Private phone</label><input name="phone"></div><div class="field"><label>Private LinkedIn</label><input name="linkedin"></div><div class="field"><label>Private meeting link</label><input name="calendar"></div></div><p class="helper">A random HumanLink code and identity key pair will be generated locally.</p></div><div class="modal-footer"><button type="button" class="btn btn-ghost" data-action="close-modal" data-id="createIdentityModal">Cancel</button><button type="submit" class="btn btn-primary">Create encrypted identity</button></div></form></div></div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
