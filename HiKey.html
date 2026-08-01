@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070a08" />
+  <meta name="description" content="HiKey by HumanLink — privacy-first identity exchange proof of concept" />
+  <title>HiKey by HumanLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- QR rendering. The rest of the application is contained in this single HTML file. -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    :root {
+      --ink: #071005;
+      --bg: #dff5a8;
+      --app: #060907;
+      --surface: #141915;
+      --surface-2: #1c221d;
+      --surface-3: #242b25;
+      --line: #2d352f;
+      --line-soft: rgba(255, 255, 255, 0.08);
+      --text: #f5f8f4;
+      --muted: #8b968d;
+      --lime: #c8ff4d;
+      --lime-deep: #aee92c;
+      --good: #69e7a6;
+      --warn: #ffd66c;
+      --danger: #ff8190;
+      --shadow: 0 28px 80px rgba(26, 46, 10, 0.26);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --font-sans: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+      --font-mono: "DM Mono", "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255,255,255,.42), transparent 18%),
+        radial-gradient(circle at 92% 78%, rgba(255,255,255,.22), transparent 26%),
+        linear-gradient(135deg, #e9fcb8 0%, #cfe995 48%, #e3f9af 100%);
+      overflow-x: hidden;
+    }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      border-radius: 999px;
+      border: 1px solid rgba(30, 53, 10, .08);
+      z-index: -1;
+    }
+    body::before { width: 600px; height: 600px; left: -330px; top: -180px; box-shadow: 0 0 0 70px rgba(255,255,255,.08); }
+    body::after { width: 520px; height: 520px; right: -260px; bottom: -250px; box-shadow: 0 0 0 80px rgba(255,255,255,.08); }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    [hidden] { display: none !important; }
+
+    .stage {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .showcase {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: minmax(360px, 438px) 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .phone {
+      width: 100%;
+      height: min(890px, calc(100vh - 48px));
+      min-height: 660px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--app);
+      border-radius: 44px;
+      box-shadow: var(--shadow), 0 0 0 5px rgba(255,255,255,.56), inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 22px 18px 10px;
+      background: linear-gradient(180deg, rgba(6,9,7,.98), rgba(6,9,7,.86), transparent);
+      z-index: 5;
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark,
+    .avatar-button,
+    .avatar {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--lime);
+      font-weight: 800;
+      letter-spacing: -.4px;
+    }
+    .brand-mark { width: 43px; height: 43px; border-radius: 14px; box-shadow: inset 0 -8px 18px rgba(7,16,5,.08); }
+    .brand-copy { min-width: 0; }
+    .brand-copy strong { display: block; font-size: 15px; letter-spacing: -.2px; white-space: nowrap; }
+    .brand-copy small { display: block; color: var(--muted); font-size: 8px; margin-top: 3px; letter-spacing: .5px; }
+
+    .avatar-button {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(200,255,77,.12);
+    }
+
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 15px 112px;
+      scrollbar-width: none;
+      overscroll-behavior: contain;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    .view { display: none; }
+    .view.active { display: block; animation: viewIn .2s ease; }
+    @keyframes viewIn { from { opacity: .2; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .page-title { margin: 12px 3px 16px; }
+    .eyebrow { color: var(--lime); font-size: 8px; font-weight: 800; letter-spacing: 1.15px; text-transform: uppercase; }
+    .page-title h1 { margin: 6px 0 3px; font-size: 25px; line-height: 1.05; letter-spacing: -1px; }
+    .page-title p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+
+    .identity-card {
+      position: relative;
+      overflow: hidden;
+      padding: 19px;
+      color: var(--ink);
+      background: linear-gradient(145deg, #d7ff77, var(--lime));
+      border-radius: 29px;
+      box-shadow: 0 18px 50px rgba(200,255,77,.08);
+    }
+    .identity-card::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      top: -142px;
+      right: -105px;
+      border-radius: 50%;
+      border: 1px solid rgba(7,16,5,.12);
+      box-shadow: 0 0 0 34px rgba(7,16,5,.05), 0 0 0 68px rgba(7,16,5,.035);
+    }
+
+    .identity-top,
+    .identity-grid,
+    .identity-actions { position: relative; z-index: 1; }
+    .identity-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .privacy-chip { display: inline-flex; align-items: center; gap: 5px; padding: 7px 9px; border-radius: 999px; background: rgba(7,16,5,.09); font-size: 7px; font-weight: 800; }
+    .privacy-dot { width: 6px; height: 6px; border-radius: 50%; background: #167d4c; box-shadow: 0 0 0 4px rgba(22,125,76,.1); }
+    .avatar { width: 42px; height: 42px; border-radius: 14px; background: rgba(7,16,5,.12); }
+    .avatar.small { width: 44px; height: 44px; border-radius: 14px; background: var(--lime); }
+
+    .identity-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 14px;
+      align-items: center;
+      margin-top: 18px;
+    }
+    .identity-name { margin: 0; font-size: 23px; letter-spacing: -.8px; }
+    .identity-role { margin: 4px 0 0; color: rgba(7,16,5,.62); font-size: 9px; line-height: 1.4; }
+    .identity-purpose { margin: 12px 0 0; font-size: 12px; font-weight: 800; line-height: 1.4; }
+    .hikey-label { margin-top: 14px; font-size: 7px; text-transform: uppercase; letter-spacing: 1px; opacity: .54; font-weight: 800; }
+    .hikey-code { margin-top: 3px; font-size: 17px; font-weight: 800; letter-spacing: 1.3px; }
+
+    .qr-box {
+      min-height: 110px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .qr-box img,
+    .qr-box canvas { max-width: 100% !important; height: auto !important; border-radius: 4px; }
+    .qr-fallback { color: var(--ink); text-align: center; font-size: 8px; line-height: 1.45; }
+
+    .identity-actions,
+    .button-row { display: flex; gap: 8px; }
+    .identity-actions { margin-top: 14px; }
+
+    .btn {
+      min-height: 43px;
+      border: 0;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 13px;
+      font-size: 9px;
+      font-weight: 800;
+      transition: transform .16s ease, filter .16s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active { transform: none; }
+    .btn-wide { flex: 1; }
+    .btn-dark { background: var(--ink); color: white; }
+    .btn-lime { background: var(--lime); color: var(--ink); }
+    .btn-ghost { color: var(--text); background: var(--surface-2); border: 1px solid var(--line); }
+    .btn-danger { color: var(--danger); background: #34191d; border: 1px solid #672a34; }
+    .btn-soft { color: var(--ink); background: rgba(7,16,5,.11); }
+
+    .panel {
+      margin-top: 11px;
+      padding: 15px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+    }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+    .panel-head h3 { margin: 0; font-size: 12px; }
+    .panel-head span { color: var(--muted); font-size: 7px; }
+
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .metric { padding: 10px; background: var(--surface-2); border-radius: 14px; }
+    .metric strong { display: block; font-size: 18px; line-height: 1; }
+    .metric span { display: block; margin-top: 5px; color: var(--muted); font-size: 7px; line-height: 1.35; }
+
+    .speed-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .speed-step { padding: 10px; text-align: center; background: var(--surface-2); border-radius: 13px; }
+    .speed-step b { width: 24px; height: 24px; margin: 0 auto 7px; display: grid; place-items: center; color: var(--ink); background: var(--lime); border-radius: 8px; font-size: 8px; }
+    .speed-step span { display: block; font-size: 7px; font-weight: 800; }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .search-box input {
+      flex: 1;
+      min-width: 0;
+      padding: 9px;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 10px;
+    }
+
+    .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 15px; }
+    .segment { padding: 9px; color: var(--muted); background: transparent; border: 0; border-radius: 11px; font-size: 8px; font-weight: 800; }
+    .segment.active { color: var(--ink); background: var(--lime); }
+
+    .cards { display: grid; gap: 8px; margin-top: 10px; }
+    .person-card,
+    .request-card,
+    .connection-card,
+    .grant-card,
+    .audit-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      padding: 11px;
+    }
+
+    .person-card { display: grid; grid-template-columns: 45px minmax(0,1fr) 36px; gap: 9px; align-items: center; }
+    .person-main { min-width: 0; }
+    .person-main strong { display: block; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .person-main p { margin: 3px 0; color: var(--muted); font-size: 8px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .person-main small { display: block; color: #667068; font-size: 7px; }
+    .arrow-button { width: 36px; height: 36px; border: 0; border-radius: 12px; color: var(--text); background: var(--surface-3); }
+
+    .status {
+      float: right;
+      padding: 5px 7px;
+      border-radius: 999px;
+      color: #b5beb6;
+      background: var(--surface-3);
+      font-size: 7px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .status.pending { color: var(--warn); }
+    .status.approved, .status.active { color: var(--good); }
+    .status.declined, .status.revoked, .status.cancelled { color: var(--danger); }
+
+    .request-card strong,
+    .connection-card strong,
+    .grant-card strong { font-size: 10px; }
+    .request-card p,
+    .connection-card p,
+    .grant-card p { margin: 4px 0 9px; color: var(--muted); font-size: 8px; line-height: 1.5; }
+    .request-card small,
+    .connection-card small,
+    .grant-card small { color: #69736b; font-size: 7px; }
+
+    .direction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+    .direction-box { padding: 9px; background: var(--surface-2); border-radius: 13px; }
+    .direction-box span { color: #788279; font-size: 7px; }
+    .direction-box b { display: block; margin-top: 4px; font-size: 9px; }
+
+    .empty-state { padding: 25px 18px; text-align: center; color: var(--muted); background: var(--surface); border: 1px dashed #353e37; border-radius: 19px; font-size: 8px; line-height: 1.55; }
+    .empty-state b { display: block; color: var(--text); font-size: 10px; margin-bottom: 4px; }
+
+    .vault-hero { padding: 18px; color: var(--ink); background: linear-gradient(145deg, #d7ff77, var(--lime)); border-radius: 24px; }
+    .vault-icon { width: 45px; height: 45px; display: grid; place-items: center; background: rgba(7,16,5,.11); border-radius: 14px; font-size: 20px; }
+    .vault-hero h2 { margin: 13px 0 4px; font-size: 19px; }
+    .vault-hero p { margin: 0; color: rgba(7,16,5,.62); font-size: 8px; line-height: 1.5; }
+    .fingerprint { margin-top: 12px; font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: .8px; word-break: break-all; }
+    .cipher-preview { margin-top: 10px; padding: 10px; color: #91a194; background: #0c110d; border-radius: 12px; font-family: var(--font-mono); font-size: 7px; line-height: 1.55; word-break: break-all; }
+
+    .audit-card { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 9px; }
+    .audit-icon { width: 28px; height: 28px; display: grid; place-items: center; color: var(--ink); background: var(--lime); border-radius: 9px; font-size: 10px; }
+    .audit-card b { display: block; font-size: 8px; }
+    .audit-card p { margin: 3px 0; color: var(--muted); font-size: 7px; line-height: 1.45; }
+    .audit-card small { color: #69736b; font-size: 6px; }
+
+    .bottom-nav {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 3px;
+      padding: 6px;
+      background: rgba(27,32,28,.94);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 21px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 42px rgba(0,0,0,.32);
+    }
+    .bottom-nav button {
+      position: relative;
+      padding: 7px 2px;
+      color: #788279;
+      background: transparent;
+      border: 0;
+      border-radius: 15px;
+      font-size: 7px;
+      font-weight: 800;
+    }
+    .bottom-nav button b { display: block; margin-bottom: 1px; font-size: 16px; line-height: 1; }
+    .bottom-nav button.active { color: var(--ink); background: var(--lime); }
+    .nav-count { position: absolute; top: 3px; right: 9px; min-width: 15px; height: 15px; display: grid; place-items: center; padding: 0 3px; color: white; background: #d23f55; border-radius: 999px; font-size: 6px; }
+
+    .story-card {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      background: rgba(7,10,8,.96);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 36px;
+      box-shadow: var(--shadow);
+    }
+    .story-card::after { content: ""; position: absolute; width: 320px; height: 320px; right: -180px; top: -160px; border-radius: 50%; border: 1px solid rgba(200,255,77,.2); box-shadow: 0 0 0 54px rgba(200,255,77,.035), 0 0 0 108px rgba(200,255,77,.02); }
+    .story-card > * { position: relative; z-index: 1; }
+    .story-card h2 { margin: 30px 0 14px; font-size: clamp(38px, 5vw, 58px); line-height: .98; letter-spacing: -3px; }
+    .story-card h2 em { color: var(--lime); font-style: normal; }
+    .story-card > p { max-width: 620px; color: #a5afa7; font-size: 12px; line-height: 1.75; }
+    .story-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .story-stats span { padding: 8px 10px; color: #abb5ad; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-size: 8px; }
+    .story-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 22px; }
+    .story-step { padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 17px; }
+    .story-step b { width: 27px; height: 27px; display: grid; place-items: center; color: var(--ink); background: var(--lime); border-radius: 9px; font-size: 8px; }
+    .story-step strong { display: block; margin-top: 11px; font-size: 10px; }
+    .story-step p { margin: 5px 0 0; color: var(--muted); font-size: 8px; line-height: 1.5; }
+    .demo-note { margin-top: 20px; padding: 13px; color: #b6c0b8; background: #121713; border: 1px solid var(--line); border-radius: 15px; font-size: 8px; line-height: 1.55; }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 15px;
+      background: rgba(0,0,0,.7);
+      backdrop-filter: blur(8px);
+    }
+    .modal.open { display: flex; }
+    .sheet {
+      width: min(470px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #101511;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.48);
+    }
+    .sheet-head,
+    .sheet-foot { position: sticky; z-index: 2; display: flex; align-items: center; gap: 8px; padding: 15px; background: rgba(16,21,17,.97); backdrop-filter: blur(14px); }
+    .sheet-head { top: 0; border-bottom: 1px solid var(--line); }
+    .sheet-foot { bottom: 0; border-top: 1px solid var(--line); }
+    .sheet-head h3 { flex: 1; margin: 0; font-size: 14px; }
+    .sheet-body { padding: 15px; }
+
+    .profile-card { padding: 16px; color: var(--ink); background: var(--lime); border-radius: 22px; }
+    .profile-card h2 { margin: 11px 0 3px; font-size: 21px; }
+    .profile-card p { margin: 3px 0; color: rgba(7,16,5,.62); font-size: 8px; line-height: 1.5; }
+    .privacy-message { margin-top: 10px; padding: 11px; color: #a7b1a9; background: var(--surface-2); border-radius: 14px; font-size: 8px; line-height: 1.55; }
+    .privacy-message strong { color: var(--text); }
+
+    .field { margin-top: 10px; }
+    .field label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 8px; font-weight: 800; }
+    .field textarea,
+    .field select,
+    .field input { width: 100%; padding: 10px; color: var(--text); background: #191f1a; border: 1px solid var(--line); border-radius: 13px; outline: 0; font-size: 9px; }
+    .field textarea { min-height: 78px; resize: vertical; }
+
+    .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 9px; }
+    .check { display: flex; align-items: center; gap: 7px; padding: 9px; background: var(--surface-2); border: 1px solid transparent; border-radius: 12px; font-size: 8px; }
+    .check:has(input:checked) { color: var(--ink); background: var(--lime); border-color: var(--lime); }
+
+    .unlocked-row { margin-top: 7px; padding: 10px; background: var(--surface-2); border-radius: 13px; }
+    .unlocked-row span { display: block; color: #788279; font-size: 7px; text-transform: uppercase; letter-spacing: .6px; }
+    .unlocked-row strong { display: block; margin-top: 4px; font-size: 10px; word-break: break-word; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 80;
+      max-width: min(90vw, 460px);
+      padding: 11px 14px;
+      color: var(--text);
+      background: #111612;
+      border: 1px solid #343d36;
+      border-radius: 13px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.36);
+      font-size: 9px;
+      text-align: center;
+      opacity: 0;
+      transform: translate(-50%, 15px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    /* Refined proportional typography: Plus Jakarta Sans + DM Mono */
+    body { font-size: 14px; font-weight: 400; line-height: 1.5; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+    .brand-copy strong { font-size: 16px; font-weight: 800; }
+    .brand-copy small { font-size: 10px; line-height: 1.35; }
+    .eyebrow { font-size: 10px; font-weight: 800; }
+    .page-title h1 { font-size: 26px; line-height: 1.12; letter-spacing: -.8px; font-weight: 800; }
+    .page-title p { font-size: 11px; line-height: 1.55; }
+    .privacy-chip { font-size: 9px; }
+    .identity-name { font-size: 24px; line-height: 1.15; font-weight: 800; }
+    .identity-role { font-size: 11px; }
+    .identity-purpose { font-size: 13px; font-weight: 700; }
+    .hikey-label { font-size: 9px; }
+    .hikey-code,
+    .fingerprint,
+    .cipher-preview,
+    .person-main small,
+    .nav-count { font-family: var(--font-mono); }
+    .hikey-code { font-size: 16px; font-weight: 500; letter-spacing: 1px; }
+    .qr-fallback { font-size: 9px; }
+    .btn { font-size: 11px; font-weight: 700; }
+    .panel-head h3 { font-size: 13px; font-weight: 700; }
+    .panel-head span { font-size: 9px; }
+    .metric strong { font-size: 20px; font-weight: 800; }
+    .metric span { font-size: 9px; }
+    .speed-step b { font-size: 10px; }
+    .speed-step span { font-size: 9px; font-weight: 700; }
+    .search-box input { font-size: 11.5px; }
+    .segment { font-size: 10px; font-weight: 700; }
+    .person-main strong { font-size: 11.5px; font-weight: 700; }
+    .person-main p { font-size: 9.5px; }
+    .person-main small { font-size: 8.5px; }
+    .status { font-size: 8.5px; font-weight: 700; }
+    .request-card strong,
+    .connection-card strong,
+    .grant-card strong { font-size: 11.5px; font-weight: 700; }
+    .request-card p,
+    .connection-card p,
+    .grant-card p { font-size: 9.5px; }
+    .request-card small,
+    .connection-card small,
+    .grant-card small { font-size: 8.5px; }
+    .direction-box span { font-size: 8.5px; }
+    .direction-box b { font-size: 10.5px; }
+    .empty-state { font-size: 10px; }
+    .empty-state b { font-size: 12px; }
+    .vault-hero h2 { font-size: 20px; font-weight: 800; }
+    .vault-hero p { font-size: 10px; }
+    .fingerprint { font-size: 10px; font-weight: 500; }
+    .cipher-preview { font-size: 8.5px; }
+    .audit-card b { font-size: 9.5px; }
+    .audit-card p { font-size: 8.5px; }
+    .audit-card small { font-size: 8px; }
+    .bottom-nav button { font-size: 8.5px; font-weight: 700; }
+    .nav-count { font-size: 7.5px; }
+    .story-card h2 { font-weight: 800; }
+    .story-card > p { font-size: 13px; }
+    .story-stats span { font-size: 9.5px; }
+    .story-step b { font-size: 9px; }
+    .story-step strong { font-size: 11px; font-weight: 700; }
+    .story-step p { font-size: 9.5px; }
+    .demo-note { font-size: 9.5px; }
+    .sheet-head h3 { font-size: 15px; font-weight: 700; }
+    .profile-card h2 { font-size: 22px; font-weight: 800; }
+    .profile-card p { font-size: 10px; }
+    .privacy-message { font-size: 10px; }
+    .field label { font-size: 9.5px; font-weight: 700; }
+    .field textarea,
+    .field select,
+    .field input { font-size: 10.5px; }
+    .check { font-size: 9.5px; }
+    .unlocked-row span { font-size: 8.5px; }
+    .unlocked-row strong { font-size: 11px; }
+    .toast { font-size: 10.5px; }
+
+    @media (max-width: 880px) {
+      body { background: var(--app); }
+      .stage { display: block; padding: 0; }
+      .showcase { display: block; width: 100%; }
+      .story-card { display: none; }
+      .phone { width: 100%; height: 100dvh; min-height: 600px; border-radius: 0; box-shadow: none; }
+    }
+
+    @media (max-width: 380px) {
+      .identity-grid { grid-template-columns: minmax(0,1fr) 98px; }
+      .metrics, .direction-grid, .speed-flow { grid-template-columns: 1fr; }
+      .checks { grid-template-columns: 1fr; }
+      .story-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="showcase">
+      <section class="phone" aria-label="HiKey mobile application prototype">
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-mark">HK</div>
+            <div class="brand-copy">
+              <strong>HiKey</strong>
+              <small id="headerContext">by HumanLink</small>
+            </div>
+          </div>
+          <button class="avatar-button" id="identitySwitcher" type="button" aria-label="Switch demo identity">SK</button>
+        </header>
+
+        <main class="scroll-area" id="scrollArea">
+          <section class="view active" id="view-home"></section>
+          <section class="view" id="view-connect"></section>
+          <section class="view" id="view-requests"></section>
+          <section class="view" id="view-people"></section>
+          <section class="view" id="view-vault"></section>
+        </main>
+
+        <nav class="bottom-nav" id="bottomNav" aria-label="Application navigation"></nav>
+      </section>
+
+      <aside class="story-card">
+        <div class="brand">
+          <div class="brand-mark">HK</div>
+          <div class="brand-copy">
+            <strong>HiKey by HumanLink</strong>
+            <small>Say hi. Share a key. Stay connected.</small>
+          </div>
+        </div>
+        <h2>Share identity <em>without exposing it.</em></h2>
+        <p>
+          HiKey is a privacy-first connection handshake for random meetings, events and professional networking.
+          A public key starts the relationship; the receiver alone decides whether any private information becomes visible.
+        </p>
+        <div class="story-stats">
+          <span>50 fictional demo identities</span>
+          <span>One-way private grants</span>
+          <span>Revocable access</span>
+          <span>GitHub Pages ready</span>
+        </div>
+        <div class="story-steps">
+          <div class="story-step"><b>1</b><strong>Share a HiKey</strong><p>Use a QR, link or memorable code. No phone number is embedded.</p></div>
+          <div class="story-step"><b>2</b><strong>Approve the person</strong><p>The receiver accepts or declines the connection request.</p></div>
+          <div class="story-step"><b>3</b><strong>Grant selectively</strong><p>Choose specific private fields, then revoke access whenever required.</p></div>
+        </div>
+        <div class="demo-note">
+          <strong>Prototype boundary:</strong> this single-browser demonstration stores encrypted demo keys locally so both sides can be simulated. A production system needs authenticated APIs, secure device keystores, key recovery, abuse controls and an independent security review.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3 id="modalTitle">HiKey</h3>
+        <button class="arrow-button" type="button" data-action="close-modal" aria-label="Close dialog">×</button>
+      </div>
+      <div class="sheet-body" id="modalBody"></div>
+      <div class="sheet-foot" id="modalFoot"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+
+    const APP_VERSION = "2.0.0";
+    const STATE_KEY = "hikey_humanlink_state_v2";
+    const KEYSTORE_KEY = "hikey_humanlink_keys_v2";
+    const ROUTES = ["home", "connect", "requests", "people", "vault"];
+    const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
+
+    const DEMO_NAMES = [
+      "Sanjay K.", "Anaya M.", "Rohan D.", "Aarav S.", "Meera I.", "Kabir A.", "Ishita R.", "Vihaan P.", "Nisha B.", "Arjun N.",
+      "Tara J.", "Dev M.", "Aditi G.", "Neil W.", "Pooja K.", "Reyansh C.", "Sara F.", "Manav T.", "Kavya S.", "Yash B.",
+      "Riya P.", "Dhruv V.", "Sneha R.", "Advik J.", "Myra D.", "Kunal S.", "Avni M.", "Rahul P.", "Diya A.", "Om K.",
+      "Siya T.", "Atharv R.", "Ira B.", "Vivaan M.", "Anika S.", "Krish V.", "Maya K.", "Ayaan H.", "Zara S.", "Arnav G.",
+      "Navya N.", "Rudra P.", "Kiara C.", "Shaurya L.", "Amaira R.", "Aryan S.", "Prisha D.", "Veer K.", "Samaira A.", "Aditya R."
+    ];
+
+    const ROLES = [
+      "Digital Operations Leader", "Product Strategy Lead", "Community Builder", "Startup Founder", "Design Director",
+      "AI Product Manager", "People Experience Head", "Growth Consultant", "Cybersecurity Specialist", "Cloud Architect"
+    ];
+
+    const ORGANIZATIONS = [
+      "Enterprise Technology", "Northstar Labs", "PeopleGrid", "OrbitWorks", "Form & Flow",
+      "VectorNine", "NexaPeople", "ScaleMint", "SafeLayer", "SkyStack"
+    ];
+
+    const CITIES = ["Mumbai", "Pune", "Bengaluru", "Ahmedabad", "Chennai", "Gurugram", "Hyderabad", "Surat", "New Delhi", "Kochi"];
+
+    const PURPOSES = [
+      "Building simple systems for complex work",
+      "Exploring privacy-safe professional networking",
+      "Helping meaningful conversations continue after the event",
+      "Connecting with builders, leaders and collaborators",
+      "Making introductions easier without losing control of personal data"
+    ];
+
+    function deterministicCode(index, name) {
+      if (index === 0) return "HL-7K3M-9Q2D";
+      if (index === 1) return "HL-4P8R-K6WM";
+      if (index === 2) return "HL-9T2N-V5QH";
+      let hash = 2166136261;
+      const seed = `${name}-${index}`;
+      for (const character of seed) {
+        hash = Math.imul(hash ^ character.charCodeAt(0), 16777619);
+      }
+      let body = "";
+      for (let offset = 0; offset < 8; offset += 1) {
+        hash = Math.imul(hash ^ (hash >>> 13), 16777619);
+        body += CODE_ALPHABET[(hash >>> 0) % CODE_ALPHABET.length];
+      }
+      return `HL-${body.slice(0, 4)}-${body.slice(4)}`;
+    }
+
+    function initials(name) {
+      return name.split(/\s+/).map(part => part[0]).join("").replace(".", "").slice(0, 2).toUpperCase();
+    }
+
+    const DEMO_USERS = DEMO_NAMES.map((name, index) => ({
+      id: `usr_${String(index + 1).padStart(2, "0")}`,
+      index,
+      code: deterministicCode(index, name),
+      publicProfile: {
+        displayName: name,
+        role: ROLES[index % ROLES.length],
+        organization: ORGANIZATIONS[index % ORGANIZATIONS.length],
+        city: CITIES[index % CITIES.length],
+        purpose: PURPOSES[index % PURPOSES.length],
+        avatar: initials(name)
+      },
+      privateSeed: {
+        fullName: `${name.replace(".", "")} Demo`,
+        email: `${name.toLowerCase().replace(/[^a-z0-9]/g, "")}@demo.hikey.local`,
+        phone: `+91 90000 ${String(index + 1).padStart(5, "0")}`,
+        linkedin: `linkedin.com/in/${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-demo`,
+        meetingLink: `hikey.local/book/demo-${String(index + 1).padStart(2, "0")}`,
+        note: "Fictional private data used only to demonstrate selective encrypted sharing."
+      }
+    }));
+
+    let state = loadState();
+    let keyStore = loadKeyStore();
+    let activeRoute = ROUTES.includes(location.hash.slice(1)) ? location.hash.slice(1) : "home";
+    let requestTab = "incoming";
+    let activeProfileTargetId = null;
+    let toastTimer = null;
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+    function escapeHtml(value = "") {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+      })[character]);
+    }
+
+    function nowIso() { return new Date().toISOString(); }
+    function uid(prefix) {
+      return `${prefix}_${crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}_${Math.random().toString(36).slice(2)}`}`;
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+    }
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STATE_KEY) || "null");
+        if (parsed?.version === APP_VERSION) return parsed;
+      } catch (error) {
+        console.warn("Unable to load saved state", error);
+      }
+      return {
+        version: APP_VERSION,
+        activeUserId: DEMO_USERS[0].id,
+        requests: [],
+        connections: [],
+        grants: [],
+        vaults: {},
+        audit: []
+      };
+    }
+
+    function loadKeyStore() {
+      try { return JSON.parse(localStorage.getItem(KEYSTORE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+
+    function persist() {
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+      localStorage.setItem(KEYSTORE_KEY, JSON.stringify(keyStore));
+    }
+
+    function activeUser() { return DEMO_USERS.find(user => user.id === state.activeUserId) || DEMO_USERS[0]; }
+    function userById(id) { return DEMO_USERS.find(user => user.id === id); }
+    function grantIsActive(grant) { return Boolean(grant) && !grant.revokedAt; }
+
+    function audit(userId, type, message, referenceId = null) {
+      state.audit.unshift({ id: uid("audit"), userId, type, message, referenceId, createdAt: nowIso() });
+      state.audit = state.audit.slice(0, 150);
+    }
+
+    function bytesToBase64(bytes) {
+      const array = bytes instanceof ArrayBuffer ? new Uint8Array(bytes) : new Uint8Array(bytes.buffer || bytes);
+      let binary = "";
+      array.forEach(byte => { binary += String.fromCharCode(byte); });
+      return btoa(binary);
+    }
+
+    function base64ToBytes(value) {
+      const binary = atob(value);
+      return Uint8Array.from(binary, character => character.charCodeAt(0));
+    }
+
+    async function ensureIdentityKey(userId) {
+      if (!keyStore[userId]) {
+        const aesKey = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
+        keyStore[userId] = {
+          rawKey: bytesToBase64(await crypto.subtle.exportKey("raw", aesKey)),
+          createdAt: nowIso()
+        };
+        persist();
+      }
+      return crypto.subtle.importKey("raw", base64ToBytes(keyStore[userId].rawKey), { name: "AES-GCM" }, false, ["encrypt", "decrypt"]);
+    }
+
+    async function sha256Text(value) {
+      const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+      return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function encryptJson(data, key) {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const encoded = new TextEncoder().encode(JSON.stringify(data));
+      const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoded);
+      return { algorithm: "AES-GCM-256", iv: bytesToBase64(iv), ciphertext: bytesToBase64(ciphertext) };
+    }
+
+    async function decryptJson(payload, key) {
+      const plaintext = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: base64ToBytes(payload.iv) },
+        key,
+        base64ToBytes(payload.ciphertext)
+      );
+      return JSON.parse(new TextDecoder().decode(plaintext));
+    }
+
+    async function ensureVault(userId) {
+      if (!state.vaults[userId]) {
+        const user = userById(userId);
+        state.vaults[userId] = await encryptJson(user.privateSeed, await ensureIdentityKey(userId));
+        audit(userId, "VAULT_CREATED", "Encrypted private identity vault created", userId);
+        persist();
+      }
+    }
+
+    async function readVault(userId) {
+      await ensureVault(userId);
+      return decryptJson(state.vaults[userId], await ensureIdentityKey(userId));
+    }
+
+    async function createGrant(ownerId, granteeId, fields) {
+      const privateData = await readVault(ownerId);
+      const selectedData = Object.fromEntries(fields.map(field => [field, privateData[field]]));
+
+      const contentKey = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
+      const encryptedData = await encryptJson(selectedData, contentKey);
+      const rawContentKey = bytesToBase64(await crypto.subtle.exportKey("raw", contentKey));
+
+      // Demo wrapping: the grant key is encrypted using the recipient's dedicated local identity key.
+      const wrappedKey = await encryptJson({ rawContentKey }, await ensureIdentityKey(granteeId));
+
+      const grant = {
+        id: uid("grant"),
+        ownerId,
+        granteeId,
+        fields,
+        encryptedData,
+        wrappedKey,
+        createdAt: nowIso(),
+        revokedAt: null,
+        protocol: "AES-GCM vault → per-grant AES-256 content key → recipient-key wrapping"
+      };
+      state.grants.unshift(grant);
+      audit(ownerId, "PRIVATE_GRANT_CREATED", `${fields.length} private field(s) shared with ${userById(granteeId).code}`, grant.id);
+      persist();
+      return grant;
+    }
+
+    async function unlockGrant(grant) {
+      if (!grantIsActive(grant)) throw new Error("This private grant has been revoked.");
+      if (grant.granteeId !== state.activeUserId) throw new Error("This grant belongs to a different identity.");
+      const wrapper = await decryptJson(grant.wrappedKey, await ensureIdentityKey(grant.granteeId));
+      const contentKey = await crypto.subtle.importKey("raw", base64ToBytes(wrapper.rawContentKey), { name: "AES-GCM" }, false, ["decrypt"]);
+      return decryptJson(grant.encryptedData, contentKey);
+    }
+
+    function shareUrl(code) {
+      const base = location.protocol === "file:"
+        ? "https://expresstree.github.io/twolineswisdom/HumanLink_PoC.html"
+        : `${location.origin}${location.pathname}`;
+      return `${base}?code=${encodeURIComponent(code)}`;
+    }
+
+    async function copyText(value, successMessage) {
+      try {
+        await navigator.clipboard.writeText(value);
+        showToast(successMessage);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = value;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+        showToast(successMessage);
+      }
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      $("#toast").textContent = message;
+      $("#toast").classList.add("show");
+      toastTimer = setTimeout(() => $("#toast").classList.remove("show"), 2400);
+    }
+
+    function renderQr(target, url) {
+      target.innerHTML = "";
+      if (window.QRCode) {
+        new QRCode(target, { text: url, width: 96, height: 96, colorDark: "#071005", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+      } else {
+        target.innerHTML = `<div class="qr-fallback"><strong>QR library loads online</strong><br>${escapeHtml(activeUser().code)}</div>`;
+      }
+    }
+
+    function titleMarkup(eyebrow, title, subtitle) {
+      return `<div class="page-title"><span class="eyebrow">${escapeHtml(eyebrow)}</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(subtitle)}</p></div>`;
+    }
+
+    function routeTo(route) {
+      if (!ROUTES.includes(route)) route = "home";
+      activeRoute = route;
+      history.replaceState(null, "", `${location.pathname}${location.search}#${route}`);
+      renderAll();
+      $("#scrollArea").scrollTop = 0;
+    }
+
+    function renderNavigation() {
+      const pendingCount = state.requests.filter(request => request.toId === state.activeUserId && request.status === "pending").length;
+      const navItems = [
+        ["home", "⌂", "Home"],
+        ["connect", "⌁", "Connect"],
+        ["requests", "↗", "Requests"],
+        ["people", "◎", "People"],
+        ["vault", "◇", "Vault"]
+      ];
+      $("#bottomNav").innerHTML = navItems.map(([route, icon, label]) => `
+        <button type="button" class="${activeRoute === route ? "active" : ""}" data-route="${route}">
+          <b>${icon}</b>${label}${route === "requests" && pendingCount ? `<span class="nav-count">${pendingCount}</span>` : ""}
+        </button>
+      `).join("");
+
+      ROUTES.forEach(route => $("#view-" + route).classList.toggle("active", route === activeRoute));
+      $("#headerContext").textContent = activeRoute === "home" ? "by HumanLink" : activeRoute[0].toUpperCase() + activeRoute.slice(1);
+      $("#identitySwitcher").textContent = activeUser().publicProfile.avatar;
+    }
+
+    function renderHome() {
+      const user = activeUser();
+      const pending = state.requests.filter(request => request.toId === user.id && request.status === "pending").length;
+      const connections = state.connections.filter(connection => connection.members.includes(user.id)).length;
+      const grants = state.grants.filter(grant => grant.ownerId === user.id && grantIsActive(grant)).length;
+
+      $("#view-home").innerHTML = `
+        ${titleMarkup("HiKey by HumanLink", "Say hi. Stay connected.", "A public identity key starts the conversation. Your private vault stays closed.")}
+        <article class="identity-card">
+          <div class="identity-top">
+            <span class="privacy-chip"><span class="privacy-dot"></span> Privacy key active</span>
+            <span class="avatar">${escapeHtml(user.publicProfile.avatar)}</span>
+          </div>
+          <div class="identity-grid">
+            <div>
+              <h2 class="identity-name">${escapeHtml(user.publicProfile.displayName)}</h2>
+              <p class="identity-role">${escapeHtml(user.publicProfile.role)} · ${escapeHtml(user.publicProfile.organization)}</p>
+              <p class="identity-purpose">${escapeHtml(user.publicProfile.purpose)}</p>
+              <div class="hikey-label">My HiKey</div>
+              <div class="hikey-code">${escapeHtml(user.code)}</div>
+            </div>
+            <div class="qr-box" id="homeQr"></div>
+          </div>
+          <div class="identity-actions">
+            <button class="btn btn-dark btn-wide" type="button" data-action="share-hikey">Share HiKey</button>
+            <button class="btn btn-soft" type="button" data-route="connect">Connect</button>
+          </div>
+        </article>
+
+        <section class="panel">
+          <div class="panel-head"><h3>Privacy pulse</h3><span>Current demo identity</span></div>
+          <div class="metrics">
+            <div class="metric"><strong>${connections}</strong><span>trusted connections</span></div>
+            <div class="metric"><strong>${pending}</strong><span>requests awaiting you</span></div>
+            <div class="metric"><strong>${grants}</strong><span>active private grants</span></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h3>30-second handshake</h3><span>No contact details in the code</span></div>
+          <div class="speed-flow">
+            <div class="speed-step"><b>1</b><span>Show QR or code</span></div>
+            <div class="speed-step"><b>2</b><span>Send request</span></div>
+            <div class="speed-step"><b>3</b><span>Approve selectively</span></div>
+          </div>
+        </section>
+      `;
+      renderQr($("#homeQr"), shareUrl(user.code));
+    }
+
+    function renderConnect(filter = "") {
+      const normalized = filter.trim().toLowerCase();
+      const users = DEMO_USERS.filter(user => user.id !== state.activeUserId).filter(user => {
+        if (!normalized) return true;
+        const haystack = `${user.publicProfile.displayName} ${user.publicProfile.role} ${user.publicProfile.organization} ${user.publicProfile.city} ${user.code}`.toLowerCase();
+        return haystack.includes(normalized);
+      });
+
+      $("#view-connect").innerHTML = `
+        ${titleMarkup("Under 30 seconds", "Connect by key", "Enter a HiKey or explore 50 fictional identities. No private details appear before approval.")}
+        <form class="search-box" id="codeSearchForm">
+          <input id="codeSearchInput" autocomplete="off" placeholder="Enter HL-4P8R-K6WM" aria-label="Enter a HiKey code" />
+          <button class="btn btn-lime" type="submit">Find</button>
+        </form>
+
+        <section class="panel">
+          <div class="panel-head"><h3>50 demo identities</h3><span id="demoPeopleCount">${users.length} shown</span></div>
+          <div class="search-box">
+            <input id="peopleSearchInput" autocomplete="off" value="${escapeHtml(filter)}" placeholder="Search name, role, city or key" aria-label="Search demo identities" />
+          </div>
+          <div class="cards" id="demoPeopleList">
+            ${users.map(personListCard).join("")}
+          </div>
+        </section>
+      `;
+    }
+
+    function personListCard(user) {
+      return `
+        <article class="person-card">
+          <div class="avatar small">${escapeHtml(user.publicProfile.avatar)}</div>
+          <div class="person-main">
+            <strong>${escapeHtml(user.publicProfile.displayName)}</strong>
+            <p>${escapeHtml(user.publicProfile.role)} · ${escapeHtml(user.publicProfile.organization)}</p>
+            <small>${escapeHtml(user.code)} · ${escapeHtml(user.publicProfile.city)}</small>
+          </div>
+          <button class="arrow-button" type="button" data-action="open-profile" data-id="${user.id}" aria-label="Open ${escapeHtml(user.publicProfile.displayName)}">→</button>
+        </article>
+      `;
+    }
+
+    function updateDemoPeopleList(filter) {
+      const normalized = filter.trim().toLowerCase();
+      const users = DEMO_USERS.filter(user => user.id !== state.activeUserId).filter(user => {
+        if (!normalized) return true;
+        const haystack = `${user.publicProfile.displayName} ${user.publicProfile.role} ${user.publicProfile.organization} ${user.publicProfile.city} ${user.code}`.toLowerCase();
+        return haystack.includes(normalized);
+      });
+      const list = $("#demoPeopleList");
+      const count = $("#demoPeopleCount");
+      if (list) list.innerHTML = users.length ? users.map(personListCard).join("") : `<div class="empty-state"><b>No demo identity found</b>Try a name, role, city or complete HiKey.</div>`;
+      if (count) count.textContent = `${users.length} shown`;
+    }
+
+    function renderRequests() {
+      const incoming = state.requests.filter(request => request.toId === state.activeUserId);
+      const sent = state.requests.filter(request => request.fromId === state.activeUserId);
+      const list = requestTab === "incoming" ? incoming : sent;
+
+      $("#view-requests").innerHTML = `
+        ${titleMarkup("Consent inbox", "Requests", "A connection can be approved without sharing any private information.")}
+        <div class="segmented">
+          <button class="segment ${requestTab === "incoming" ? "active" : ""}" type="button" data-request-tab="incoming">Incoming (${incoming.length})</button>
+          <button class="segment ${requestTab === "sent" ? "active" : ""}" type="button" data-request-tab="sent">Sent (${sent.length})</button>
+        </div>
+        <div class="cards">
+          ${list.length ? list.map(requestCard).join("") : `<div class="empty-state"><b>No ${requestTab} requests</b>Try one of the 50 demo identities from Connect.</div>`}
+        </div>
+      `;
+    }
+
+    function requestCard(request) {
+      const counterpart = userById(requestTab === "incoming" ? request.fromId : request.toId);
+      const incomingPending = requestTab === "incoming" && request.status === "pending";
+      return `
+        <article class="request-card">
+          <span class="status ${request.status}">${escapeHtml(request.status)}</span>
+          <strong>${escapeHtml(counterpart.publicProfile.displayName)}</strong>
+          <p>${escapeHtml(request.message)}</p>
+          <small>${escapeHtml(counterpart.code)} · ${formatDate(request.createdAt)}</small>
+          ${incomingPending ? `
+            <div class="button-row" style="margin-top:9px">
+              <button class="btn btn-lime btn-wide" type="button" data-action="review-request" data-id="${request.id}">Review</button>
+              <button class="btn btn-danger" type="button" data-action="decline-request" data-id="${request.id}">Decline</button>
+            </div>
+          ` : requestTab === "sent" && request.status === "pending" ? `
+            <div class="button-row" style="margin-top:9px">
+              <button class="btn btn-ghost btn-wide" type="button" data-action="cancel-request" data-id="${request.id}">Cancel request</button>
+            </div>
+          ` : ""}
+        </article>
+      `;
+    }
+
+    function renderPeople() {
+      const connections = state.connections.filter(connection => connection.members.includes(state.activeUserId));
+      $("#view-people").innerHTML = `
+        ${titleMarkup("Relationship memory", "My people", "Each direction has its own approval and private-data grant.")}
+        <div class="cards">
+          ${connections.length ? connections.map(connectionCard).join("") : `<div class="empty-state"><b>No trusted connections yet</b>Open Connect, choose a demo identity and send a HiKey request.</div>`}
+        </div>
+      `;
+    }
+
+    function connectionCard(connection) {
+      const otherId = connection.members.find(memberId => memberId !== state.activeUserId);
+      const other = userById(otherId);
+      const receivedGrant = state.grants.find(grant => grant.ownerId === otherId && grant.granteeId === state.activeUserId && grantIsActive(grant));
+      const sharedGrant = state.grants.find(grant => grant.ownerId === state.activeUserId && grant.granteeId === otherId && grantIsActive(grant));
+
+      return `
+        <article class="connection-card">
+          <strong>${escapeHtml(other.publicProfile.displayName)}</strong>
+          <p>${escapeHtml(other.publicProfile.role)} · ${escapeHtml(other.code)}</p>
+          <div class="direction-grid">
+            <div class="direction-box"><span>They shared with you</span><b>${receivedGrant ? `${receivedGrant.fields.length} private field(s)` : "Open identity only"}</b></div>
+            <div class="direction-box"><span>You shared</span><b>${sharedGrant ? `${sharedGrant.fields.length} private field(s)` : "Open identity only"}</b></div>
+          </div>
+          <div class="button-row" style="margin-top:9px">
+            ${receivedGrant ? `<button class="btn btn-lime btn-wide" type="button" data-action="unlock-grant" data-id="${receivedGrant.id}">Unlock approved data</button>` : `<button class="btn btn-ghost btn-wide" type="button" data-action="open-profile" data-id="${otherId}">Request private access</button>`}
+            ${sharedGrant ? `<button class="btn btn-danger" type="button" data-action="revoke-grant" data-id="${sharedGrant.id}">Revoke</button>` : ""}
+          </div>
+        </article>
+      `;
+    }
+
+    async function renderVault() {
+      const user = activeUser();
+      await ensureVault(user.id);
+      const vault = state.vaults[user.id];
+      const fingerprint = (await sha256Text(keyStore[user.id].rawKey)).slice(0, 24).toUpperCase().match(/.{1,4}/g).join(" ");
+      const grants = state.grants.filter(grant => grant.ownerId === user.id);
+      const activity = state.audit.filter(item => item.userId === user.id).slice(0, 8);
+
+      $("#view-vault").innerHTML = `
+        ${titleMarkup("Owner controlled", "Private vault", "Your private identity is encrypted. Every grant is one-way and revocable.")}
+        <section class="vault-hero">
+          <div class="vault-icon">◇</div>
+          <h2>Encrypted identity vault</h2>
+          <p>Dedicated browser-side AES-256 key for this demo identity.</p>
+          <div class="fingerprint">${escapeHtml(fingerprint)}</div>
+          <div class="cipher-preview">${escapeHtml(vault.ciphertext.slice(0, 118))}…</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h3>Private grants</h3><span>${grants.filter(grantIsActive).length} active</span></div>
+          <div class="cards">
+            ${grants.length ? grants.map(grantCard).join("") : `<div class="empty-state"><b>Nothing private has been shared</b>Your open HiKey identity can still receive connection requests.</div>`}
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h3>Security activity</h3><span>Local demo audit</span></div>
+          <div class="cards">
+            ${activity.length ? activity.map(auditCard).join("") : `<div class="empty-state"><b>No security activity</b>Actions such as grants and revocations will appear here.</div>`}
+          </div>
+        </section>
+      `;
+    }
+
+    function grantCard(grant) {
+      const grantee = userById(grant.granteeId);
+      return `
+        <article class="grant-card">
+          <span class="status ${grantIsActive(grant) ? "active" : "revoked"}">${grantIsActive(grant) ? "active" : "revoked"}</span>
+          <strong>${escapeHtml(grantee.publicProfile.displayName)}</strong>
+          <p>${escapeHtml(grant.fields.join(", "))}</p>
+          <small>${formatDate(grant.createdAt)}</small>
+          ${grantIsActive(grant) ? `<div class="button-row" style="margin-top:9px"><button class="btn btn-danger btn-wide" type="button" data-action="revoke-grant" data-id="${grant.id}">Revoke private access</button></div>` : ""}
+        </article>
+      `;
+    }
+
+    function auditCard(item) {
+      return `
+        <article class="audit-card">
+          <div class="audit-icon">✓</div>
+          <div><b>${escapeHtml(item.type.replaceAll("_", " "))}</b><p>${escapeHtml(item.message)}</p><small>${formatDate(item.createdAt)}</small></div>
+        </article>
+      `;
+    }
+
+    async function renderAll() {
+      renderNavigation();
+      renderHome();
+      renderConnect($("#peopleSearchInput")?.value || "");
+      renderRequests();
+      renderPeople();
+      await renderVault();
+    }
+
+    function openModal(title, body, footer = "") {
+      $("#modalTitle").textContent = title;
+      $("#modalBody").innerHTML = body;
+      $("#modalFoot").innerHTML = footer;
+      $("#modal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      $("#modal").classList.remove("open");
+      document.body.style.overflow = "";
+      activeProfileTargetId = null;
+    }
+
+    function openPublicProfile(userId) {
+      const user = userById(userId);
+      activeProfileTargetId = userId;
+      openModal(
+        "Public HiKey",
+        `
+          <article class="profile-card">
+            <div class="avatar small" style="background:rgba(7,16,5,.12)">${escapeHtml(user.publicProfile.avatar)}</div>
+            <h2>${escapeHtml(user.publicProfile.displayName)}</h2>
+            <p>${escapeHtml(user.publicProfile.role)} · ${escapeHtml(user.publicProfile.organization)} · ${escapeHtml(user.publicProfile.city)}</p>
+            <p>${escapeHtml(user.publicProfile.purpose)}</p>
+            <div class="hikey-code">${escapeHtml(user.code)}</div>
+          </article>
+          <div class="privacy-message"><strong>No phone number or email is inside this link.</strong><br>A request shares only your open HiKey identity. ${escapeHtml(user.publicProfile.displayName)} decides whether any private field becomes visible.</div>
+          <div class="field"><label>Why would you like to stay connected?</label><textarea id="requestMessage">Great meeting you. I would like to stay connected through HiKey.</textarea></div>
+        `,
+        `<button class="btn btn-ghost btn-wide" type="button" data-action="close-modal">Not now</button><button class="btn btn-lime btn-wide" type="button" data-action="send-request">Send request</button>`
+      );
+    }
+
+    function sendConnectionRequest() {
+      const fromId = state.activeUserId;
+      const toId = activeProfileTargetId;
+      if (!toId || fromId === toId) return;
+
+      const existingPending = state.requests.find(request => request.fromId === fromId && request.toId === toId && request.status === "pending");
+      if (existingPending) {
+        showToast("A request is already pending for this HiKey.");
+        return;
+      }
+
+      const message = $("#requestMessage")?.value.trim() || "I would like to stay connected through HiKey.";
+      const request = { id: uid("request"), fromId, toId, message, status: "pending", createdAt: nowIso(), decidedAt: null };
+      state.requests.unshift(request);
+      audit(fromId, "REQUEST_SENT", `Connection request sent to ${userById(toId).code}`, request.id);
+      audit(toId, "REQUEST_RECEIVED", `Connection request received from ${userById(fromId).code}`, request.id);
+      persist();
+      closeModal();
+      renderAll();
+      showToast("Request sent. No private data was shared.");
+    }
+
+    function openApproval(requestId) {
+      const request = state.requests.find(item => item.id === requestId && item.toId === state.activeUserId && item.status === "pending");
+      if (!request) return;
+      const requester = userById(request.fromId);
+      openModal(
+        "Approve connection",
+        `
+          <article class="person-card">
+            <div class="avatar small">${escapeHtml(requester.publicProfile.avatar)}</div>
+            <div class="person-main"><strong>${escapeHtml(requester.publicProfile.displayName)}</strong><p>${escapeHtml(request.message)}</p><small>${escapeHtml(requester.code)}</small></div>
+            <span class="status pending">pending</span>
+          </article>
+          <div class="privacy-message"><strong>Open connection is the safe default.</strong><br>Select private fields only when they are genuinely required. Sharing is one-way; the requester does not automatically reveal anything to you.</div>
+          <div class="checks">
+            ${[
+              ["fullName", "Full name"], ["email", "Email"], ["phone", "Mobile"],
+              ["linkedin", "LinkedIn"], ["meetingLink", "Meeting link"], ["note", "Private note"]
+            ].map(([field, label]) => `<label class="check"><input type="checkbox" name="grantField" value="${field}" /> ${label}</label>`).join("")}
+        `,
+        `<button class="btn btn-ghost btn-wide" type="button" data-action="approve-open" data-id="${request.id}">Open only</button><button class="btn btn-lime btn-wide" type="button" data-action="approve-private" data-id="${request.id}">Share selected</button>`
+      );
+    }
+
+    async function approveRequest(requestId, sharePrivate) {
+      const request = state.requests.find(item => item.id === requestId && item.toId === state.activeUserId && item.status === "pending");
+      if (!request) return;
+      const selectedFields = $$('input[name="grantField"]:checked').map(input => input.value);
+      if (sharePrivate && !selectedFields.length) {
+        showToast("Select at least one private field.");
+        return;
+      }
+
+      request.status = "approved";
+      request.decidedAt = nowIso();
+      const alreadyConnected = state.connections.some(connection => connection.members.includes(request.fromId) && connection.members.includes(request.toId));
+      if (!alreadyConnected) state.connections.unshift({ id: uid("connection"), members: [request.fromId, request.toId], createdAt: nowIso() });
+      if (sharePrivate) await createGrant(request.toId, request.fromId, selectedFields);
+
+      audit(request.toId, "REQUEST_APPROVED", `${userById(request.fromId).code} approved as a connection`, request.id);
+      audit(request.fromId, "REQUEST_APPROVED_BY_RECEIVER", `${userById(request.toId).code} approved your request`, request.id);
+      persist();
+      closeModal();
+      await renderAll();
+      showToast(sharePrivate ? "Connected with an encrypted private grant." : "Connected. Both private vaults remain sealed.");
+    }
+
+    function declineRequest(requestId) {
+      const request = state.requests.find(item => item.id === requestId && item.toId === state.activeUserId && item.status === "pending");
+      if (!request) return;
+      request.status = "declined";
+      request.decidedAt = nowIso();
+      audit(request.toId, "REQUEST_DECLINED", `Declined request from ${userById(request.fromId).code}`, request.id);
+      persist();
+      renderAll();
+      showToast("Request declined. No private data was shared.");
+    }
+
+    function cancelRequest(requestId) {
+      const request = state.requests.find(item => item.id === requestId && item.fromId === state.activeUserId && item.status === "pending");
+      if (!request) return;
+      request.status = "cancelled";
+      request.decidedAt = nowIso();
+      audit(request.fromId, "REQUEST_CANCELLED", `Cancelled request to ${userById(request.toId).code}`, request.id);
+      persist();
+      renderAll();
+      showToast("Pending request cancelled.");
+    }
+
+    async function showUnlockedGrant(grantId) {
+      const grant = state.grants.find(item => item.id === grantId);
+      try {
+        const data = await unlockGrant(grant);
+        openModal(
+          "Approved information",
+          `<div class="privacy-message"><strong>Decrypted locally for ${escapeHtml(activeUser().publicProfile.displayName)}.</strong><br>The information below came from an active one-way grant.</div>${Object.entries(data).map(([key, value]) => `<div class="unlocked-row"><span>${escapeHtml(key)}</span><strong>${escapeHtml(value)}</strong></div>`).join("")}`,
+          `<button class="btn btn-lime btn-wide" type="button" data-action="close-modal">Done</button>`
+        );
+      } catch (error) {
+        showToast(error.message || "Unable to unlock this grant.");
+      }
+    }
+
+    function revokeGrant(grantId) {
+      const grant = state.grants.find(item => item.id === grantId && item.ownerId === state.activeUserId && grantIsActive(item));
+      if (!grant) return;
+      grant.revokedAt = nowIso();
+      audit(grant.ownerId, "PRIVATE_GRANT_REVOKED", `Private access revoked for ${userById(grant.granteeId).code}`, grant.id);
+      persist();
+      renderAll();
+      showToast("Private access revoked immediately.");
+    }
+
+    function switcherCard(user) {
+      return `
+        <article class="person-card">
+          <div class="avatar small">${escapeHtml(user.publicProfile.avatar)}</div>
+          <div class="person-main"><strong>${escapeHtml(user.publicProfile.displayName)}</strong><p>${escapeHtml(user.publicProfile.role)}</p><small>${escapeHtml(user.code)}</small></div>
+          <button class="arrow-button" type="button" data-action="switch-identity" data-id="${user.id}">${user.id === state.activeUserId ? "✓" : "→"}</button>
+        </article>`;
+    }
+
+    function openIdentitySwitcher(filter = "") {
+      const normalized = filter.trim().toLowerCase();
+      const users = DEMO_USERS.filter(user => !normalized || `${user.publicProfile.displayName} ${user.code} ${user.publicProfile.role}`.toLowerCase().includes(normalized));
+      openModal(
+        "Choose a demo identity",
+        `<div class="search-box"><input id="switcherSearch" value="${escapeHtml(filter)}" placeholder="Search 50 demo users" /></div><div class="cards" id="switcherList">${users.map(switcherCard).join("")}</div>`,
+        ""
+      );
+    }
+
+    function updateSwitcherList(filter) {
+      const normalized = filter.trim().toLowerCase();
+      const users = DEMO_USERS.filter(user => !normalized || `${user.publicProfile.displayName} ${user.code} ${user.publicProfile.role}`.toLowerCase().includes(normalized));
+      const list = $("#switcherList");
+      if (list) list.innerHTML = users.length ? users.map(switcherCard).join("") : `<div class="empty-state"><b>No identity found</b>Try another name, role or HiKey.</div>`;
+    }
+
+    async function switchIdentity(userId) {
+      if (!userById(userId)) return;
+      state.activeUserId = userId;
+      await ensureVault(userId);
+      persist();
+      closeModal();
+      await renderAll();
+      showToast(`Now acting as ${activeUser().publicProfile.displayName}.`);
+    }
+
+    async function shareActiveHiKey() {
+      const user = activeUser();
+      const url = shareUrl(user.code);
+      const text = `Connect with ${user.publicProfile.displayName} using HiKey ${user.code}. No phone number or email is contained in this link.`;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: `HiKey · ${user.code}`, text, url });
+          return;
+        } catch (error) {
+          if (error.name === "AbortError") return;
+        }
+      }
+      await copyText(`${text}\n${url}`, "HiKey profile link copied.");
+    }
+
+    function findCode(code) {
+      const normalized = code.trim().toUpperCase();
+      const user = DEMO_USERS.find(item => item.code === normalized);
+      if (!user) {
+        showToast("HiKey not found in the 50-user demo network.");
+        return;
+      }
+      if (user.id === state.activeUserId) {
+        showToast("That is your current HiKey. Switch identity to test the other side.");
+        return;
+      }
+      openPublicProfile(user.id);
+    }
+
+    document.addEventListener("click", async event => {
+      const target = event.target.closest("[data-action], [data-route], [data-request-tab]");
+      if (!target) return;
+
+      if (target.dataset.route) {
+        routeTo(target.dataset.route);
+        return;
+      }
+      if (target.dataset.requestTab) {
+        requestTab = target.dataset.requestTab;
+        renderRequests();
+        return;
+      }
+
+      const action = target.dataset.action;
+      const id = target.dataset.id;
+      if (action === "close-modal") closeModal();
+      if (action === "share-hikey") await shareActiveHiKey();
+      if (action === "open-profile") openPublicProfile(id);
+      if (action === "send-request") sendConnectionRequest();
+      if (action === "review-request") openApproval(id);
+      if (action === "approve-open") await approveRequest(id, false);
+      if (action === "approve-private") await approveRequest(id, true);
+      if (action === "decline-request") declineRequest(id);
+      if (action === "cancel-request") cancelRequest(id);
+      if (action === "unlock-grant") await showUnlockedGrant(id);
+      if (action === "revoke-grant") revokeGrant(id);
+      if (action === "switch-identity") await switchIdentity(id);
+    });
+
+    document.addEventListener("submit", event => {
+      if (event.target.id === "codeSearchForm") {
+        event.preventDefault();
+        findCode($("#codeSearchInput").value);
+      }
+    });
+
+    document.addEventListener("input", event => {
+      if (event.target.id === "peopleSearchInput") updateDemoPeopleList(event.target.value);
+      if (event.target.id === "switcherSearch") updateSwitcherList(event.target.value);
+    });
+
+    $("#identitySwitcher").addEventListener("click", () => openIdentitySwitcher(""));
+    $("#modal").addEventListener("click", event => { if (event.target.id === "modal") closeModal(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") closeModal(); });
+
+    window.addEventListener("hashchange", () => {
+      const route = location.hash.slice(1);
+      if (ROUTES.includes(route)) {
+        activeRoute = route;
+        renderAll();
+      }
+    });
+
+    async function initialize() {
+      await ensureVault(state.activeUserId);
+      await renderAll();
+
+      const requestedCode = new URLSearchParams(location.search).get("code");
+      if (requestedCode) {
+        const target = DEMO_USERS.find(user => user.code === requestedCode.trim().toUpperCase());
+        if (target) {
+          if (target.id === state.activeUserId) {
+            const alternate = DEMO_USERS.find(user => user.id !== target.id);
+            state.activeUserId = alternate.id;
+            await ensureVault(alternate.id);
+            persist();
+          }
+          activeRoute = "connect";
+          await renderAll();
+          setTimeout(() => openPublicProfile(target.id), 150);
+        } else {
+          showToast("The shared HiKey is not available in this demo network.");
+        }
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      initialize().catch(error => {
+        console.error(error);
+        document.body.innerHTML = `<div style="max-width:620px;margin:70px auto;padding:24px;background:#101511;color:white;border-radius:24px;font-family:var(--font-sans)"><h2>HiKey could not start</h2><p>${escapeHtml(error.message || String(error))}</p><p>Use a modern browser with Web Crypto and localStorage enabled.</p></div>`;
+      });
+    });
+  </script>
+</body>
+</html>
