@@ -540,6 +540,63 @@
     .unlocked-row strong { font-size: 11px; }
     .toast { font-size: 10.5px; }
 
+
+    /* HiKey Moat Edition */
+    .moat-banner {
+      margin-top: 11px;
+      padding: 15px;
+      border-radius: 20px;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--lime), #e4ff9c);
+      box-shadow: 0 14px 36px rgba(200,255,77,.09);
+    }
+    .moat-banner strong { display: block; font-size: 13px; letter-spacing: -.25px; }
+    .moat-banner p { margin: 6px 0 0; font-size: 9px; line-height: 1.55; color: rgba(7,16,5,.68); }
+    .key-wallet { display: grid; gap: 8px; }
+    .context-key {
+      display: grid;
+      grid-template-columns: 38px minmax(0,1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface-2);
+      transition: .18s ease;
+    }
+    .context-key.active { border-color: rgba(200,255,77,.62); background: linear-gradient(135deg, rgba(200,255,77,.13), var(--surface-2)); }
+    .context-icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--surface-3); color: var(--lime); font-size: 15px; }
+    .context-key strong, .context-key span, .context-key small { display: block; }
+    .context-key strong { font-size: 10px; }
+    .context-key span { margin-top: 3px; color: var(--lime); font-family: var(--font-mono); font-size: 8px; word-break: break-word; }
+    .context-key small { margin-top: 3px; color: var(--muted); font-size: 7px; line-height: 1.4; }
+    .mini-button { border: 0; border-radius: 11px; padding: 8px 9px; color: var(--ink); background: var(--lime); font-size: 8px; font-weight: 800; }
+    .trust-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .trust-chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 7px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); color: #b9c2ba; font-size: 7px; font-weight: 700; }
+    .trust-chip.verified { color: var(--good); border-color: rgba(105,231,166,.22); background: rgba(105,231,166,.08); }
+    .profile-card .trust-chip { color: rgba(7,16,5,.68); border-color: rgba(7,16,5,.13); background: rgba(7,16,5,.06); }
+    .profile-card .trust-chip.verified { color: #0c6b43; border-color: rgba(12,107,67,.18); background: rgba(12,107,67,.08); }
+    .memory-card { margin-top: 9px; padding: 11px; border-radius: 14px; background: var(--surface-2); }
+    .memory-card span, .memory-card b { display: block; }
+    .memory-card span { color: var(--muted); font-size: 7px; text-transform: uppercase; letter-spacing: .7px; }
+    .memory-card b { margin-top: 4px; font-size: 9px; line-height: 1.45; }
+    .relationship-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; margin-top: 9px; }
+    .relay-badge { display: inline-flex; align-items: center; gap: 5px; color: var(--good); font-size: 7px; font-weight: 800; }
+    .relay-message { max-width: 88%; padding: 9px 10px; margin: 7px 0; border-radius: 14px 14px 14px 5px; background: var(--surface-2); font-size: 9px; line-height: 1.5; }
+    .relay-message.mine { margin-left: auto; border-radius: 14px 14px 5px 14px; color: var(--ink); background: var(--lime); }
+    .relay-message small { display: block; margin-top: 4px; opacity: .58; font-size: 7px; }
+    .consent-graph { padding: 10px; border: 1px solid var(--line); border-radius: 20px; background: radial-gradient(circle at center, rgba(200,255,77,.08), transparent 42%), var(--surface); overflow: hidden; }
+    .consent-graph svg { width: 100%; height: auto; display: block; }
+    .graph-caption { margin-top: 7px; color: var(--muted); font-size: 7px; line-height: 1.45; text-align: center; }
+    .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .control-tile { padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-2); }
+    .control-tile b { display: block; font-size: 16px; }
+    .control-tile span { display: block; margin-top: 4px; color: var(--muted); font-size: 7px; line-height: 1.4; }
+    .temporary-code { margin: 16px 0 5px; color: var(--lime); font-family: var(--font-mono); font-size: 34px; font-weight: 500; letter-spacing: 4px; text-align: center; }
+    .timer-track { height: 6px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
+    .timer-bar { height: 100%; width: 100%; background: var(--lime); transition: width .25s linear; }
+    .storage-mode { margin-top: 8px; color: var(--muted); font-size: 7px; text-align: center; }
+
     @media (max-width: 880px) {
       body { background: var(--app); }
       .stage { display: block; padding: 0; }
@@ -590,24 +647,23 @@
             <small>Say hi. Share a key. Stay connected.</small>
           </div>
         </div>
-        <h2>Share identity <em>without exposing it.</em></h2>
+        <h2>The private <em>relationship layer.</em></h2>
         <p>
-          HiKey is a privacy-first connection handshake for random meetings, events and professional networking.
-          A public key starts the relationship; the receiver alone decides whether any private information becomes visible.
+          HiKey is no longer presented as a digital visiting card. It demonstrates a consent graph where each relationship has its own context, trust signals, relay channel and revocable permissions.
         </p>
         <div class="story-stats">
-          <span>50 fictional demo identities</span>
-          <span>One-way private grants</span>
-          <span>Revocable access</span>
-          <span>GitHub Pages ready</span>
+          <span>Contextual HiKeys</span>
+          <span>Consent graph</span>
+          <span>Private relay</span>
+          <span>Relationship memory</span>
         </div>
         <div class="story-steps">
-          <div class="story-step"><b>1</b><strong>Share a HiKey</strong><p>Use a QR, link or memorable code. No phone number is embedded.</p></div>
-          <div class="story-step"><b>2</b><strong>Approve the person</strong><p>The receiver accepts or declines the connection request.</p></div>
-          <div class="story-step"><b>3</b><strong>Grant selectively</strong><p>Choose specific private fields, then revoke access whenever required.</p></div>
+          <div class="story-step"><b>1</b><strong>Meet and exchange</strong><p>Share a work, event or temporary key without revealing a contact channel.</p></div>
+          <div class="story-step"><b>2</b><strong>Create consent</strong><p>The receiver approves the relationship and chooses one-way permissions.</p></div>
+          <div class="story-step"><b>3</b><strong>Remain reachable</strong><p>Use a private relay, remember the context, then revoke access whenever needed.</p></div>
         </div>
         <div class="demo-note">
-          <strong>Prototype boundary:</strong> this single-browser demonstration stores encrypted demo keys locally so both sides can be simulated. A production system needs authenticated APIs, secure device keystores, key recovery, abuse controls and an independent security review.
+          <strong>Prototype boundary:</strong> this edition demonstrates product logic and browser-side cryptography with fictional data. Production needs authenticated APIs, passkeys, secure device keystores, relay infrastructure, key recovery, abuse controls and independent security review.
         </div>
       </aside>
     </div>
@@ -629,9 +685,9 @@
   <script>
     "use strict";
 
-    const APP_VERSION = "2.0.0";
-    const STATE_KEY = "hikey_humanlink_state_v2";
-    const KEYSTORE_KEY = "hikey_humanlink_keys_v2";
+    const APP_VERSION = "3.0.0";
+    const STATE_KEY = "hikey_humanlink_state_v3";
+    const KEYSTORE_KEY = "hikey_humanlink_keys_v3";
     const ROUTES = ["home", "connect", "requests", "people", "vault"];
     const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 
@@ -706,12 +762,127 @@
       }
     }));
 
+
+    const CONTEXTS = {
+      work: { label: "Work", icon: "▦", description: "Role, organization and professional purpose" },
+      event: { label: "Event", icon: "◎", description: "A limited profile for conferences and meetups" },
+      personal: { label: "Personal", icon: "◇", description: "A minimal identity for trusted introductions" }
+    };
+
+    function contextCode(user, context = "work") {
+      const body = user.code.replace(/^HL-/, "").replaceAll("-", "");
+      const prefix = context === "event" ? "EV" : context === "personal" ? "ME" : "WK";
+      return `HK-${prefix}-${body.slice(0, 4)}-${body.slice(4)}`;
+    }
+
+    function activeContext(userId = state?.activeUserId) {
+      return state?.activeContexts?.[userId] || "work";
+    }
+
+    function activeContextCode(user = activeUser()) {
+      return contextCode(user, activeContext(user.id));
+    }
+
+    function trustBadges(user) {
+      const badges = ["Device verified"];
+      if (user.index % 2 === 0) badges.push("Work domain");
+      if (user.index % 3 === 0) badges.push("Event attendee");
+      if (user.index % 4 === 0) badges.push("Trusted introduction");
+      return badges;
+    }
+
+    function trustMarkup(user) {
+      return `<div class="trust-row">${trustBadges(user).map(label => `<span class="trust-chip verified">✓ ${escapeHtml(label)}</span>`).join("")}</div>`;
+    }
+
+    function resolveHiKey(value) {
+      const normalized = String(value || "").trim().toUpperCase();
+      for (const user of DEMO_USERS) {
+        if (user.code === normalized) return { user, context: "work", legacy: true };
+        for (const context of Object.keys(CONTEXTS)) {
+          if (contextCode(user, context) === normalized) return { user, context, legacy: false };
+        }
+      }
+      return null;
+    }
+
+    const LEGACY_STORAGE_KEYS = [
+      "humanlink_poc_state_v1", "humanlink_poc_keys_v1",
+      "hikey2", "hikey2keys",
+      "hikey_humanlink_state_v1", "hikey_humanlink_keys_v1"
+    ];
+    const memoryStorage = { state: null, keys: null };
+    let storageMode = "local";
+    let storageWarning = "";
+
+    function isQuotaError(error) {
+      return Boolean(error) && (
+        error.name === "QuotaExceededError" ||
+        error.name === "NS_ERROR_DOM_QUOTA_REACHED" ||
+        error.code === 22 || error.code === 1014 ||
+        /quota|storage/i.test(error.message || "")
+      );
+    }
+
+    function cleanupLegacyStorage() {
+      for (const store of [localStorage, sessionStorage]) {
+        try {
+          LEGACY_STORAGE_KEYS.forEach(key => store.removeItem(key));
+          const removable = [];
+          for (let index = 0; index < store.length; index += 1) {
+            const key = store.key(index);
+            if (key && /^(humanlink|hikey)/i.test(key) && ![STATE_KEY, KEYSTORE_KEY].includes(key)) removable.push(key);
+          }
+          removable.forEach(key => store.removeItem(key));
+        } catch (error) {
+          console.warn("Unable to clean legacy HiKey storage", error);
+        }
+      }
+    }
+
+    function readStoredValue(key, memoryKey) {
+      for (const [mode, store] of [["local", localStorage], ["session", sessionStorage]]) {
+        try {
+          const value = store.getItem(key);
+          if (value !== null) {
+            storageMode = mode;
+            return value;
+          }
+        } catch (error) {
+          console.warn(`Unable to read ${mode} storage`, error);
+        }
+      }
+      return memoryStorage[memoryKey];
+    }
+
+    function compactStateForStorage() {
+      state.audit = Array.isArray(state.audit) ? state.audit.slice(0, 60) : [];
+      state.requests = Array.isArray(state.requests) ? state.requests.slice(0, 120) : [];
+      state.connections = Array.isArray(state.connections) ? state.connections.slice(0, 120) : [];
+      state.relayMessages = Array.isArray(state.relayMessages) ? state.relayMessages.slice(0, 160) : [];
+      state.grants = Array.isArray(state.grants)
+        ? state.grants.filter((grant, index) => !grant.revokedAt || index < 40).slice(0, 120)
+        : [];
+
+      // Demo vaults can be recreated from fictional seed data. Keeping only the active
+      // vault prevents identity switching across 50 users from filling browser storage.
+      const activeVault = state.vaults?.[state.activeUserId];
+      state.vaults = activeVault ? { [state.activeUserId]: activeVault } : {};
+
+      // Identity keys are tiny compared with encrypted activity data. Keep them so a
+      // newly created recipient key is not removed before its grant is committed.
+      // With 50 demo identities this remains comfortably below browser limits.
+    }
+
+    cleanupLegacyStorage();
     let state = loadState();
     let keyStore = loadKeyStore();
     let activeRoute = ROUTES.includes(location.hash.slice(1)) ? location.hash.slice(1) : "home";
     let requestTab = "incoming";
     let activeProfileTargetId = null;
+    let activeProfileContext = "work";
     let toastTimer = null;
+    let meetingTimer = null;
 
     const $ = (selector, root = document) => root.querySelector(selector);
     const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -732,37 +903,119 @@
       return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
     }
 
+    function createDefaultState() {
+      const createdAt = nowIso();
+      return {
+        version: APP_VERSION,
+        activeUserId: DEMO_USERS[0].id,
+        activeContexts: { [DEMO_USERS[0].id]: "work" },
+        requests: [{
+          id: "request_demo_anaya", fromId: DEMO_USERS[1].id, toId: DEMO_USERS[0].id,
+          message: "We met during the privacy-by-design roundtable. Let us continue the discussion through HiKey.",
+          status: "pending", createdAt, decidedAt: null, targetContext: "event", requesterContext: "work",
+          metAt: "Privacy-by-Design Roundtable", topic: "Consent-first professional networking", followUp: "Share the prototype this week"
+        }],
+        connections: [{
+          id: "connection_demo_rohan", members: [DEMO_USERS[0].id, DEMO_USERS[2].id], createdAt,
+          memory: { metAt: "Mumbai Product Meetup", topic: "Private relationship networks", followUp: "Reconnect after the prototype review", introducedBy: "Event host", updatedAt: createdAt },
+          relayEnabled: true
+        }],
+        relayMessages: [{ id: "relay_demo_1", connectionId: "connection_demo_rohan", fromId: DEMO_USERS[2].id, toId: DEMO_USERS[0].id, text: "Good meeting you. The relay keeps both of our phone numbers private.", createdAt }],
+        grants: [],
+        vaults: {},
+        audit: [],
+        blocked: []
+      };
+    }
+
     function loadState() {
       try {
-        const parsed = JSON.parse(localStorage.getItem(STATE_KEY) || "null");
+        const parsed = JSON.parse(readStoredValue(STATE_KEY, "state") || "null");
         if (parsed?.version === APP_VERSION) return parsed;
       } catch (error) {
         console.warn("Unable to load saved state", error);
       }
-      return {
-        version: APP_VERSION,
-        activeUserId: DEMO_USERS[0].id,
-        requests: [],
-        connections: [],
-        grants: [],
-        vaults: {},
-        audit: []
-      };
+      return createDefaultState();
     }
 
     function loadKeyStore() {
-      try { return JSON.parse(localStorage.getItem(KEYSTORE_KEY) || "{}"); }
+      try { return JSON.parse(readStoredValue(KEYSTORE_KEY, "keys") || "{}"); }
       catch { return {}; }
     }
 
+    function writeToStorage(store, stateText, keyText) {
+      // Remove first so a large legacy value does not block its smaller replacement.
+      store.removeItem(STATE_KEY);
+      store.removeItem(KEYSTORE_KEY);
+      store.setItem(KEYSTORE_KEY, keyText);
+      store.setItem(STATE_KEY, stateText);
+    }
+
     function persist() {
-      localStorage.setItem(STATE_KEY, JSON.stringify(state));
-      localStorage.setItem(KEYSTORE_KEY, JSON.stringify(keyStore));
+      compactStateForStorage();
+      let stateText = JSON.stringify(state);
+      let keyText = JSON.stringify(keyStore);
+
+      try {
+        writeToStorage(localStorage, stateText, keyText);
+        storageMode = "local";
+        storageWarning = "";
+        return true;
+      } catch (error) {
+        console.warn("Local storage write failed; attempting recovery", error);
+        cleanupLegacyStorage();
+
+        // Compact once more after cleanup and retry.
+        compactStateForStorage();
+        stateText = JSON.stringify(state);
+        keyText = JSON.stringify(keyStore);
+        try {
+          writeToStorage(localStorage, stateText, keyText);
+          storageMode = "local";
+          storageWarning = "Old HiKey browser cache was cleared automatically.";
+          return true;
+        } catch (retryError) {
+          console.warn("Local storage recovery failed", retryError);
+          try {
+            writeToStorage(sessionStorage, stateText, keyText);
+            storageMode = "session";
+            storageWarning = "Browser storage is full. HiKey is running in temporary session mode.";
+            return true;
+          } catch (sessionError) {
+            console.warn("Session storage unavailable; using memory-only mode", sessionError);
+            memoryStorage.state = stateText;
+            memoryStorage.keys = keyText;
+            storageMode = "memory";
+            storageWarning = "Storage is unavailable. HiKey will work until this tab is closed.";
+            return false;
+          }
+        }
+      }
+    }
+
+    function resetHiKeyStorage() {
+      for (const store of [localStorage, sessionStorage]) {
+        try {
+          store.removeItem(STATE_KEY);
+          store.removeItem(KEYSTORE_KEY);
+          LEGACY_STORAGE_KEYS.forEach(key => store.removeItem(key));
+        } catch (error) {
+          console.warn("Unable to reset a browser storage area", error);
+        }
+      }
+      memoryStorage.state = null;
+      memoryStorage.keys = null;
+      state = createDefaultState();
+      keyStore = {};
+      storageMode = "local";
+      storageWarning = "HiKey demo storage was reset.";
     }
 
     function activeUser() { return DEMO_USERS.find(user => user.id === state.activeUserId) || DEMO_USERS[0]; }
     function userById(id) { return DEMO_USERS.find(user => user.id === id); }
-    function grantIsActive(grant) { return Boolean(grant) && !grant.revokedAt; }
+    function grantIsActive(grant) {
+      return Boolean(grant) && !grant.revokedAt && (!grant.expiresAt || new Date(grant.expiresAt).getTime() > Date.now());
+    }
 
     function audit(userId, type, message, referenceId = null) {
       state.audit.unshift({ id: uid("audit"), userId, type, message, referenceId, createdAt: nowIso() });
@@ -828,27 +1081,21 @@
       return decryptJson(state.vaults[userId], await ensureIdentityKey(userId));
     }
 
-    async function createGrant(ownerId, granteeId, fields) {
+    async function createGrant(ownerId, granteeId, fields, expiryHours = 0) {
       const privateData = await readVault(ownerId);
       const selectedData = Object.fromEntries(fields.map(field => [field, privateData[field]]));
 
       const contentKey = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
       const encryptedData = await encryptJson(selectedData, contentKey);
       const rawContentKey = bytesToBase64(await crypto.subtle.exportKey("raw", contentKey));
-
-      // Demo wrapping: the grant key is encrypted using the recipient's dedicated local identity key.
       const wrappedKey = await encryptJson({ rawContentKey }, await ensureIdentityKey(granteeId));
 
       const grant = {
-        id: uid("grant"),
-        ownerId,
-        granteeId,
-        fields,
-        encryptedData,
-        wrappedKey,
+        id: uid("grant"), ownerId, granteeId, fields, encryptedData, wrappedKey,
         createdAt: nowIso(),
+        expiresAt: Number(expiryHours) ? new Date(Date.now() + Number(expiryHours) * 3600000).toISOString() : null,
         revokedAt: null,
-        protocol: "AES-GCM vault → per-grant AES-256 content key → recipient-key wrapping"
+        protocol: "AES-GCM vault → relationship-specific content key → recipient-key wrapping"
       };
       state.grants.unshift(grant);
       audit(ownerId, "PRIVATE_GRANT_CREATED", `${fields.length} private field(s) shared with ${userById(granteeId).code}`, grant.id);
@@ -864,11 +1111,11 @@
       return decryptJson(grant.encryptedData, contentKey);
     }
 
-    function shareUrl(code) {
+    function shareUrl(code, context = "work") {
       const base = location.protocol === "file:"
         ? "https://expresstree.github.io/twolineswisdom/HumanLink_PoC.html"
         : `${location.origin}${location.pathname}`;
-      return `${base}?code=${encodeURIComponent(code)}`;
+      return `${base}?code=${encodeURIComponent(code)}&context=${encodeURIComponent(context)}`;
     }
 
     async function copyText(value, successMessage) {
@@ -917,11 +1164,11 @@
     function renderNavigation() {
       const pendingCount = state.requests.filter(request => request.toId === state.activeUserId && request.status === "pending").length;
       const navItems = [
-        ["home", "⌂", "Home"],
-        ["connect", "⌁", "Connect"],
-        ["requests", "↗", "Requests"],
-        ["people", "◎", "People"],
-        ["vault", "◇", "Vault"]
+        ["home", "⌂", "Keys"],
+        ["connect", "⌁", "Exchange"],
+        ["requests", "↗", "Consent"],
+        ["people", "◎", "Relations"],
+        ["vault", "◇", "Control"]
       ];
       $("#bottomNav").innerHTML = navItems.map(([route, icon, label]) => `
         <button type="button" class="${activeRoute === route ? "active" : ""}" data-route="${route}">
@@ -930,58 +1177,69 @@
       `).join("");
 
       ROUTES.forEach(route => $("#view-" + route).classList.toggle("active", route === activeRoute));
-      $("#headerContext").textContent = activeRoute === "home" ? "by HumanLink" : activeRoute[0].toUpperCase() + activeRoute.slice(1);
+      const labels = { home: "Key wallet", connect: "Exchange", requests: "Consent", people: "Relationships", vault: "Trust & control" };
+      $("#headerContext").textContent = labels[activeRoute] || "by HumanLink";
       $("#identitySwitcher").textContent = activeUser().publicProfile.avatar;
     }
 
     function renderHome() {
       const user = activeUser();
+      const context = activeContext(user.id);
+      const selectedKey = contextCode(user, context);
       const pending = state.requests.filter(request => request.toId === user.id && request.status === "pending").length;
       const connections = state.connections.filter(connection => connection.members.includes(user.id)).length;
       const grants = state.grants.filter(grant => grant.ownerId === user.id && grantIsActive(grant)).length;
+      const relays = state.relayMessages.filter(message => message.fromId === user.id || message.toId === user.id).length;
 
       $("#view-home").innerHTML = `
-        ${titleMarkup("HiKey by HumanLink", "Say hi. Stay connected.", "A public identity key starts the conversation. Your private vault stays closed.")}
+        ${titleMarkup("HiKey moat edition", "Your key wallet", "One identity can present different public surfaces without exposing a private contact channel.")}
         <article class="identity-card">
           <div class="identity-top">
-            <span class="privacy-chip"><span class="privacy-dot"></span> Privacy key active</span>
+            <span class="privacy-chip"><span class="privacy-dot"></span> ${escapeHtml(CONTEXTS[context].label)} key active</span>
             <span class="avatar">${escapeHtml(user.publicProfile.avatar)}</span>
           </div>
           <div class="identity-grid">
             <div>
               <h2 class="identity-name">${escapeHtml(user.publicProfile.displayName)}</h2>
               <p class="identity-role">${escapeHtml(user.publicProfile.role)} · ${escapeHtml(user.publicProfile.organization)}</p>
-              <p class="identity-purpose">${escapeHtml(user.publicProfile.purpose)}</p>
-              <div class="hikey-label">My HiKey</div>
-              <div class="hikey-code">${escapeHtml(user.code)}</div>
+              <p class="identity-purpose">${escapeHtml(CONTEXTS[context].description)}</p>
+              <div class="hikey-label">Active contextual HiKey</div>
+              <div class="hikey-code">${escapeHtml(selectedKey)}</div>
             </div>
             <div class="qr-box" id="homeQr"></div>
           </div>
+          ${trustMarkup(user)}
           <div class="identity-actions">
-            <button class="btn btn-dark btn-wide" type="button" data-action="share-hikey">Share HiKey</button>
-            <button class="btn btn-soft" type="button" data-route="connect">Connect</button>
+            <button class="btn btn-dark btn-wide" type="button" data-action="share-hikey">Share this key</button>
+            <button class="btn btn-soft" type="button" data-action="meeting-mode">90-sec code</button>
           </div>
         </article>
 
+        <section class="moat-banner"><strong>Public key. Private relationship.</strong><p>The QR creates a consent request. It does not disclose a phone number, email address or permanent communication channel.</p></section>
+
         <section class="panel">
-          <div class="panel-head"><h3>Privacy pulse</h3><span>Current demo identity</span></div>
-          <div class="metrics">
-            <div class="metric"><strong>${connections}</strong><span>trusted connections</span></div>
-            <div class="metric"><strong>${pending}</strong><span>requests awaiting you</span></div>
-            <div class="metric"><strong>${grants}</strong><span>active private grants</span></div>
+          <div class="panel-head"><h3>Contextual key wallet</h3><span>Rotate the surface, not your identity</span></div>
+          <div class="key-wallet">
+            ${Object.entries(CONTEXTS).map(([key, item]) => `
+              <div class="context-key ${context === key ? "active" : ""}">
+                <div class="context-icon">${item.icon}</div>
+                <div><strong>${escapeHtml(item.label)} HiKey</strong><span>${escapeHtml(contextCode(user, key))}</span><small>${escapeHtml(item.description)}</small></div>
+                <button class="mini-button" type="button" data-action="select-context" data-context="${key}">${context === key ? "Active" : "Use"}</button>
+              </div>`).join("")}
           </div>
         </section>
 
         <section class="panel">
-          <div class="panel-head"><h3>30-second handshake</h3><span>No contact details in the code</span></div>
-          <div class="speed-flow">
-            <div class="speed-step"><b>1</b><span>Show QR or code</span></div>
-            <div class="speed-step"><b>2</b><span>Send request</span></div>
-            <div class="speed-step"><b>3</b><span>Approve selectively</span></div>
+          <div class="panel-head"><h3>Relationship moat</h3><span>Current identity</span></div>
+          <div class="control-grid">
+            <div class="control-tile"><b>${connections}</b><span>consent relationships with remembered context</span></div>
+            <div class="control-tile"><b>${pending}</b><span>requests waiting for an explicit decision</span></div>
+            <div class="control-tile"><b>${grants}</b><span>active one-way private grants</span></div>
+            <div class="control-tile"><b>${relays}</b><span>relay messages without exposed contact details</span></div>
           </div>
         </section>
       `;
-      renderQr($("#homeQr"), shareUrl(user.code));
+      renderQr($("#homeQr"), shareUrl(selectedKey, context));
     }
 
     function renderConnect(filter = "") {
@@ -993,7 +1251,7 @@
       });
 
       $("#view-connect").innerHTML = `
-        ${titleMarkup("Under 30 seconds", "Connect by key", "Enter a HiKey or explore 50 fictional identities. No private details appear before approval.")}
+        ${titleMarkup("Physical meeting → private relationship", "Exchange a HiKey", "Enter any work, event, personal or legacy key. The receiver still controls the next step.")}
         <form class="search-box" id="codeSearchForm">
           <input id="codeSearchInput" autocomplete="off" placeholder="Enter HL-4P8R-K6WM" aria-label="Enter a HiKey code" />
           <button class="btn btn-lime" type="submit">Find</button>
@@ -1018,7 +1276,7 @@
           <div class="person-main">
             <strong>${escapeHtml(user.publicProfile.displayName)}</strong>
             <p>${escapeHtml(user.publicProfile.role)} · ${escapeHtml(user.publicProfile.organization)}</p>
-            <small>${escapeHtml(user.code)} · ${escapeHtml(user.publicProfile.city)}</small>
+            <small>${escapeHtml(contextCode(user, "work"))} · ${escapeHtml(user.publicProfile.city)}</small>
           </div>
           <button class="arrow-button" type="button" data-action="open-profile" data-id="${user.id}" aria-label="Open ${escapeHtml(user.publicProfile.displayName)}">→</button>
         </article>
@@ -1063,7 +1321,8 @@
           <span class="status ${request.status}">${escapeHtml(request.status)}</span>
           <strong>${escapeHtml(counterpart.publicProfile.displayName)}</strong>
           <p>${escapeHtml(request.message)}</p>
-          <small>${escapeHtml(counterpart.code)} · ${formatDate(request.createdAt)}</small>
+          ${request.metAt ? `<div class="memory-card"><span>Meeting context</span><b>${escapeHtml(request.metAt)} · ${escapeHtml(request.topic || "General introduction")}</b></div>` : ""}
+          <small>${escapeHtml(contextCode(counterpart, request.targetContext || "work"))} · ${formatDate(request.createdAt)}</small>
           ${incomingPending ? `
             <div class="button-row" style="margin-top:9px">
               <button class="btn btn-lime btn-wide" type="button" data-action="review-request" data-id="${request.id}">Review</button>
@@ -1078,12 +1337,33 @@
       `;
     }
 
+    function consentGraphMarkup(connections) {
+      const visible = connections.slice(0, 5);
+      const positions = [[165,28],[280,72],[250,154],[80,154],[50,72]];
+      const centerX = 165, centerY = 94;
+      const lines = visible.map((connection, index) => {
+        const otherId = connection.members.find(memberId => memberId !== state.activeUserId);
+        const [x,y] = positions[index];
+        const grantToMe = state.grants.some(grant => grant.ownerId === otherId && grant.granteeId === state.activeUserId && grantIsActive(grant));
+        const grantByMe = state.grants.some(grant => grant.ownerId === state.activeUserId && grant.granteeId === otherId && grantIsActive(grant));
+        const stroke = grantToMe || grantByMe ? "#c8ff4d" : "#566058";
+        return `<line x1="${centerX}" y1="${centerY}" x2="${x}" y2="${y}" stroke="${stroke}" stroke-width="2" stroke-dasharray="${grantToMe || grantByMe ? "0" : "5 4"}" opacity=".8"/>`;
+      }).join("");
+      const nodes = visible.map((connection, index) => {
+        const otherId = connection.members.find(memberId => memberId !== state.activeUserId);
+        const user = userById(otherId); const [x,y] = positions[index];
+        return `<circle cx="${x}" cy="${y}" r="17" fill="#c8ff4d"/><text x="${x}" y="${y+3}" text-anchor="middle" fill="#071005" font-size="8" font-weight="800">${escapeHtml(user.publicProfile.avatar)}</text>`;
+      }).join("");
+      return `<div class="consent-graph"><svg viewBox="0 0 330 185" role="img" aria-label="Consent relationship graph">${lines}<circle cx="${centerX}" cy="${centerY}" r="24" fill="#ffffff"/><text x="${centerX}" y="${centerY+4}" text-anchor="middle" fill="#071005" font-size="10" font-weight="800">YOU</text>${nodes}</svg><div class="graph-caption">Solid lime edges have an active private grant. Dashed edges remain open-profile relationships.</div></div>`;
+    }
+
     function renderPeople() {
       const connections = state.connections.filter(connection => connection.members.includes(state.activeUserId));
       $("#view-people").innerHTML = `
-        ${titleMarkup("Relationship memory", "My people", "Each direction has its own approval and private-data grant.")}
-        <div class="cards">
-          ${connections.length ? connections.map(connectionCard).join("") : `<div class="empty-state"><b>No trusted connections yet</b>Open Connect, choose a demo identity and send a HiKey request.</div>`}
+        ${titleMarkup("The HiKey moat", "Consent relationships", "Remember where you met, communicate through a private relay and manage each direction separately.")}
+        ${connections.length ? consentGraphMarkup(connections) : ""}
+        <div class="cards" style="margin-top:10px">
+          ${connections.length ? connections.map(connectionCard).join("") : `<div class="empty-state"><b>No consent relationships yet</b>Exchange a HiKey, then approve the request from the receiver's identity.</div>`}
         </div>
       `;
     }
@@ -1093,18 +1373,25 @@
       const other = userById(otherId);
       const receivedGrant = state.grants.find(grant => grant.ownerId === otherId && grant.granteeId === state.activeUserId && grantIsActive(grant));
       const sharedGrant = state.grants.find(grant => grant.ownerId === state.activeUserId && grant.granteeId === otherId && grantIsActive(grant));
+      const memory = connection.memory || {};
+      const relayCount = state.relayMessages.filter(message => message.connectionId === connection.id).length;
 
       return `
         <article class="connection-card">
-          <strong>${escapeHtml(other.publicProfile.displayName)}</strong>
-          <p>${escapeHtml(other.publicProfile.role)} · ${escapeHtml(other.code)}</p>
+          <span class="relay-badge">● Private relay active · ${relayCount} message${relayCount === 1 ? "" : "s"}</span>
+          <strong style="display:block;margin-top:7px">${escapeHtml(other.publicProfile.displayName)}</strong>
+          <p>${escapeHtml(other.publicProfile.role)} · ${escapeHtml(contextCode(other, "work"))}</p>
+          ${trustMarkup(other)}
+          <div class="memory-card"><span>Why this relationship exists</span><b>${escapeHtml(memory.metAt || "Meeting context not recorded")} · ${escapeHtml(memory.topic || "Add a discussion topic")}</b></div>
           <div class="direction-grid">
             <div class="direction-box"><span>They shared with you</span><b>${receivedGrant ? `${receivedGrant.fields.length} private field(s)` : "Open identity only"}</b></div>
             <div class="direction-box"><span>You shared</span><b>${sharedGrant ? `${sharedGrant.fields.length} private field(s)` : "Open identity only"}</b></div>
           </div>
-          <div class="button-row" style="margin-top:9px">
-            ${receivedGrant ? `<button class="btn btn-lime btn-wide" type="button" data-action="unlock-grant" data-id="${receivedGrant.id}">Unlock approved data</button>` : `<button class="btn btn-ghost btn-wide" type="button" data-action="open-profile" data-id="${otherId}">Request private access</button>`}
-            ${sharedGrant ? `<button class="btn btn-danger" type="button" data-action="revoke-grant" data-id="${sharedGrant.id}">Revoke</button>` : ""}
+          <div class="relationship-actions">
+            <button class="btn btn-lime" type="button" data-action="open-relay" data-id="${connection.id}">Private relay</button>
+            <button class="btn btn-ghost" type="button" data-action="edit-memory" data-id="${connection.id}">Memory</button>
+            ${receivedGrant ? `<button class="btn btn-ghost" type="button" data-action="unlock-grant" data-id="${receivedGrant.id}">Unlock grant</button>` : `<button class="btn btn-ghost" type="button" data-action="open-profile" data-id="${otherId}">Request access</button>`}
+            ${sharedGrant ? `<button class="btn btn-danger" type="button" data-action="revoke-grant" data-id="${sharedGrant.id}">Revoke</button>` : `<button class="btn btn-soft" type="button" data-action="open-profile" data-id="${otherId}">Review profile</button>`}
           </div>
         </article>
       `;
@@ -1117,29 +1404,39 @@
       const fingerprint = (await sha256Text(keyStore[user.id].rawKey)).slice(0, 24).toUpperCase().match(/.{1,4}/g).join(" ");
       const grants = state.grants.filter(grant => grant.ownerId === user.id);
       const activity = state.audit.filter(item => item.userId === user.id).slice(0, 8);
+      const activeGrants = grants.filter(grantIsActive).length;
+      const relationships = state.connections.filter(connection => connection.members.includes(user.id)).length;
 
       $("#view-vault").innerHTML = `
-        ${titleMarkup("Owner controlled", "Private vault", "Your private identity is encrypted. Every grant is one-way and revocable.")}
+        ${titleMarkup("Trust, keys and revocation", "Owner control centre", "The defensible product is the permissioned relationship—not the QR code.")}
         <section class="vault-hero">
           <div class="vault-icon">◇</div>
-          <h2>Encrypted identity vault</h2>
-          <p>Dedicated browser-side AES-256 key for this demo identity.</p>
+          <h2>Encrypted identity root</h2>
+          <p>Contextual HiKeys resolve to one protected identity. Private data remains encrypted until a valid grant is unlocked.</p>
           <div class="fingerprint">${escapeHtml(fingerprint)}</div>
           <div class="cipher-preview">${escapeHtml(vault.ciphertext.slice(0, 118))}…</div>
         </section>
 
         <section class="panel">
-          <div class="panel-head"><h3>Private grants</h3><span>${grants.filter(grantIsActive).length} active</span></div>
-          <div class="cards">
-            ${grants.length ? grants.map(grantCard).join("") : `<div class="empty-state"><b>Nothing private has been shared</b>Your open HiKey identity can still receive connection requests.</div>`}
+          <div class="panel-head"><h3>Trust wallet</h3><span>Signals, not exposed documents</span></div>
+          ${trustMarkup(user)}
+          <div class="control-grid" style="margin-top:10px">
+            <div class="control-tile"><b>${Object.keys(CONTEXTS).length}</b><span>contextual public keys mapped to one identity</span></div>
+            <div class="control-tile"><b>${relationships}</b><span>consent relationships in the private graph</span></div>
+            <div class="control-tile"><b>${activeGrants}</b><span>active private grants that can be revoked</span></div>
+            <div class="control-tile"><b>${storageMode}</b><span>current prototype persistence mode</span></div>
           </div>
         </section>
 
         <section class="panel">
+          <div class="panel-head"><h3>Private grants</h3><span>${activeGrants} active</span></div>
+          <div class="cards">${grants.length ? grants.map(grantCard).join("") : `<div class="empty-state"><b>Nothing private has been shared</b>Connections and private grants remain separate decisions.</div>`}</div>
+        </section>
+
+        <section class="panel">
           <div class="panel-head"><h3>Security activity</h3><span>Local demo audit</span></div>
-          <div class="cards">
-            ${activity.length ? activity.map(auditCard).join("") : `<div class="empty-state"><b>No security activity</b>Actions such as grants and revocations will appear here.</div>`}
-          </div>
+          <div class="cards">${activity.length ? activity.map(auditCard).join("") : `<div class="empty-state"><b>No security activity</b>Approvals, grants, relay messages and revocations will appear here.</div>`}</div>
+          <div class="storage-mode">Prototype storage: ${escapeHtml(storageMode)}. No real personal records are used.</div>
         </section>
       `;
     }
@@ -1151,7 +1448,7 @@
           <span class="status ${grantIsActive(grant) ? "active" : "revoked"}">${grantIsActive(grant) ? "active" : "revoked"}</span>
           <strong>${escapeHtml(grantee.publicProfile.displayName)}</strong>
           <p>${escapeHtml(grant.fields.join(", "))}</p>
-          <small>${formatDate(grant.createdAt)}</small>
+          <small>${formatDate(grant.createdAt)}${grant.expiresAt ? ` · expires ${formatDate(grant.expiresAt)}` : " · no automatic expiry"}</small>
           ${grantIsActive(grant) ? `<div class="button-row" style="margin-top:9px"><button class="btn btn-danger btn-wide" type="button" data-action="revoke-grant" data-id="${grant.id}">Revoke private access</button></div>` : ""}
         </article>
       `;
@@ -1187,11 +1484,13 @@
       $("#modal").classList.remove("open");
       document.body.style.overflow = "";
       activeProfileTargetId = null;
+      activeProfileContext = "work";
     }
 
-    function openPublicProfile(userId) {
+    function openPublicProfile(userId, context = "work") {
       const user = userById(userId);
       activeProfileTargetId = userId;
+      activeProfileContext = CONTEXTS[context] ? context : "work";
       openModal(
         "Public HiKey",
         `
@@ -1199,13 +1498,17 @@
             <div class="avatar small" style="background:rgba(7,16,5,.12)">${escapeHtml(user.publicProfile.avatar)}</div>
             <h2>${escapeHtml(user.publicProfile.displayName)}</h2>
             <p>${escapeHtml(user.publicProfile.role)} · ${escapeHtml(user.publicProfile.organization)} · ${escapeHtml(user.publicProfile.city)}</p>
-            <p>${escapeHtml(user.publicProfile.purpose)}</p>
-            <div class="hikey-code">${escapeHtml(user.code)}</div>
+            <p>${escapeHtml(CONTEXTS[activeProfileContext].description)}</p>
+            <div class="hikey-code">${escapeHtml(contextCode(user, activeProfileContext))}</div>
+            ${trustMarkup(user)}
           </article>
-          <div class="privacy-message"><strong>No phone number or email is inside this link.</strong><br>A request shares only your open HiKey identity. ${escapeHtml(user.publicProfile.displayName)} decides whether any private field becomes visible.</div>
-          <div class="field"><label>Why would you like to stay connected?</label><textarea id="requestMessage">Great meeting you. I would like to stay connected through HiKey.</textarea></div>
+          <div class="privacy-message"><strong>This is a request address, not a contact record.</strong><br>No phone number, email address or permanent relay destination is visible. ${escapeHtml(user.publicProfile.displayName)} decides what happens next.</div>
+          <div class="field"><label>Where did you meet?</label><input id="meetingContext" value="Professional event" /></div>
+          <div class="field"><label>What did you discuss?</label><input id="meetingTopic" value="Privacy-first professional networking" /></div>
+          <div class="field"><label>Suggested follow-up</label><input id="meetingFollowUp" value="Continue the conversation through HiKey" /></div>
+          <div class="field"><label>Request message</label><textarea id="requestMessage">Great meeting you. I would like to stay connected through HiKey without exchanging private contact details.</textarea></div>
         `,
-        `<button class="btn btn-ghost btn-wide" type="button" data-action="close-modal">Not now</button><button class="btn btn-lime btn-wide" type="button" data-action="send-request">Send request</button>`
+        `<button class="btn btn-ghost btn-wide" type="button" data-action="close-modal">Not now</button><button class="btn btn-lime btn-wide" type="button" data-action="send-request">Send consent request</button>`
       );
     }
 
@@ -1213,22 +1516,23 @@
       const fromId = state.activeUserId;
       const toId = activeProfileTargetId;
       if (!toId || fromId === toId) return;
-
       const existingPending = state.requests.find(request => request.fromId === fromId && request.toId === toId && request.status === "pending");
-      if (existingPending) {
-        showToast("A request is already pending for this HiKey.");
-        return;
-      }
+      if (existingPending) return showToast("A request is already pending for this HiKey.");
 
-      const message = $("#requestMessage")?.value.trim() || "I would like to stay connected through HiKey.";
-      const request = { id: uid("request"), fromId, toId, message, status: "pending", createdAt: nowIso(), decidedAt: null };
+      const request = {
+        id: uid("request"), fromId, toId,
+        message: $("#requestMessage")?.value.trim() || "I would like to stay connected through HiKey.",
+        status: "pending", createdAt: nowIso(), decidedAt: null,
+        requesterContext: activeContext(fromId), targetContext: activeProfileContext,
+        metAt: $("#meetingContext")?.value.trim() || "In-person meeting",
+        topic: $("#meetingTopic")?.value.trim() || "General introduction",
+        followUp: $("#meetingFollowUp")?.value.trim() || "Continue through HiKey"
+      };
       state.requests.unshift(request);
-      audit(fromId, "REQUEST_SENT", `Connection request sent to ${userById(toId).code}`, request.id);
-      audit(toId, "REQUEST_RECEIVED", `Connection request received from ${userById(fromId).code}`, request.id);
-      persist();
-      closeModal();
-      renderAll();
-      showToast("Request sent. No private data was shared.");
+      audit(fromId, "REQUEST_SENT", `Consent request sent to ${contextCode(userById(toId), activeProfileContext)}`, request.id);
+      audit(toId, "REQUEST_RECEIVED", `Consent request received from ${contextCode(userById(fromId), activeContext(fromId))}`, request.id);
+      persist(); closeModal(); renderAll();
+      showToast("Consent request sent. No private data was shared.");
     }
 
     function openApproval(requestId) {
@@ -1243,12 +1547,15 @@
             <div class="person-main"><strong>${escapeHtml(requester.publicProfile.displayName)}</strong><p>${escapeHtml(request.message)}</p><small>${escapeHtml(requester.code)}</small></div>
             <span class="status pending">pending</span>
           </article>
-          <div class="privacy-message"><strong>Open connection is the safe default.</strong><br>Select private fields only when they are genuinely required. Sharing is one-way; the requester does not automatically reveal anything to you.</div>
+          <div class="memory-card"><span>Meeting context</span><b>${escapeHtml(request.metAt || "Not specified")} · ${escapeHtml(request.topic || "General introduction")}</b></div>
+          <div class="privacy-message"><strong>Open relationship is the safe default.</strong><br>Select private fields only when required. The requester does not automatically reveal anything to you.</div>
           <div class="checks">
             ${[
               ["fullName", "Full name"], ["email", "Email"], ["phone", "Mobile"],
               ["linkedin", "LinkedIn"], ["meetingLink", "Meeting link"], ["note", "Private note"]
             ].map(([field, label]) => `<label class="check"><input type="checkbox" name="grantField" value="${field}" /> ${label}</label>`).join("")}
+          </div>
+          <div class="field"><label>Private grant expiry</label><select id="grantExpiry"><option value="24">24 hours</option><option value="720" selected>30 days</option><option value="2160">90 days</option><option value="0">Until manually revoked</option></select></div>
         `,
         `<button class="btn btn-ghost btn-wide" type="button" data-action="approve-open" data-id="${request.id}">Open only</button><button class="btn btn-lime btn-wide" type="button" data-action="approve-private" data-id="${request.id}">Share selected</button>`
       );
@@ -1265,9 +1572,16 @@
 
       request.status = "approved";
       request.decidedAt = nowIso();
-      const alreadyConnected = state.connections.some(connection => connection.members.includes(request.fromId) && connection.members.includes(request.toId));
-      if (!alreadyConnected) state.connections.unshift({ id: uid("connection"), members: [request.fromId, request.toId], createdAt: nowIso() });
-      if (sharePrivate) await createGrant(request.toId, request.fromId, selectedFields);
+      let connection = state.connections.find(item => item.members.includes(request.fromId) && item.members.includes(request.toId));
+      if (!connection) {
+        connection = {
+          id: uid("connection"), members: [request.fromId, request.toId], createdAt: nowIso(), relayEnabled: true,
+          memory: { metAt: request.metAt, topic: request.topic, followUp: request.followUp, introducedBy: "", updatedAt: nowIso() }
+        };
+        state.connections.unshift(connection);
+      }
+      const expiryHours = Number($("#grantExpiry")?.value || 0);
+      if (sharePrivate) await createGrant(request.toId, request.fromId, selectedFields, expiryHours);
 
       audit(request.toId, "REQUEST_APPROVED", `${userById(request.fromId).code} approved as a connection`, request.id);
       audit(request.fromId, "REQUEST_APPROVED_BY_RECEIVER", `${userById(request.toId).code} approved your request`, request.id);
@@ -1311,6 +1625,60 @@
       } catch (error) {
         showToast(error.message || "Unable to unlock this grant.");
       }
+    }
+
+    function setContext(context) {
+      if (!CONTEXTS[context]) return;
+      state.activeContexts ||= {};
+      state.activeContexts[state.activeUserId] = context;
+      persist(); renderAll(); showToast(`${CONTEXTS[context].label} HiKey is now active.`);
+    }
+
+    function startMeetingMode() {
+      clearInterval(meetingTimer);
+      const code = String(100000 + (crypto.getRandomValues(new Uint32Array(1))[0] % 900000));
+      const expiresAt = Date.now() + 90000;
+      openModal("90-second meeting code", `<div class="privacy-message"><strong>Use this only while standing with the other person.</strong><br>It is a temporary rendezvous code and contains no identity details.</div><div class="temporary-code" id="temporaryCode">${code.slice(0,3)} ${code.slice(3)}</div><div class="timer-track"><div class="timer-bar" id="meetingTimerBar"></div></div><div class="storage-mode"><span id="meetingSeconds">90</span> seconds remaining</div>`, `<button class="btn btn-lime btn-wide" type="button" data-action="copy-meeting-code" data-code="${code}">Copy code</button>`);
+      meetingTimer = setInterval(() => {
+        const remaining = Math.max(0, expiresAt - Date.now());
+        const seconds = Math.ceil(remaining / 1000);
+        if ($("#meetingSeconds")) $("#meetingSeconds").textContent = seconds;
+        if ($("#meetingTimerBar")) $("#meetingTimerBar").style.width = `${remaining / 90000 * 100}%`;
+        if (!remaining) {
+          clearInterval(meetingTimer);
+          if ($("#temporaryCode")) $("#temporaryCode").textContent = "EXPIRED";
+        }
+      }, 250);
+    }
+
+    function connectionById(id) { return state.connections.find(connection => connection.id === id); }
+
+    function openRelay(connectionId) {
+      const connection = connectionById(connectionId); if (!connection) return;
+      const otherId = connection.members.find(id => id !== state.activeUserId); const other = userById(otherId);
+      const messages = state.relayMessages.filter(message => message.connectionId === connectionId).slice().reverse();
+      openModal("Private relay", `<div class="privacy-message"><strong>Reachable without exposure.</strong><br>Messages are routed through the relationship. This demo never reveals either person's phone number or email address.</div><div>${messages.length ? messages.map(message => `<div class="relay-message ${message.fromId === state.activeUserId ? "mine" : ""}">${escapeHtml(message.text)}<small>${message.fromId === state.activeUserId ? "You" : escapeHtml(other.publicProfile.displayName)} · ${formatDate(message.createdAt)}</small></div>`).join("") : `<div class="empty-state"><b>No relay messages</b>Start the conversation without exposing a private contact channel.</div>`}</div><div class="field"><label>Message ${escapeHtml(other.publicProfile.displayName)}</label><textarea id="relayText" placeholder="Write a private relay message"></textarea></div>`, `<button class="btn btn-ghost btn-wide" type="button" data-action="close-modal">Close</button><button class="btn btn-lime btn-wide" type="button" data-action="send-relay" data-id="${connectionId}">Send through relay</button>`);
+    }
+
+    function sendRelay(connectionId) {
+      const connection = connectionById(connectionId); const text = $("#relayText")?.value.trim();
+      if (!connection || !text) return showToast("Write a relay message first.");
+      const toId = connection.members.find(id => id !== state.activeUserId);
+      state.relayMessages.unshift({ id: uid("relay"), connectionId, fromId: state.activeUserId, toId, text, createdAt: nowIso() });
+      audit(state.activeUserId, "RELAY_MESSAGE_SENT", `Private relay message sent to ${userById(toId).code}`, connectionId);
+      persist(); openRelay(connectionId); renderAll();
+    }
+
+    function openMemoryEditor(connectionId) {
+      const connection = connectionById(connectionId); if (!connection) return;
+      const memory = connection.memory || {};
+      openModal("Relationship memory", `<div class="privacy-message"><strong>Remember the relationship, not only the person.</strong><br>This context remains private to your HiKey experience.</div><div class="field"><label>Where you met</label><input id="memoryMetAt" value="${escapeHtml(memory.metAt || "")}" /></div><div class="field"><label>What you discussed</label><input id="memoryTopic" value="${escapeHtml(memory.topic || "")}" /></div><div class="field"><label>Follow-up</label><input id="memoryFollowUp" value="${escapeHtml(memory.followUp || "")}" /></div><div class="field"><label>Introduced by</label><input id="memoryIntroducedBy" value="${escapeHtml(memory.introducedBy || "")}" /></div>`, `<button class="btn btn-ghost btn-wide" type="button" data-action="close-modal">Cancel</button><button class="btn btn-lime btn-wide" type="button" data-action="save-memory" data-id="${connectionId}">Save memory</button>`);
+    }
+
+    function saveMemory(connectionId) {
+      const connection = connectionById(connectionId); if (!connection) return;
+      connection.memory = { metAt: $("#memoryMetAt")?.value.trim(), topic: $("#memoryTopic")?.value.trim(), followUp: $("#memoryFollowUp")?.value.trim(), introducedBy: $("#memoryIntroducedBy")?.value.trim(), updatedAt: nowIso() };
+      persist(); closeModal(); renderAll(); showToast("Relationship memory updated.");
     }
 
     function revokeGrant(grantId) {
@@ -1360,32 +1728,22 @@
     }
 
     async function shareActiveHiKey() {
-      const user = activeUser();
-      const url = shareUrl(user.code);
-      const text = `Connect with ${user.publicProfile.displayName} using HiKey ${user.code}. No phone number or email is contained in this link.`;
+      const user = activeUser(); const context = activeContext(user.id); const code = contextCode(user, context);
+      const url = shareUrl(code, context);
+      const text = `Connect with ${user.publicProfile.displayName} using the ${CONTEXTS[context].label} HiKey ${code}. This is a request address, not a phone number or email address.`;
       if (navigator.share) {
-        try {
-          await navigator.share({ title: `HiKey · ${user.code}`, text, url });
-          return;
-        } catch (error) {
-          if (error.name === "AbortError") return;
-        }
+        try { await navigator.share({ title: `HiKey · ${code}`, text, url }); return; }
+        catch (error) { if (error.name === "AbortError") return; }
       }
-      await copyText(`${text}\n${url}`, "HiKey profile link copied.");
+      await copyText(`${text}
+${url}`, "Contextual HiKey link copied.");
     }
 
     function findCode(code) {
-      const normalized = code.trim().toUpperCase();
-      const user = DEMO_USERS.find(item => item.code === normalized);
-      if (!user) {
-        showToast("HiKey not found in the 50-user demo network.");
-        return;
-      }
-      if (user.id === state.activeUserId) {
-        showToast("That is your current HiKey. Switch identity to test the other side.");
-        return;
-      }
-      openPublicProfile(user.id);
+      const resolved = resolveHiKey(code);
+      if (!resolved) return showToast("HiKey not found in the 50-user demo network.");
+      if (resolved.user.id === state.activeUserId) return showToast("That key belongs to your current identity. Switch identity to test the receiver side.");
+      openPublicProfile(resolved.user.id, resolved.context);
     }
 
     document.addEventListener("click", async event => {
@@ -1406,7 +1764,10 @@
       const id = target.dataset.id;
       if (action === "close-modal") closeModal();
       if (action === "share-hikey") await shareActiveHiKey();
-      if (action === "open-profile") openPublicProfile(id);
+      if (action === "select-context") setContext(target.dataset.context);
+      if (action === "meeting-mode") startMeetingMode();
+      if (action === "copy-meeting-code") await copyText(target.dataset.code, "Temporary meeting code copied.");
+      if (action === "open-profile") openPublicProfile(id, target.dataset.context || "work");
       if (action === "send-request") sendConnectionRequest();
       if (action === "review-request") openApproval(id);
       if (action === "approve-open") await approveRequest(id, false);
@@ -1415,6 +1776,10 @@
       if (action === "cancel-request") cancelRequest(id);
       if (action === "unlock-grant") await showUnlockedGrant(id);
       if (action === "revoke-grant") revokeGrant(id);
+      if (action === "open-relay") openRelay(id);
+      if (action === "send-relay") sendRelay(id);
+      if (action === "edit-memory") openMemoryEditor(id);
+      if (action === "save-memory") saveMemory(id);
       if (action === "switch-identity") await switchIdentity(id);
     });
 
@@ -1445,30 +1810,44 @@
     async function initialize() {
       await ensureVault(state.activeUserId);
       await renderAll();
+      if (storageWarning) setTimeout(() => showToast(storageWarning), 180);
 
-      const requestedCode = new URLSearchParams(location.search).get("code");
+      const params = new URLSearchParams(location.search);
+      const requestedCode = params.get("code");
       if (requestedCode) {
-        const target = DEMO_USERS.find(user => user.code === requestedCode.trim().toUpperCase());
-        if (target) {
-          if (target.id === state.activeUserId) {
-            const alternate = DEMO_USERS.find(user => user.id !== target.id);
+        const resolved = resolveHiKey(requestedCode);
+        if (resolved) {
+          if (resolved.user.id === state.activeUserId) {
+            const alternate = DEMO_USERS.find(user => user.id !== resolved.user.id);
             state.activeUserId = alternate.id;
             await ensureVault(alternate.id);
             persist();
           }
           activeRoute = "connect";
           await renderAll();
-          setTimeout(() => openPublicProfile(target.id), 150);
-        } else {
-          showToast("The shared HiKey is not available in this demo network.");
-        }
+          setTimeout(() => openPublicProfile(resolved.user.id, params.get("context") || resolved.context), 150);
+        } else showToast("The shared HiKey is not available in this demo network.");
       }
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      initialize().catch(error => {
+      initialize().catch(async error => {
         console.error(error);
-        document.body.innerHTML = `<div style="max-width:620px;margin:70px auto;padding:24px;background:#101511;color:white;border-radius:24px;font-family:var(--font-sans)"><h2>HiKey could not start</h2><p>${escapeHtml(error.message || String(error))}</p><p>Use a modern browser with Web Crypto and localStorage enabled.</p></div>`;
+        if (isQuotaError(error)) {
+          try {
+            resetHiKeyStorage();
+            await initialize();
+            showToast("Old HiKey cache was reset. The demo is ready.");
+            return;
+          } catch (recoveryError) {
+            console.error("Automatic storage recovery failed", recoveryError);
+          }
+        }
+        document.body.innerHTML = `<div style="max-width:620px;margin:70px auto;padding:24px;background:#101511;color:white;border-radius:24px;font-family:var(--font-sans)"><h2>HiKey could not start</h2><p>${escapeHtml(error.message || String(error))}</p><p>The app can run without permanent storage, but Web Crypto must be available.</p><button id="resetHiKeyButton" style="border:0;border-radius:14px;padding:12px 16px;background:#c8ff4d;color:#071005;font-weight:800;cursor:pointer">Clear HiKey cache and retry</button></div>`;
+        document.getElementById("resetHiKeyButton")?.addEventListener("click", () => {
+          resetHiKeyStorage();
+          location.reload();
+        });
       });
     });
   </script>
