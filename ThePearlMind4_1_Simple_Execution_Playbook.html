@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ThePearlMind 4.1 — Simple Execution Playbook</title>
+<style>
+:root{--paper:#fff;--bg:#f7f4ee;--ink:#181817;--muted:#65625c;--gold:#b87508;--gold2:#fff0ce;--line:#e8e1d5;--ce:#087d55;--ce2:#e5f7ef;--pe:#7130a6;--pe2:#f3eafd;--danger:#b3261e;--navy:#102a43;--shadow:0 12px 36px rgba(37,28,12,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top,#fff8e9,#f5f2ec 42%,#eeece8);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.65;padding:22px 12px 42px}.book{max-width:1000px;margin:auto;background:var(--paper);border:1px solid #ddd5c9;border-radius:24px;box-shadow:var(--shadow);overflow:hidden}.inner{padding:30px 28px 38px}.hero{text-align:center}.eyebrow{display:inline-flex;padding:6px 14px;border:1px solid var(--gold);border-radius:999px;background:var(--gold2);color:#754802;font:bold 12px Arial;letter-spacing:.12em}.hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.12;margin:15px 0 8px}.hero h1 span{color:var(--gold)}.hero p{max-width:760px;margin:0 auto;color:var(--muted)}.meta{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}.chip{padding:5px 10px;border-radius:999px;background:#f7f6f3;border:1px solid var(--line);font:bold 12px Arial;color:#4d4a45}.notice{margin:20px 0;border:1px solid #e7c985;border-radius:15px;padding:14px 16px;background:#fff9eb;font-size:.92rem}.notice b{color:#7a4b00}.toolbar{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:20px 0}.btn{border:1px solid var(--gold);border-radius:999px;padding:8px 15px;background:var(--gold2);color:#704500;font:bold 13px Georgia;cursor:pointer}.snapshot{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.snap{border:1px solid var(--line);border-radius:16px;padding:15px;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.045)}.snap small{display:block;color:var(--gold);font:bold 11px Arial;letter-spacing:.08em;text-transform:uppercase}.snap strong{display:block;margin:5px 0;line-height:1.3}.snap span{font-size:.86rem;color:var(--muted)}.loop{border:1px solid var(--line);border-radius:20px;padding:18px;background:linear-gradient(135deg,#fffdf9,#faf7f0);margin:20px 0}.loop-title{text-align:center;font-weight:bold;margin-bottom:14px}.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}.step{border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;text-align:center}.step b{display:block;font-size:.9rem}.step span{font-size:.8rem;color:var(--muted)}.arrow{align-self:center;color:var(--gold);font:bold 22px Arial}.ce{border-color:#8fcdb5;background:var(--ce2)}.ce b{color:var(--ce)}.pe{border-color:#c9a7e8;background:var(--pe2)}.pe b{color:var(--pe)}.cards{display:flex;flex-direction:column;gap:13px}.card{border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.055)}.card.open{border-color:#e4bd69;background:#fffaf0}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 17px;cursor:pointer}.head-main{display:flex;gap:10px;align-items:center}.pill{white-space:nowrap;background:var(--gold2);border:1px solid #dfad4d;border-radius:999px;padding:4px 9px;color:#754802;font:bold 11px Arial}.title{font-weight:bold}.toggle{width:28px;height:28px;border:1px solid #d5cec2;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--gold);transition:.25s}.card.open .toggle{transform:rotate(90deg)}.body{max-height:0;overflow:hidden;padding:0 18px;transition:max-height .35s ease,padding .25s}.card.open .body{padding-bottom:18px}.content{padding-top:7px}.intent{color:#704500;font:bold 11px Arial;letter-spacing:.1em;text-transform:uppercase}.quote{font-style:italic;color:#444}.rule{border-left:4px solid var(--gold);background:#fff5df;padding:10px 13px;border-radius:0 10px 10px 0;margin:12px 0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini{border:1px solid var(--line);border-radius:14px;background:#fff;padding:13px}.mini h3{font-size:1rem;margin:0 0 6px}.mini p{margin:0;color:var(--muted);font-size:.9rem}ul,ol{padding-left:23px}li{margin:6px 0}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;margin:12px 0}table{border-collapse:collapse;width:100%;min-width:700px;background:#fff;font-size:.9rem}th,td{padding:11px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}th{background:#fff2d8;color:#754802;font:bold 12px Arial;text-transform:uppercase}tr:last-child td{border:0}.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font:bold 11px Arial}.badge.ceb{background:var(--ce);color:#fff}.badge.peb{background:var(--pe);color:#fff}.badge.risk{background:#fde7e5;color:var(--danger)}.calc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.calc .mini{text-align:center}.calc strong{display:block;font-size:1.15rem;color:var(--navy)}.checklist label{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed #ddd}.checklist input{margin-top:6px}.footer{text-align:center;color:var(--muted);font-size:.84rem;margin-top:25px}.danger{color:var(--danger)}
+@media(max-width:780px){body{padding:8px}.inner{padding:21px 14px}.snapshot,.grid2,.calc{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}.head{align-items:flex-start}.head-main{align-items:flex-start}.title{font-size:.94rem}}
+@media print{body{background:#fff;padding:0;font-size:14px}.book{box-shadow:none;border:0;border-radius:0;max-width:none}.inner{padding:9mm}.toolbar{display:none}.card{break-inside:avoid;box-shadow:none}.body{max-height:none!important;overflow:visible!important;padding-bottom:12px!important}.toggle{display:none}.snapshot{grid-template-columns:repeat(3,1fr)}.flow{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr}}
+</style>
+</head>
+<body>
+<main class="book"><div class="inner">
+<header class="hero">
+  <div class="eyebrow">⚓ THEPEARLMIND™ 4.1</div>
+  <h1>The <span>Simplest Trading Rule</span> Playbook</h1>
+  <p>A practical execution rulebook for staying with the market, controlling individual losses, switching direction without prediction, and giving larger moves room to work.</p>
+  <div class="meta"><span class="chip">Mode: Always Available</span><span class="chip">Strike Zone: ₹600–₹800</span><span class="chip">Expiry: Current Month till 19th</span><span class="chip">Expiry: Next Month from 20th</span><span class="chip">Risk Tool: 6% Trailing SL</span><span class="chip">Decision: Follow Opposite Signal</span></div>
+</header>
+
+<div class="notice"><b>Educational & Risk Notice:</b> This playbook explains a rule-based execution framework. It is not financial advice, a tip service, or a promise of profit. The 50–60-point loss is a risk-management objective—not a guarantee. Strike selection, volatility, premium movement, slippage, execution delay, liquidity and market gaps can materially change outcomes. Trading involves market risk; every participant remains responsible for their decisions.</div>
+
+<div class="snapshot">
+ <div class="snap"><small>Only Two Actions</small><strong>CE signal: Close PE → Buy CE</strong><span>Switch immediately to the bullish side after a valid signal.</span></div>
+ <div class="snap"><small>Only Two Actions</small><strong>PE signal: Close CE → Buy PE</strong><span>Switch immediately to the bearish side after a valid signal.</span></div>
+ <div class="snap"><small>Trade Protection</small><strong>Maintain a 6% trailing stop-loss</strong><span>Protect the active premium while allowing the move to continue.</span></div>
+</div>
+
+<section class="loop">
+ <div class="loop-title">The Complete 4.1 Execution Loop</div>
+ <div class="flow">
+  <div class="step ce"><b>1. CE Signal</b><span>Close PE, if open</span></div><div class="arrow">→</div>
+  <div class="step"><b>2. Buy CE</b><span>Choose correct expiry and premium near ₹800</span></div><div class="arrow">→</div>
+  <div class="step"><b>3. Trail 6%</b><span>Hold; do not predict</span></div><div class="arrow">→</div>
+  <div class="step pe"><b>4. PE Signal</b><span>Close CE, buy PE, repeat</span></div>
+ </div>
+</section>
+
+<div class="toolbar"><button class="btn" id="expand">Expand All</button><button class="btn" id="collapse">Collapse All</button><button class="btn" onclick="window.print()">Print / Save PDF</button></div>
+
+<section class="cards">
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 1</span><div class="title">The One Rule — Signal, Switch, Trail, Repeat</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <span class="intent">Core Intent</span><p class="quote">“Your job is not to decide the market direction. Your job is to execute the direction shown by the latest valid signal.”</p>
+ <div class="table-wrap"><table><thead><tr><th>New Signal</th><th>If You Hold</th><th>First Action</th><th>Second Action</th><th>Then</th></tr></thead><tbody>
+ <tr><td><span class="badge ceb">CE</span></td><td>PE</td><td>Close PE—whatever the current profit or loss</td><td>Buy CE near the defined premium zone</td><td>Apply and maintain 6% trailing SL</td></tr>
+ <tr><td><span class="badge peb">PE</span></td><td>CE</td><td>Close CE—whatever the current profit or loss</td><td>Buy PE near the defined premium zone</td><td>Apply and maintain 6% trailing SL</td></tr>
+ </tbody></table></div>
+ <div class="rule"><b>Golden Rule:</b> The latest opposite signal has priority over hope, fear, opinion, news, indicators and the current P&amp;L.</div>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 2</span><div class="title">Strike Selection — Keep the Instrument Consistent</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <span class="intent">Selection Protocol</span><p>After the signal, first select the correct monthly expiry, then select a liquid CE or PE strike whose option premium is <b>as close as practical to ₹800</b>, generally within the <b>₹600–₹800 range</b>.</p>
+ <div class="table-wrap"><table><thead><tr><th>Calendar Date</th><th>Monthly Expiry to Select</th><th>Practical Rule</th></tr></thead><tbody>
+ <tr><td><b>1st through 19th</b></td><td>Current-month expiry</td><td>Use a strike from the current month whose premium is generally within ₹600–₹800 and as close as practical to ₹800.</td></tr>
+ <tr><td><b>20th through month-end</b></td><td>Next-month expiry</td><td>Rollover to the next month and select a liquid strike in the same preferred premium zone.</td></tr>
+ </tbody></table></div>
+ <div class="rule"><b>Monthly Expiry Rollover Rule:</b> Till and including the 19th, trade current-month strikes. From and including the 20th, trade next-month strikes. The date rule applies to both CE and PE selections.</div>
+ <div class="grid2"><div class="mini"><h3>Preferred</h3><p>A liquid strike in the target premium band with a reasonable bid–ask spread and executable quantity.</p></div><div class="mini"><h3>Avoid</h3><p>Far OTM contracts, poor liquidity, unusually wide spreads, or delaying so long that the intended move is chased.</p></div></div>
+ <ul><li>Check the calendar date before selecting every new strike—especially when switching around the 19th/20th boundary.</li><li>Use the same expiry and premium-selection discipline for both CE and PE.</li><li>Do not keep changing strikes because another premium appears more exciting.</li><li>If no suitable liquid strike exists, execution quality and risk come before forcing a trade.</li></ul>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 3</span><div class="title">The 6% Trailing Stop-Loss — Your Protective Seat Belt</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <span class="intent">Risk Protocol</span><p>A 6% trailing stop-loss is calculated from the option premium, not from the Bank Nifty or Nifty spot value.</p>
+ <div class="calc"><div class="mini"><span>Premium</span><strong>₹800</strong></div><div class="mini"><span>6% Distance</span><strong>₹48</strong></div><div class="mini"><span>Initial Reference</span><strong>₹752</strong></div></div>
+ <p class="rule"><b>Illustration only:</b> If the premium is ₹800, 6% equals ₹48. A simple initial reference would be around ₹752. As the option premium rises, the stop should trail upward according to the execution platform’s mechanism; it should not be loosened downward.</p>
+ <ul><li>Confirm whether your broker’s trailing order is supported and how it behaves.</li><li>Do not widen or cancel the stop because a loss feels uncomfortable.</li><li>A gap or fast premium move can produce an exit worse than the stop reference.</li><li>If the trailing SL exits you before a new signal, remain out of that position and wait for the next valid signal; do not re-enter from emotion.</li></ul>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 4</span><div class="title">What to Do When the Opposite Signal Appears</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <span class="intent">Reversal Protocol</span><ol><li>Recognise the new opposite signal.</li><li>Close the existing position first. Do not wait for it to return to your entry price.</li><li>Confirm the applicable monthly expiry: current month through the 19th, next month from the 20th onward.</li><li>Select the opposite option near the target premium zone.</li><li>Enter the new side and activate the 6% trailing SL.</li><li>Record the switch, then return attention to the next signal.</li></ol>
+ <div class="rule"><b>Never hold CE and PE together to avoid accepting a loss.</b> That changes a simple switch into an unmanaged hedge and breaks the 4.1 execution rule.</div>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 5</span><div class="title">Why the Framework Can Operate in Trending and Sideways Markets</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <span class="intent">Outcome Structure</span><p>The framework does not require the trader to label the market first. It uses smaller controlled exits as the cost of remaining available for a larger directional move.</p>
+ <div class="grid2"><div class="mini"><h3>During Sideways Movement</h3><p>Direction may switch repeatedly. The objective is to keep each failed attempt controlled; several small losses remain possible.</p></div><div class="mini"><h3>During a Strong Trend</h3><p>The active position may expand while the trailing stop protects progress, allowing one larger move to offset several smaller attempts.</p></div></div>
+ <p class="rule"><b>Designed outcome pattern:</b> Small Loss + Small Profit + Big Profit. This is a framework objective, not a guaranteed daily sequence.</p>
+ <p>A controlled loss is the occasional “EMI” paid for participation—but only when it stays inside the predefined risk process. Frequent losses, slippage and costs can still accumulate.</p>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 6</span><div class="title">What 4.1 Removes from Live Decision-Making</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <span class="intent">Simplicity Boundary</span><p>During execution, you do not need to add candlestick patterns, chart patterns, MACD, Bollinger Bands, Gann Theory, Elliott Waves, open interest, option-chain analysis, news predictions or another formula.</p>
+ <p>ThePearlMind is described as processing the market through <b>15 dimensions developed within the Black Pearl Vaults</b>. The trader-facing layer is intentionally simpler: receive signal, execute, protect, repeat.</p>
+ <div class="rule"><b>Simple does not mean easy.</b> The analytical burden is reduced, but emotional discipline, correct order placement and risk control are still required.</div>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Section 7</span><div class="title">Discipline Rules — What Must Never Change Mid-Trade</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <ul><li>Do not ignore an opposite signal because the open trade is losing.</li><li>Do not book a winner only because a small profit looks attractive.</li><li>Do not increase quantity to recover the previous loss.</li><li>Do not widen the 6% trailing risk setting.</li><li>Do not mix extra indicators after entering.</li><li>Do not judge the method from one trade; audit a meaningful sample.</li><li>Do not trade with capital whose loss would disturb essential expenses.</li><li>Include brokerage, taxes, slippage and execution differences in every review.</li></ul>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Live Checklist</span><div class="title">30-Second Pre-Trade and Switch Check</div></div><div class="toggle">➤</div></div><div class="body"><div class="content checklist">
+ <label><input type="checkbox"> <span>I can clearly identify whether the latest valid signal is CE or PE.</span></label>
+ <label><input type="checkbox"> <span>I have closed the opposite position before opening the new one.</span></label>
+ <label><input type="checkbox"> <span>I selected the current-month expiry if today is the 1st–19th, or the next-month expiry if today is the 20th or later.</span></label>
+ <label><input type="checkbox"> <span>The selected strike is liquid and near the ₹600–₹800 premium zone.</span></label>
+ <label><input type="checkbox"> <span>My order quantity matches my predefined risk and capital plan.</span></label>
+ <label><input type="checkbox"> <span>The 6% trailing stop-loss is active and verified.</span></label>
+ <label><input type="checkbox"> <span>I will hold until the opposite signal or trailing stop exits the trade.</span></label>
+</div></div></article>
+
+<article class="card open"><div class="head"><div class="head-main"><span class="pill">Journal</span><div class="title">Minimum Trade Record for Honest Evaluation</div></div><div class="toggle">➤</div></div><div class="body"><div class="content">
+ <div class="table-wrap"><table><thead><tr><th>Date / Time</th><th>Signal</th><th>Expiry Month</th><th>Strike</th><th>Entry Premium</th><th>6% SL</th><th>Exit Trigger</th><th>Exit Premium</th><th>Net Points</th><th>Rule Followed?</th></tr></thead><tbody><tr><td>________</td><td>CE / PE</td><td>Current / Next</td><td>________</td><td>₹______</td><td>₹______</td><td>Opposite / TSL</td><td>₹______</td><td>______</td><td>Yes / No</td></tr><tr><td>________</td><td>CE / PE</td><td>Current / Next</td><td>________</td><td>₹______</td><td>₹______</td><td>Opposite / TSL</td><td>₹______</td><td>______</td><td>Yes / No</td></tr></tbody></table></div>
+ <p class="rule"><b>Judge execution before P&amp;L:</b> A losing trade that followed every rule is a valid execution. A profitable trade that broke the rules is a dangerous habit.</p>
+</div></div></article>
+</section>
+
+<p class="footer">ThePearlMind™ 4.1 Simple Execution Playbook • Follow the signal • Control the loss • Stay available for the move</p>
+</div></main>
+<script>
+(()=>{const cards=[...document.querySelectorAll('.card')];const resize=c=>{const b=c.querySelector('.body');b.style.maxHeight=c.classList.contains('open')?b.scrollHeight+'px':'0'};cards.forEach(c=>c.querySelector('.head').onclick=()=>{c.classList.toggle('open');resize(c)});document.getElementById('expand').onclick=()=>cards.forEach(c=>{c.classList.add('open');resize(c)});document.getElementById('collapse').onclick=()=>cards.forEach(c=>{c.classList.remove('open');resize(c)});addEventListener('resize',()=>cards.forEach(resize));setTimeout(()=>cards.forEach(resize),80)})();
+</script>
+</body></html>
