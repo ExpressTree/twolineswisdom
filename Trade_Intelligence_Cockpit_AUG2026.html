@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>August 2026 Trade Intelligence Cockpit</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{
+  --font-scale:1;
+  --page:#e9eef5; --shell:#ffffff; --sidebar:#f7f9fc; --card:#ffffff;
+  --text:#233142; --muted:#8492a6; --line:#e4ebf3;
+  --blue:#2f80ed; --blue2:#65a9ff; --blueSoft:#eaf3ff;
+  --green:#33c477; --greenSoft:#eafaf1; --red:#eb6b73; --redSoft:#fff0f1;
+  --amber:#f3b844; --amberSoft:#fff8e7; --purple:#8b7cf6; --ink:#152536;
+  --shadow:0 18px 55px rgba(41,61,89,.12); --chart:#f8fbfe;
+}
+body.dark{
+  --page:#0d141c;--shell:#121b25;--sidebar:#111a23;--card:#17212c;
+  --text:#dce7f2;--muted:#8191a2;--line:#293846;--blueSoft:#162b44;
+  --greenSoft:#173328;--redSoft:#382126;--amberSoft:#3a311e;--ink:#f5f8fb;
+  --shadow:0 18px 50px rgba(0,0,0,.25);--chart:#111a23;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--text);font-family:"Plus Jakarta Sans","Segoe UI",Arial,sans-serif;line-height:1.45}
+button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.app-shell{width:min(1560px,calc(100% - 28px));margin:18px auto 34px;display:grid;grid-template-columns:218px minmax(0,1fr);gap:16px;align-items:start}
+.sidebar{background:var(--sidebar);border:1px solid var(--line);border-radius:25px;box-shadow:var(--shadow);padding:20px 14px;position:sticky;top:10px;height:calc(100vh - 20px);overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 22px}.brand-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#edf3fa);border:1px solid var(--line);color:var(--blue);font-weight:800}
+body.dark .brand-mark{background:#16212d}.brand-copy b{display:block;font-size:calc(13px * var(--font-scale))}.brand-copy span{display:block;font-size:calc(9px * var(--font-scale));color:var(--muted);margin-top:2px}
+.side-label{font-size:calc(9px * var(--font-scale));text-transform:uppercase;letter-spacing:.1em;color:#a6b1bd;padding:7px 11px}
+.side-nav{display:flex;flex-direction:column;gap:5px}.side-link{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:12px;color:#8b98a8;font-size:calc(12px * var(--font-scale));font-weight:650;border:0;background:transparent;width:100%;text-align:left}
+.side-link:hover,.side-link.active{background:var(--card);color:var(--ink);box-shadow:0 6px 18px rgba(39,70,110,.07)}.side-link.active{color:var(--blue)}
+.side-icon{width:18px;text-align:center}.side-foot{margin-top:18px;padding:14px 9px;border-top:1px solid var(--line);font-size:calc(9px * var(--font-scale));color:var(--muted)}
+.main{background:var(--shell);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;min-width:0}
+.topbar{display:flex;align-items:center;gap:12px;padding:17px 22px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--shell) 95%, transparent);position:sticky;top:0;z-index:30}
+.heading{min-width:240px}.heading h1{font-size:calc(18px * var(--font-scale));margin:0;letter-spacing:-.03em}.heading p{margin:2px 0 0;font-size:calc(9px * var(--font-scale));color:var(--muted)}
+.scope{font-size:calc(9px * var(--font-scale));color:#62758a;background:var(--blueSoft);padding:6px 9px;border-radius:999px;white-space:nowrap}
+.actions{margin-left:auto;display:flex;align-items:center;gap:7px;flex-wrap:wrap}.btn,.filebtn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:8px 10px;border-radius:10px;font-size:calc(9px * var(--font-scale));font-weight:750}.btn:hover,.filebtn:hover{border-color:#b9d7fb;color:var(--blue)}.filebtn input{display:none}
+.toolbar{position:sticky;top:67px;z-index:25;margin:10px 16px 0;padding:9px;background:color-mix(in srgb,var(--shell) 95%, transparent);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:15px;box-shadow:0 10px 28px rgba(41,61,89,.08);display:grid;grid-template-columns:1.5fr repeat(8,minmax(100px,1fr));gap:7px}
+.toolbar input,.toolbar select{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:9px;padding:8px 9px;font-size:calc(9px * var(--font-scale));outline:none}
+.toolbar input:focus,.toolbar select:focus{border-color:#a8cffb;box-shadow:0 0 0 3px var(--blueSoft)}
+.content{padding:14px 20px 30px}.view{display:none}.view.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:4px 0 10px}.section-head h2{font-size:calc(14px * var(--font-scale));margin:0}.section-head p{font-size:calc(9px * var(--font-scale));color:var(--muted);margin:3px 0 0}.chip{font-size:calc(8px * var(--font-scale));font-weight:800;color:var(--blue);background:var(--blueSoft);padding:5px 7px;border-radius:999px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px}.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s9{grid-column:span 9}.s12{grid-column:1/-1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;min-width:0}.card.soft{background:linear-gradient(145deg,var(--chart),var(--card))}
+.kpi{min-height:104px;position:relative;overflow:hidden}.kpi:after{content:"";position:absolute;width:72px;height:72px;border-radius:50%;right:-28px;top:-28px;background:var(--blueSoft)}.kpi.green:after{background:var(--greenSoft)}.kpi.red:after{background:var(--redSoft)}.kpi.amber:after{background:var(--amberSoft)}
+.kpi-label{font-size:calc(9px * var(--font-scale));color:var(--muted);font-weight:700;margin-bottom:7px}.kpi-value{font-size:calc(22px * var(--font-scale));font-weight:800;color:var(--ink);letter-spacing:-.04em}.kpi-note{font-size:calc(8px * var(--font-scale));color:var(--muted);margin-top:5px}.kpi-trend{font-size:calc(8px * var(--font-scale));font-weight:800;color:var(--blue);margin-top:6px}.good{color:var(--green)!important}.bad{color:var(--red)!important}.warn{color:var(--amber)!important}.info{color:var(--blue)!important}
+.card-title{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}.card-title b{font-size:calc(10px * var(--font-scale));color:var(--ink)}.card-title span{font-size:calc(8px * var(--font-scale));color:var(--muted)}
+.fact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fact{background:var(--chart);border:1px solid var(--line);border-radius:12px;padding:10px}.fact strong{display:block;font-size:calc(18px * var(--font-scale));color:var(--ink);letter-spacing:-.035em}.fact span{display:block;font-size:calc(8px * var(--font-scale));color:var(--muted);margin-top:3px}.fact .meta{font-size:calc(8px * var(--font-scale));color:var(--blue);font-weight:750;margin-top:5px}
+.story{font-size:calc(10px * var(--font-scale));color:#667a90;line-height:1.6}.story strong{font-size:calc(17px * var(--font-scale));color:var(--ink);letter-spacing:-.03em}.story .callout{border-left:3px solid var(--blue);background:var(--blueSoft);border-radius:9px;padding:9px 10px;margin:8px 0}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}.stat{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dotted var(--line);font-size:calc(9px * var(--font-scale))}.stat span:first-child{color:var(--muted)}.stat span:last-child{font-weight:750;color:var(--ink)}
+canvas{width:100%;height:220px;display:block;background:var(--chart);border-radius:10px;border:1px solid var(--line)}
+.chart-note{font-size:calc(8px * var(--font-scale));color:var(--muted);margin-top:5px}
+.table-wrap{overflow:auto;max-height:600px;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left;font-size:calc(8.5px * var(--font-scale))}th{background:var(--chart);color:#708195;font-weight:800;position:sticky;top:0;z-index:2}td{color:#536579}body.dark td{color:#b8c6d4}tr:hover td{background:var(--blueSoft)}
+.badge{display:inline-block;padding:3px 6px;border-radius:999px;font-size:calc(8px * var(--font-scale));font-weight:750;background:var(--blueSoft);color:var(--blue)}.badge.red{background:var(--redSoft);color:var(--red)}.badge.green{background:var(--greenSoft);color:var(--green)}.badge.amber{background:var(--amberSoft);color:#9b7223}
+.barlist{display:flex;align-items:flex-end;gap:6px;height:210px;padding:24px 4px 24px;border-bottom:1px solid var(--line)}.baritem{flex:1;min-width:18px;text-align:center;position:relative;height:166px;display:flex;align-items:flex-end;justify-content:center}.bar{width:72%;background:linear-gradient(180deg,var(--blue2),var(--blue));min-height:2px;border-radius:4px 4px 0 0}.bar.neg{background:linear-gradient(180deg,#f79ca1,var(--red))}.bar.good{background:linear-gradient(180deg,#7ce1ad,var(--green))}.barvalue{position:absolute;left:-9px;right:-9px;bottom:calc(var(--bh) + 4px);font-size:calc(7px * var(--font-scale));line-height:1;font-weight:800;color:var(--ink);white-space:nowrap}.barvalue.pos{color:var(--green)}.barvalue.neg{color:var(--red)}.barlabel{font-size:calc(7px * var(--font-scale));color:var(--muted);transform:rotate(-35deg);position:absolute;left:-10px;right:-10px;bottom:-22px}
+.quants{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.quant{padding:9px;border:1px solid var(--line);border-radius:11px;background:var(--chart);text-align:center}.quant strong{font-size:calc(16px * var(--font-scale))}.quant span{display:block;font-size:calc(7px * var(--font-scale));color:var(--muted);margin-top:2px}
+.missing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.missing{padding:10px;border:1px dashed #c8d5e4;border-radius:12px;background:var(--chart)}.missing b{font-size:calc(10px * var(--font-scale))}.missing p{font-size:calc(8px * var(--font-scale));color:var(--muted);margin:4px 0 0}
+.current-card{background:linear-gradient(135deg,var(--blueSoft),var(--card));border-color:#cfe2fb}.current-line{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.current-line strong{font-size:calc(26px * var(--font-scale));color:var(--ink)}.current-line span{font-size:calc(9px * var(--font-scale));color:var(--muted)}
+.footer{padding:16px 20px;border-top:1px solid var(--line);font-size:calc(8px * var(--font-scale));color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.mobile-tabs{display:none}
+@media(max-width:1180px){.app-shell{grid-template-columns:180px minmax(0,1fr)}.s2{grid-column:span 4}.s3{grid-column:span 6}.s4,.s5,.s6,.s7,.s8,.s9{grid-column:span 6}.toolbar{grid-template-columns:1.5fr repeat(3,1fr)}}
+@media(max-width:860px){body{background:var(--shell)}.app-shell{width:100%;margin:0;display:block}.sidebar{display:none}.main{border-radius:0;box-shadow:none}.topbar{position:relative;flex-wrap:wrap;padding:12px 14px}.heading{min-width:0;flex:1}.scope{order:3;width:100%;white-space:normal}.actions{margin-left:0}.toolbar{position:relative;top:auto;margin:8px;padding:8px;grid-template-columns:1fr 1fr}.toolbar .wide{grid-column:1/-1}.content{padding:10px 10px 24px}.mobile-tabs{display:flex;gap:5px;overflow:auto;padding:7px 9px;border-bottom:1px solid var(--line);background:var(--shell);position:sticky;top:0;z-index:20}.mobile-tabs button{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--muted);padding:7px 9px;border-radius:999px;font-size:calc(8px * var(--font-scale))}.mobile-tabs button.active{color:var(--blue);border-color:#b9d7fb}.s2,.s3,.s4,.s5,.s6,.s7,.s8,.s9{grid-column:1/-1}.fact-grid{grid-template-columns:1fr 1fr}.missing-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.toolbar{grid-template-columns:1fr}.toolbar .wide{grid-column:auto}.fact-grid,.missing-grid,.statgrid{grid-template-columns:1fr}.quants{grid-template-columns:repeat(2,1fr)}.kpi-value{font-size:calc(20px * var(--font-scale))}.heading h1{font-size:calc(15px * var(--font-scale))}canvas{height:210px}}
+
+.report-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.report-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.report-panel h3{margin:0;padding:8px 10px;background:linear-gradient(180deg,#7f98bd,#6e89b2);color:#fff;font-size:calc(10px * var(--font-scale));letter-spacing:.02em}
+body.dark .report-panel h3{background:linear-gradient(180deg,#314863,#26394f)}
+.report-body{padding:9px 10px}
+.report-row{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(70px,.65fr);gap:8px;padding:3px 0;font-size:calc(8.5px * var(--font-scale));border-bottom:1px solid color-mix(in srgb,var(--line) 70%, transparent)}
+.report-row:last-child{border-bottom:0}.report-row span:first-child{color:var(--text)}.report-row b{text-align:right;color:var(--ink)}
+.report-row .pos{color:var(--green)}.report-row .neg{color:var(--red)}.report-row .muted{color:var(--muted)}
+.report-table{width:100%;min-width:0}.report-table th,.report-table td{font-size:calc(8px * var(--font-scale));padding:6px 7px}
+.report-callout{padding:10px;border-radius:12px;background:var(--blueSoft);border:1px solid color-mix(in srgb,var(--blue) 20%, var(--line));font-size:calc(8.5px * var(--font-scale));color:var(--text)}
+.report-callout strong{font-size:calc(17px * var(--font-scale));color:var(--ink);display:block;margin-bottom:3px}
+@media(max-width:1100px){.report-grid{grid-template-columns:1fr 1fr}.report-panel.report-wide{grid-column:1/-1}}
+@media(max-width:700px){.report-grid{grid-template-columns:1fr}}
+
+
+.font-controls{display:flex;align-items:center;gap:3px;padding:2px;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+.font-controls .btn{border:0;box-shadow:none;padding:6px 7px;min-width:30px}
+.font-controls .font-value{min-width:44px;color:var(--blue);font-weight:800}
+.font-controls .font-btn{font-weight:800}
+@media(max-width:860px){.font-controls{order:2}}
+
+
+.advanced-wrap{margin:7px 16px 0}
+.advanced-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.advanced-filters{display:none;margin-top:7px;padding:9px;border:1px solid var(--line);border-radius:14px;background:var(--card);grid-template-columns:repeat(7,minmax(105px,1fr));gap:7px}
+.advanced-filters.open{display:grid}
+.advanced-filters label{display:flex;flex-direction:column;gap:4px;font-size:calc(8px * var(--font-scale));color:var(--muted);font-weight:750}
+.advanced-filters input,.advanced-filters select{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:9px;padding:8px 9px;font-size:calc(9px * var(--font-scale));outline:none}
+.advanced-filters input:focus,.advanced-filters select:focus{border-color:#a8cffb;box-shadow:0 0 0 3px var(--blueSoft)}
+.sortable th[data-sortable="1"]{cursor:pointer;user-select:none;white-space:nowrap}
+.sortable th[data-sortable="1"]::after{content:" ↕";opacity:.35}
+.sortable th.sort-asc::after{content:" ↑";opacity:1;color:var(--blue)}
+.sortable th.sort-desc::after{content:" ↓";opacity:1;color:var(--blue)}
+.filter-count{font-size:calc(8px * var(--font-scale));color:var(--muted)}
+@media(max-width:1180px){.advanced-filters{grid-template-columns:repeat(4,minmax(105px,1fr))}}
+@media(max-width:700px){.advanced-wrap{margin:7px 8px 0}.advanced-filters{grid-template-columns:1fr 1fr}}
+@media(max-width:470px){.advanced-filters{grid-template-columns:1fr}}
+
+.kid-hero{background:linear-gradient(135deg,var(--blueSoft),var(--card) 58%,var(--greenSoft));border:1px solid var(--line);border-radius:20px;padding:18px;display:grid;grid-template-columns:1.35fr .65fr;gap:14px;align-items:center}
+.kid-hero h2{font-size:calc(25px * var(--font-scale));line-height:1.08;margin:0 0 7px;letter-spacing:-.04em;color:var(--ink)}
+.kid-hero p{font-size:calc(10px * var(--font-scale));color:var(--muted);margin:0}.kid-score{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.kid-score strong{display:block;font-size:calc(38px * var(--font-scale));color:var(--blue)}.kid-score span{font-size:calc(9px * var(--font-scale));color:var(--muted)}
+.kid-people{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:10px}.kid-person{aspect-ratio:1;border-radius:7px;background:var(--greenSoft);border:1px solid var(--line);display:grid;place-items:center;font-size:11px}.kid-person.loss{background:var(--redSoft)}
+.kid-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px;margin-top:10px}.kid-card{grid-column:span 4;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;min-width:0}.kid-card.wide{grid-column:span 6}.kid-card.full{grid-column:1/-1}
+.kid-top{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px}.kid-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;background:var(--blueSoft);display:grid;place-items:center;font-size:22px}.kid-top h3{font-size:calc(11px * var(--font-scale));margin:1px 0 2px}.kid-top p{font-size:calc(8px * var(--font-scale));margin:0;color:var(--muted)}
+.kid-big{font-size:calc(26px * var(--font-scale));font-weight:800;color:var(--ink)}.kid-sub{font-size:calc(9px * var(--font-scale));color:var(--muted);margin-top:3px}.kid-simple{font-size:calc(9px * var(--font-scale));line-height:1.55;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.kid-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line);font-size:calc(8.5px * var(--font-scale))}.kid-row span{color:var(--muted)}.kid-row b{text-align:right}
+.kid-meter{height:12px;border-radius:999px;background:var(--line);overflow:hidden;margin:8px 0}.kid-meter i{display:block;height:100%;background:var(--green)}.kid-meter.red i{background:var(--red)}
+.kid-traffic{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.kid-light{padding:10px;border:1px solid var(--line);border-radius:12px;text-align:center}.kid-light .dot{width:20px;height:20px;border-radius:50%;margin:0 auto 5px}.kid-light.red .dot{background:var(--red)}.kid-light.amber .dot{background:var(--amber)}.kid-light.green .dot{background:var(--green)}.kid-light span{display:block;font-size:calc(7.5px * var(--font-scale));color:var(--muted)}
+.kid-story{padding:11px;border-radius:13px;background:var(--chart);border:1px solid var(--line);font-size:calc(9px * var(--font-scale));line-height:1.55}.kid-story strong{display:block;font-size:calc(14px * var(--font-scale));margin-bottom:4px}
+.kid-band{display:flex;gap:5px;align-items:flex-end;height:120px}.kid-band-item{flex:1;text-align:center}.kid-band-bar{width:70%;margin:auto;background:var(--blue);border-radius:5px 5px 0 0}.kid-band-item b,.kid-band-item span{display:block;font-size:calc(7px * var(--font-scale))}
+@media(max-width:980px){.kid-card,.kid-card.wide{grid-column:span 6}.kid-hero{grid-template-columns:1fr}}@media(max-width:620px){.kid-card,.kid-card.wide{grid-column:1/-1}.kid-traffic{grid-template-columns:1fr}}
+
+.kid-nav-link{color:var(--blue)!important;background:var(--blueSoft)!important}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">PM</div><div class="brand-copy"><b>Trade Cockpit</b><span>Historical intelligence</span></div></div>
+    <div class="side-label">Analytics</div>
+    <nav class="side-nav" id="sideNav">
+      <button type="button" class="side-link active" data-view="executive"><span class="side-icon">▦</span>Executive</button>
+      <button type="button" class="side-link" data-view="date"><span class="side-icon">◫</span>Date-wise</button>
+      <button type="button" class="side-link" data-view="time"><span class="side-icon">◷</span>Time-wise</button>
+      <button type="button" class="side-link" data-view="points"><span class="side-icon">↕</span>Points-wise</button>
+      <button type="button" class="side-link" data-view="risk"><span class="side-icon">◇</span>Risk & consistency</button>
+      <button type="button" class="side-link" data-view="confidence"><span class="side-icon">◎</span>Confidence</button>
+      <button type="button" class="side-link" data-view="forex"><span class="side-icon">⌁</span>Forex-style report</button>
+      <button type="button" class="side-link" data-view="pudpdd"><span class="side-icon">⇅</span>PUD / PDD</button>
+      <button type="button" class="side-link" data-view="log"><span class="side-icon">☷</span>Trade log</button>
+      <button type="button" class="side-link" data-view="health"><span class="side-icon">✓</span>Data health</button>
+      <button type="button" class="side-link kid-nav-link" data-view="kid"><span class="side-icon">★</span>5-year-old view</button>
+    </nav>
+    <div class="side-foot">Light cockpit styling inspired by the supplied application.<br><br>All calculations run locally in your browser.</div>
+  </aside>
+
+  <section class="main">
+    <header class="topbar">
+      <div class="heading"><h1>August 2026 Trade Intelligence Cockpit</h1><p>BANKNIFTY · AUG 2026 only · date-wise · time-wise · points-wise · confidence · PUD/PDD</p></div>
+      <div class="scope" id="scopeText">223 August rows · 222 completed trades</div>
+      <div class="actions">
+        <label class="filebtn">IMPORT CSV / JSON<input id="fileInput" type="file" accept=".csv,.json"></label>
+        <button class="btn" id="resetBtn">AUG 2026 DATA</button>
+        <button class="btn" id="themeBtn">DARK</button>
+        <div class="font-controls" aria-label="Application font size">
+          <button class="btn font-btn" id="fontDownBtn" type="button" title="Decrease application font size">A−</button>
+          <button class="btn font-value" id="fontResetBtn" type="button" title="Reset application font size">100%</button>
+          <button class="btn font-btn" id="fontUpBtn" type="button" title="Increase application font size">A+</button>
+        </div>
+        <button class="btn" id="exportBtn">EXPORT SUMMARY</button>
+      </div>
+    </header>
+
+    <nav class="mobile-tabs" id="mobileTabs">
+      <button class="active" data-view="executive">Executive</button><button data-view="date">Date</button><button data-view="time">Time</button>
+      <button data-view="points">Points</button><button data-view="risk">Risk</button><button data-view="confidence">Confidence</button><button data-view="forex">Report</button>
+      <button data-view="pudpdd">PUD/PDD</button><button data-view="log">Log</button><button data-view="health">Health</button><button data-view="kid">5-year-old</button>
+    </nav>
+
+    <div class="toolbar">
+      <input class="wide" id="searchInput" placeholder="Search date, trade type, PUD/PDD state..." />
+      <select id="directionFilter"><option value="ALL">All directions</option><option value="UP">UP / CE</option><option value="DOWN">DOWN / PE</option></select>
+      <select id="outcomeFilter"><option value="ALL">All outcomes</option><option value="WIN">Profit only</option><option value="LOSS">Loss only</option><option value="FLAT">Flat only</option></select>
+      <select id="monthFilter" title="This cockpit is restricted to August 2026"><option value="ALL">August 2026 only</option></select>
+      <input id="confidenceMin" type="number" value="0" min="0" max="100" step="1" title="Minimum confidence" />
+      <input id="costPerTrade" type="number" value="0" min="0" step="0.1" title="Cost/slippage in point-equivalent per trade" />
+      <input id="capitalInput" type="number" value="100000" min="1" step="1000" title="Trading capital in INR" />
+      <input id="rupeePerPoint" type="number" value="30" min="0.01" step="1" title="INR value per recorded result point. Default 30 = one BANKNIFTY option lot if the result is option-premium points." />
+      <input id="lotsInput" type="number" value="1" min="0.01" step="1" title="Number of lots represented by each trade" />
+    </div>
+
+
+    <div style="margin:8px 16px 0;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:var(--amberSoft);font-size:calc(8.5px * var(--font-scale));color:var(--text)">
+      <b>August source coverage:</b> the supplied detailed cockpit contains structural trade rows from
+      <b>03 Aug 2026 through 28 Aug 2026</b>. The 31 Aug activity visible in the supplied screenshot is not
+      present as detailed PUD/PDD/time/confidence rows in the source HTML, so this version does not fabricate those fields.
+    </div>
+
+    <div class="advanced-wrap">
+      <div class="advanced-toggle">
+        <button class="btn" id="advancedToggleBtn" type="button">ADVANCED FILTERS</button>
+        <span class="filter-count" id="activeFilterCount">No advanced filters</span>
+      </div>
+      <div class="advanced-filters" id="advancedFilters">
+        <label>From date<input id="fromDate" type="date"></label>
+        <label>To date<input id="toDate" type="date"></label>
+        <label>Min points<input id="minPoints" type="number" step="1" placeholder="Any"></label>
+        <label>Max points<input id="maxPoints" type="number" step="1" placeholder="Any"></label>
+        <label>Update<select id="updateFilter"><option value="ALL">All updates</option></select></label>
+        <label>Motion state<select id="motionFilter"><option value="ALL">All states</option></select></label>
+        <label>Max confidence<input id="confidenceMax" type="number" min="0" max="100" step="1" placeholder="100"></label>
+        <label><span>&nbsp;</span><button class="btn" id="resetFiltersBtn" type="button">RESET FILTERS</button></label>
+      </div>
+    </div>
+
+    <div class="content">
+      <section id="executive" class="view active">
+        <div class="section-head"><div><h2>Executive cockpit</h2><p>The strategy story in numbers. Large values are highlighted deliberately.</p></div><span class="chip" id="dateRangeChip"></span></div>
+        <div class="grid" id="kpiGrid"></div>
+        <div class="grid" style="margin-top:10px">
+          <div class="card soft s4"><div class="card-title"><div><b>What the numbers are saying</b><br><span>Automatic interpretation</span></div></div><div id="story" class="story"></div></div>
+          <div class="card s5"><div class="card-title"><div><b>Equity curve</b><br><span>Cumulative points</span></div></div><canvas id="equityChart"></canvas></div>
+          <div class="card s3"><div class="card-title"><div><b>Core efficiency</b><br><span>Outcome quality</span></div></div><div id="coreStats" class="statgrid"></div></div>
+          <div class="card s12"><div class="card-title"><div><b>Important historical facts</b><br><span>Facts are recalculated from the active filters</span></div></div><div id="factGrid" class="fact-grid"></div></div>
+        </div>
+      </section>
+
+      <section id="date" class="view">
+        <div class="section-head"><div><h2>Date-wise intelligence</h2><p>Which dates, weekdays and months created or destroyed points?</p></div><span class="chip">Calendar facts</span></div>
+        <div class="grid">
+          <div class="card s4"><div class="card-title"><div><b>Date facts</b></div></div><div id="dateFacts" class="fact-grid"></div></div>
+          <div class="card s4"><div class="card-title"><div><b>Day-of-week average</b></div></div><div id="weekdayBars"></div></div>
+          <div class="card s4"><div class="card-title"><div><b>Monthly net points</b></div></div><div id="monthBars"></div></div>
+          <div class="card s12"><div class="card-title"><div><b>Daily ledger</b><br><span>Trade count, wins, losses, win rate, net, average, best, worst, average confidence</span></div></div><div class="table-wrap"><table id="dailyTable"></table></div></div>
+        </div>
+      </section>
+
+      <section id="time" class="view">
+        <div class="section-head"><div><h2>Time-wise intelligence</h2><p>Hour and session behaviour—useful for identifying productive and weak periods.</p></div><span class="chip">Intraday facts</span></div>
+        <div class="grid">
+          <div class="card s4"><div class="card-title"><div><b>Time facts</b></div></div><div id="timeFacts" class="fact-grid"></div></div>
+          <div class="card s4"><div class="card-title"><div><b>Average points by hour</b></div></div><div id="hourBars"></div></div>
+          <div class="card s4"><div class="card-title"><div><b>Win rate by hour</b></div></div><div id="hourWinBars"></div></div>
+          <div class="card s12"><div class="card-title"><div><b>Session segments</b><br><span>Open · morning · midday · afternoon · close</span></div></div><div class="table-wrap"><table id="sessionTable"></table></div></div>
+        </div>
+      </section>
+
+      <section id="points" class="view">
+        <div class="section-head"><div><h2>Points-wise intelligence</h2><p>Distribution, tails, point slabs and profit concentration.</p></div><span class="chip">Outcome shape</span></div>
+        <div class="grid">
+          <div class="card s4"><div class="card-title"><div><b>Point quantiles</b></div></div><div id="quantiles" class="quants"></div></div>
+          <div class="card s4"><div class="card-title"><div><b>Point distribution</b></div></div><canvas id="histChart"></canvas></div>
+          <div class="card s4"><div class="card-title"><div><b>Point facts</b></div></div><div id="pointFacts" class="fact-grid"></div></div>
+          <div class="card s12"><div class="card-title"><div><b>Point slabs</b></div></div><div class="table-wrap"><table id="pointsTable"></table></div></div>
+        </div>
+      </section>
+
+      <section id="risk" class="view">
+        <div class="section-head"><div><h2>Risk & consistency</h2><p>Drawdown, streaks, rolling behaviour and dependence on a small number of winners.</p></div><span class="chip">Risk control</span></div>
+        <div class="grid">
+          <div class="card s3"><div class="card-title"><div><b>Risk facts</b></div></div><div id="riskStats" class="statgrid"></div></div>
+          <div class="card s5"><div class="card-title"><div><b>Drawdown curve</b></div></div><canvas id="drawdownChart"></canvas></div>
+          <div class="card s4"><div class="card-title"><div><b>Rolling 20-trade win rate</b></div></div><canvas id="rollingWinChart"></canvas></div>
+          <div class="card s6"><div class="card-title"><div><b>Rolling 20-trade expectancy</b></div></div><canvas id="rollingExpChart"></canvas></div>
+          <div class="card s6"><div class="card-title"><div><b>Concentration facts</b></div></div><div id="concentrationFacts" class="fact-grid"></div></div>
+        </div>
+      </section>
+
+      <section id="confidence" class="view">
+        <div class="section-head"><div><h2>Confidence calibration</h2><p>Model score versus empirical historical outcome. Probability is measured from actual completed trades.</p></div><span class="chip">Score ≠ guarantee</span></div>
+        <div class="grid">
+          <div class="card s6"><div class="card-title"><div><b>Confidence bands</b></div></div><div class="table-wrap"><table id="confidenceTable"></table></div></div>
+          <div class="card s6"><div class="card-title"><div><b>Average points by confidence band</b></div></div><div id="confidenceBars"></div></div>
+          <div class="card s4"><div class="card-title"><div><b>Filter simulator</b><br><span>Threshold uses the value in the top bar</span></div></div><div id="filterStats" class="statgrid"></div></div>
+          <div class="card s8"><div class="card-title"><div><b>Filter impact facts</b></div></div><div id="filterFacts" class="fact-grid"></div></div>
+        </div>
+      </section>
+
+
+      <section id="forex" class="view">
+        <div class="section-head"><div><h2>Forex-style performance report — adapted for BANKNIFTY Index Options</h2>
+          <p>Familiar account-report KPIs translated into point-based NSE index-options statistics. Monetary figures use the configurable ₹/point, lots and capital controls above.</p></div>
+          <span class="chip">BANKNIFTY · OPTIDX</span></div>
+
+        <div class="report-callout" style="margin-bottom:10px">
+          <strong id="bankNiftyHeadline">—</strong>
+          <span id="bankNiftyContext">Set ₹/point correctly for your result definition. If your result is option-premium points, ₹/point normally equals contract lot size × lots. If your result is an underlying/custom point measure, enter its true monetary equivalent instead.</span>
+        </div>
+
+        <div class="report-grid">
+          <div class="report-panel"><h3>Account / Market Context</h3><div class="report-body" id="fxAccount"></div></div>
+          <div class="report-panel"><h3>Performance</h3><div class="report-body" id="fxPerformance"></div></div>
+          <div class="report-panel"><h3>Trade Stats</h3><div class="report-body" id="fxTradeStats"></div></div>
+
+          <div class="report-panel"><h3>Risk / Quality</h3><div class="report-body" id="fxRisk"></div></div>
+          <div class="report-panel"><h3>BankNifty-specific Relative KPIs</h3><div class="report-body" id="fxBankNifty"></div></div>
+          <div class="report-panel"><h3>Data Availability</h3><div class="report-body" id="fxAvailability"></div></div>
+
+          <div class="report-panel report-wide" style="grid-column:1/-1"><h3>Averages by Period</h3>
+            <div class="report-body table-wrap" style="max-height:none"><table class="report-table" id="fxPeriodTable"></table></div>
+          </div>
+
+          <div class="report-panel"><h3>Direction / Instrument</h3><div class="report-body table-wrap" style="max-height:none"><table class="report-table" id="fxDirectionTable"></table></div></div>
+          <div class="report-panel"><h3>Confidence / Model Quality</h3><div class="report-body" id="fxConfidence"></div></div>
+          <div class="report-panel"><h3>Cost & Capital Sensitivity</h3><div class="report-body" id="fxCosts"></div></div>
+        </div>
+      </section>
+
+      <section id="pudpdd" class="view">
+        <div class="section-head"><div><h2>PUD / PDD structural intelligence</h2><p>Height, same-side distance, acceleration/deceleration and recurring expansion/compression patterns.</p></div><span class="chip">Structure layer</span></div>
+        <div class="grid">
+          <div class="card current-card s12" id="currentTradeCard"></div>
+          <div class="card s6"><div class="card-title"><div><b>Height zones</b></div></div><div class="table-wrap"><table id="heightTable"></table></div></div>
+          <div class="card s6"><div class="card-title"><div><b>Motion states</b><br><span>E+Accel / E+Decel / C+Accel / C+Decel</span></div></div><div class="table-wrap"><table id="motionTable"></table></div></div>
+          <div class="card s6"><div class="card-title"><div><b>PUD vs PDD</b></div></div><div id="updateBars"></div></div>
+          <div class="card s6"><div class="card-title"><div><b>Expansion streak</b></div></div><div class="table-wrap"><table id="streakTable"></table></div></div>
+        </div>
+      </section>
+
+      
+<section id="kid" class="view">
+  <div class="kid-hero">
+    <div><span class="chip">Same data · simple words</span><h2>Imagine every trade is one turn in a game.</h2><p>This page explains the same professional statistics using simple pictures and short sentences.</p><div class="kid-people" id="kidPeopleGrid"></div></div>
+    <div class="kid-score"><strong id="kidWinScore">—</strong><span>trades out of 100<br>historically finished positive</span></div>
+  </div>
+  <div class="kid-grid">
+    <article class="kid-card"><div class="kid-top"><div class="kid-icon">🏆</div><div><h3>Did the game make points?</h3><p>Net result</p></div></div><div class="kid-big" id="kidNet">—</div><div class="kid-sub" id="kidNetMoney"></div><div class="kid-simple" id="kidNetStory"></div></article>
+    <article class="kid-card"><div class="kid-top"><div class="kid-icon">🎯</div><div><h3>How often did a trade win?</h3><p>Win rate</p></div></div><div class="kid-big" id="kidWinRate">—</div><div class="kid-meter"><i id="kidWinMeter"></i></div><div class="kid-simple" id="kidWinStory"></div></article>
+    <article class="kid-card"><div class="kid-top"><div class="kid-icon">⚖️</div><div><h3>Win size vs loss size</h3><p>Payoff</p></div></div><div class="kid-big" id="kidPayoff">—</div><div class="kid-simple" id="kidPayoffStory"></div></article>
+    <article class="kid-card wide"><div class="kid-top"><div class="kid-icon">📅</div><div><h3>Which days were happy or sad?</h3><p>Date-wise</p></div></div><div id="kidDateFacts"></div></article>
+    <article class="kid-card wide"><div class="kid-top"><div class="kid-icon">⏰</div><div><h3>What time worked best?</h3><p>Time-wise</p></div></div><div id="kidTimeFacts"></div></article>
+    <article class="kid-card"><div class="kid-top"><div class="kid-icon">📏</div><div><h3>What does a normal trade look like?</h3><p>Points</p></div></div><div class="kid-big" id="kidMedian">—</div><div class="kid-simple" id="kidPointStory"></div></article>
+    <article class="kid-card"><div class="kid-top"><div class="kid-icon">🎢</div><div><h3>How bumpy was the ride?</h3><p>Drawdown</p></div></div><div class="kid-big" id="kidDrawdown">—</div><div class="kid-meter red"><i id="kidRiskMeter"></i></div><div class="kid-simple" id="kidRiskStory"></div></article>
+    <article class="kid-card"><div class="kid-top"><div class="kid-icon">🔥</div><div><h3>Winning and losing streaks</h3><p>Runs</p></div></div><div id="kidStreakFacts"></div></article>
+    <article class="kid-card wide"><div class="kid-top"><div class="kid-icon">🚦</div><div><h3>Confidence is like a traffic light</h3><p>Ranking, not a promise</p></div></div><div class="kid-traffic"><div class="kid-light red"><div class="dot"></div><b>Below 40</b><span>Watch</span></div><div class="kid-light amber"><div class="dot"></div><b>40–59</b><span>Middle</span></div><div class="kid-light green"><div class="dot"></div><b>60+</b><span>Higher confidence</span></div></div><div class="kid-simple" id="kidConfidenceStory"></div></article>
+    <article class="kid-card wide"><div class="kid-top"><div class="kid-icon">↕️</div><div><h3>PUD and PDD are like two walls</h3><p>The gap grows and shrinks</p></div></div><div id="kidPudPddFacts"></div><div class="kid-simple" id="kidPudPddStory"></div></article>
+    <article class="kid-card full"><div class="kid-top"><div class="kid-icon">📊</div><div><h3>Confidence score board</h3><p>Win rate and average points by score</p></div></div><div class="kid-band" id="kidConfidenceBands"></div></article>
+    <article class="kid-card wide"><div class="kid-top"><div class="kid-icon">💰</div><div><h3>What do points mean in rupees?</h3><p>BANKNIFTY example</p></div></div><div id="kidMoneyFacts"></div><div class="kid-simple">The ₹ number uses the capital, ₹/point and lots controls at the top.</div></article>
+    <article class="kid-card wide"><div class="kid-top"><div class="kid-icon">🧠</div><div><h3>The whole story in one sentence</h3><p>What to remember</p></div></div><div class="kid-story" id="kidOneSentence"></div></article>
+  </div>
+</section>
+
+<section id="log" class="view">
+        <div class="section-head"><div><h2>Historical trade log</h2><p>Search and filter the complete dataset.</p></div><span class="chip" id="visibleCount"></span></div>
+        <div class="card"><div class="table-wrap"><table id="tradeTable"></table></div></div>
+      </section>
+
+      <section id="health" class="view">
+        <div class="section-head"><div><h2>Data health & missing KPIs</h2><p>What this dataset can calculate reliably—and what would require additional fields.</p></div><span class="chip">Data readiness</span></div>
+        <div class="grid">
+          <div class="card s5"><div class="card-title"><div><b>Detected data health</b></div></div><div id="healthStats" class="statgrid"></div></div>
+          <div class="card s7"><div class="card-title"><div><b>Advanced parameters still missing</b></div></div><div id="missingGrid" class="missing-grid"></div></div>
+          <div class="card s12"><div class="card-title"><div><b>Recognised import fields</b></div></div><div id="fieldBadges"></div></div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer"><span>August 2026 Trade Intelligence Cockpit · detailed source is restricted to August 2026 only; chart values are displayed directly on graphs.</span><span>Statistics describe historical observations; they do not guarantee future outcomes. *Capital velocity is a point-value activity proxy, not exchange turnover. **30-unit BANKNIFTY lot is a current reference and remains editable.</span></footer>
+  </section>
+</div>
+
+<script id="embeddedData" type="application/json">[{"dt":"2026-08-03 09:15:00","update":"PDD","trade_type":"CE","PUD":57377,"PDD":57214,"height":163,"D":-63.0,"step":63.0,"prev_same_step":7.0,"step_accel":56.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":248.0,"outcome":"PROFIT","page":5,"trade_no":1},{"dt":"2026-08-03 09:20:00","update":"PUD","trade_type":"PE","PUD":57628,"PDD":57214,"height":414,"D":251.0,"step":251.0,"prev_same_step":119.0,"step_accel":132.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2679565851,"confidence":56.6591180985,"confidence_band":"Moderate","result":-49.0,"outcome":"LOSS","page":5,"trade_no":2},{"dt":"2026-08-03 09:26:00","update":"PDD","trade_type":"CE","PUD":57628,"PDD":57511,"height":117,"D":-297.0,"step":297.0,"prev_same_step":63.0,"step_accel":234.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":194.0,"outcome":"PROFIT","page":5,"trade_no":3},{"dt":"2026-08-03 10:16:00","update":"PUD","trade_type":"PE","PUD":57832,"PDD":57511,"height":321,"D":204.0,"step":204.0,"prev_same_step":251.0,"step_accel":-47.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-23.0,"outcome":"LOSS","page":5,"trade_no":4},{"dt":"2026-08-03 10:55:00","update":"PDD","trade_type":"CE","PUD":57832,"PDD":57728,"height":104,"D":-217.0,"step":217.0,"prev_same_step":297.0,"step_accel":-80.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-7.0,"outcome":"LOSS","page":5,"trade_no":5},{"dt":"2026-08-03 11:45:00","update":"PUD","trade_type":"PE","PUD":57848,"PDD":57728,"height":120,"D":16.0,"step":16.0,"prev_same_step":204.0,"step_accel":-188.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0291342079,"confidence":50.7283036825,"confidence_band":"Neutral","result":63.0,"outcome":"PROFIT","page":5,"trade_no":6},{"dt":"2026-08-03 13:34:00","update":"PDD","trade_type":"CE","PUD":57848,"PDD":57658,"height":190,"D":70.0,"step":70.0,"prev_same_step":217.0,"step_accel":-147.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.0719847243,"confidence":51.7988414046,"confidence_band":"Neutral","result":0.0,"outcome":"PROFIT","page":5,"trade_no":7},{"dt":"2026-08-03 15:04:00","update":"PUD","trade_type":"PE","PUD":57787,"PDD":57658,"height":129,"D":-61.0,"step":61.0,"prev_same_step":16.0,"step_accel":45.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.2762687815,"confidence":56.8631229634,"confidence_band":"Moderate","result":1.0,"outcome":"PROFIT","page":5,"trade_no":8},{"dt":"2026-08-03 15:29:00","update":"PDD","trade_type":"CE","PUD":57787,"PDD":57657,"height":130,"D":1.0,"step":1.0,"prev_same_step":70.0,"step_accel":-69.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.0344064938,"confidence":49.1399225013,"confidence_band":"Below Avg","result":463.0,"outcome":"PROFIT","page":5,"trade_no":9},{"dt":"2026-08-04 09:15:00","update":"PUD","trade_type":"PE","PUD":58248,"PDD":57657,"height":591,"D":461.0,"step":461.0,"prev_same_step":61.0,"step_accel":400.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.4244480669,"confidence":60.454714174,"confidence_band":"Good","result":419.0,"outcome":"PROFIT","page":5,"trade_no":1},{"dt":"2026-08-04 09:17:00","update":"PDD","trade_type":"CE","PUD":58248,"PDD":57702,"height":546,"D":-45.0,"step":45.0,"prev_same_step":1.0,"step_accel":44.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.0391178943,"confidence":50.9778226703,"confidence_band":"Neutral","result":1.0,"outcome":"PROFIT","page":5,"trade_no":2},{"dt":"2026-08-04 09:28:00","update":"PUD","trade_type":"PE","PUD":57836,"PDD":57702,"height":134,"D":-412.0,"step":412.0,"prev_same_step":461.0,"step_accel":-49.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":0.0127682983,"confidence":50.3192031202,"confidence_band":"Neutral","result":-37.0,"outcome":"LOSS","page":5,"trade_no":3},{"dt":"2026-08-04 09:40:00","update":"PDD","trade_type":"CE","PUD":57836,"PDD":57739,"height":97,"D":-37.0,"step":37.0,"prev_same_step":45.0,"step_accel":-8.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":2,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":50.0,"outcome":"PROFIT","page":5,"trade_no":4},{"dt":"2026-08-04 10:11:00","update":"PUD","trade_type":"PE","PUD":57918,"PDD":57739,"height":179,"D":82.0,"step":82.0,"prev_same_step":412.0,"step_accel":-330.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":296.0,"outcome":"PROFIT","page":5,"trade_no":5},{"dt":"2026-08-04 12:17:00","update":"PDD","trade_type":"CE","PUD":57918,"PDD":57495,"height":423,"D":244.0,"step":244.0,"prev_same_step":37.0,"step_accel":207.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.150637354,"confidence":53.7588287118,"confidence_band":"Neutral","result":-36.0,"outcome":"LOSS","page":5,"trade_no":6},{"dt":"2026-08-04 12:36:00","update":"PUD","trade_type":"PE","PUD":57586,"PDD":57495,"height":91,"D":-332.0,"step":332.0,"prev_same_step":82.0,"step_accel":250.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":99.0,"outcome":"PROFIT","page":5,"trade_no":7},{"dt":"2026-08-04 14:06:00","update":"PDD","trade_type":"CE","PUD":57586,"PDD":57360,"height":226,"D":135.0,"step":135.0,"prev_same_step":244.0,"step_accel":-109.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.1606535453,"confidence":54.0077225403,"confidence_band":"Neutral","result":42.0,"outcome":"PROFIT","page":5,"trade_no":8},{"dt":"2026-08-04 15:05:00","update":"PUD","trade_type":"PE","PUD":57530,"PDD":57360,"height":170,"D":-56.0,"step":56.0,"prev_same_step":332.0,"step_accel":-276.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-45.0,"outcome":"LOSS","page":5,"trade_no":9},{"dt":"2026-08-04 15:28:00","update":"PDD","trade_type":"CE","PUD":57530,"PDD":57437,"height":93,"D":-77.0,"step":77.0,"prev_same_step":135.0,"step_accel":-58.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":333.0,"outcome":"PROFIT","page":5,"trade_no":10},{"dt":"2026-08-05 09:15:00","update":"PUD","trade_type":"PE","PUD":57907,"PDD":57437,"height":470,"D":377.0,"step":377.0,"prev_same_step":56.0,"step_accel":321.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":-50.0,"outcome":"LOSS","page":5,"trade_no":1},{"dt":"2026-08-05 09:18:00","update":"PDD","trade_type":"CE","PUD":57907,"PDD":57830,"height":77,"D":-393.0,"step":393.0,"prev_same_step":77.0,"step_accel":316.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-45.0,"outcome":"LOSS","page":5,"trade_no":2},{"dt":"2026-08-05 09:26:00","update":"PUD","trade_type":"PE","PUD":57912,"PDD":57830,"height":82,"D":5.0,"step":5.0,"prev_same_step":377.0,"step_accel":-372.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.5156737156,"confidence":37.3864418867,"confidence_band":"Low","result":-51.0,"outcome":"LOSS","page":5,"trade_no":3},{"dt":"2026-08-05 09:39:00","update":"PDD","trade_type":"CE","PUD":57912,"PDD":57835,"height":77,"D":-5.0,"step":5.0,"prev_same_step":393.0,"step_accel":-388.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-48.0,"outcome":"LOSS","page":5,"trade_no":4},{"dt":"2026-08-05 09:53:00","update":"PUD","trade_type":"PE","PUD":57918,"PDD":57835,"height":83,"D":6.0,"step":6.0,"prev_same_step":5.0,"step_accel":1.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.2133106367,"confidence":44.6873632016,"confidence_band":"Below Avg","result":-14.0,"outcome":"LOSS","page":4,"trade_no":5},{"dt":"2026-08-05 10:02:00","update":"PDD","trade_type":"CE","PUD":57918,"PDD":57799,"height":119,"D":36.0,"step":36.0,"prev_same_step":5.0,"step_accel":31.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.3743478032,"confidence":59.2509141721,"confidence_band":"Moderate","result":-8.0,"outcome":"LOSS","page":4,"trade_no":6},{"dt":"2026-08-05 10:06:00","update":"PUD","trade_type":"PE","PUD":57921,"PDD":57799,"height":122,"D":3.0,"step":3.0,"prev_same_step":6.0,"step_accel":-3.0,"motion_state":"E+Decel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.2662398523,"confidence":43.3830437673,"confidence_band":"Below Avg","result":-31.0,"outcome":"LOSS","page":4,"trade_no":7},{"dt":"2026-08-05 10:20:00","update":"PDD","trade_type":"CE","PUD":57921,"PDD":57824,"height":97,"D":-25.0,"step":25.0,"prev_same_step":36.0,"step_accel":-11.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":-0.0507724034,"confidence":48.730962518,"confidence_band":"Below Avg","result":-49.0,"outcome":"LOSS","page":4,"trade_no":8},{"dt":"2026-08-05 10:26:00","update":"PUD","trade_type":"PE","PUD":57906,"PDD":57824,"height":82,"D":-15.0,"step":15.0,"prev_same_step":3.0,"step_accel":12.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":171.0,"outcome":"PROFIT","page":4,"trade_no":9},{"dt":"2026-08-05 10:32:00","update":"PDD","trade_type":"CE","PUD":57906,"PDD":57601,"height":305,"D":223.0,"step":223.0,"prev_same_step":25.0,"step_accel":198.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":131.0,"outcome":"PROFIT","page":4,"trade_no":10},{"dt":"2026-08-05 11:09:00","update":"PUD","trade_type":"PE","PUD":57866,"PDD":57601,"height":265,"D":-40.0,"step":40.0,"prev_same_step":15.0,"step_accel":25.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":0.7102333021,"confidence":67.0452708995,"confidence_band":"High","result":263.0,"outcome":"PROFIT","page":4,"trade_no":11},{"dt":"2026-08-05 13:47:00","update":"PDD","trade_type":"CE","PUD":57866,"PDD":57473,"height":393,"D":128.0,"step":128.0,"prev_same_step":223.0,"step_accel":-95.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-9.0,"outcome":"LOSS","page":4,"trade_no":12},{"dt":"2026-08-05 14:17:00","update":"PUD","trade_type":"PE","PUD":57593,"PDD":57473,"height":120,"D":-273.0,"step":273.0,"prev_same_step":40.0,"step_accel":233.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":0.0554271396,"confidence":51.3853238461,"confidence_band":"Neutral","result":-35.0,"outcome":"LOSS","page":4,"trade_no":13},{"dt":"2026-08-05 15:03:00","update":"PDD","trade_type":"CE","PUD":57593,"PDD":57499,"height":94,"D":-26.0,"step":26.0,"prev_same_step":128.0,"step_accel":-102.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":218.0,"outcome":"PROFIT","page":4,"trade_no":14},{"dt":"2026-08-06 09:33:00","update":"PUD","trade_type":"PE","PUD":57848,"PDD":57499,"height":349,"D":255.0,"step":255.0,"prev_same_step":273.0,"step_accel":-18.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-34.0,"outcome":"LOSS","page":4,"trade_no":1},{"dt":"2026-08-06 09:38:00","update":"PDD","trade_type":"CE","PUD":57848,"PDD":57751,"height":97,"D":-252.0,"step":252.0,"prev_same_step":26.0,"step_accel":226.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-13.0,"outcome":"LOSS","page":4,"trade_no":2},{"dt":"2026-08-06 09:59:00","update":"PUD","trade_type":"PE","PUD":57869,"PDD":57751,"height":118,"D":21.0,"step":21.0,"prev_same_step":255.0,"step_accel":-234.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0291342079,"confidence":50.7283036825,"confidence_band":"Neutral","result":6.0,"outcome":"PROFIT","page":4,"trade_no":3},{"dt":"2026-08-06 10:13:00","update":"PDD","trade_type":"CE","PUD":57869,"PDD":57731,"height":138,"D":20.0,"step":20.0,"prev_same_step":252.0,"step_accel":-232.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.0719847243,"confidence":51.7988414046,"confidence_band":"Neutral","result":69.0,"outcome":"PROFIT","page":4,"trade_no":4},{"dt":"2026-08-06 11:43:00","update":"PUD","trade_type":"PE","PUD":57927,"PDD":57731,"height":196,"D":58.0,"step":58.0,"prev_same_step":21.0,"step_accel":37.0,"motion_state":"E+Accel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.2511279243,"confidence":43.7545898008,"confidence_band":"Below Avg","result":-57.0,"outcome":"LOSS","page":4,"trade_no":5},{"dt":"2026-08-06 11:55:00","update":"PDD","trade_type":"CE","PUD":57927,"PDD":57855,"height":72,"D":-124.0,"step":124.0,"prev_same_step":20.0,"step_accel":104.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":0.2127280798,"confidence":55.2982368517,"confidence_band":"Moderate","result":-10.0,"outcome":"LOSS","page":4,"trade_no":6},{"dt":"2026-08-06 12:49:00","update":"PUD","trade_type":"PE","PUD":57974,"PDD":57855,"height":119,"D":47.0,"step":47.0,"prev_same_step":58.0,"step_accel":-11.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2528446571,"confidence":56.2876543671,"confidence_band":"Moderate","result":-42.0,"outcome":"LOSS","page":4,"trade_no":7},{"dt":"2026-08-06 13:03:00","update":"PDD","trade_type":"CE","PUD":57974,"PDD":57889,"height":85,"D":-34.0,"step":34.0,"prev_same_step":124.0,"step_accel":-90.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":56.0,"outcome":"PROFIT","page":4,"trade_no":8},{"dt":"2026-08-06 14:31:00","update":"PUD","trade_type":"PE","PUD":58073,"PDD":57889,"height":184,"D":99.0,"step":99.0,"prev_same_step":47.0,"step_accel":52.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":-47.0,"outcome":"LOSS","page":4,"trade_no":9},{"dt":"2026-08-06 15:28:00","update":"PDD","trade_type":"CE","PUD":58073,"PDD":57992,"height":81,"D":-103.0,"step":103.0,"prev_same_step":34.0,"step_accel":69.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":-57.0,"outcome":"LOSS","page":4,"trade_no":10},{"dt":"2026-08-07 09:15:00","update":"PUD","trade_type":"PE","PUD":58064,"PDD":57992,"height":72,"D":-9.0,"step":9.0,"prev_same_step":99.0,"step_accel":-90.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":115.0,"outcome":"PROFIT","page":4,"trade_no":1},{"dt":"2026-08-07 09:22:00","update":"PDD","trade_type":"CE","PUD":58064,"PDD":57821,"height":243,"D":171.0,"step":171.0,"prev_same_step":103.0,"step_accel":68.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.2393061749,"confidence":55.9542659906,"confidence_band":"Moderate","result":11.0,"outcome":"PROFIT","page":4,"trade_no":2},{"dt":"2026-08-07 10:18:00","update":"PUD","trade_type":"PE","PUD":57964,"PDD":57821,"height":143,"D":-100.0,"step":100.0,"prev_same_step":9.0,"step_accel":91.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":0.2762687815,"confidence":56.8631229634,"confidence_band":"Moderate","result":85.0,"outcome":"PROFIT","page":4,"trade_no":3},{"dt":"2026-08-07 11:12:00","update":"PDD","trade_type":"CE","PUD":57964,"PDD":57747,"height":217,"D":74.0,"step":74.0,"prev_same_step":171.0,"step_accel":-97.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.063056904,"confidence":48.4240995369,"confidence_band":"Below Avg","result":-28.0,"outcome":"LOSS","page":4,"trade_no":4},{"dt":"2026-08-07 11:35:00","update":"PUD","trade_type":"PE","PUD":57846,"PDD":57747,"height":99,"D":-118.0,"step":118.0,"prev_same_step":100.0,"step_accel":18.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.4893807839,"confidence":38.0039449986,"confidence_band":"Low","result":18.0,"outcome":"PROFIT","page":4,"trade_no":5},{"dt":"2026-08-07 12:26:00","update":"PDD","trade_type":"CE","PUD":57846,"PDD":57701,"height":145,"D":46.0,"step":46.0,"prev_same_step":74.0,"step_accel":-28.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-20.0,"outcome":"LOSS","page":4,"trade_no":6},{"dt":"2026-08-07 13:31:00","update":"PUD","trade_type":"PE","PUD":57810,"PDD":57701,"height":109,"D":-36.0,"step":36.0,"prev_same_step":118.0,"step_accel":-82.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":4,"net4":0.0,"model_z":-0.2080733436,"confidence":44.8168530839,"confidence_band":"Below Avg","result":-31.0,"outcome":"LOSS","page":4,"trade_no":7},{"dt":"2026-08-07 13:46:00","update":"PDD","trade_type":"CE","PUD":57810,"PDD":57713,"height":97,"D":-12.0,"step":12.0,"prev_same_step":46.0,"step_accel":-34.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":132.0,"outcome":"PROFIT","page":4,"trade_no":8},{"dt":"2026-08-07 13:54:00","update":"PUD","trade_type":"PE","PUD":57972,"PDD":57713,"height":259,"D":162.0,"step":162.0,"prev_same_step":36.0,"step_accel":126.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.7654618074,"confidence":68.2538374942,"confidence_band":"High","result":15.0,"outcome":"PROFIT","page":4,"trade_no":9},{"dt":"2026-08-07 13:56:00","update":"PDD","trade_type":"CE","PUD":57972,"PDD":57830,"height":142,"D":-117.0,"step":117.0,"prev_same_step":12.0,"step_accel":105.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-59.0,"outcome":"LOSS","page":4,"trade_no":10},{"dt":"2026-08-07 13:57:00","update":"PUD","trade_type":"PE","PUD":57902,"PDD":57830,"height":72,"D":-70.0,"step":70.0,"prev_same_step":162.0,"step_accel":-92.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-23.0,"outcome":"LOSS","page":4,"trade_no":11},{"dt":"2026-08-07 13:59:00","update":"PDD","trade_type":"CE","PUD":57902,"PDD":57793,"height":109,"D":37.0,"step":37.0,"prev_same_step":117.0,"step_accel":-80.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":3.0,"outcome":"PROFIT","page":4,"trade_no":12},{"dt":"2026-08-07 14:03:00","update":"PUD","trade_type":"PE","PUD":57926,"PDD":57793,"height":133,"D":24.0,"step":24.0,"prev_same_step":70.0,"step_accel":-46.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.1355254259,"confidence":53.3829592922,"confidence_band":"Neutral","result":1.0,"outcome":"PROFIT","page":4,"trade_no":13},{"dt":"2026-08-07 14:17:00","update":"PDD","trade_type":"CE","PUD":57926,"PDD":57796,"height":130,"D":-3.0,"step":3.0,"prev_same_step":37.0,"step_accel":-34.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-30.0,"outcome":"LOSS","page":4,"trade_no":14},{"dt":"2026-08-07 14:31:00","update":"PUD","trade_type":"PE","PUD":57894,"PDD":57796,"height":98,"D":-32.0,"step":32.0,"prev_same_step":24.0,"step_accel":8.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":62.0,"outcome":"PROFIT","page":4,"trade_no":15},{"dt":"2026-08-07 15:00:00","update":"PDD","trade_type":"CE","PUD":57894,"PDD":57704,"height":190,"D":92.0,"step":92.0,"prev_same_step":3.0,"step_accel":89.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":19.0,"outcome":"PROFIT","page":4,"trade_no":16},{"dt":"2026-08-07 15:14:00","update":"PUD","trade_type":"PE","PUD":57853,"PDD":57704,"height":149,"D":-41.0,"step":41.0,"prev_same_step":32.0,"step_accel":9.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":0.2762687815,"confidence":56.8631229634,"confidence_band":"Moderate","result":-24.0,"outcome":"LOSS","page":4,"trade_no":17},{"dt":"2026-08-10 09:15:00","update":"PDD","trade_type":"CE","PUD":57853,"PDD":57746,"height":107,"D":-42.0,"step":42.0,"prev_same_step":92.0,"step_accel":-50.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":85.0,"outcome":"PROFIT","page":4,"trade_no":1},{"dt":"2026-08-10 09:19:00","update":"PUD","trade_type":"PE","PUD":57959,"PDD":57746,"height":213,"D":106.0,"step":106.0,"prev_same_step":41.0,"step_accel":65.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.7654618074,"confidence":68.2538374942,"confidence_band":"High","result":288.0,"outcome":"PROFIT","page":4,"trade_no":2},{"dt":"2026-08-10 09:39:00","update":"PDD","trade_type":"CE","PUD":57959,"PDD":57544,"height":415,"D":202.0,"step":202.0,"prev_same_step":42.0,"step_accel":160.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.150637354,"confidence":53.7588287118,"confidence_band":"Neutral","result":-19.0,"outcome":"LOSS","page":4,"trade_no":3},{"dt":"2026-08-10 09:51:00","update":"PUD","trade_type":"PE","PUD":57654,"PDD":57544,"height":110,"D":-305.0,"step":305.0,"prev_same_step":106.0,"step_accel":199.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.2762687815,"confidence":56.8631229634,"confidence_band":"Moderate","result":-26.0,"outcome":"LOSS","page":4,"trade_no":4},{"dt":"2026-08-10 10:02:00","update":"PDD","trade_type":"CE","PUD":57654,"PDD":57551,"height":103,"D":-7.0,"step":7.0,"prev_same_step":202.0,"step_accel":-195.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-22.0,"outcome":"LOSS","page":4,"trade_no":5},{"dt":"2026-08-10 10:10:00","update":"PUD","trade_type":"PE","PUD":57657,"PDD":57551,"height":106,"D":3.0,"step":3.0,"prev_same_step":305.0,"step_accel":-302.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0291342079,"confidence":50.7283036825,"confidence_band":"Neutral","result":-49.0,"outcome":"LOSS","page":4,"trade_no":6},{"dt":"2026-08-10 10:15:00","update":"PDD","trade_type":"CE","PUD":57657,"PDD":57573,"height":84,"D":-22.0,"step":22.0,"prev_same_step":7.0,"step_accel":15.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":58.0,"outcome":"PROFIT","page":4,"trade_no":7},{"dt":"2026-08-10 10:54:00","update":"PUD","trade_type":"PE","PUD":57763,"PDD":57573,"height":190,"D":106.0,"step":106.0,"prev_same_step":3.0,"step_accel":103.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":19.0,"outcome":"PROFIT","page":4,"trade_no":8},{"dt":"2026-08-10 12:13:00","update":"PDD","trade_type":"CE","PUD":57763,"PDD":57618,"height":145,"D":-45.0,"step":45.0,"prev_same_step":22.0,"step_accel":23.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":-38.0,"outcome":"LOSS","page":4,"trade_no":9},{"dt":"2026-08-10 12:50:00","update":"PUD","trade_type":"PE","PUD":57708,"PDD":57618,"height":90,"D":-55.0,"step":55.0,"prev_same_step":106.0,"step_accel":-51.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":14.0,"outcome":"PROFIT","page":4,"trade_no":10},{"dt":"2026-08-10 13:40:00","update":"PDD","trade_type":"CE","PUD":57708,"PDD":57566,"height":142,"D":52.0,"step":52.0,"prev_same_step":45.0,"step_accel":7.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":-35.0,"outcome":"LOSS","page":4,"trade_no":11},{"dt":"2026-08-10 14:01:00","update":"PUD","trade_type":"PE","PUD":57658,"PDD":57566,"height":92,"D":-50.0,"step":50.0,"prev_same_step":55.0,"step_accel":-5.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":-55.0,"outcome":"LOSS","page":4,"trade_no":12},{"dt":"2026-08-10 14:32:00","update":"PDD","trade_type":"CE","PUD":57658,"PDD":57586,"height":72,"D":-20.0,"step":20.0,"prev_same_step":52.0,"step_accel":-32.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-63.0,"outcome":"LOSS","page":4,"trade_no":13},{"dt":"2026-08-10 14:46:00","update":"PUD","trade_type":"PE","PUD":57650,"PDD":57586,"height":64,"D":-8.0,"step":8.0,"prev_same_step":50.0,"step_accel":-42.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":3,"net4":-2.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-27.0,"outcome":"LOSS","page":3,"trade_no":14},{"dt":"2026-08-10 15:29:00","update":"PDD","trade_type":"CE","PUD":57650,"PDD":57550,"height":100,"D":36.0,"step":36.0,"prev_same_step":20.0,"step_accel":16.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":10.0,"outcome":"PROFIT","page":3,"trade_no":15},{"dt":"2026-08-11 09:15:00","update":"PUD","trade_type":"PE","PUD":57687,"PDD":57550,"height":137,"D":37.0,"step":37.0,"prev_same_step":8.0,"step_accel":29.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.4378885049,"confidence":60.7755788872,"confidence_band":"Good","result":402.0,"outcome":"PROFIT","page":3,"trade_no":1},{"dt":"2026-08-11 10:01:00","update":"PDD","trade_type":"CE","PUD":57687,"PDD":57159,"height":528,"D":391.0,"step":391.0,"prev_same_step":36.0,"step_accel":355.0,"motion_state":"E+Accel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.2010276606,"confidence":44.9911652714,"confidence_band":"Below Avg","result":35.0,"outcome":"PROFIT","page":3,"trade_no":2},{"dt":"2026-08-11 12:02:00","update":"PUD","trade_type":"PE","PUD":57320,"PDD":57159,"height":161,"D":-367.0,"step":367.0,"prev_same_step":37.0,"step_accel":330.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":0.2127280798,"confidence":55.2982368517,"confidence_band":"Moderate","result":-56.0,"outcome":"LOSS","page":3,"trade_no":3},{"dt":"2026-08-11 12:44:00","update":"PDD","trade_type":"CE","PUD":57320,"PDD":57250,"height":70,"D":-91.0,"step":91.0,"prev_same_step":391.0,"step_accel":-300.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":28.0,"outcome":"PROFIT","page":3,"trade_no":4},{"dt":"2026-08-11 13:17:00","update":"PUD","trade_type":"PE","PUD":57404,"PDD":57250,"height":154,"D":84.0,"step":84.0,"prev_same_step":367.0,"step_accel":-283.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-38.0,"outcome":"LOSS","page":3,"trade_no":5},{"dt":"2026-08-11 13:26:00","update":"PDD","trade_type":"CE","PUD":57404,"PDD":57316,"height":88,"D":-66.0,"step":66.0,"prev_same_step":91.0,"step_accel":-25.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":3.0,"outcome":"PROFIT","page":3,"trade_no":6},{"dt":"2026-08-11 13:38:00","update":"PUD","trade_type":"PE","PUD":57446,"PDD":57316,"height":130,"D":42.0,"step":42.0,"prev_same_step":84.0,"step_accel":-42.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0291342079,"confidence":50.7283036825,"confidence_band":"Neutral","result":-44.0,"outcome":"LOSS","page":3,"trade_no":7},{"dt":"2026-08-11 14:17:00","update":"PDD","trade_type":"CE","PUD":57446,"PDD":57363,"height":83,"D":-47.0,"step":47.0,"prev_same_step":66.0,"step_accel":-19.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-62.0,"outcome":"LOSS","page":3,"trade_no":8},{"dt":"2026-08-11 14:31:00","update":"PUD","trade_type":"PE","PUD":57428,"PDD":57363,"height":65,"D":-18.0,"step":18.0,"prev_same_step":42.0,"step_accel":-24.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-27.0,"outcome":"LOSS","page":3,"trade_no":9},{"dt":"2026-08-11 15:29:00","update":"PDD","trade_type":"CE","PUD":57428,"PDD":57326,"height":102,"D":37.0,"step":37.0,"prev_same_step":47.0,"step_accel":-10.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-8.0,"outcome":"LOSS","page":3,"trade_no":10},{"dt":"2026-08-12 09:15:00","update":"PUD","trade_type":"PE","PUD":57446,"PDD":57326,"height":120,"D":18.0,"step":18.0,"prev_same_step":18.0,"step_accel":0.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.1355254259,"confidence":53.3829592922,"confidence_band":"Neutral","result":62.0,"outcome":"PROFIT","page":3,"trade_no":1},{"dt":"2026-08-12 09:19:00","update":"PDD","trade_type":"CE","PUD":57446,"PDD":57258,"height":188,"D":68.0,"step":68.0,"prev_same_step":37.0,"step_accel":31.0,"motion_state":"E+Accel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.2511279243,"confidence":43.7545898008,"confidence_band":"Below Avg","result":358.0,"outcome":"PROFIT","page":3,"trade_no":2},{"dt":"2026-08-12 09:30:00","update":"PUD","trade_type":"PE","PUD":57742,"PDD":57258,"height":484,"D":296.0,"step":296.0,"prev_same_step":18.0,"step_accel":278.0,"motion_state":"E+Accel","exp_streak":4,"comp_streak":0,"same_in_streak":0,"net4":4.0,"model_z":-0.2511279243,"confidence":43.7545898008,"confidence_band":"Below Avg","result":-21.0,"outcome":"LOSS","page":3,"trade_no":3},{"dt":"2026-08-12 09:37:00","update":"PDD","trade_type":"CE","PUD":57742,"PDD":57636,"height":106,"D":-378.0,"step":378.0,"prev_same_step":68.0,"step_accel":310.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":0.2127280798,"confidence":55.2982368517,"confidence_band":"Moderate","result":-38.0,"outcome":"LOSS","page":3,"trade_no":4},{"dt":"2026-08-12 09:45:00","update":"PUD","trade_type":"PE","PUD":57725,"PDD":57636,"height":89,"D":-17.0,"step":17.0,"prev_same_step":296.0,"step_accel":-279.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":-4.0,"outcome":"LOSS","page":3,"trade_no":5},{"dt":"2026-08-12 09:54:00","update":"PDD","trade_type":"CE","PUD":57725,"PDD":57600,"height":125,"D":36.0,"step":36.0,"prev_same_step":378.0,"step_accel":-342.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-61.0,"outcome":"LOSS","page":3,"trade_no":6},{"dt":"2026-08-12 10:03:00","update":"PUD","trade_type":"PE","PUD":57670,"PDD":57600,"height":70,"D":-55.0,"step":55.0,"prev_same_step":17.0,"step_accel":38.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-63.0,"outcome":"LOSS","page":3,"trade_no":7},{"dt":"2026-08-12 10:17:00","update":"PDD","trade_type":"CE","PUD":57670,"PDD":57599,"height":71,"D":1.0,"step":1.0,"prev_same_step":36.0,"step_accel":-35.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":46.0,"outcome":"PROFIT","page":3,"trade_no":8},{"dt":"2026-08-12 10:40:00","update":"PUD","trade_type":"PE","PUD":57779,"PDD":57599,"height":180,"D":109.0,"step":109.0,"prev_same_step":55.0,"step_accel":54.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.3743478032,"confidence":59.2509141721,"confidence_band":"Moderate","result":86.0,"outcome":"PROFIT","page":3,"trade_no":9},{"dt":"2026-08-12 11:23:00","update":"PDD","trade_type":"CE","PUD":57779,"PDD":57564,"height":215,"D":35.0,"step":35.0,"prev_same_step":1.0,"step_accel":34.0,"motion_state":"E+Accel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.0560678852,"confidence":48.5986699525,"confidence_band":"Below Avg","result":-55.0,"outcome":"LOSS","page":3,"trade_no":10},{"dt":"2026-08-12 11:27:00","update":"PUD","trade_type":"PE","PUD":57638,"PDD":57564,"height":74,"D":-141.0,"step":141.0,"prev_same_step":109.0,"step_accel":32.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":0.2127280798,"confidence":55.2982368517,"confidence_band":"Moderate","result":36.0,"outcome":"PROFIT","page":3,"trade_no":11},{"dt":"2026-08-12 12:34:00","update":"PDD","trade_type":"CE","PUD":57638,"PDD":57473,"height":165,"D":91.0,"step":91.0,"prev_same_step":35.0,"step_accel":56.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2679565851,"confidence":56.6591180985,"confidence_band":"Moderate","result":-30.0,"outcome":"LOSS","page":3,"trade_no":12},{"dt":"2026-08-12 12:54:00","update":"PUD","trade_type":"PE","PUD":57573,"PDD":57473,"height":100,"D":-65.0,"step":65.0,"prev_same_step":141.0,"step_accel":-76.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":-43.0,"outcome":"LOSS","page":3,"trade_no":13},{"dt":"2026-08-12 13:36:00","update":"PDD","trade_type":"CE","PUD":57573,"PDD":57486,"height":87,"D":-13.0,"step":13.0,"prev_same_step":91.0,"step_accel":-78.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-62.0,"outcome":"LOSS","page":3,"trade_no":14},{"dt":"2026-08-12 14:11:00","update":"PUD","trade_type":"PE","PUD":57556,"PDD":57486,"height":70,"D":-17.0,"step":17.0,"prev_same_step":65.0,"step_accel":-48.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":3,"net4":-2.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-58.0,"outcome":"LOSS","page":3,"trade_no":15},{"dt":"2026-08-12 14:32:00","update":"PDD","trade_type":"CE","PUD":57556,"PDD":57483,"height":73,"D":3.0,"step":3.0,"prev_same_step":13.0,"step_accel":-10.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":233.0,"outcome":"PROFIT","page":3,"trade_no":16},{"dt":"2026-08-12 15:08:00","update":"PUD","trade_type":"PE","PUD":57843,"PDD":57483,"height":360,"D":287.0,"step":287.0,"prev_same_step":17.0,"step_accel":270.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.150637354,"confidence":53.7588287118,"confidence_band":"Neutral","result":-56.0,"outcome":"LOSS","page":3,"trade_no":17},{"dt":"2026-08-12 15:28:00","update":"PDD","trade_type":"CE","PUD":57843,"PDD":57771,"height":72,"D":-288.0,"step":288.0,"prev_same_step":3.0,"step_accel":285.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-13.0,"outcome":"LOSS","page":3,"trade_no":18},{"dt":"2026-08-13 09:15:00","update":"PUD","trade_type":"PE","PUD":57886,"PDD":57771,"height":115,"D":43.0,"step":43.0,"prev_same_step":287.0,"step_accel":-244.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2528446571,"confidence":56.2876543671,"confidence_band":"Moderate","result":206.0,"outcome":"PROFIT","page":3,"trade_no":1},{"dt":"2026-08-13 09:40:00","update":"PDD","trade_type":"CE","PUD":57886,"PDD":57552,"height":334,"D":219.0,"step":219.0,"prev_same_step":288.0,"step_accel":-69.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.0719847243,"confidence":51.7988414046,"confidence_band":"Neutral","result":41.0,"outcome":"PROFIT","page":3,"trade_no":2},{"dt":"2026-08-13 10:08:00","update":"PUD","trade_type":"PE","PUD":57721,"PDD":57552,"height":169,"D":-165.0,"step":165.0,"prev_same_step":43.0,"step_accel":122.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":37.0,"outcome":"PROFIT","page":3,"trade_no":3},{"dt":"2026-08-13 10:48:00","update":"PDD","trade_type":"CE","PUD":57721,"PDD":57556,"height":165,"D":-4.0,"step":4.0,"prev_same_step":219.0,"step_accel":-215.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-31.0,"outcome":"LOSS","page":3,"trade_no":4},{"dt":"2026-08-13 11:04:00","update":"PUD","trade_type":"PE","PUD":57654,"PDD":57556,"height":98,"D":-67.0,"step":67.0,"prev_same_step":165.0,"step_accel":-98.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":2,"net4":-2.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":-30.0,"outcome":"LOSS","page":3,"trade_no":5},{"dt":"2026-08-13 11:36:00","update":"PDD","trade_type":"CE","PUD":57654,"PDD":57556,"height":98,"D":0.0,"step":0.0,"prev_same_step":4.0,"step_accel":-4.0,"motion_state":null,"exp_streak":0,"comp_streak":0,"same_in_streak":0,"net4":-3.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":19.0,"outcome":"PROFIT","page":3,"trade_no":6},{"dt":"2026-08-13 12:17:00","update":"PUD","trade_type":"PE","PUD":57702,"PDD":57556,"height":146,"D":48.0,"step":48.0,"prev_same_step":67.0,"step_accel":-19.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-1.0,"model_z":0.0291342079,"confidence":50.7283036825,"confidence_band":"Neutral","result":16.0,"outcome":"PROFIT","page":3,"trade_no":7},{"dt":"2026-08-13 13:44:00","update":"PDD","trade_type":"CE","PUD":57702,"PDD":57559,"height":143,"D":-3.0,"step":3.0,"prev_same_step":0.0,"step_accel":3.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":-1.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-34.0,"outcome":"LOSS","page":3,"trade_no":8},{"dt":"2026-08-13 14:10:00","update":"PUD","trade_type":"PE","PUD":57652,"PDD":57559,"height":93,"D":-50.0,"step":50.0,"prev_same_step":48.0,"step_accel":2.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-1.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":-32.0,"outcome":"LOSS","page":3,"trade_no":9},{"dt":"2026-08-13 14:30:00","update":"PDD","trade_type":"CE","PUD":57652,"PDD":57557,"height":95,"D":2.0,"step":2.0,"prev_same_step":3.0,"step_accel":-1.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-49.0,"outcome":"LOSS","page":3,"trade_no":10},{"dt":"2026-08-14 09:15:00","update":"PUD","trade_type":"PE","PUD":57635,"PDD":57557,"height":78,"D":-17.0,"step":17.0,"prev_same_step":50.0,"step_accel":-33.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":30.0,"outcome":"PROFIT","page":3,"trade_no":1},{"dt":"2026-08-14 09:33:00","update":"PDD","trade_type":"CE","PUD":57635,"PDD":57478,"height":157,"D":79.0,"step":79.0,"prev_same_step":2.0,"step_accel":77.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":8.0,"outcome":"PROFIT","page":3,"trade_no":2},{"dt":"2026-08-14 09:54:00","update":"PUD","trade_type":"PE","PUD":57614,"PDD":57478,"height":136,"D":-21.0,"step":21.0,"prev_same_step":17.0,"step_accel":4.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":0.0554271396,"confidence":51.3853238461,"confidence_band":"Neutral","result":-61.0,"outcome":"LOSS","page":3,"trade_no":3},{"dt":"2026-08-14 10:07:00","update":"PDD","trade_type":"CE","PUD":57614,"PDD":57547,"height":67,"D":-69.0,"step":69.0,"prev_same_step":79.0,"step_accel":-10.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-2.0,"outcome":"LOSS","page":3,"trade_no":4},{"dt":"2026-08-14 10:17:00","update":"PUD","trade_type":"PE","PUD":57674,"PDD":57547,"height":127,"D":60.0,"step":60.0,"prev_same_step":21.0,"step_accel":39.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.3314972868,"confidence":58.2123645123,"confidence_band":"Moderate","result":157.0,"outcome":"PROFIT","page":3,"trade_no":5},{"dt":"2026-08-14 12:14:00","update":"PDD","trade_type":"CE","PUD":57674,"PDD":57389,"height":285,"D":158.0,"step":158.0,"prev_same_step":69.0,"step_accel":89.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.345697393,"confidence":58.5573820544,"confidence_band":"Moderate","result":-28.0,"outcome":"LOSS","page":3,"trade_no":6},{"dt":"2026-08-14 12:42:00","update":"PUD","trade_type":"PE","PUD":57488,"PDD":57389,"height":99,"D":-186.0,"step":186.0,"prev_same_step":60.0,"step_accel":126.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":-33.0,"outcome":"LOSS","page":3,"trade_no":7},{"dt":"2026-08-14 13:45:00","update":"PDD","trade_type":"CE","PUD":57488,"PDD":57393,"height":95,"D":-4.0,"step":4.0,"prev_same_step":158.0,"step_accel":-154.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":84.0,"outcome":"PROFIT","page":3,"trade_no":8},{"dt":"2026-08-14 14:21:00","update":"PUD","trade_type":"PE","PUD":57605,"PDD":57393,"height":212,"D":117.0,"step":117.0,"prev_same_step":186.0,"step_accel":-69.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.4630987285,"confidence":61.3749022746,"confidence_band":"Good","result":266.0,"outcome":"PROFIT","page":3,"trade_no":9},{"dt":"2026-08-17 09:19:00","update":"PDD","trade_type":"CE","PUD":57605,"PDD":57212,"height":393,"D":181.0,"step":181.0,"prev_same_step":4.0,"step_accel":177.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.150637354,"confidence":53.7588287118,"confidence_band":"Neutral","result":-47.0,"outcome":"LOSS","page":3,"trade_no":1},{"dt":"2026-08-17 09:22:00","update":"PUD","trade_type":"PE","PUD":57291,"PDD":57212,"height":79,"D":-314.0,"step":314.0,"prev_same_step":117.0,"step_accel":197.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":-59.0,"outcome":"LOSS","page":2,"trade_no":2},{"dt":"2026-08-17 09:25:00","update":"PDD","trade_type":"CE","PUD":57291,"PDD":57220,"height":71,"D":-8.0,"step":8.0,"prev_same_step":181.0,"step_accel":-173.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-45.0,"outcome":"LOSS","page":2,"trade_no":3},{"dt":"2026-08-17 09:32:00","update":"PUD","trade_type":"PE","PUD":57305,"PDD":57220,"height":85,"D":14.0,"step":14.0,"prev_same_step":314.0,"step_accel":-300.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.5156737156,"confidence":37.3864418867,"confidence_band":"Low","result":-48.0,"outcome":"LOSS","page":2,"trade_no":4},{"dt":"2026-08-17 09:38:00","update":"PDD","trade_type":"CE","PUD":57305,"PDD":57226,"height":79,"D":-6.0,"step":6.0,"prev_same_step":8.0,"step_accel":-2.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-1.0,"outcome":"LOSS","page":2,"trade_no":5},{"dt":"2026-08-17 10:07:00","update":"PUD","trade_type":"PE","PUD":57351,"PDD":57226,"height":125,"D":46.0,"step":46.0,"prev_same_step":14.0,"step_accel":32.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.3314972868,"confidence":58.2123645123,"confidence_band":"Moderate","result":102.0,"outcome":"PROFIT","page":2,"trade_no":6},{"dt":"2026-08-17 10:53:00","update":"PDD","trade_type":"CE","PUD":57351,"PDD":57124,"height":227,"D":102.0,"step":102.0,"prev_same_step":6.0,"step_accel":96.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.5694078422,"confidence":63.8626526607,"confidence_band":"Good","result":422.0,"outcome":"PROFIT","page":2,"trade_no":7},{"dt":"2026-08-17 13:50:00","update":"PUD","trade_type":"PE","PUD":57672,"PDD":57124,"height":548,"D":321.0,"step":321.0,"prev_same_step":46.0,"step_accel":275.0,"motion_state":"E+Accel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.2010276606,"confidence":44.9911652714,"confidence_band":"Below Avg","result":1.0,"outcome":"PROFIT","page":2,"trade_no":8},{"dt":"2026-08-17 14:42:00","update":"PDD","trade_type":"CE","PUD":57672,"PDD":57543,"height":129,"D":-419.0,"step":419.0,"prev_same_step":102.0,"step_accel":317.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":0.2127280798,"confidence":55.2982368517,"confidence_band":"Moderate","result":77.0,"outcome":"PROFIT","page":2,"trade_no":9},{"dt":"2026-08-17 15:28:00","update":"PUD","trade_type":"PE","PUD":57749,"PDD":57543,"height":206,"D":77.0,"step":77.0,"prev_same_step":321.0,"step_accel":-244.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.6868091778,"confidence":66.5256736965,"confidence_band":"High","result":123.0,"outcome":"PROFIT","page":2,"trade_no":10},{"dt":"2026-08-18 09:15:00","update":"PDD","trade_type":"CE","PUD":57749,"PDD":57331,"height":418,"D":212.0,"step":212.0,"prev_same_step":419.0,"step_accel":-207.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.0719847243,"confidence":51.7988414046,"confidence_band":"Neutral","result":-46.0,"outcome":"LOSS","page":2,"trade_no":1},{"dt":"2026-08-18 09:17:00","update":"PUD","trade_type":"PE","PUD":57579,"PDD":57331,"height":248,"D":-170.0,"step":170.0,"prev_same_step":77.0,"step_accel":93.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.7102333021,"confidence":67.0452708995,"confidence_band":"High","result":110.0,"outcome":"PROFIT","page":2,"trade_no":2},{"dt":"2026-08-18 09:39:00","update":"PDD","trade_type":"CE","PUD":57579,"PDD":57343,"height":236,"D":-12.0,"step":12.0,"prev_same_step":212.0,"step_accel":-200.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.0794228136,"confidence":48.0154727474,"confidence_band":"Below Avg","result":-50.0,"outcome":"LOSS","page":2,"trade_no":3},{"dt":"2026-08-18 09:44:00","update":"PUD","trade_type":"PE","PUD":57419,"PDD":57343,"height":76,"D":-160.0,"step":160.0,"prev_same_step":170.0,"step_accel":-10.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":2,"net4":-2.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":15.0,"outcome":"PROFIT","page":2,"trade_no":4},{"dt":"2026-08-18 10:27:00","update":"PDD","trade_type":"CE","PUD":57419,"PDD":57278,"height":141,"D":65.0,"step":65.0,"prev_same_step":12.0,"step_accel":53.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":-40.0,"outcome":"LOSS","page":2,"trade_no":5},{"dt":"2026-08-18 10:45:00","update":"PUD","trade_type":"PE","PUD":57364,"PDD":57278,"height":86,"D":-55.0,"step":55.0,"prev_same_step":160.0,"step_accel":-105.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":-2.0,"model_z":-0.7528812671,"confidence":32.0193811527,"confidence_band":"Low","result":-2.0,"outcome":"LOSS","page":2,"trade_no":6},{"dt":"2026-08-18 11:09:00","update":"PDD","trade_type":"CE","PUD":57364,"PDD":57240,"height":124,"D":38.0,"step":38.0,"prev_same_step":65.0,"step_accel":-27.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-58.0,"outcome":"LOSS","page":2,"trade_no":7},{"dt":"2026-08-18 11:28:00","update":"PUD","trade_type":"PE","PUD":57308,"PDD":57240,"height":68,"D":-56.0,"step":56.0,"prev_same_step":55.0,"step_accel":1.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":4,"net4":0.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":-42.0,"outcome":"LOSS","page":2,"trade_no":8},{"dt":"2026-08-18 11:38:00","update":"PDD","trade_type":"CE","PUD":57308,"PDD":57224,"height":84,"D":16.0,"step":16.0,"prev_same_step":38.0,"step_accel":-22.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":34.0,"outcome":"PROFIT","page":2,"trade_no":9},{"dt":"2026-08-18 12:44:00","update":"PUD","trade_type":"PE","PUD":57384,"PDD":57224,"height":160,"D":76.0,"step":76.0,"prev_same_step":56.0,"step_accel":20.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.3743478032,"confidence":59.2509141721,"confidence_band":"Moderate","result":-21.0,"outcome":"LOSS","page":2,"trade_no":10},{"dt":"2026-08-18 14:03:00","update":"PDD","trade_type":"CE","PUD":57384,"PDD":57279,"height":105,"D":-55.0,"step":55.0,"prev_same_step":16.0,"step_accel":39.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":2.0,"outcome":"PROFIT","page":2,"trade_no":11},{"dt":"2026-08-18 15:12:00","update":"PUD","trade_type":"PE","PUD":57408,"PDD":57279,"height":129,"D":24.0,"step":24.0,"prev_same_step":76.0,"step_accel":-52.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2528446571,"confidence":56.2876543671,"confidence_band":"Moderate","result":274.0,"outcome":"PROFIT","page":2,"trade_no":12},{"dt":"2026-08-19 09:41:00","update":"PDD","trade_type":"CE","PUD":57408,"PDD":57008,"height":400,"D":271.0,"step":271.0,"prev_same_step":55.0,"step_accel":216.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.3743478032,"confidence":59.2509141721,"confidence_band":"Moderate","result":109.0,"outcome":"PROFIT","page":2,"trade_no":1},{"dt":"2026-08-19 10:17:00","update":"PUD","trade_type":"PE","PUD":57242,"PDD":57008,"height":234,"D":-166.0,"step":166.0,"prev_same_step":24.0,"step_accel":142.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.7102333021,"confidence":67.0452708995,"confidence_band":"High","result":90.0,"outcome":"PROFIT","page":2,"trade_no":2},{"dt":"2026-08-19 11:46:00","update":"PDD","trade_type":"CE","PUD":57242,"PDD":57025,"height":217,"D":-17.0,"step":17.0,"prev_same_step":271.0,"step_accel":-254.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.0794228136,"confidence":48.0154727474,"confidence_band":"Below Avg","result":56.0,"outcome":"PROFIT","page":2,"trade_no":3},{"dt":"2026-08-19 12:02:00","update":"PUD","trade_type":"PE","PUD":57208,"PDD":57025,"height":183,"D":-34.0,"step":34.0,"prev_same_step":166.0,"step_accel":-132.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":2,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":30.0,"outcome":"PROFIT","page":2,"trade_no":4},{"dt":"2026-08-19 13:09:00","update":"PDD","trade_type":"CE","PUD":57208,"PDD":57050,"height":158,"D":-25.0,"step":25.0,"prev_same_step":17.0,"step_accel":8.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":4,"same_in_streak":2,"net4":-4.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-57.0,"outcome":"LOSS","page":2,"trade_no":5},{"dt":"2026-08-19 13:17:00","update":"PUD","trade_type":"PE","PUD":57121,"PDD":57050,"height":71,"D":-87.0,"step":87.0,"prev_same_step":34.0,"step_accel":53.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":5,"same_in_streak":3,"net4":-4.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":-53.0,"outcome":"LOSS","page":2,"trade_no":6},{"dt":"2026-08-19 13:43:00","update":"PDD","trade_type":"CE","PUD":57121,"PDD":57048,"height":73,"D":2.0,"step":2.0,"prev_same_step":25.0,"step_accel":-23.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":11.0,"outcome":"PROFIT","page":2,"trade_no":7},{"dt":"2026-08-19 14:16:00","update":"PUD","trade_type":"PE","PUD":57185,"PDD":57048,"height":137,"D":64.0,"step":64.0,"prev_same_step":87.0,"step_accel":-23.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.1355254259,"confidence":53.3829592922,"confidence_band":"Neutral","result":-51.0,"outcome":"LOSS","page":2,"trade_no":8},{"dt":"2026-08-19 14:33:00","update":"PDD","trade_type":"CE","PUD":57185,"PDD":57110,"height":75,"D":-62.0,"step":62.0,"prev_same_step":2.0,"step_accel":60.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":65.0,"outcome":"PROFIT","page":2,"trade_no":9},{"dt":"2026-08-19 14:37:00","update":"PUD","trade_type":"PE","PUD":57303,"PDD":57110,"height":193,"D":118.0,"step":118.0,"prev_same_step":64.0,"step_accel":54.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2679565851,"confidence":56.6591180985,"confidence_band":"Moderate","result":18.0,"outcome":"PROFIT","page":2,"trade_no":10},{"dt":"2026-08-19 15:29:00","update":"PDD","trade_type":"CE","PUD":57303,"PDD":57157,"height":146,"D":-47.0,"step":47.0,"prev_same_step":62.0,"step_accel":-15.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":298.0,"outcome":"PROFIT","page":2,"trade_no":11},{"dt":"2026-08-20 09:24:00","update":"PUD","trade_type":"PE","PUD":57584,"PDD":57157,"height":427,"D":281.0,"step":281.0,"prev_same_step":118.0,"step_accel":163.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":-57.0,"outcome":"LOSS","page":2,"trade_no":1},{"dt":"2026-08-20 09:28:00","update":"PDD","trade_type":"CE","PUD":57584,"PDD":57511,"height":73,"D":-354.0,"step":354.0,"prev_same_step":47.0,"step_accel":307.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":32.0,"outcome":"PROFIT","page":2,"trade_no":2},{"dt":"2026-08-20 09:50:00","update":"PUD","trade_type":"PE","PUD":57670,"PDD":57511,"height":159,"D":86.0,"step":86.0,"prev_same_step":281.0,"step_accel":-195.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-58.0,"outcome":"LOSS","page":2,"trade_no":3},{"dt":"2026-08-20 09:56:00","update":"PDD","trade_type":"CE","PUD":57670,"PDD":57601,"height":69,"D":-90.0,"step":90.0,"prev_same_step":354.0,"step_accel":-264.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":4,"net4":0.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-36.0,"outcome":"LOSS","page":2,"trade_no":4},{"dt":"2026-08-20 10:36:00","update":"PUD","trade_type":"PE","PUD":57696,"PDD":57601,"height":95,"D":26.0,"step":26.0,"prev_same_step":86.0,"step_accel":-60.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.5156737156,"confidence":37.3864418867,"confidence_band":"Low","result":-55.0,"outcome":"LOSS","page":2,"trade_no":5},{"dt":"2026-08-20 11:00:00","update":"PDD","trade_type":"CE","PUD":57696,"PDD":57621,"height":75,"D":-20.0,"step":20.0,"prev_same_step":90.0,"step_accel":-70.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":5,"net4":0.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-55.0,"outcome":"LOSS","page":2,"trade_no":6},{"dt":"2026-08-20 11:22:00","update":"PUD","trade_type":"PE","PUD":57693,"PDD":57621,"height":72,"D":-3.0,"step":3.0,"prev_same_step":26.0,"step_accel":-23.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":20.0,"outcome":"PROFIT","page":2,"trade_no":7},{"dt":"2026-08-20 12:47:00","update":"PDD","trade_type":"CE","PUD":57693,"PDD":57543,"height":150,"D":78.0,"step":78.0,"prev_same_step":20.0,"step_accel":58.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":2.0,"outcome":"PROFIT","page":2,"trade_no":8},{"dt":"2026-08-20 13:31:00","update":"PUD","trade_type":"PE","PUD":57679,"PDD":57543,"height":136,"D":-14.0,"step":14.0,"prev_same_step":3.0,"step_accel":11.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":0.2762687815,"confidence":56.8631229634,"confidence_band":"Moderate","result":104.0,"outcome":"PROFIT","page":2,"trade_no":9},{"dt":"2026-08-21 09:15:00","update":"PDD","trade_type":"CE","PUD":57679,"PDD":57444,"height":235,"D":99.0,"step":99.0,"prev_same_step":78.0,"step_accel":21.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.2393061749,"confidence":55.9542659906,"confidence_band":"Moderate","result":15.0,"outcome":"PROFIT","page":2,"trade_no":1},{"dt":"2026-08-21 09:20:00","update":"PUD","trade_type":"PE","PUD":57623,"PDD":57444,"height":179,"D":-56.0,"step":56.0,"prev_same_step":14.0,"step_accel":42.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":-35.0,"outcome":"LOSS","page":2,"trade_no":2},{"dt":"2026-08-21 09:29:00","update":"PDD","trade_type":"CE","PUD":57623,"PDD":57494,"height":129,"D":-50.0,"step":50.0,"prev_same_step":99.0,"step_accel":-49.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":142.0,"outcome":"PROFIT","page":2,"trade_no":3},{"dt":"2026-08-21 10:01:00","update":"PUD","trade_type":"PE","PUD":57763,"PDD":57494,"height":269,"D":140.0,"step":140.0,"prev_same_step":56.0,"step_accel":84.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.7654618074,"confidence":68.2538374942,"confidence_band":"High","result":9.0,"outcome":"PROFIT","page":2,"trade_no":4},{"dt":"2026-08-21 10:28:00","update":"PDD","trade_type":"CE","PUD":57763,"PDD":57625,"height":138,"D":-131.0,"step":131.0,"prev_same_step":50.0,"step_accel":81.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-9.0,"outcome":"LOSS","page":2,"trade_no":5},{"dt":"2026-08-21 11:54:00","update":"PUD","trade_type":"PE","PUD":57747,"PDD":57625,"height":122,"D":-16.0,"step":16.0,"prev_same_step":140.0,"step_accel":-124.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":0.0127682983,"confidence":50.3192031202,"confidence_band":"Neutral","result":-14.0,"outcome":"LOSS","page":2,"trade_no":6},{"dt":"2026-08-21 13:09:00","update":"PDD","trade_type":"CE","PUD":57747,"PDD":57632,"height":115,"D":-7.0,"step":7.0,"prev_same_step":131.0,"step_accel":-124.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":3,"net4":-2.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-52.0,"outcome":"LOSS","page":2,"trade_no":7},{"dt":"2026-08-21 13:49:00","update":"PUD","trade_type":"PE","PUD":57709,"PDD":57632,"height":77,"D":-38.0,"step":38.0,"prev_same_step":16.0,"step_accel":22.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":4,"same_in_streak":2,"net4":-4.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":-54.0,"outcome":"LOSS","page":2,"trade_no":8},{"dt":"2026-08-21 15:29:00","update":"PDD","trade_type":"CE","PUD":57709,"PDD":57630,"height":79,"D":2.0,"step":2.0,"prev_same_step":7.0,"step_accel":-5.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":86.0,"outcome":"PROFIT","page":2,"trade_no":9},{"dt":"2026-08-24 09:31:00","update":"PUD","trade_type":"PE","PUD":57852,"PDD":57630,"height":222,"D":143.0,"step":143.0,"prev_same_step":38.0,"step_accel":105.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.8718530255,"confidence":70.5131127715,"confidence_band":"Very High","result":389.0,"outcome":"PROFIT","page":1,"trade_no":1},{"dt":"2026-08-24 11:48:00","update":"PDD","trade_type":"CE","PUD":57852,"PDD":57330,"height":522,"D":300.0,"step":300.0,"prev_same_step":2.0,"step_accel":298.0,"motion_state":"E+Accel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.2010276606,"confidence":44.9911652714,"confidence_band":"Below Avg","result":-38.0,"outcome":"LOSS","page":1,"trade_no":2},{"dt":"2026-08-24 12:29:00","update":"PUD","trade_type":"PE","PUD":57421,"PDD":57330,"height":91,"D":-431.0,"step":431.0,"prev_same_step":143.0,"step_accel":288.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":-0.0448286928,"confidence":48.8794703257,"confidence_band":"Below Avg","result":34.0,"outcome":"PROFIT","page":1,"trade_no":3},{"dt":"2026-08-24 13:21:00","update":"PDD","trade_type":"CE","PUD":57421,"PDD":57260,"height":161,"D":70.0,"step":70.0,"prev_same_step":300.0,"step_accel":-230.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.0344064938,"confidence":49.1399225013,"confidence_band":"Below Avg","result":-6.0,"outcome":"LOSS","page":1,"trade_no":4},{"dt":"2026-08-24 14:16:00","update":"PUD","trade_type":"PE","PUD":57380,"PDD":57260,"height":120,"D":-41.0,"step":41.0,"prev_same_step":431.0,"step_accel":-390.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":0.0127682983,"confidence":50.3192031202,"confidence_band":"Neutral","result":-51.0,"outcome":"LOSS","page":1,"trade_no":5},{"dt":"2026-08-24 14:30:00","update":"PDD","trade_type":"CE","PUD":57380,"PDD":57305,"height":75,"D":-45.0,"step":45.0,"prev_same_step":70.0,"step_accel":-25.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":94.0,"outcome":"PROFIT","page":1,"trade_no":6},{"dt":"2026-08-25 09:15:00","update":"PUD","trade_type":"PE","PUD":57526,"PDD":57305,"height":221,"D":146.0,"step":146.0,"prev_same_step":41.0,"step_accel":105.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.7654618074,"confidence":68.2538374942,"confidence_band":"High","result":112.0,"outcome":"PROFIT","page":1,"trade_no":1},{"dt":"2026-08-25 09:18:00","update":"PDD","trade_type":"CE","PUD":57526,"PDD":57288,"height":238,"D":17.0,"step":17.0,"prev_same_step":45.0,"step_accel":-28.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0433343141,"confidence":51.0831883506,"confidence_band":"Neutral","result":141.0,"outcome":"PROFIT","page":1,"trade_no":2},{"dt":"2026-08-25 09:22:00","update":"PUD","trade_type":"PE","PUD":57555,"PDD":57288,"height":267,"D":29.0,"step":29.0,"prev_same_step":146.0,"step_accel":-117.0,"motion_state":"E+Decel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.1677246684,"confidence":54.1833143726,"confidence_band":"Neutral","result":-61.0,"outcome":"LOSS","page":1,"trade_no":3},{"dt":"2026-08-25 09:27:00","update":"PDD","trade_type":"CE","PUD":57555,"PDD":57489,"height":66,"D":-201.0,"step":201.0,"prev_same_step":17.0,"step_accel":184.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":0.2127280798,"confidence":55.2982368517,"confidence_band":"Moderate","result":5.0,"outcome":"PROFIT","page":1,"trade_no":4},{"dt":"2026-08-25 09:37:00","update":"PUD","trade_type":"PE","PUD":57623,"PDD":57489,"height":134,"D":68.0,"step":68.0,"prev_same_step":29.0,"step_accel":39.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.555207736,"confidence":63.5342979434,"confidence_band":"Good","result":112.0,"outcome":"PROFIT","page":1,"trade_no":5},{"dt":"2026-08-25 10:33:00","update":"PDD","trade_type":"CE","PUD":57623,"PDD":57382,"height":241,"D":107.0,"step":107.0,"prev_same_step":201.0,"step_accel":-94.0,"motion_state":"E+Decel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2670447633,"confidence":56.6367255317,"confidence_band":"Moderate","result":74.0,"outcome":"PROFIT","page":1,"trade_no":6},{"dt":"2026-08-25 10:59:00","update":"PUD","trade_type":"PE","PUD":57584,"PDD":57382,"height":202,"D":-39.0,"step":39.0,"prev_same_step":68.0,"step_accel":-29.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.4467328189,"confidence":60.9862152164,"confidence_band":"Good","result":66.0,"outcome":"PROFIT","page":1,"trade_no":7},{"dt":"2026-08-25 11:56:00","update":"PDD","trade_type":"CE","PUD":57584,"PDD":57390,"height":194,"D":-8.0,"step":8.0,"prev_same_step":107.0,"step_accel":-99.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":0.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":-34.0,"outcome":"LOSS","page":1,"trade_no":8},{"dt":"2026-08-25 12:27:00","update":"PUD","trade_type":"PE","PUD":57489,"PDD":57390,"height":99,"D":-95.0,"step":95.0,"prev_same_step":39.0,"step_accel":56.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":3,"same_in_streak":2,"net4":-2.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":91.0,"outcome":"PROFIT","page":1,"trade_no":9},{"dt":"2026-08-25 13:41:00","update":"PDD","trade_type":"CE","PUD":57489,"PDD":57260,"height":229,"D":130.0,"step":130.0,"prev_same_step":8.0,"step_accel":122.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":0.2393061749,"confidence":55.9542659906,"confidence_band":"Moderate","result":14.0,"outcome":"PROFIT","page":1,"trade_no":10},{"dt":"2026-08-25 14:01:00","update":"PUD","trade_type":"PE","PUD":57412,"PDD":57260,"height":152,"D":-77.0,"step":77.0,"prev_same_step":95.0,"step_accel":-18.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":-2.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-30.0,"outcome":"LOSS","page":1,"trade_no":11},{"dt":"2026-08-25 14:20:00","update":"PDD","trade_type":"CE","PUD":57412,"PDD":57310,"height":102,"D":-50.0,"step":50.0,"prev_same_step":130.0,"step_accel":-80.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":40.0,"outcome":"PROFIT","page":1,"trade_no":12},{"dt":"2026-08-25 15:08:00","update":"PUD","trade_type":"PE","PUD":57477,"PDD":57310,"height":167,"D":65.0,"step":65.0,"prev_same_step":77.0,"step_accel":-12.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-57.0,"outcome":"LOSS","page":1,"trade_no":13},{"dt":"2026-08-25 15:28:00","update":"PDD","trade_type":"CE","PUD":57477,"PDD":57407,"height":70,"D":-97.0,"step":97.0,"prev_same_step":50.0,"step_accel":47.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":317.0,"outcome":"PROFIT","page":1,"trade_no":14},{"dt":"2026-08-26 09:18:00","update":"PUD","trade_type":"PE","PUD":57853,"PDD":57407,"height":446,"D":376.0,"step":376.0,"prev_same_step":65.0,"step_accel":311.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":-53.0,"outcome":"LOSS","page":1,"trade_no":1},{"dt":"2026-08-26 09:21:00","update":"PDD","trade_type":"CE","PUD":57853,"PDD":57775,"height":78,"D":-368.0,"step":368.0,"prev_same_step":97.0,"step_accel":271.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":-0.2318240113,"confidence":44.2302167553,"confidence_band":"Below Avg","result":83.0,"outcome":"PROFIT","page":1,"trade_no":2},{"dt":"2026-08-26 10:07:00","update":"PUD","trade_type":"PE","PUD":57986,"PDD":57775,"height":211,"D":133.0,"step":133.0,"prev_same_step":376.0,"step_accel":-243.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.4630987285,"confidence":61.3749022746,"confidence_band":"Good","result":32.0,"outcome":"PROFIT","page":1,"trade_no":3},{"dt":"2026-08-26 10:28:00","update":"PDD","trade_type":"CE","PUD":57986,"PDD":57826,"height":160,"D":-51.0,"step":51.0,"prev_same_step":368.0,"step_accel":-317.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":4,"net4":0.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":15.0,"outcome":"PROFIT","page":1,"trade_no":4},{"dt":"2026-08-26 10:54:00","update":"PUD","trade_type":"PE","PUD":57969,"PDD":57826,"height":143,"D":-17.0,"step":17.0,"prev_same_step":133.0,"step_accel":-116.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":0.0127682983,"confidence":50.3192031202,"confidence_band":"Neutral","result":-19.0,"outcome":"LOSS","page":1,"trade_no":5},{"dt":"2026-08-26 11:10:00","update":"PDD","trade_type":"CE","PUD":57969,"PDD":57859,"height":110,"D":-33.0,"step":33.0,"prev_same_step":51.0,"step_accel":-18.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":3,"same_in_streak":5,"net4":-2.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-30.0,"outcome":"LOSS","page":1,"trade_no":6},{"dt":"2026-08-26 11:48:00","update":"PUD","trade_type":"PE","PUD":57958,"PDD":57859,"height":99,"D":-11.0,"step":11.0,"prev_same_step":17.0,"step_accel":-6.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":4,"same_in_streak":2,"net4":-4.0,"model_z":-0.5320396253,"confidence":37.0041303589,"confidence_band":"Low","result":-34.0,"outcome":"LOSS","page":1,"trade_no":7},{"dt":"2026-08-26 12:14:00","update":"PDD","trade_type":"CE","PUD":57958,"PDD":57864,"height":94,"D":-5.0,"step":5.0,"prev_same_step":33.0,"step_accel":-28.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":5,"same_in_streak":6,"net4":-4.0,"model_z":-0.4953244945,"confidence":37.8640057412,"confidence_band":"Low","result":-24.0,"outcome":"LOSS","page":1,"trade_no":8},{"dt":"2026-08-26 13:16:00","update":"PUD","trade_type":"PE","PUD":57970,"PDD":57864,"height":106,"D":12.0,"step":12.0,"prev_same_step":11.0,"step_accel":1.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":-2.0,"model_z":0.3314972868,"confidence":58.2123645123,"confidence_band":"Moderate","result":0.0,"outcome":"LOSS","page":1,"trade_no":9},{"dt":"2026-08-26 14:48:00","update":"PDD","trade_type":"CE","PUD":57970,"PDD":57835,"height":135,"D":29.0,"step":29.0,"prev_same_step":5.0,"step_accel":24.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.150637354,"confidence":53.7588287118,"confidence_band":"Neutral","result":-26.0,"outcome":"LOSS","page":1,"trade_no":10},{"dt":"2026-08-26 15:06:00","update":"PUD","trade_type":"PE","PUD":57942,"PDD":57835,"height":107,"D":-28.0,"step":28.0,"prev_same_step":12.0,"step_accel":16.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":0.2762687815,"confidence":56.8631229634,"confidence_band":"Moderate","result":31.0,"outcome":"PROFIT","page":1,"trade_no":11},{"dt":"2026-08-27 09:15:00","update":"PDD","trade_type":"CE","PUD":57942,"PDD":57784,"height":158,"D":51.0,"step":51.0,"prev_same_step":29.0,"step_accel":22.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2679565851,"confidence":56.6591180985,"confidence_band":"Moderate","result":3.0,"outcome":"PROFIT","page":1,"trade_no":1},{"dt":"2026-08-27 09:17:00","update":"PUD","trade_type":"PE","PUD":57990,"PDD":57784,"height":206,"D":48.0,"step":48.0,"prev_same_step":28.0,"step_accel":20.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":1.0955634747,"confidence":74.9427911782,"confidence_band":"Very High","result":6.0,"outcome":"PROFIT","page":1,"trade_no":2},{"dt":"2026-08-27 09:18:00","update":"PDD","trade_type":"CE","PUD":57990,"PDD":57779,"height":211,"D":5.0,"step":5.0,"prev_same_step":51.0,"step_accel":-46.0,"motion_state":"E+Decel","exp_streak":3,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.3584309641,"confidence":41.133943827,"confidence_band":"Below Avg","result":-37.0,"outcome":"LOSS","page":1,"trade_no":3},{"dt":"2026-08-27 09:28:00","update":"PUD","trade_type":"PE","PUD":57872,"PDD":57779,"height":93,"D":-118.0,"step":118.0,"prev_same_step":48.0,"step_accel":70.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":2.0,"model_z":-0.0448286928,"confidence":48.8794703257,"confidence_band":"Below Avg","result":-9.0,"outcome":"LOSS","page":1,"trade_no":4},{"dt":"2026-08-27 09:34:00","update":"PDD","trade_type":"CE","PUD":57872,"PDD":57753,"height":119,"D":26.0,"step":26.0,"prev_same_step":5.0,"step_accel":21.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.2679565851,"confidence":56.6591180985,"confidence_band":"Moderate","result":-17.0,"outcome":"LOSS","page":1,"trade_no":5},{"dt":"2026-08-27 10:14:00","update":"PUD","trade_type":"PE","PUD":57866,"PDD":57753,"height":113,"D":-6.0,"step":6.0,"prev_same_step":118.0,"step_accel":-112.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":0.0,"model_z":0.0127682983,"confidence":50.3192031202,"confidence_band":"Neutral","result":151.0,"outcome":"PROFIT","page":1,"trade_no":6},{"dt":"2026-08-27 12:55:00","update":"PDD","trade_type":"CE","PUD":57866,"PDD":57583,"height":283,"D":170.0,"step":170.0,"prev_same_step":26.0,"step_accel":144.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.2393061749,"confidence":55.9542659906,"confidence_band":"Moderate","result":75.0,"outcome":"PROFIT","page":1,"trade_no":7},{"dt":"2026-08-27 13:28:00","update":"PUD","trade_type":"PE","PUD":57788,"PDD":57583,"height":205,"D":-78.0,"step":78.0,"prev_same_step":6.0,"step_accel":72.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":3,"net4":0.0,"model_z":0.4893916602,"confidence":61.9963112575,"confidence_band":"Good","result":110.0,"outcome":"PROFIT","page":1,"trade_no":8},{"dt":"2026-08-27 14:19:00","update":"PDD","trade_type":"CE","PUD":57788,"PDD":57551,"height":237,"D":32.0,"step":32.0,"prev_same_step":170.0,"step_accel":-138.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.063056904,"confidence":48.4240995369,"confidence_band":"Below Avg","result":-27.0,"outcome":"LOSS","page":1,"trade_no":9},{"dt":"2026-08-27 14:32:00","update":"PUD","trade_type":"PE","PUD":57651,"PDD":57551,"height":100,"D":-137.0,"step":137.0,"prev_same_step":78.0,"step_accel":59.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":4,"net4":0.0,"model_z":-0.4893807839,"confidence":38.0039449986,"confidence_band":"Low","result":249.0,"outcome":"PROFIT","page":1,"trade_no":10},{"dt":"2026-08-28 09:24:00","update":"PDD","trade_type":"CE","PUD":57651,"PDD":57274,"height":377,"D":277.0,"step":277.0,"prev_same_step":32.0,"step_accel":245.0,"motion_state":"E+Accel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0442461359,"confidence":51.1059729711,"confidence_band":"Neutral","result":74.0,"outcome":"PROFIT","page":1,"trade_no":1},{"dt":"2026-08-28 09:30:00","update":"PUD","trade_type":"PE","PUD":57478,"PDD":57274,"height":204,"D":-173.0,"step":173.0,"prev_same_step":137.0,"step_accel":36.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":5,"net4":0.0,"model_z":0.4893916602,"confidence":61.9963112575,"confidence_band":"Good","result":-12.0,"outcome":"LOSS","page":1,"trade_no":2},{"dt":"2026-08-28 09:40:00","update":"PDD","trade_type":"CE","PUD":57478,"PDD":57359,"height":119,"D":-85.0,"step":85.0,"prev_same_step":277.0,"step_accel":-192.0,"motion_state":"C+Decel","exp_streak":0,"comp_streak":2,"same_in_streak":1,"net4":-2.0,"model_z":-0.2744828526,"confidence":43.1806893997,"confidence_band":"Below Avg","result":66.0,"outcome":"PROFIT","page":1,"trade_no":3},{"dt":"2026-08-28 10:35:00","update":"PUD","trade_type":"PE","PUD":57553,"PDD":57359,"height":194,"D":75.0,"step":75.0,"prev_same_step":173.0,"step_accel":-98.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":-0.258116943,"confidence":43.5826661526,"confidence_band":"Below Avg","result":-44.0,"outcome":"LOSS","page":1,"trade_no":4},{"dt":"2026-08-28 10:40:00","update":"PDD","trade_type":"CE","PUD":57553,"PDD":57466,"height":87,"D":-107.0,"step":107.0,"prev_same_step":85.0,"step_accel":22.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":2,"net4":-2.0,"model_z":-0.0109823694,"confidence":49.7254435238,"confidence_band":"Below Avg","result":-9.0,"outcome":"LOSS","page":1,"trade_no":5},{"dt":"2026-08-28 11:07:00","update":"PUD","trade_type":"PE","PUD":57589,"PDD":57466,"height":123,"D":36.0,"step":36.0,"prev_same_step":75.0,"step_accel":-39.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":0.0,"model_z":0.0291342079,"confidence":50.7283036825,"confidence_band":"Neutral","result":122.0,"outcome":"PROFIT","page":1,"trade_no":6},{"dt":"2026-08-28 12:46:00","update":"PDD","trade_type":"CE","PUD":57589,"PDD":57339,"height":250,"D":127.0,"step":127.0,"prev_same_step":107.0,"step_accel":20.0,"motion_state":"E+Accel","exp_streak":2,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":0.5694078422,"confidence":63.8626526607,"confidence_band":"Good","result":-43.0,"outcome":"LOSS","page":1,"trade_no":7},{"dt":"2026-08-28 12:59:00","update":"PUD","trade_type":"PE","PUD":57422,"PDD":57339,"height":83,"D":-167.0,"step":167.0,"prev_same_step":36.0,"step_accel":131.0,"motion_state":"C+Accel","exp_streak":0,"comp_streak":1,"same_in_streak":1,"net4":0.0,"model_z":-0.2685391421,"confidence":43.326576862,"confidence_band":"Below Avg","result":-18.0,"outcome":"LOSS","page":1,"trade_no":8},{"dt":"2026-08-28 13:37:00","update":"PDD","trade_type":"CE","PUD":57422,"PDD":57314,"height":108,"D":25.0,"step":25.0,"prev_same_step":127.0,"step_accel":-102.0,"motion_state":"E+Decel","exp_streak":1,"comp_streak":0,"same_in_streak":0,"net4":2.0,"model_z":-0.0344064938,"confidence":49.1399225013,"confidence_band":"Below Avg","result":null,"outcome":null,"page":1,"trade_no":9}]</script>
+<script>
+(function(){
+"use strict";
+const ORIGINAL=JSON.parse(document.getElementById("embeddedData").textContent);
+const S={raw:ORIGINAL,rows:[],filtered:[],fields:{},theme:"light"};
+const $=id=>document.getElementById(id);
+const aliases={
+ dt:["dt","datetime","timestamp","confirmed","date_time","date","time"],
+ result:["result","pnl","points","trade_result","profit_loss","net_points"],
+ direction:["direction","trade_type","trade","side","signal","type","next_trade"],
+ confidence:["confidence","confidence_score","model_score","score","probability","conf"],
+ pud:["pud"],pdd:["pdd"],height:["height","pud_pdd_height","range_height","h"],
+ update:["update","update_type","structure"], motion:["motion_state","pattern","motion"],
+ exp:["exp_streak","expansion_streak"],comp:["comp_streak","compression_streak"],
+ inward:["same_in_streak","same_side_inward_streak"],net4:["net4","last4_balance"],
+ step:["step","same_side_distance"],prevStep:["prev_same_step","previous_same_side_distance"],
+ accel:["step_accel","distance_accel","acceleration"], tradeNo:["trade_no","trade_number"]
+};
+const fmt=(v,d=1)=>Number.isFinite(v)?v.toLocaleString(undefined,{maximumFractionDigits:d,minimumFractionDigits:d}):"—";
+const sign=(v,d=1)=>Number.isFinite(v)?(v>0?"+":"")+fmt(v,d):"—";
+const pct=(v,d=1)=>Number.isFinite(v)?fmt(v*100,d)+"%":"—";
+const cls=v=>v>0?"good":v<0?"bad":"";
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const mean=a=>a.length?sum(a)/a.length:0;
+const median=a=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y),m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
+const quantile=(a,q)=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y),p=(b.length-1)*q,lo=Math.floor(p),hi=Math.ceil(p);return b[lo]+(b[hi]-b[lo])*(p-lo)};
+function norm(k){return String(k).trim().toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"")}
+function num(v){if(v===null||v===undefined||v==="")return NaN;const m=String(v).replace(/,/g,"").match(/[-+]?\d*\.?\d+/);return m?Number(m[0]):NaN}
+function direction(v){const s=String(v??"").toUpperCase();if(s.includes("CE")||s.includes("UP")||s.includes("LONG")||s.includes("▲"))return"UP";if(s.includes("PE")||s.includes("DOWN")||s.includes("SHORT")||s.includes("▼"))return"DOWN";return s||"—"}
+function detect(raw){const keys=[...new Set(raw.flatMap(r=>Object.keys(r)))],map=new Map(keys.map(k=>[norm(k),k])),f={};for(const [concept,list] of Object.entries(aliases)){for(const a of list){if(map.has(a)){f[concept]=map.get(a);break}}}f.all=keys;return f}
+function parseDate(v,i){const d=new Date(String(v??""));return isNaN(d)?new Date(2000,0,1,0,i):d}
+function standardize(raw){
+ S.fields=detect(raw);const f=S.fields;
+ return raw.map((r,i)=>{
+   let pud=num(r[f.pud]),pdd=num(r[f.pdd]),h=num(r[f.height]);
+   if(!Number.isFinite(h)&&Number.isFinite(pud)&&Number.isFinite(pdd))h=Math.abs(pud-pdd);
+   return {...r,__i:i+1,__date:parseDate(r[f.dt],i),__result:num(r[f.result]),__direction:direction(r[f.direction]),
+     __confidence:num(r[f.confidence]),__pud:pud,__pdd:pdd,__height:h,__update:String(r[f.update]??"").toUpperCase(),
+     __motion:String(r[f.motion]??""),__exp:num(r[f.exp]),__comp:num(r[f.comp]),__inward:num(r[f.inward]),__net4:num(r[f.net4]),
+     __step:num(r[f.step]),__prevStep:num(r[f.prevStep]),__accel:num(r[f.accel]),__tradeNo:num(r[f.tradeNo])};
+ }).sort((a,b)=>a.__date-b.__date)
+}
+function completed(rows){return rows.filter(r=>Number.isFinite(r.__result))}
+function applyFilters(){
+ let rows=S.rows.slice();
+ const dir=$("directionFilter").value,out=$("outcomeFilter").value,month=$("monthFilter").value,minc=Number($("confidenceMin").value)||0,q=$("searchInput").value.toLowerCase();
+ const from=$("fromDate").value?new Date($("fromDate").value+"T00:00:00"):null;
+ const to=$("toDate").value?new Date($("toDate").value+"T23:59:59"):null;
+ const minPts=$("minPoints").value===""?null:Number($("minPoints").value);
+ const maxPts=$("maxPoints").value===""?null:Number($("maxPoints").value);
+ const upd=$("updateFilter").value,motion=$("motionFilter").value;
+ const maxc=$("confidenceMax").value===""?null:Number($("confidenceMax").value);
+ rows=rows.filter(r=>{
+   const mon=r.__date.getFullYear()+"-"+String(r.__date.getMonth()+1).padStart(2,"0");
+   const outcome=r.__result>0?"WIN":r.__result<0?"LOSS":r.__result===0?"FLAT":"OPEN";
+   return (dir==="ALL"||r.__direction===dir)
+     &&(out==="ALL"||outcome===out)
+     &&(month==="ALL"||mon===month)
+     &&(!Number.isFinite(r.__confidence)||r.__confidence>=minc)
+     &&(maxc===null||!Number.isFinite(r.__confidence)||r.__confidence<=maxc)
+     &&(!from||r.__date>=from)&&(!to||r.__date<=to)
+     &&(minPts===null||!Number.isFinite(r.__result)||r.__result>=minPts)
+     &&(maxPts===null||!Number.isFinite(r.__result)||r.__result<=maxPts)
+     &&(upd==="ALL"||r.__update===upd)
+     &&(motion==="ALL"||r.__motion===motion)
+     &&(!q||JSON.stringify(r).toLowerCase().includes(q));
+ });
+ S.filtered=rows;activeAdvancedFilterCount();renderAll()
+}
+function analysis(rows){
+ const c=completed(rows),res=c.map(r=>r.__result),wins=res.filter(x=>x>0),losses=res.filter(x=>x<0),flats=res.filter(x=>x===0);
+ const grossP=sum(wins),grossL=Math.abs(sum(losses)),net=sum(res),avg=mean(res),avgW=mean(wins),avgL=Math.abs(mean(losses)),wr=c.length?wins.length/c.length:0;
+ let eq=0,peak=0,maxDD=0,eqs=[],dds=[],curW=0,curL=0,maxW=0,maxL=0,ddStart=0,maxDdEnd=0,maxDdStart=0,peakIdx=0;
+ c.forEach((r,i)=>{eq+=r.__result;eqs.push(eq);if(eq>=peak){peak=eq;peakIdx=i}const dd=eq-peak;dds.push(dd);if(dd<maxDD){maxDD=dd;maxDdEnd=i;maxDdStart=peakIdx}
+   if(r.__result>0){curW++;curL=0}else if(r.__result<0){curL++;curW=0}else{curW=curL=0}maxW=Math.max(maxW,curW);maxL=Math.max(maxL,curL)});
+ const sd=Math.sqrt(mean(res.map(x=>(x-avg)**2))),pf=grossL?grossP/grossL:0,payoff=avgL?avgW/avgL:0,recovery=Math.abs(maxDD)?net/Math.abs(maxDD):0;
+ return {c,res,wins,losses,flats,grossP,grossL,net,avg,avgW,avgL,wr,eqs,dds,maxDD,maxDdStart,maxDdEnd,maxW,maxL,sd,pf,payoff,recovery,median:median(res),
+   breakeven:avgW+avgL?avgL/(avgW+avgL):0,best:res.length?Math.max(...res):0,worst:res.length?Math.min(...res):0};
+}
+function group(rows,key){const m=new Map();rows.forEach(r=>{const k=key(r);if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return m}
+function lite(rows){const a=analysis(rows);return {n:a.c.length,net:a.net,avg:a.avg,wr:a.wr,pf:a.pf,best:a.best,worst:a.worst,conf:mean(a.c.map(r=>r.__confidence).filter(Number.isFinite))}}
+function kpi(label,value,note,klass="",tone=""){return `<div class="card kpi s2 ${tone}"><div class="kpi-label">${label}</div><div class="kpi-value ${klass}">${value}</div><div class="kpi-note">${note}</div></div>`}
+function stat(label,val,klass=""){return `<div class="stat"><span>${label}</span><span class="${klass}">${val}</span></div>`}
+function fact(value,label,meta="",klass=""){return `<div class="fact"><strong class="${klass}">${value}</strong><span>${label}</span><div class="meta">${meta}</div></div>`}
+function table(headers,rows){return `<thead><tr>${headers.map((x,i)=>`<th data-sortable="1" data-col="${i}">${x}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}</tbody>`}
+function bars(el,items,mode="net"){
+ if(!items.length){el.innerHTML="<div class='story'>No data.</div>";return}
+ const mx=Math.max(...items.map(x=>Math.abs(x.value)),1);
+ el.innerHTML=`<div class="barlist">${items.map(x=>{
+   const bh=Math.max(2,Math.abs(x.value)/mx*145);
+   const valueClass=x.value>0?"pos":x.value<0?"neg":"";
+   const display=mode==="positive"?fmt(x.value,1)+"%":sign(x.value,1);
+   return `<div class="baritem" style="--bh:${bh}px">
+     <div class="barvalue ${valueClass}">${display}</div>
+     <div class="bar ${x.value<0?"neg":x.value>0&&mode==="positive"?"good":""}" style="height:${bh}px"></div>
+     <div class="barlabel">${x.label}</div>
+   </div>`;
+ }).join("")}</div>`;
+}
+function lineChart(id,data,color="#2f80ed",zero=true){
+ const c=$(id),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1,w=c.clientWidth||500,h=c.clientHeight||220;c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);
+ const css=getComputedStyle(document.body),bg=css.getPropertyValue("--chart").trim(),grid=css.getPropertyValue("--line").trim(),muted=css.getPropertyValue("--muted").trim(),ink=css.getPropertyValue("--ink").trim();
+ ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);if(!data.length)return;
+ let min=Math.min(...data),max=Math.max(...data);if(zero){min=Math.min(min,0);max=Math.max(max,0)}const range=max-min||1,pad=25;
+ ctx.strokeStyle=grid;ctx.lineWidth=1;for(let i=0;i<5;i++){const y=pad+(h-2*pad)*i/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad,y);ctx.stroke()}
+ const points=data.map((v,i)=>({v,x:pad+(w-2*pad)*(i/Math.max(1,data.length-1)),y:h-pad-(v-min)/range*(h-2*pad)}));
+ ctx.strokeStyle=color;ctx.lineWidth=1.7;ctx.beginPath();points.forEach((p,i)=>{i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();
+
+ // Always-visible statistical labels. For long series, label sampled points plus min/max/last
+ // so the graph remains readable instead of printing 800+ overlapping values.
+ const labelIndexes=new Set();
+ const step=data.length<=24?1:Math.max(1,Math.ceil(data.length/10));
+ for(let i=0;i<data.length;i+=step)labelIndexes.add(i);
+ labelIndexes.add(data.length-1);
+ labelIndexes.add(data.indexOf(Math.max(...data)));
+ labelIndexes.add(data.indexOf(Math.min(...data)));
+
+ ctx.font=`700 ${Math.max(7,8*appFontScale)}px Plus Jakarta Sans`;ctx.textAlign="center";ctx.textBaseline="bottom";
+ [...labelIndexes].sort((a,b)=>a-b).forEach(i=>{
+   const p=points[i]; if(!p)return;
+   ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,2.4,0,Math.PI*2);ctx.fill();
+   const label=fmt(p.v,1);
+   const tw=ctx.measureText(label).width+6;
+   let ly=p.y-6;
+   if(ly<13)ly=p.y+15;
+   ctx.fillStyle=bg;ctx.fillRect(p.x-tw/2,ly-9,tw,11);
+   ctx.fillStyle=ink;ctx.fillText(label,p.x,ly);
+ });
+ ctx.textAlign="left";ctx.textBaseline="alphabetic";ctx.fillStyle=muted;ctx.font=`${Math.max(8,9*appFontScale)}px Plus Jakarta Sans`;ctx.fillText(fmt(max,0),3,12);ctx.fillText(fmt(min,0),3,h-5)
+}
+function histogram(id,arr){
+ const c=$(id),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1,w=c.clientWidth||500,h=c.clientHeight||220;c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);
+ const css=getComputedStyle(document.body),bg=css.getPropertyValue("--chart").trim(),red=css.getPropertyValue("--red").trim(),blue=css.getPropertyValue("--blue").trim(),muted=css.getPropertyValue("--muted").trim(),ink=css.getPropertyValue("--ink").trim();
+ ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);if(!arr.length)return;const bins=18,min=Math.min(...arr),max=Math.max(...arr),range=max-min||1,counts=Array(bins).fill(0);
+ arr.forEach(v=>counts[Math.min(bins-1,Math.floor((v-min)/range*bins))]++);const peak=Math.max(...counts,1),bw=w/bins;
+ ctx.font=`700 ${Math.max(6,7*appFontScale)}px Plus Jakarta Sans`;ctx.textAlign="center";
+ counts.forEach((n,i)=>{
+   const center=min+range*(i+.5)/bins;ctx.fillStyle=center>=0?blue:red;
+   const bh=n/peak*(h-42);const x=i*bw+2,y=h-bh-18;ctx.fillRect(x,y,bw-4,bh);
+   if(n>0){ctx.fillStyle=ink;ctx.fillText(String(n),x+(bw-4)/2,Math.max(9,y-3))}
+ });
+ ctx.textAlign="left";ctx.fillStyle=muted;ctx.font=`${Math.max(8,9*appFontScale)}px Plus Jakarta Sans`;ctx.fillText(fmt(min,0),3,h-3);ctx.fillText(fmt(max,0),w-42,h-3)
+}
+function renderExecutive(a){
+ $("kpiGrid").innerHTML=[
+   kpi("Net Points",sign(a.net,0),`${a.c.length} completed trades`,cls(a.net),a.net>0?"green":"red"),
+   kpi("Win Rate",pct(a.wr),`${a.wins.length} wins · ${a.losses.length} losses`,a.wr>=.5?"good":"warn"),
+   kpi("Profit Factor",fmt(a.pf,2),"Gross profit ÷ gross loss",a.pf>=1.5?"good":a.pf>=1?"warn":"bad"),
+   kpi("Expectancy",sign(a.avg,1),"Average points per trade",cls(a.avg)),
+   kpi("Payoff Ratio",fmt(a.payoff,2)+"×","Average win ÷ average loss",a.payoff>=2?"good":""),
+   kpi("Max Drawdown",sign(a.maxDD,0),"Peak-to-trough points","bad","red"),
+   kpi("Average Win",sign(a.avgW,1),"Winning trades","good","green"),
+   kpi("Average Loss","-"+fmt(a.avgL,1),"Losing trades","bad","red"),
+   kpi("Median Trade",sign(a.median,1),"Typical middle outcome",cls(a.median)),
+   kpi("Recovery Factor",fmt(a.recovery,2),"Net points ÷ max drawdown",a.recovery>=2?"good":""),
+   kpi("Best Trade",sign(a.best,0),"Largest single winner","good","green"),
+   kpi("Worst Trade",sign(a.worst,0),"Largest single loss","bad","red")
+ ].join("");
+ const dates=group(a.c,r=>r.__date.toISOString().slice(0,10)),daily=[...dates].map(([k,v])=>({k,...lite(v)})),bestDay=daily.sort((x,y)=>y.net-x.net)[0],worstDay=[...daily].sort((x,y)=>x.net-y.net)[0];
+ const hourly=[...group(a.c,r=>r.__date.getHours())].map(([k,v])=>({k,...lite(v)})),bestHour=hourly.sort((x,y)=>y.avg-x.avg)[0];
+ const topGross=[...a.wins].sort((x,y)=>y-x).slice(0,10),topShare=a.grossP?sum(topGross)/a.grossP:0;
+ $("factGrid").innerHTML=[
+   fact(bestDay?sign(bestDay.net,0):"—","Best trading day",bestDay?bestDay.k:"","good"),
+   fact(worstDay?sign(worstDay.net,0):"—","Worst trading day",worstDay?worstDay.k:"","bad"),
+   fact(bestHour?String(bestHour.k).padStart(2,"0")+":00":"—","Best average hour",bestHour?`${sign(bestHour.avg,1)} pts/trade · ${pct(bestHour.wr)}`:"","info"),
+   fact(pct(daily.filter(x=>x.net>0).length/Math.max(1,daily.length)),"Profitable trading days",`${daily.filter(x=>x.net>0).length} of ${daily.length} days`,"good"),
+   fact(pct(topShare),"Gross profit from top 10 winners","Shows dependence on large winners","warn"),
+   fact(fmt(a.sd,1),"Trade-result volatility","Standard deviation of points","")
+ ].join("");
+ $("coreStats").innerHTML=[stat("Gross profit",sign(a.grossP,0),"good"),stat("Gross loss","-"+fmt(a.grossL,0),"bad"),stat("Break-even win rate",pct(a.breakeven)),stat("Actual win rate",pct(a.wr)),stat("Max win streak",a.maxW),stat("Max loss streak",a.maxL),stat("Std deviation",fmt(a.sd,1)),stat("Flat trades",a.flats.length)].join("");
+ const edge=a.pf>=1.5?"The historical edge is strong on payoff, not on hit-rate.":a.pf>=1?"The historical edge is positive but thin.":"The current filtered history is negative.";
+ $("story").innerHTML=`<strong>${edge}</strong><div class="callout">The system wins ${pct(a.wr)} of completed trades, but the average winner is <b>${fmt(a.payoff,2)}×</b> the average loser. That asymmetry is the main engine behind <b class="${cls(a.net)}">${sign(a.net,0)} net points</b>.</div>
+ <p>Median trade is <b>${sign(a.median,1)}</b>, which means many trades are small or negative while a smaller number of large winners drive the equity curve. The current max drawdown is <b>${sign(a.maxDD,0)} pts</b>.</p>`;
+ lineChart("equityChart",a.eqs)
+}
+function renderDate(a){
+ const g=group(a.c,r=>r.__date.toISOString().slice(0,10)),daily=[...g].map(([date,v])=>({date,...lite(v),wins:completed(v).filter(r=>r.__result>0).length,losses:completed(v).filter(r=>r.__result<0).length})).sort((x,y)=>x.date.localeCompare(y.date));
+ const best=[...daily].sort((x,y)=>y.net-x.net)[0],worst=[...daily].sort((x,y)=>x.net-y.net)[0],positive=daily.filter(x=>x.net>0);
+ $("dateFacts").innerHTML=[fact(best?sign(best.net,0):"—","Best day",best?.date||"","good"),fact(worst?sign(worst.net,0):"—","Worst day",worst?.date||"","bad"),fact(pct(positive.length/Math.max(1,daily.length)),"Positive days",`${positive.length} / ${daily.length}`,"good")].join("");
+ const wkOrder=["Monday","Tuesday","Wednesday","Thursday","Friday"],wkg=group(a.c,r=>r.__date.toLocaleDateString("en-US",{weekday:"long"}));
+ bars($("weekdayBars"),wkOrder.filter(k=>wkg.has(k)).map(k=>({label:k.slice(0,3),value:lite(wkg.get(k)).avg})));
+ const mg=group(a.c,r=>r.__date.getFullYear()+"-"+String(r.__date.getMonth()+1).padStart(2,"0"));
+ bars($("monthBars"),[...mg].map(([k,v])=>({label:k,value:lite(v).net})));
+ $("dailyTable").innerHTML=table(["Date","Trades","Wins","Losses","Win %","Net pts","Avg","Best","Worst","Avg Conf"],daily.slice().reverse().map(x=>[x.date,x.n,x.wins,x.losses,pct(x.wr),`<b class="${cls(x.net)}">${sign(x.net,0)}</b>`,sign(x.avg,1),`<span class="good">${sign(x.best,0)}</span>`,`<span class="bad">${sign(x.worst,0)}</span>`,Number.isFinite(x.conf)?fmt(x.conf,1)+"%":"—"]))
+}
+function sessionName(h,m){const t=h*60+m;if(t<600)return"Open 09:15–10:00";if(t<690)return"Morning 10:00–11:30";if(t<810)return"Midday 11:30–13:30";if(t<900)return"Afternoon 13:30–15:00";return"Close 15:00+"}
+function renderTime(a){
+ const hg=group(a.c,r=>r.__date.getHours()),hours=[...hg].map(([h,v])=>({h,...lite(v)})).sort((x,y)=>x.h-y.h),best=[...hours].sort((x,y)=>y.avg-x.avg)[0],worst=[...hours].sort((x,y)=>x.avg-y.avg)[0],bestWR=[...hours].filter(x=>x.n>=10).sort((x,y)=>y.wr-x.wr)[0];
+ $("timeFacts").innerHTML=[fact(best?String(best.h).padStart(2,"0")+":00":"—","Best average hour",best?`${sign(best.avg,1)} pts/trade`:"","good"),fact(worst?String(worst.h).padStart(2,"0")+":00":"—","Weakest average hour",worst?`${sign(worst.avg,1)} pts/trade`:"","warn"),fact(bestWR?pct(bestWR.wr):"—","Best win-rate hour",bestWR?`${String(bestWR.h).padStart(2,"0")}:00 · n${bestWR.n}`:"","info")].join("");
+ bars($("hourBars"),hours.map(x=>({label:String(x.h).padStart(2,"0"),value:x.avg})));
+ bars($("hourWinBars"),hours.map(x=>({label:String(x.h).padStart(2,"0"),value:x.wr*100})),"positive");
+ const sg=group(a.c,r=>sessionName(r.__date.getHours(),r.__date.getMinutes()));
+ $("sessionTable").innerHTML=table(["Session","Trades","Win %","Net pts","Avg pts","PF","Best","Worst"],[...sg].map(([k,v])=>{const x=lite(v);return[k,x.n,pct(x.wr),`<b class="${cls(x.net)}">${sign(x.net,0)}</b>`,sign(x.avg,1),fmt(x.pf,2),sign(x.best,0),sign(x.worst,0)]}))
+}
+function pointBand(v){if(v<-100)return"< -100";if(v<-50)return"-100 to -51";if(v<0)return"-50 to -1";if(v===0)return"0";if(v<=25)return"1 to 25";if(v<=50)return"26 to 50";if(v<=100)return"51 to 100";if(v<=200)return"101 to 200";return"> 200"}
+function renderPoints(a){
+ const qs=[.1,.25,.5,.75,.9];$("quantiles").innerHTML=qs.map(q=>`<div class="quant"><strong class="${cls(quantile(a.res,q))}">${sign(quantile(a.res,q),0)}</strong><span>P${q*100}</span></div>`).join("");
+ histogram("histChart",a.res);
+ const top5=[...a.res].sort((x,y)=>y-x).slice(0,5),top10=[...a.res].sort((x,y)=>y-x).slice(0,10);
+ $("pointFacts").innerHTML=[fact(sign(mean(a.res),1),"Average trade","Expectancy",cls(mean(a.res))),fact(sign(median(a.res),1),"Median trade","Middle observation",cls(median(a.res))),fact(pct(sum(top10)/Math.max(1,a.net)),"Top 10 / net points","Can exceed 100% when other trades offset gains","warn")].join("");
+ const order=["< -100","-100 to -51","-50 to -1","0","1 to 25","26 to 50","51 to 100","101 to 200","> 200"],g=group(a.c,r=>pointBand(r.__result));
+ $("pointsTable").innerHTML=table(["Point slab","Trades","Share","Win %","Net pts","Avg pts"],order.filter(k=>g.has(k)).map(k=>{const v=g.get(k),x=lite(v);return[k,x.n,pct(x.n/a.c.length),pct(x.wr),`<b class="${cls(x.net)}">${sign(x.net,0)}</b>`,sign(x.avg,1)]}))
+}
+function rolling(arr,n,fn){return arr.map((_,i)=>fn(arr.slice(Math.max(0,i-n+1),i+1)))}
+function renderRisk(a){
+ const c=a.c;
+ const worst5=Math.min(...rolling(c,5,s=>sum(s.map(r=>r.__result)))),worst10=Math.min(...rolling(c,10,s=>sum(s.map(r=>r.__result))));
+ $("riskStats").innerHTML=[stat("Max drawdown",sign(a.maxDD,0),"bad"),stat("Max loss streak",a.maxL,"bad"),stat("Max win streak",a.maxW,"good"),stat("Worst 5-trade window",sign(worst5,0),"bad"),stat("Worst 10-trade window",sign(worst10,0),"bad"),stat("Recovery factor",fmt(a.recovery,2)),stat("Break-even win rate",pct(a.breakeven)),stat("Actual win rate",pct(a.wr))].join("");
+ lineChart("drawdownChart",a.dds,"#eb6b73");
+ lineChart("rollingWinChart",rolling(c,20,s=>s.filter(r=>r.__result>0).length/s.length*100),"#8b7cf6",false);
+ lineChart("rollingExpChart",rolling(c,20,s=>mean(s.map(r=>r.__result))),"#33c477");
+ const wins=[...a.wins].sort((x,y)=>y-x),gross=a.grossP,top5=sum(wins.slice(0,5)),top10=sum(wins.slice(0,10)),top20=sum(wins.slice(0,20));
+ $("concentrationFacts").innerHTML=[fact(pct(top5/gross),"Gross profit from top 5 winners","Tail dependence","warn"),fact(pct(top10/gross),"Gross profit from top 10 winners","Large winners matter","warn"),fact(pct(top20/gross),"Gross profit from top 20 winners","Profit concentration","warn")].join("")
+}
+function confBand(c){return c<40?"<40":c<45?"40–44.9":c<50?"45–49.9":c<55?"50–54.9":c<60?"55–59.9":c<65?"60–64.9":c<70?"65–69.9":"70+"}
+function renderConfidence(a){
+ const usable=a.c.filter(r=>Number.isFinite(r.__confidence)),order=["<40","40–44.9","45–49.9","50–54.9","55–59.9","60–64.9","65–69.9","70+"],g=group(usable,r=>confBand(r.__confidence)),rows=[];
+ order.filter(k=>g.has(k)).forEach(k=>{const v=g.get(k),x=lite(v);rows.push({k,...x})});
+ $("confidenceTable").innerHTML=table(["Score","Trades","Empirical win probability","Avg pts","Net pts","PF"],rows.map(x=>[x.k,x.n,`<b>${pct(x.wr)}</b>`,sign(x.avg,1),`<b class="${cls(x.net)}">${sign(x.net,0)}</b>`,fmt(x.pf,2)]));
+ bars($("confidenceBars"),rows.map(x=>({label:x.k,value:x.avg})));
+ const cut=Number($("confidenceMin").value)||40,cost=Number($("costPerTrade").value)||0,kept=usable.filter(r=>r.__confidence>=cut),skipped=usable.filter(r=>r.__confidence<cut),ak=analysis(kept),as=analysis(skipped);
+ const avoided=Math.abs(sum(skipped.filter(r=>r.__result<0).map(r=>r.__result))),missed=sum(skipped.filter(r=>r.__result>0).map(r=>r.__result)),costSaved=skipped.length*cost,impact=avoided-missed+costSaved;
+ $("filterStats").innerHTML=[stat("Threshold",fmt(cut,1)+"%"),stat("Kept trades",kept.length),stat("Skipped trades",skipped.length),stat("Kept win rate",pct(ak.wr)),stat("Skipped win rate",pct(as.wr)),stat("Kept net",sign(ak.net,0),cls(ak.net)),stat("Skipped net",sign(as.net,0),cls(as.net)),stat("Cost saved",sign(costSaved,1),cls(costSaved))].join("");
+ $("filterFacts").innerHTML=[fact(sign(avoided,0),"Loss points avoided","From skipped losing trades","good"),fact(sign(missed,0),"Profit points missed","From skipped winning trades","bad"),fact(sign(impact,0),"Net filter impact","Avoided loss − missed profit + cost saved",cls(impact))].join("")
+}
+function heightBand(h){return h<=75?"≤75":h<=100?"76–100":h<=150?"101–150":h<=200?"151–200":h<=300?"201–300":h<=500?"301–500":">500"}
+function renderPudPdd(a){
+ const all=S.filtered,open=all.filter(r=>!Number.isFinite(r.__result)).slice(-1)[0],latest=all.slice(-1)[0];
+ const r=open||latest;
+ $("currentTradeCard").innerHTML=r?`<div class="card-title"><div><b>${open?"Current active structural trade":"Latest structural trade"}</b><br><span>${r.__date.toLocaleString()}</span></div><span class="badge ${r.__confidence<40?"red":r.__confidence>=60?"green":"amber"}">${Number.isFinite(r.__confidence)?fmt(r.__confidence,1)+"%":"—"}</span></div>
+ <div class="current-line"><strong>${r.__direction==="UP"?"▲ UP":"▼ DOWN"}</strong><span>H <b>${fmt(r.__height,0)}</b> · ΔH <b>${sign(num(r.D),0)}</b> · Step <b>${fmt(r.__step,0)}</b> / Prev <b>${fmt(r.__prevStep,0)}</b> · Accel <b>${sign(r.__accel,0)}</b> · ${r.__motion||"—"}</span></div>`:"<div class='story'>No structural row available.</div>";
+ const usable=a.c.filter(r=>Number.isFinite(r.__height)),hg=group(usable,r=>heightBand(r.__height)),horder=["≤75","76–100","101–150","151–200","201–300","301–500",">500"];
+ $("heightTable").innerHTML=table(["Height","Trades","Win %","Avg pts","Net pts","Avg Conf"],horder.filter(k=>hg.has(k)).map(k=>{const v=hg.get(k),x=lite(v);return[k,x.n,pct(x.wr),sign(x.avg,1),`<b class="${cls(x.net)}">${sign(x.net,0)}</b>`,Number.isFinite(x.conf)?fmt(x.conf,1)+"%":"—"]}));
+ const mg=group(a.c.filter(r=>r.__motion),r=>r.__motion);
+ $("motionTable").innerHTML=table(["Motion state","Trades","Win %","Avg pts","Net pts"],[...mg].map(([k,v])=>{const x=lite(v);return[k,x.n,pct(x.wr),sign(x.avg,1),`<b class="${cls(x.net)}">${sign(x.net,0)}</b>`]}));
+ const ug=group(a.c,r=>r.__update||"—");bars($("updateBars"),[...ug].map(([k,v])=>({label:k,value:lite(v).avg})));
+ const sg=group(a.c.filter(r=>Number.isFinite(r.__exp)),r=>r.__exp>=3?"3+":String(r.__exp)),so=["0","1","2","3+"];
+ $("streakTable").innerHTML=table(["Expansion streak","Trades","Win %","Avg pts","Net pts"],so.filter(k=>sg.has(k)).map(k=>{const v=sg.get(k),x=lite(v);return[k,x.n,pct(x.wr),sign(x.avg,1),sign(x.net,0)]}))
+}
+
+function kidRow(label,value,klass=""){return `<div class="kid-row"><span>${label}</span><b class="${klass}">${value}</b></div>`}
+function renderKid(a){
+ const capital=Math.max(1,Number($("capitalInput").value)||100000),rpp=Math.max(.01,Number($("rupeePerPoint").value)||30),lots=Math.max(.01,Number($("lotsInput").value)||1),cost=Math.max(0,Number($("costPerTrade").value)||0);
+ const money=(a.net-a.c.length*cost)*rpp*lots,wr100=Math.round(a.wr*100);
+ $("kidWinScore").textContent=wr100;
+ $("kidPeopleGrid").innerHTML=Array.from({length:100},(_,i)=>`<div class="kid-person ${i<wr100?"":"loss"}">${i<wr100?"✓":"×"}</div>`).join("");
+ $("kidNet").textContent=sign(a.net,0)+" pts";$("kidNet").className="kid-big "+(a.net>=0?"good":"bad");
+ $("kidNetMoney").textContent=`≈ ${money>=0?"+":""}₹${Math.round(money).toLocaleString("en-IN")} with current settings`;
+ $("kidNetStory").innerHTML=`Add every completed trade together and the score becomes <b>${sign(a.net,0)} points</b>.`;
+ $("kidWinRate").textContent=pct(a.wr);$("kidWinMeter").style.width=Math.min(100,a.wr*100)+"%";
+ $("kidWinStory").innerHTML=`About <b>${wr100} out of 100</b> trades won. Win rate is only one part of the story.`;
+ $("kidPayoff").textContent=fmt(a.payoff,2)+"×";$("kidPayoffStory").innerHTML=`A winner was about <b>${fmt(a.payoff,2)} times</b> the size of a loser on average.`;
+
+ const dg=group(a.c,r=>r.__date.toISOString().slice(0,10)),days=[...dg].map(([k,v])=>({k,...lite(v)})),best=[...days].sort((x,y)=>y.net-x.net)[0],worst=[...days].sort((x,y)=>x.net-y.net)[0];
+ $("kidDateFacts").innerHTML=[kidRow("Best day",best?`${best.k} · ${sign(best.net,0)} pts`:"—","good"),kidRow("Worst day",worst?`${worst.k} · ${sign(worst.net,0)} pts`:"—","bad"),kidRow("Happy days",`${days.filter(x=>x.net>0).length} of ${days.length}`,"good")].join("");
+
+ const hg=group(a.c,r=>r.__date.getHours()),hours=[...hg].map(([k,v])=>({k,...lite(v)})),bh=[...hours].sort((x,y)=>y.avg-x.avg)[0],wh=[...hours].sort((x,y)=>x.avg-y.avg)[0];
+ $("kidTimeFacts").innerHTML=[kidRow("Best hour",bh?`${String(bh.k).padStart(2,"0")}:00 · ${sign(bh.avg,1)} avg`:"—","good"),kidRow("Weakest hour",wh?`${String(wh.k).padStart(2,"0")}:00 · ${sign(wh.avg,1)} avg`:"—","bad"),kidRow("Trades per day",fmt(a.c.length/Math.max(1,days.length),1))].join("");
+
+ $("kidMedian").textContent=sign(a.median,1)+" pts";$("kidPointStory").innerHTML=`The middle trade was <b>${sign(a.median,1)} points</b>. The average was <b>${sign(a.avg,1)} points</b>.`;
+ $("kidDrawdown").textContent=sign(a.maxDD,0)+" pts";$("kidRiskMeter").style.width=Math.min(100,Math.abs(a.maxDD)/Math.max(1,Math.abs(a.net))*100)+"%";
+ $("kidRiskStory").innerHTML=`This was the deepest fall from a previous high: <b>${sign(a.maxDD,0)} points</b>.`;
+ $("kidStreakFacts").innerHTML=[kidRow("Longest winning run",`${a.maxW} trades`,"good"),kidRow("Longest losing run",`${a.maxL} trades`,"bad"),kidRow("Recovery factor",fmt(a.recovery,2)+"×")].join("");
+
+ const conf=a.c.filter(r=>Number.isFinite(r.__confidence)),hi=conf.filter(r=>r.__confidence>=60),lo=conf.filter(r=>r.__confidence<40),ahi=analysis(hi),alo=analysis(lo);
+ $("kidConfidenceStory").innerHTML=`60+ score: <b>${hi.length}</b> trades, <b>${hi.length?pct(ahi.wr):"—"}</b> wins. Below 40: <b>${lo.length}</b> trades, <b>${lo.length?pct(alo.wr):"—"}</b> wins.`;
+
+ const latest=S.filtered.slice(-1)[0];
+ $("kidPudPddFacts").innerHTML=latest?[kidRow("Upper wall · PUD",fmt(latest.__pud,0)),kidRow("Lower wall · PDD",fmt(latest.__pdd,0)),kidRow("Gap",fmt(latest.__height,0)+" pts"),kidRow("Movement",latest.__motion||"—")].join(""):"";
+ $("kidPudPddStory").innerHTML=`If the gap grows, the walls move apart. If it shrinks, the walls come closer. The cockpit also checks whether that movement is speeding up or slowing down.`;
+
+ const order=["<40","40–44.9","45–49.9","50–54.9","55–59.9","60–64.9","65–69.9","70+"],cg=group(conf,r=>confBand(r.__confidence)),bands=order.filter(k=>cg.has(k)).map(k=>{const x=lite(cg.get(k));return{k,...x}}),mx=Math.max(...bands.map(x=>Math.abs(x.avg)),1);
+ $("kidConfidenceBands").innerHTML=bands.map(x=>`<div class="kid-band-item"><div class="kid-band-bar" style="height:${Math.max(4,Math.abs(x.avg)/mx*82)}px"></div><b>${x.k}</b><span>${pct(x.wr)}</span><span>${sign(x.avg,1)} avg</span></div>`).join("");
+
+ $("kidMoneyFacts").innerHTML=[kidRow("Trading capital",`₹${Math.round(capital).toLocaleString("en-IN")}`),kidRow("₹ per point",`₹${fmt(rpp,2)}`),kidRow("Lots",fmt(lots,2)),kidRow("Cost / trade",`${fmt(cost,2)} pts`),kidRow("Money-equivalent result",`${money>=0?"+":""}₹${Math.round(money).toLocaleString("en-IN")}`,money>=0?"good":"bad")].join("");
+
+ $("kidOneSentence").innerHTML=`<strong>${a.net>=0?"The game finished ahead historically.":"The game finished behind historically."}</strong> It won ${pct(a.wr)} of trades, but it only needed about ${pct(a.breakeven)} to break even because winners were ${fmt(a.payoff,2)}× the size of losers. The big lesson is: <b>do not look only at win rate—also look at win size, loss size, drawdown, time, confidence and PUD/PDD structure.</b>`;
+}
+
+function renderLog(){
+ const rows=S.filtered.slice().reverse();$("visibleCount").textContent=`${rows.length} rows`;
+ $("tradeTable").innerHTML=table(["#","Date / time","Direction","Update","Result","Confidence","PUD","PDD","Height","Step / Prev","Accel","State"],rows.map(r=>[
+ r.__i,r.__date.toLocaleString(),r.__direction,r.__update||"—",Number.isFinite(r.__result)?`<b class="${cls(r.__result)}">${sign(r.__result,0)}</b>`:"<span class='badge amber'>OPEN</span>",
+ Number.isFinite(r.__confidence)?fmt(r.__confidence,1)+"%":"—",fmt(r.__pud,0),fmt(r.__pdd,0),fmt(r.__height,0),`${fmt(r.__step,0)} / ${fmt(r.__prevStep,0)}`,sign(r.__accel,0),r.__motion||"—"
+ ]))
+}
+function renderHealth(){
+ const c=completed(S.rows),open=S.rows.length-c.length,dates=c.map(r=>r.__date),missingConf=c.filter(r=>!Number.isFinite(r.__confidence)).length,missingHeight=c.filter(r=>!Number.isFinite(r.__height)).length;
+ $("healthStats").innerHTML=[stat("Rows loaded",S.rows.length),stat("Completed trades",c.length),stat("Open / incomplete rows",open),stat("Date range",dates.length?dates[0].toLocaleDateString()+" → "+dates.at(-1).toLocaleDateString():"—"),stat("Missing confidence",missingConf),stat("Missing PUD/PDD height",missingHeight),stat("Detected columns",S.fields.all?.length||0),stat("Current filtered rows",S.filtered.length)].join("");
+ const missing=[
+   ["MFE / MAE","Needs maximum favourable and adverse excursion for every trade.","Would quantify give-back, stop efficiency and unrealised opportunity."],
+   ["Entry & Exit timestamps","Current data has a confirmed time, not a full entry-to-exit pair.","Would unlock holding duration, time-in-trade and duration-vs-return."],
+   ["Entry / Exit price","Needed for execution-quality and slippage analysis.","Would separate signal quality from execution quality."],
+   ["Brokerage / taxes / slippage","Only a manual point-equivalent cost control is available.","Would calculate true post-cost expectancy and filter impact."],
+   ["Quantity / lots / capital","Points are available, position size is not.","Would unlock ₹ P&L, ROI, return on capital, risk per trade."],
+   ["Stop / target / trailing data","Trade result exists, but planned risk/reward does not.","Would measure R-multiples, stop-hit behaviour and target efficiency."]
+ ];
+ $("missingGrid").innerHTML=missing.map(x=>`<div class="missing"><b>${x[0]}</b><p>${x[1]}</p><p><strong>Use:</strong> ${x[2]}</p></div>`).join("");
+ $("fieldBadges").innerHTML=(S.fields.all||[]).map(x=>`<span class="badge" style="margin:3px">${x}</span>`).join("")
+}
+
+function fxRow(label,value,klass=""){return `<div class="report-row"><span>${label}</span><b class="${klass}">${value}</b></div>`}
+function periodKey(d,kind){
+ if(kind==="daily")return d.toISOString().slice(0,10);
+ if(kind==="weekly"){const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);return x.toISOString().slice(0,10)}
+ if(kind==="monthly")return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+ if(kind==="quarterly")return `${d.getFullYear()} Q${Math.floor(d.getMonth()/3)+1}`;
+ return String(d.getFullYear())
+}
+function maxRunup(values){
+ let trough=0,eq=0,maxRU=0;
+ values.forEach(v=>{eq+=v;trough=Math.min(trough,eq);maxRU=Math.max(maxRU,eq-trough)});
+ return maxRU
+}
+function sharpeSortino(a,capital,rupeePerPoint,lots){
+ const g=group(a.c,r=>r.__date.toISOString().slice(0,10));
+ const daily=[...g].map(([k,v])=>sum(v.map(r=>r.__result))*rupeePerPoint*lots/capital);
+ if(daily.length<2)return {sharpe:NaN,sortino:NaN,dailyAvg:mean(daily)};
+ const mu=mean(daily),sd=Math.sqrt(mean(daily.map(x=>(x-mu)**2))),downs=daily.filter(x=>x<0),downDev=Math.sqrt(mean(downs.map(x=>x*x)));
+ return {sharpe:sd?mu/sd*Math.sqrt(252):NaN,sortino:downDev?mu/downDev*Math.sqrt(252):NaN,dailyAvg:mu}
+}
+function renderForex(a){
+ const capital=Math.max(1,Number($("capitalInput").value)||100000);
+ const rpp=Math.max(.01,Number($("rupeePerPoint").value)||30);
+ const lots=Math.max(.01,Number($("lotsInput").value)||1);
+ const costPts=Math.max(0,Number($("costPerTrade").value)||0);
+ const grossRupee=a.net*rpp*lots, costs=a.c.length*costPts*rpp*lots, netRupee=grossRupee-costs;
+ const periodReturn=netRupee/capital;
+ const first=a.c[0]?.__date,last=a.c.at(-1)?.__date;
+ const spanDays=first&&last?Math.max(1,(last-first)/86400000):1;
+ const annualized=(1+periodReturn)>0?Math.pow(1+periodReturn,365/spanDays)-1:NaN;
+ const rupeeResults=a.res.map(x=>x*rpp*lots-costPts*rpp*lots);
+ const maxDDRs=a.maxDD*rpp*lots;
+ const runup=maxRunup(a.res)*rpp*lots;
+ const sr=sharpeSortino(a,capital,rpp,lots);
+ const closed=a.c.length,open=S.filtered.filter(r=>!Number.isFinite(r.__result)).length;
+ const up=a.c.filter(r=>r.__direction==="UP"),down=a.c.filter(r=>r.__direction==="DOWN");
+ const avgTradeR=closed?mean(rupeeResults)/capital:0,avgWinR=a.wins.length?(a.avgW*rpp*lots-costPts*rpp*lots)/capital:0,avgLossR=a.losses.length?(-a.avgL*rpp*lots-costPts*rpp*lots)/capital:0;
+ const totalAbsTurnover=sum(a.res.map(x=>Math.abs(x)))*rpp*lots;
+ const gDays=group(a.c,r=>r.__date.toISOString().slice(0,10)),tradingDays=gDays.size;
+ const tradesPerDay=closed/Math.max(1,tradingDays),netPerDay=netRupee/Math.max(1,tradingDays);
+ const capitalVelocity=totalAbsTurnover/capital;
+ const edgeRatio=a.breakeven?a.wr/a.breakeven:0;
+
+ $("bankNiftyHeadline").textContent=`${sign(a.net,0)} pts → ${netRupee>=0?"+":""}₹${Math.round(netRupee).toLocaleString("en-IN")} net after configured costs`;
+ $("fxAccount").innerHTML=[
+   fxRow("Market","NSE Equity Derivatives"),fxRow("Underlying","NIFTY BANK"),fxRow("Instrument","BANKNIFTY Index Options"),
+   fxRow("Trading currency","INR"),fxRow("Configured capital","₹"+Math.round(capital).toLocaleString("en-IN")),
+   fxRow("₹ per result point",`₹${fmt(rpp,2)} × ${fmt(lots,2)} lot(s)`),fxRow("Completed trades",closed),fxRow("Open / incomplete",open),
+   fxRow("History span",`${Math.round(spanDays)} calendar days`),fxRow("Trading days",tradingDays)
+ ].join("");
+
+ $("fxPerformance").innerHTML=[
+   fxRow("Profit Factor",fmt(a.pf,2),a.pf>=1.5?"pos":a.pf<1?"neg":""),fxRow("Sharpe Ratio (daily)",Number.isFinite(sr.sharpe)?fmt(sr.sharpe,2):"n/a"),
+   fxRow("Sortino Ratio (daily)",Number.isFinite(sr.sortino)?fmt(sr.sortino,2):"n/a"),
+   fxRow("Period Return",pct(periodReturn),periodReturn>=0?"pos":"neg"),fxRow("Annualized Return*",Number.isFinite(annualized)?pct(annualized):"n/a"),
+   fxRow("Gross Gain",`₹${Math.round(a.grossP*rpp*lots).toLocaleString("en-IN")}`,"pos"),fxRow("Gross Loss",`-₹${Math.round(a.grossL*rpp*lots).toLocaleString("en-IN")}`,"neg"),
+   fxRow("Configured costs",`-₹${Math.round(costs).toLocaleString("en-IN")}`,"neg"),fxRow("Net Profit",`${netRupee>=0?"+":""}₹${Math.round(netRupee).toLocaleString("en-IN")}`,netRupee>=0?"pos":"neg"),
+   fxRow("Net Points",sign(a.net,0),a.net>=0?"pos":"neg"),fxRow("Max Profit Run-Up",`₹${Math.round(runup).toLocaleString("en-IN")}`,"pos"),
+   fxRow("Max Profit Drawdown",`-₹${Math.round(Math.abs(maxDDRs)).toLocaleString("en-IN")}`,"neg")
+ ].join("");
+
+ $("fxTradeStats").innerHTML=[
+   fxRow("Closed Trades",closed),fxRow("Open Trades",open),fxRow("UP / CE-linked Trades",up.length),fxRow("DOWN / PE-linked Trades",down.length),
+   fxRow("Avg Trade Return",pct(avgTradeR),avgTradeR>=0?"pos":"neg"),fxRow("Avg Trade Profit",`${a.avg>=0?"+":""}₹${Math.round((a.avg-costPts)*rpp*lots).toLocaleString("en-IN")}`,a.avg>=0?"pos":"neg"),
+   fxRow("Avg Trade Points",sign(a.avg,1),cls(a.avg)==="good"?"pos":cls(a.avg)==="bad"?"neg":""),
+   fxRow("Avg Trade Duration","n/a","muted"),fxRow("Win Rate",pct(a.wr),a.wr>=.5?"pos":""),
+   fxRow("Avg Winning Trade",pct(avgWinR),"pos"),fxRow("Avg Losing Trade",pct(avgLossR),"neg"),fxRow("Winning Trades",a.wins.length,"pos"),fxRow("Losing Trades",a.losses.length,"neg"),
+   fxRow("Max Consecutive Wins",a.maxW),fxRow("Max Consecutive Losses",a.maxL),fxRow("Best Trade Return",pct((a.best*rpp*lots-costPts*rpp*lots)/capital),"pos"),
+   fxRow("Worst Trade Return",pct((a.worst*rpp*lots-costPts*rpp*lots)/capital),"neg"),fxRow("Lots Traded",fmt(closed*lots,0)),fxRow("Time in Trade","n/a","muted")
+ ].join("");
+
+ $("fxRisk").innerHTML=[
+   fxRow("Max Return Drawdown",pct(maxDDRs/capital),"neg"),fxRow("Recovery Factor",fmt(a.recovery,2),a.recovery>=2?"pos":""),
+   fxRow("Payoff Ratio",fmt(a.payoff,2)+"×",a.payoff>=2?"pos":""),fxRow("Break-even Win Rate",pct(a.breakeven)),
+   fxRow("Actual Win Rate",pct(a.wr)),fxRow("Win-rate Edge",pct(a.wr-a.breakeven),a.wr>a.breakeven?"pos":"neg"),
+   fxRow("Edge Ratio",fmt(edgeRatio,2)+"×",edgeRatio>1?"pos":"neg"),fxRow("Std Dev / Trade",fmt(a.sd,1)+" pts"),
+   fxRow("Worst 5-trade block",sign(Math.min(...rolling(a.c,5,s=>sum(s.map(r=>r.__result)))),0)+" pts","neg"),
+   fxRow("Worst 10-trade block",sign(Math.min(...rolling(a.c,10,s=>sum(s.map(r=>r.__result)))),0)+" pts","neg")
+ ].join("");
+
+ $("fxBankNifty").innerHTML=[
+   fxRow("Expectancy / trade",`${sign(a.avg,1)} pts · ${a.avg>=0?"+":""}₹${Math.round((a.avg-costPts)*rpp*lots).toLocaleString("en-IN")}`,a.avg>=0?"pos":"neg"),
+   fxRow("Net ₹ / trading day",`${netPerDay>=0?"+":""}₹${Math.round(netPerDay).toLocaleString("en-IN")}`,netPerDay>=0?"pos":"neg"),
+   fxRow("Trades / trading day",fmt(tradesPerDay,2)),fxRow("Point turnover proxy",`₹${Math.round(totalAbsTurnover).toLocaleString("en-IN")}`),
+   fxRow("Capital Velocity*",fmt(capitalVelocity,2)+"×"),fxRow("Cost Drag",pct(costs/Math.max(1,a.grossP*rpp*lots))),
+   fxRow("Median Trade",sign(a.median,1)+" pts"),fxRow("Best / Worst",`${sign(a.best,0)} / ${sign(a.worst,0)} pts`),
+   fxRow("Current lot reference","30 units / lot**"),fxRow("BANKNIFTY tick","₹0.05 premium tick")
+ ].join("");
+
+ $("fxAvailability").innerHTML=[
+   fxRow("Entry time","Available / structural timestamp"),fxRow("Exit time","Not available","muted"),fxRow("Holding duration","Not available","muted"),
+   fxRow("Option premium entry/exit","Not available","muted"),fxRow("Strike / ATM distance","Not available","muted"),fxRow("Expiry / DTE","Not available","muted"),
+   fxRow("IV / VIX","Not available","muted"),fxRow("MFE / MAE","Not available","muted"),fxRow("Actual brokerage/taxes","Manual point-equivalent only","muted"),
+   fxRow("PUD/PDD / Confidence","Available","pos")
+ ].join("");
+
+ const kinds=[["Daily","daily"],["Weekly","weekly"],["Monthly","monthly"],["Quarterly","quarterly"],["Annual","annual"]];
+ $("fxPeriodTable").innerHTML=table(["Period","Avg Return","Avg Profit ₹","Avg Points","Avg Entries","Avg Lots"],kinds.map(([label,kind])=>{
+   const g=group(a.c,r=>periodKey(r.__date,kind)),vals=[...g].map(([k,v])=>analysis(v));
+   const avgPts=mean(vals.map(x=>x.net)),avgEntries=mean(vals.map(x=>x.c.length)),avgProfit=(avgPts*rpp*lots)-(avgEntries*costPts*rpp*lots),avgRet=avgProfit/capital;
+   return [label,pct(avgRet),`${avgProfit>=0?"+":""}₹${Math.round(avgProfit).toLocaleString("en-IN")}`,sign(avgPts,1),fmt(avgEntries,1),fmt(avgEntries*lots,1)]
+ }));
+
+ const dirs=[["UP / CE-linked",up],["DOWN / PE-linked",down]];
+ $("fxDirectionTable").innerHTML=table(["Direction","Return","Profit ₹","Points","Entries","Win %"],dirs.map(([label,v])=>{
+   const x=analysis(v),profit=(x.net-x.c.length*costPts)*rpp*lots;
+   return [label,pct(profit/capital),`${profit>=0?"+":""}₹${Math.round(profit).toLocaleString("en-IN")}`,sign(x.net,0),x.c.length,pct(x.wr)]
+ }));
+
+ const conf=a.c.filter(r=>Number.isFinite(r.__confidence)),high=conf.filter(r=>r.__confidence>=60),low=conf.filter(r=>r.__confidence<40),ah=analysis(high),al=analysis(low);
+ $("fxConfidence").innerHTML=[
+   fxRow("Avg Model Score",conf.length?fmt(mean(conf.map(r=>r.__confidence)),1)+"%":"n/a"),
+   fxRow("60%+ trades",high.length),fxRow("60%+ win rate",high.length?pct(ah.wr):"n/a",ah.wr>=.6?"pos":""),
+   fxRow("60%+ avg points",high.length?sign(ah.avg,1):"n/a",ah.avg>0?"pos":""),
+   fxRow("<40% trades",low.length),fxRow("<40% win rate",low.length?pct(al.wr):"n/a",al.wr<.5?"neg":""),
+   fxRow("<40% avg points",low.length?sign(al.avg,1):"n/a",al.avg<0?"neg":"")
+ ].join("");
+
+ $("fxCosts").innerHTML=[
+   fxRow("Cost assumption",`${fmt(costPts,2)} pts/trade`),fxRow("₹ cost / trade",`₹${Math.round(costPts*rpp*lots).toLocaleString("en-IN")}`),
+   fxRow("Total configured cost",`₹${Math.round(costs).toLocaleString("en-IN")}`,"neg"),fxRow("Gross return",pct(grossRupee/capital),grossRupee>=0?"pos":"neg"),
+   fxRow("Net return",pct(periodReturn),periodReturn>=0?"pos":"neg"),fxRow("Capital at 1× assumption",`₹${Math.round(capital).toLocaleString("en-IN")}`)
+ ].join("");
+}
+
+
+function parseSortableCell(td){
+ const raw=(td?.textContent||"").trim();
+ if(!raw)return {t:"text",v:""};
+ const pm=raw.match(/^([+-]?[\d,.]+)\s*%$/);
+ if(pm)return {t:"num",v:Number(pm[1].replace(/,/g,""))};
+ const cleaned=raw.replace(/[₹,$]/g,"").replace(/\bpts?\b/gi,"").replace(/×/g,"").trim();
+ if(/^[-+]?[\d,.]+(?:\.\d+)?$/.test(cleaned))return {t:"num",v:Number(cleaned.replace(/,/g,""))};
+ const d=Date.parse(raw);
+ if(!Number.isNaN(d)&&/[-/]|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/i.test(raw))return {t:"date",v:d};
+ return {t:"text",v:raw.toLowerCase()};
+}
+function enableTableSorting(){
+ document.querySelectorAll("table").forEach(tbl=>{
+   tbl.classList.add("sortable");
+   tbl.querySelectorAll("th[data-sortable='1']").forEach(th=>{
+     if(th.dataset.sortBound==="1")return;
+     th.dataset.sortBound="1";
+     th.addEventListener("click",()=>{
+       const tbody=tbl.tBodies[0];if(!tbody)return;
+       const col=Number(th.dataset.col),asc=!th.classList.contains("sort-asc");
+       tbl.querySelectorAll("th").forEach(h=>h.classList.remove("sort-asc","sort-desc"));
+       th.classList.add(asc?"sort-asc":"sort-desc");
+       const rows=[...tbody.rows];
+       rows.sort((ra,rb)=>{
+         const a=parseSortableCell(ra.cells[col]),b=parseSortableCell(rb.cells[col]);
+         let cmp;
+         if(a.t===b.t&&(a.t==="num"||a.t==="date"))cmp=a.v-b.v;
+         else cmp=String(a.v).localeCompare(String(b.v),undefined,{numeric:true,sensitivity:"base"});
+         return asc?cmp:-cmp;
+       });
+       rows.forEach(r=>tbody.appendChild(r));
+     });
+   });
+ });
+}
+function activeAdvancedFilterCount(){
+ let n=0;
+ if($("fromDate").value)n++;if($("toDate").value)n++;
+ if($("minPoints").value!=="")n++;if($("maxPoints").value!=="")n++;
+ if($("updateFilter").value!=="ALL")n++;if($("motionFilter").value!=="ALL")n++;
+ if($("confidenceMax").value!=="")n++;
+ $("activeFilterCount").textContent=n?`${n} advanced filter${n>1?"s":""} active`:"No advanced filters";
+}
+
+function renderAll(){
+ const a=analysis(S.filtered);$("scopeText").textContent=`${S.filtered.length} visible rows · ${a.c.length} completed trades`;
+ const c=a.c;if(c.length){$("dateRangeChip").textContent=`${c[0].__date.toLocaleDateString()} → ${c.at(-1).__date.toLocaleDateString()}`}
+ if(!c.length){
+   const msg="<div class='card s12'><div class='story'><strong>No completed trades match the current filters.</strong><div class='callout'>Change the filters or reset to AUG 2026 DATA.</div></div></div>";
+   $("kpiGrid").innerHTML=msg;
+   ["story","coreStats","factGrid","dateFacts","weekdayBars","monthBars","dailyTable","timeFacts","hourBars","hourWinBars","sessionTable","quantiles","pointFacts","pointsTable","riskStats","concentrationFacts","confidenceTable","confidenceBars","filterStats","filterFacts","heightTable","motionTable","updateBars","streakTable"].forEach(id=>{if($(id))$(id).innerHTML="<div class='story'>No completed trades for this filter.</div>"});
+   ["equityChart","histChart","drawdownChart","rollingWinChart","rollingExpChart"].forEach(id=>{const cv=$(id);if(cv){const x=cv.getContext('2d');x.clearRect(0,0,cv.width,cv.height)}});
+   renderPudPdd(a);renderLog();renderHealth();return;
+ }
+ renderExecutive(a);renderDate(a);renderTime(a);renderPoints(a);renderRisk(a);renderConfidence(a);renderForex(a);renderPudPdd(a);renderKid(a);renderLog();renderHealth();enableTableSorting()
+}
+function initMonths(){
+ const sel=$("monthFilter"),months=[...new Set(S.rows.map(r=>r.__date.getFullYear()+"-"+String(r.__date.getMonth()+1).padStart(2,"0")))].sort();
+ sel.innerHTML='<option value="ALL">August 2026 only</option>'+months.map(m=>`<option>${m}</option>`).join("");
+ const updates=[...new Set(S.rows.map(r=>r.__update).filter(Boolean))].sort();
+ $("updateFilter").innerHTML='<option value="ALL">All updates</option>'+updates.map(v=>`<option>${v}</option>`).join("");
+ const motions=[...new Set(S.rows.map(r=>r.__motion).filter(Boolean))].sort();
+ $("motionFilter").innerHTML='<option value="ALL">All states</option>'+motions.map(v=>`<option>${v}</option>`).join("");
+}
+function loadRaw(raw){
+  const augOnly=(Array.isArray(raw)?raw:[]).filter(r=>{
+    const f=detect([r]), k=f.dt, v=k?r[k]:"";
+    return String(v??"").startsWith("2026-08");
+  });
+  S.raw=augOnly;S.rows=standardize(augOnly);initMonths();applyFilters()
+}
+function parseCSV(text){const lines=text.replace(/\r/g,"").split("\n").filter(x=>x.trim());if(!lines.length)return[];const split=line=>{const out=[];let cur="",q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch=='"'){if(q&&line[i+1]=='"'){cur+='"';i++}else q=!q}else if(ch==","&&!q){out.push(cur);cur=""}else cur+=ch}out.push(cur);return out};const headers=split(lines[0]).map(x=>x.trim());return lines.slice(1).map(line=>{const vals=split(line),o={};headers.forEach((h,i)=>o[h]=vals[i]??"");return o})}
+async function importFile(file){const text=await file.text();let raw=file.name.toLowerCase().endsWith(".json")?JSON.parse(text):parseCSV(text);if(!Array.isArray(raw))raw=raw.trades||raw.data||[];loadRaw(raw)}
+function switchView(name){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===name));document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x.dataset.view===name));setTimeout(renderAll,20)}
+document.querySelectorAll("[data-view]").forEach(x=>x.addEventListener("click",e=>{if(e && e.preventDefault)e.preventDefault();switchView(x.dataset.view)}));
+["directionFilter","outcomeFilter","monthFilter","confidenceMin","costPerTrade","capitalInput","rupeePerPoint","lotsInput","fromDate","toDate","minPoints","maxPoints","updateFilter","motionFilter","confidenceMax"].forEach(id=>$(id).addEventListener("change",applyFilters));
+$("searchInput").addEventListener("input",applyFilters);
+
+$("advancedToggleBtn").addEventListener("click",()=>{
+ const p=$("advancedFilters"),open=p.classList.toggle("open");
+ $("advancedToggleBtn").textContent=open?"HIDE ADVANCED FILTERS":"ADVANCED FILTERS";
+});
+$("resetFiltersBtn").addEventListener("click",()=>{
+ $("directionFilter").value="ALL";$("outcomeFilter").value="ALL";$("monthFilter").value="ALL";$("confidenceMin").value=0;$("searchInput").value="";
+ $("fromDate").value="";$("toDate").value="";$("minPoints").value="";$("maxPoints").value="";$("updateFilter").value="ALL";$("motionFilter").value="ALL";$("confidenceMax").value="";
+ applyFilters();
+});
+
+$("fileInput").addEventListener("change",e=>e.target.files[0]&&importFile(e.target.files[0]));
+$("resetBtn").addEventListener("click",()=>loadRaw(ORIGINAL));
+$("themeBtn").addEventListener("click",()=>{S.theme=S.theme==="light"?"dark":"light";document.body.classList.toggle("dark",S.theme==="dark");$("themeBtn").textContent=S.theme==="dark"?"LIGHT":"DARK";renderAll()});
+
+let appFontScale=1;
+function applyAppFontScale(scale){
+  appFontScale=Math.max(.75,Math.min(1.40,Math.round(scale*20)/20));
+  document.documentElement.style.setProperty("--font-scale",String(appFontScale));
+  const pct=Math.round(appFontScale*100);
+  $("fontResetBtn").textContent=pct+"%";
+  $("fontDownBtn").disabled=appFontScale<=.75;
+  $("fontUpBtn").disabled=appFontScale>=1.40;
+  // Canvas labels use pixel fonts generated in JS, so redraw them after changing scale.
+  requestAnimationFrame(()=>renderAll());
+}
+$("fontDownBtn").addEventListener("click",()=>applyAppFontScale(appFontScale-.05));
+$("fontUpBtn").addEventListener("click",()=>applyAppFontScale(appFontScale+.05));
+$("fontResetBtn").addEventListener("click",()=>applyAppFontScale(1));
+
+$("exportBtn").addEventListener("click",()=>{const a=analysis(S.filtered),payload={generated_at:new Date().toISOString(),rows:S.filtered.length,completed:a.c.length,net_points:a.net,win_rate:a.wr,profit_factor:a.pf,expectancy:a.avg,max_drawdown:a.maxDD,payoff_ratio:a.payoff};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download="trade-cockpit-summary.json";link.click();URL.revokeObjectURL(link.href)});
+window.addEventListener("resize",()=>renderAll());
+loadRaw(ORIGINAL);
+})();
+</script>
+</body>
+</html>
