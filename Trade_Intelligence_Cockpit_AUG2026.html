@@ -119,6 +119,196 @@ body.dark .report-panel h3{background:linear-gradient(180deg,#314863,#26394f)}
 @media(max-width:980px){.kid-card,.kid-card.wide{grid-column:span 6}.kid-hero{grid-template-columns:1fr}}@media(max-width:620px){.kid-card,.kid-card.wide{grid-column:1/-1}.kid-traffic{grid-template-columns:1fr}}
 
 .kid-nav-link{color:var(--blue)!important;background:var(--blueSoft)!important}
+
+.summary-nav-link{color:var(--blue)!important;background:linear-gradient(135deg,var(--blueSoft),var(--amberSoft))!important;border:1px solid #cfe2fb}
+.summary-hero{background:linear-gradient(135deg,var(--blueSoft),var(--card) 54%,var(--amberSoft));border:1px solid var(--line);border-radius:22px;padding:18px;display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:center}
+.summary-hero h2{font-size:calc(28px * var(--font-scale));line-height:1.08;margin:0 0 8px;letter-spacing:-.04em;color:var(--ink)}
+.summary-hero p{font-size:calc(10px * var(--font-scale));margin:0;color:var(--muted)}
+.summary-pill{display:inline-flex;align-items:center;gap:6px;font-size:calc(8px * var(--font-scale));font-weight:800;color:var(--blue);background:var(--card);border:1px solid var(--line);padding:6px 9px;border-radius:999px;margin-bottom:8px}
+.summary-scorebox{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary-score{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.summary-score strong{display:block;font-size:calc(28px * var(--font-scale));color:var(--ink);line-height:1}
+.summary-score span{display:block;font-size:calc(8px * var(--font-scale));color:var(--muted);margin-top:6px}
+.summary-card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;min-width:0}
+.summary-card h3{font-size:calc(11px * var(--font-scale));margin:0 0 8px;color:var(--ink)}
+.summary-card p{font-size:calc(9px * var(--font-scale));color:var(--text);margin:0;line-height:1.6}
+.summary-q{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.summary-q .summary-card{background:linear-gradient(145deg,var(--chart),var(--card))}
+.summary-q b{display:block;font-size:calc(12px * var(--font-scale));color:var(--blue);margin-bottom:6px}
+.summary-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+.summary-table{width:100%;border-collapse:collapse;min-width:780px}
+.summary-table th,.summary-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:calc(8.5px * var(--font-scale))}
+.summary-table th{background:var(--chart);color:#708195;font-weight:800}
+.summary-table tr:hover td{background:var(--blueSoft)}
+.summary-table td strong{color:var(--ink)}
+.summary-note{margin-top:8px;font-size:calc(8px * var(--font-scale));color:var(--muted)}
+.summary-renewal{background:linear-gradient(135deg,var(--blueSoft),var(--card));border:1px solid #cfe2fb;border-radius:18px;padding:16px}
+.summary-renewal h3{font-size:calc(14px * var(--font-scale));margin:0 0 8px;color:var(--ink)}
+.summary-renewal p,.summary-renewal li{font-size:calc(9px * var(--font-scale));line-height:1.6;color:var(--text)}
+.summary-renewal ul{margin:8px 0 0 18px;padding:0}
+.summary-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.summary-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:11px;border:1px solid var(--line);background:var(--card);font-size:calc(9px * var(--font-scale));font-weight:800;color:var(--ink)}
+.summary-link:hover{border-color:#b9d7fb;color:var(--blue)}
+.summary-link.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.summary-highlight{background:var(--amberSoft);border:1px solid color-mix(in srgb,var(--amber) 22%, var(--line));border-radius:12px;padding:10px;font-size:calc(9px * var(--font-scale));line-height:1.6}
+.summary-highlight strong{color:var(--ink)}
+@media(max-width:980px){.summary-hero{grid-template-columns:1fr}.summary-q{grid-template-columns:1fr}}
+
+
+/* ===== Simple August Summary UX ===== */
+.simple-summary{max-width:1180px;margin:0 auto}
+.simple-hero{
+  border:1px solid var(--line);border-radius:22px;padding:18px;
+  background:linear-gradient(135deg,var(--blueSoft),var(--card) 58%,var(--greenSoft));
+}
+.simple-eyebrow{font-size:calc(8px * var(--font-scale));font-weight:850;color:var(--blue);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.simple-hero h2{margin:0;color:var(--ink);font-size:calc(28px * var(--font-scale));
+  line-height:1.08;letter-spacing:-.04em}
+.simple-hero p{margin:8px 0 0;font-size:calc(10px * var(--font-scale));color:var(--muted);line-height:1.55}
+.simple-result-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.simple-result{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px}
+.simple-result strong{display:block;color:var(--ink);font-size:calc(20px * var(--font-scale));line-height:1}
+.simple-result span{display:block;color:var(--muted);font-size:calc(7.5px * var(--font-scale));margin-top:5px}
+
+.playbook-title{margin:16px 0 8px}
+.playbook-title h3{margin:0;font-size:calc(17px * var(--font-scale));color:var(--ink)}
+.playbook-title p{margin:3px 0 0;font-size:calc(9px * var(--font-scale));color:var(--muted)}
+
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rule-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;min-width:0}
+.rule-head{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.rule-icon{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;
+  font-size:23px;background:var(--blueSoft)}
+.rule-head h3{margin:0;font-size:calc(13px * var(--font-scale));color:var(--ink)}
+.rule-head span{display:block;margin-top:2px;font-size:calc(8px * var(--font-scale));color:var(--muted)}
+.rule-line{display:grid;grid-template-columns:28px 1fr auto;gap:7px;align-items:center;
+  padding:9px 0;border-bottom:1px solid var(--line)}
+.rule-line:last-child{border-bottom:0}
+.rule-dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:900}
+.rule-dot.green{background:var(--greenSoft);color:var(--green)}
+.rule-dot.amber{background:var(--amberSoft);color:#a87818}
+.rule-dot.red{background:var(--redSoft);color:var(--red)}
+.rule-dot.blue{background:var(--blueSoft);color:var(--blue)}
+.rule-main b{display:block;font-size:calc(9.5px * var(--font-scale));color:var(--ink)}
+.rule-main span{display:block;font-size:calc(7.5px * var(--font-scale));color:var(--muted);margin-top:2px}
+.rule-tag{font-size:calc(7.5px * var(--font-scale));font-weight:850;border-radius:999px;padding:4px 6px;white-space:nowrap}
+.rule-tag.green{color:var(--green);background:var(--greenSoft)}
+.rule-tag.amber{color:#9b7223;background:var(--amberSoft)}
+.rule-tag.red{color:var(--red);background:var(--redSoft)}
+.rule-tag.blue{color:var(--blue);background:var(--blueSoft)}
+
+.big-meaning{
+  margin-top:10px;border:1px solid color-mix(in srgb,var(--blue) 25%,var(--line));
+  border-radius:18px;padding:15px;background:linear-gradient(135deg,var(--blueSoft),var(--card));
+  display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center
+}
+.big-meaning .emoji{font-size:42px}
+.big-meaning strong{display:block;font-size:calc(17px * var(--font-scale));color:var(--ink);line-height:1.25}
+.big-meaning span{display:block;font-size:calc(9px * var(--font-scale));color:var(--text);margin-top:4px;line-height:1.55}
+
+.simple-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.do-card,.dont-card{border-radius:16px;padding:13px;border:1px solid var(--line);background:var(--card)}
+.do-card{background:linear-gradient(145deg,var(--greenSoft),var(--card))}
+.dont-card{background:linear-gradient(145deg,var(--redSoft),var(--card))}
+.do-card h3,.dont-card h3{margin:0 0 7px;font-size:calc(11px * var(--font-scale));color:var(--ink)}
+.simple-bullets{margin:0;padding-left:18px}
+.simple-bullets li{font-size:calc(8.5px * var(--font-scale));color:var(--text);margin:5px 0;line-height:1.45}
+
+.simple-details{margin-top:10px;border:1px solid var(--line);border-radius:15px;background:var(--card);overflow:hidden}
+.simple-details summary{cursor:pointer;padding:12px 13px;font-size:calc(9px * var(--font-scale));font-weight:850;color:var(--blue);list-style:none}
+.simple-details summary::-webkit-details-marker{display:none}
+.simple-details .details-body{padding:0 12px 12px}
+.simple-details table{min-width:720px}
+.simple-details .summary-note{padding:8px 0 0}
+
+.simple-subscribe{margin-top:10px;border-radius:18px;padding:15px;border:1px solid var(--line);
+  background:linear-gradient(135deg,var(--amberSoft),var(--card))}
+.simple-subscribe h3{margin:0;font-size:calc(13px * var(--font-scale));color:var(--ink)}
+.simple-subscribe p{font-size:calc(8.8px * var(--font-scale));line-height:1.55;color:var(--text);margin:7px 0}
+.simple-subscribe .summary-links{margin-top:10px}
+
+@media(max-width:900px){
+  .rule-grid{grid-template-columns:1fr}
+  .simple-result-strip{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  .simple-summary{width:100%}
+  .simple-hero{padding:14px;border-radius:17px}
+  .simple-hero h2{font-size:calc(22px * var(--font-scale))}
+  .simple-result-strip{grid-template-columns:1fr 1fr}
+  .rule-card{padding:12px}
+  .simple-actions{grid-template-columns:1fr}
+  .big-meaning{grid-template-columns:1fr;text-align:center}
+  .big-meaning .emoji{font-size:36px}
+  .rule-line{grid-template-columns:25px 1fr}
+  .rule-tag{grid-column:2;justify-self:start}
+}
+
+
+/* ===== Landing page CTA upgrade ===== */
+.simple-hero{position:relative;overflow:hidden}
+.simple-hero::after{
+  content:"";position:absolute;right:-80px;top:-80px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(36,137,255,.13),rgba(36,137,255,0) 70%);
+  pointer-events:none
+}
+.landing-cta-wrap{
+  margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:stretch
+}
+.landing-cta-main,.landing-cta-secondary{
+  display:flex;flex-direction:column;justify-content:center;gap:3px;
+  border-radius:16px;padding:14px 16px;text-decoration:none;min-width:220px
+}
+.landing-cta-main{
+  background:linear-gradient(135deg,var(--blue),#1b6fef 55%,#0f56c7);
+  color:#fff;border:1px solid #0f56c7;box-shadow:0 12px 26px rgba(36,137,255,.24)
+}
+.landing-cta-main:hover{transform:translateY(-1px);box-shadow:0 16px 32px rgba(36,137,255,.3)}
+.landing-cta-main b{font-size:calc(12px * var(--font-scale));line-height:1.2;color:#fff}
+.landing-cta-main span{font-size:calc(8px * var(--font-scale));opacity:.95;color:#eff6ff}
+.landing-cta-secondary{
+  background:var(--card);color:var(--ink);border:1px solid var(--line)
+}
+.landing-cta-secondary:hover{border-color:#b9d7fb;transform:translateY(-1px)}
+.landing-cta-secondary b{font-size:calc(10px * var(--font-scale));line-height:1.2;color:var(--ink)}
+.landing-cta-secondary span{font-size:calc(8px * var(--font-scale));color:var(--muted)}
+.cta-microcopy{
+  margin-top:9px;font-size:calc(8px * var(--font-scale));color:var(--muted);line-height:1.55
+}
+.cta-banner{
+  margin-top:14px;border:1px solid color-mix(in srgb,var(--amber) 22%,var(--line));
+  background:linear-gradient(135deg,var(--amberSoft),var(--card));border-radius:16px;padding:14px
+}
+.cta-banner-top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.cta-banner h3{margin:0;font-size:calc(14px * var(--font-scale));color:var(--ink)}
+.cta-banner p{margin:4px 0 0;font-size:calc(8.8px * var(--font-scale));color:var(--text);line-height:1.55}
+.cta-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;
+  background:#fff;border:1px solid color-mix(in srgb,var(--amber) 25%,var(--line));
+  color:#9b7223;font-size:calc(8px * var(--font-scale));font-weight:850
+}
+.cta-footer{
+  margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center
+}
+.cta-footer-note{
+  font-size:calc(8px * var(--font-scale));color:var(--muted);line-height:1.5
+}
+.simple-subscribe{padding:18px}
+.simple-subscribe h3{font-size:calc(15px * var(--font-scale))}
+.simple-subscribe .summary-link.primary{
+  padding:14px 18px;border-radius:14px;font-size:calc(10px * var(--font-scale));
+  box-shadow:0 12px 26px rgba(36,137,255,.22)
+}
+.simple-subscribe .summary-link{
+  min-height:50px;display:inline-flex;align-items:center
+}
+@media(max-width:620px){
+  .landing-cta-wrap{flex-direction:column}
+  .landing-cta-main,.landing-cta-secondary{width:100%;min-width:0}
+  .cta-banner-top{align-items:flex-start}
+}
+
 </style>
 </head>
 <body>
@@ -127,7 +317,8 @@ body.dark .report-panel h3{background:linear-gradient(180deg,#314863,#26394f)}
     <div class="brand"><div class="brand-mark">PM</div><div class="brand-copy"><b>Trade Cockpit</b><span>Historical intelligence</span></div></div>
     <div class="side-label">Analytics</div>
     <nav class="side-nav" id="sideNav">
-      <button type="button" class="side-link active" data-view="executive"><span class="side-icon">▦</span>Executive</button>
+      <button type="button" class="side-link summary-nav-link active" data-view="summary"><span class="side-icon">★</span>Summary & renewal</button>
+      <button type="button" class="side-link" data-view="executive"><span class="side-icon">▦</span>Executive</button>
       <button type="button" class="side-link" data-view="date"><span class="side-icon">◫</span>Date-wise</button>
       <button type="button" class="side-link" data-view="time"><span class="side-icon">◷</span>Time-wise</button>
       <button type="button" class="side-link" data-view="points"><span class="side-icon">↕</span>Points-wise</button>
@@ -137,7 +328,7 @@ body.dark .report-panel h3{background:linear-gradient(180deg,#314863,#26394f)}
       <button type="button" class="side-link" data-view="pudpdd"><span class="side-icon">⇅</span>PUD / PDD</button>
       <button type="button" class="side-link" data-view="log"><span class="side-icon">☷</span>Trade log</button>
       <button type="button" class="side-link" data-view="health"><span class="side-icon">✓</span>Data health</button>
-      <button type="button" class="side-link kid-nav-link" data-view="kid"><span class="side-icon">★</span>5-year-old view</button>
+      <button type="button" class="side-link kid-nav-link" data-view="kid"><span class="side-icon">☺</span>5-year-old view</button>
     </nav>
     <div class="side-foot">Light cockpit styling inspired by the supplied application.<br><br>All calculations run locally in your browser.</div>
   </aside>
@@ -160,7 +351,7 @@ body.dark .report-panel h3{background:linear-gradient(180deg,#314863,#26394f)}
     </header>
 
     <nav class="mobile-tabs" id="mobileTabs">
-      <button class="active" data-view="executive">Executive</button><button data-view="date">Date</button><button data-view="time">Time</button>
+      <button class="active summary-nav-link" data-view="summary">Summary</button><button data-view="executive">Executive</button><button data-view="date">Date</button><button data-view="time">Time</button>
       <button data-view="points">Points</button><button data-view="risk">Risk</button><button data-view="confidence">Confidence</button><button data-view="forex">Report</button>
       <button data-view="pudpdd">PUD/PDD</button><button data-view="log">Log</button><button data-view="health">Health</button><button data-view="kid">5-year-old</button>
     </nav>
@@ -202,7 +393,249 @@ body.dark .report-panel h3{background:linear-gradient(180deg,#314863,#26394f)}
     </div>
 
     <div class="content">
-      <section id="executive" class="view active">
+      
+      <section id="summary" class="view active">
+        <div class="simple-summary">
+
+          <div class="simple-hero">
+            <div class="simple-eyebrow">August 2026 · simple trade playbook</div>
+            <h2>3 things to remember:<br>Good Time. Strong Signal. Give It Time.</h2>
+            <p>
+              This page turns the August data into very simple rules. Think of it like a traffic light:
+              <b>green = better historical zone</b>, <b>yellow = be careful</b>, and
+              <b>red = historically weak</b>.
+            </p>
+
+            <div class="simple-result-strip">
+              <div class="simple-result"><strong>222</strong><span>completed trades studied</span></div>
+              <div class="simple-result"><strong>+6,855</strong><span>net BankNifty points</span></div>
+              <div class="simple-result"><strong>+463</strong><span>best trade</span></div>
+              <div class="simple-result"><strong>-63</strong><span>worst trade</span></div>
+            </div>
+
+            <div class="landing-cta-wrap">
+              <a class="landing-cta-main" href="https://pages.razorpay.com/thepearlmindMonthlyAccess" target="_blank" rel="noopener">
+                <b>Renew ThePearlMind Access</b>
+                <span>CTA · ThePearlMind 4.2 Alerts + 4.1 Chart</span>
+              </a>
+              <a class="landing-cta-secondary" href="#executive" onclick="switchView('executive'); window.scrollTo({top:0,behavior:'smooth'}); return false;">
+                <b>Study August Results</b>
+                <span>Open the Executive tab on this same page</span>
+              </a>
+            </div>
+
+            <div class="cta-microcopy">
+              First <b>study the August intelligence</b>. If the logic makes sense to you, then use the highlighted
+              <b>Renew</b> button to continue.
+            </div>
+          </div>
+
+          <div class="playbook-title">
+            <h3>August Trade Intelligence — in child-simple language</h3>
+            <p>Do not memorize every number. Remember the meaning.</p>
+          </div>
+
+          <div class="rule-grid">
+
+            <article class="rule-card">
+              <div class="rule-head">
+                <div class="rule-icon">⏰</div>
+                <div><h3>1. WHEN should I take it?</h3><span>Choose the better time window.</span></div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot green">✓</div>
+                <div class="rule-main"><b>Market open → 9:30 AM</b><span>+2,428 points · 58.5% wins</span></div>
+                <div class="rule-tag green">GOOD</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot blue">✓</div>
+                <div class="rule-main"><b>9:31 → 11:00 AM</b><span>+1,901 points · productive</span></div>
+                <div class="rule-tag blue">OK</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot amber">!</div>
+                <div class="rule-main"><b>11:01 AM → 1:00 PM</b><span>Only +158 points</span></div>
+                <div class="rule-tag amber">CAREFUL</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot red">×</div>
+                <div class="rule-main"><b>1:01 → 2:30 PM</b><span>-59 points · weakest zone</span></div>
+                <div class="rule-tag red">WEAK</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot green">★</div>
+                <div class="rule-main"><b>After 2:30 PM</b><span>+2,427 points · 60% wins</span></div>
+                <div class="rule-tag green">VERY GOOD</div>
+              </div>
+            </article>
+
+            <article class="rule-card">
+              <div class="rule-head">
+                <div class="rule-icon">🎯</div>
+                <div><h3>2. WHICH signal should I trust more?</h3><span>Use confidence like a traffic light.</span></div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot red">×</div>
+                <div class="rule-main"><b>Confidence below 40%</b><span>23.1% wins · -410 points</span></div>
+                <div class="rule-tag red">SKIP / WATCH</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot amber">!</div>
+                <div class="rule-main"><b>Confidence 40% → 59%</b><span>Middle zone · need more confirmation</span></div>
+                <div class="rule-tag amber">SELECTIVE</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot green">★</div>
+                <div class="rule-main"><b>Confidence 60% → 69.9%</b><span>88.9% wins · +2,784 points</span></div>
+                <div class="rule-tag green">STRONG</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot amber">?</div>
+                <div class="rule-main"><b>Confidence 70%+</b><span>2 trades only · too small to trust yet</span></div>
+                <div class="rule-tag amber">TINY SAMPLE</div>
+              </div>
+            </article>
+
+            <article class="rule-card">
+              <div class="rule-head">
+                <div class="rule-icon">⏳</div>
+                <div><h3>3. HOW LONG should I allow it?</h3><span>Do not cut a good trade too quickly.</span></div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot red">×</div>
+                <div class="rule-main"><b>0 → 15 minutes</b><span>-64 points · mostly churn/noise</span></div>
+                <div class="rule-tag red">TOO QUICK</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot green">✓</div>
+                <div class="rule-main"><b>31 → 60 minutes</b><span>+1,838 points · 61.1% wins</span></div>
+                <div class="rule-tag green">HEALTHY</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot green">✓</div>
+                <div class="rule-main"><b>61 → 120 minutes</b><span>+729 points · 62.5% wins</span></div>
+                <div class="rule-tag green">HEALTHY</div>
+              </div>
+
+              <div class="rule-line">
+                <div class="rule-dot green">★</div>
+                <div class="rule-main"><b>More than 120 minutes</b><span>+4,271 points · 80% wins</span></div>
+                <div class="rule-tag green">BIG MOVES</div>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="big-meaning">
+            <div class="emoji">🧠</div>
+            <div>
+              <strong>Simple meaning: Pick a better time + wait for a stronger signal + do not kill a good trade too early.</strong>
+              <span>
+                August suggests that the best result did not come from trading everything.
+                It came from being more selective and allowing strong moves enough time to develop.
+              </span>
+            </div>
+          </div>
+
+          <div class="simple-actions">
+            <div class="do-card">
+              <h3>✅ Remember this</h3>
+              <ul class="simple-bullets">
+                <li><b>Opening and after 2:30 PM</b> were the strongest historical time zones.</li>
+                <li><b>60%–69.9% confidence</b> was the strongest confidence group with a meaningful sample.</li>
+                <li>If a good trade keeps working, <b>give it room</b> instead of rushing to exit.</li>
+              </ul>
+            </div>
+
+            <div class="dont-card">
+              <h3>❌ Be careful with this</h3>
+              <ul class="simple-bullets">
+                <li><b>1:01–2:30 PM</b> was the weakest August time window.</li>
+                <li><b>Below 40% confidence</b> was historically weak.</li>
+                <li>Very short trades of <b>15 minutes or less</b> mostly created churn rather than points.</li>
+              </ul>
+            </div>
+          </div>
+
+          <details class="simple-details">
+            <summary>▸ Show the numbers behind these simple rules</summary>
+            <div class="details-body">
+              <div class="summary-table-wrap">
+                <table class="summary-table">
+                  <thead>
+                    <tr>
+                      <th>Historical Filter</th><th>Trades</th><th>Win Rate</th>
+                      <th>Net Points</th><th>Avg / Trade</th><th>Meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>Opening ≤ 9:30 AM</strong></td><td>41</td><td>58.5%</td><td>+2,428</td><td>+59.2</td><td>Strong opening window</td></tr>
+                    <tr><td><strong>9:31–11:00 AM</strong></td><td>64</td><td>46.9%</td><td>+1,901</td><td>+29.7</td><td>Productive</td></tr>
+                    <tr><td><strong>11:01–1:00 PM</strong></td><td>43</td><td>41.9%</td><td>+158</td><td>+3.7</td><td>Selective</td></tr>
+                    <tr><td><strong>1:01–2:30 PM</strong></td><td>44</td><td>38.6%</td><td>-59</td><td>-1.3</td><td>Weakest window</td></tr>
+                    <tr><td><strong>After 2:30 PM</strong></td><td>30</td><td>60.0%</td><td>+2,427</td><td>+80.9</td><td>Strong late window</td></tr>
+                    <tr><td><strong>Confidence &lt;40%</strong></td><td>26</td><td>23.1%</td><td>-410</td><td>-15.8</td><td>Historically weak</td></tr>
+                    <tr><td><strong>Confidence 60–69.9%</strong></td><td>18</td><td>88.9%</td><td>+2,784</td><td>+154.7</td><td>Very strong sample</td></tr>
+                    <tr><td><strong>Confidence 70%+</strong></td><td>2</td><td>100%</td><td>+395</td><td>+197.5</td><td>Too few trades</td></tr>
+                    <tr><td><strong>Duration ≤15 min*</strong></td><td>75</td><td>30.7%</td><td>-64</td><td>-0.9</td><td>Mostly churn</td></tr>
+                    <tr><td><strong>31–60 min*</strong></td><td>54</td><td>61.1%</td><td>+1,838</td><td>+34.0</td><td>Healthy continuation</td></tr>
+                    <tr><td><strong>61–120 min*</strong></td><td>24</td><td>62.5%</td><td>+729</td><td>+30.4</td><td>Healthy</td></tr>
+                    <tr><td><strong>&gt;120 min*</strong></td><td>25</td><td>80.0%</td><td>+4,271</td><td>+170.8</td><td>Biggest contribution</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="summary-note">
+                *Duration is inferred from one signal to the next signal because the source does not contain a separate explicit exit-time field.
+                This means the duration numbers are historical observations, not a rule that every trade must be held for a fixed number of minutes.
+              </div>
+            </div>
+          </details>
+
+          <div class="simple-subscribe">
+            <div class="cta-banner">
+              <div class="cta-banner-top">
+                <div>
+                  <h3>⚓ Continue with ThePearlMind</h3>
+                  <p>
+                    This page is your landing page. Learn the August logic here, then take action.
+                    The main CTA is the <b>Renew</b> button.
+                  </p>
+                </div>
+                <span class="cta-badge">Landing Page CTA</span>
+              </div>
+
+              <div class="cta-footer">
+                <a class="summary-link primary" href="https://pages.razorpay.com/thepearlmindMonthlyAccess" target="_blank" rel="noopener">Renew ThePearlMind 4.2 + 4.1</a>
+                <a class="summary-link" href="#executive" onclick="switchView('executive'); window.scrollTo({top:0,behavior:'smooth'}); return false;">Study August Results on This Page</a>
+              </div>
+
+              <div class="cta-footer-note">
+                <b>What you get:</b> ThePearlMind 4.2 Alerts + ThePearlMind 4.1 Chart Access.<br>
+                <b>What to do first:</b> Understand <b>when to trade</b>, <b>which signal is stronger</b>, and
+                <b>how long a good trade may need</b>. Then decide whether to renew.
+              </div>
+            </div>
+
+            <p><b>Study it. Test it. Then believe it.</b> Historical results do not guarantee future performance. Trading involves risk.</p>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section id="executive" class="view">
         <div class="section-head"><div><h2>Executive cockpit</h2><p>The strategy story in numbers. Large values are highlighted deliberately.</p></div><span class="chip" id="dateRangeChip"></span></div>
         <div class="grid" id="kpiGrid"></div>
         <div class="grid" style="margin-top:10px">
