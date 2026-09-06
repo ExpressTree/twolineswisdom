@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Nine-Square Conversation Coach for coaching, consulting, discovery, group sessions and high-ticket conversations.">
+<title>Nine-Square Conversation Coach · Coaching & Consultative Sales</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{
+  --page:#e9eef5;--shell:#ffffff;--card:#ffffff;--text:#233142;--muted:#8492a6;--line:#e4ebf3;
+  --blue:#2f80ed;--blue2:#65a9ff;--blueSoft:#eaf3ff;--green:#33c477;--greenSoft:#eafaf1;
+  --red:#eb6b73;--redSoft:#fff0f1;--amber:#f3b844;--amberSoft:#fff8e7;--ink:#152536;
+  --shadow:0 18px 55px rgba(41,61,89,.12);--font-bump:2px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--text);font-family:"Plus Jakarta Sans","Segoe UI",Arial,sans-serif;line-height:1.45}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{width:min(1540px,calc(100% - 28px));margin:18px auto 34px}
+.shell{background:var(--shell);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;border:1px solid rgba(228,235,243,.7)}
+.topbar{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid #f1f4f8;background:rgba(255,255,255,.96);position:sticky;top:0;z-index:30;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:11px;min-width:245px}.brand-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#edf3fa);border:1px solid var(--line);color:var(--blue);font-weight:800;box-shadow:0 8px 20px rgba(57,91,130,.10)}
+.brand h1{font-size:calc(17px + var(--font-bump));letter-spacing:-.025em;margin:0;color:var(--ink)}.brand p{font-size:calc(9px + var(--font-bump));margin:2px 0 0;color:var(--muted)}
+.top-actions{margin-left:auto;display:flex;gap:7px;align-items:center;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;color:#667b90;border-radius:10px;padding:8px 10px;font-size:calc(9px + var(--font-bump));font-weight:800}.btn:hover{border-color:#c5dcf7;color:var(--blue)}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 7px 18px rgba(47,128,237,.22)}
+.font-tools{display:flex;align-items:center;gap:4px;border:1px solid var(--line);background:#f8fafc;border-radius:11px;padding:3px;min-height:38px}.font-btn{border:0;background:#fff;color:#62768c;min-width:34px;height:30px;border-radius:8px;font-weight:800;font-size:calc(10px + var(--font-bump));line-height:1}.font-btn:hover{color:var(--blue);background:var(--blueSoft)}.font-btn:disabled{opacity:.38;cursor:not-allowed}.font-level{min-width:47px;text-align:center;font-size:calc(8px + var(--font-bump));font-weight:800;color:#66798e;user-select:none}.font-reset{border:0;background:transparent;color:#8798aa;padding:0 6px;height:30px;font-size:calc(8px + var(--font-bump));font-weight:800;border-radius:8px}.font-reset:hover{color:var(--blue);background:#fff}
+.control-dock{margin:12px 14px 0;padding:11px;border:1px solid #dfe8f2;border-radius:18px;background:rgba(255,255,255,.97);box-shadow:0 12px 30px rgba(43,70,105,.10);display:grid;grid-template-columns:1.3fr 1fr 1fr .8fr;gap:8px;align-items:end}
+.field label{display:block;font-size:calc(8px + var(--font-bump));text-transform:uppercase;letter-spacing:.08em;color:#9aa8b7;font-weight:800;margin:0 0 4px 2px}.field select,.field input{width:100%;min-height:38px;border:1px solid var(--line);border-radius:10px;background:#fbfcfe;color:#4f6278;padding:8px 10px;font-size:calc(10px + var(--font-bump));font-weight:650;outline:none}.field select:focus,.field input:focus{border-color:#b3d2f8;box-shadow:0 0 0 3px #edf5ff}
+.timer-box{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);background:#fbfcfe;border-radius:10px;min-height:38px;padding:5px 7px}.timer{font-size:calc(15px + var(--font-bump));font-weight:800;color:var(--ink);letter-spacing:-.03em}.timer-actions{display:flex;gap:4px}.icon-btn{border:0;background:#fff;border:1px solid var(--line);width:29px;height:29px;border-radius:8px;color:#6e8094;font-size:calc(11px + var(--font-bump));font-weight:800}.icon-btn:hover{color:var(--blue)}
+.context-strip{display:grid;grid-template-columns:1.15fr 1fr 1fr 1.25fr;gap:8px;padding:10px 14px 12px}.context-card{border:1px solid var(--line);background:#fff;border-radius:13px;padding:9px 11px;min-width:0}.context-card span{display:block;font-size:calc(8px + var(--font-bump));color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:800}.context-card b{display:block;font-size:calc(10px + var(--font-bump));color:var(--ink);margin-top:3px}.context-card.blue{background:#f7faff;border-color:#e0ebf8}.context-card.amber{background:#fffaf0;border-color:#f2e5c8}
+.live-strip{margin:0 14px 12px;border:1px solid #dce9f8;background:linear-gradient(135deg,#f6faff,#fff);border-radius:15px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}.live-number{width:34px;height:34px;border-radius:10px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800}.live-copy b{font-size:calc(11px + var(--font-bump));color:var(--ink)}.live-copy p{font-size:calc(9px + var(--font-bump));color:#687b91;margin:2px 0 0}.progress-dots{display:flex;gap:4px}.dot{width:8px;height:8px;border-radius:50%;background:#dfe7f0}.dot.done{background:var(--green)}.dot.active{background:var(--blue);box-shadow:0 0 0 3px var(--blueSoft)}
+.board-wrap{padding:0 14px 14px}.phase-labels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 7px}.phase-label{text-align:center;font-size:calc(8px + var(--font-bump));text-transform:uppercase;letter-spacing:.1em;color:#97a5b5;font-weight:800}.phase-label b{color:var(--ink)}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(265px,1fr) minmax(320px,1.2fr) minmax(265px,1fr);gap:10px}
+.square{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:12px;min-width:0;display:flex;flex-direction:column;position:relative;transition:.2s;overflow:hidden}.square:hover{box-shadow:0 10px 28px rgba(39,70,110,.08);transform:translateY(-1px)}.square.active{border-color:#aad0ff;box-shadow:0 0 0 3px #edf5ff,0 12px 32px rgba(47,128,237,.10)}
+.square::after{content:"";position:absolute;width:88px;height:88px;border-radius:50%;right:-40px;top:-42px;background:var(--blueSoft);pointer-events:none}.square.gap::after{background:var(--amberSoft)}.square.hired::after{background:var(--greenSoft)}
+.sq-head{display:flex;align-items:flex-start;gap:8px;position:relative;z-index:1}.sq-num{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:calc(10px + var(--font-bump));font-weight:800;background:var(--blueSoft);color:var(--blue);flex:0 0 auto}.gap .sq-num{background:var(--amberSoft);color:#9b721c}.hired .sq-num{background:var(--greenSoft);color:#248a55}.sq-title{min-width:0}.sq-title h3{font-size:calc(11px + var(--font-bump));margin:0;color:var(--ink)}.sq-title p{font-size:calc(8px + var(--font-bump));color:var(--muted);margin:2px 0 0}.tone{margin-left:auto;font-size:calc(7px + var(--font-bump));font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:4px 6px;border-radius:999px;background:#f4f7fa;color:#73869a;white-space:nowrap}
+.sq-objective{margin:9px 0 6px;padding:7px 8px;border-radius:10px;background:#f8fafc;border:1px solid #eef2f6;font-size:calc(8.5px + var(--font-bump));color:#566b82}.sq-objective b{color:var(--ink)}
+.section-mini{margin-top:6px}.section-mini b{font-size:calc(7.5px + var(--font-bump));color:#92a0b0;text-transform:uppercase;letter-spacing:.08em}.section-mini ul{margin:4px 0 0;padding-left:15px}.section-mini li{font-size:calc(8.5px + var(--font-bump));color:#556a80;margin:2px 0}.section-mini li::marker{color:#a6b3c1}
+.control-move{margin-top:7px;border-left:3px solid var(--blue);padding:6px 7px;background:#f7fbff;border-radius:0 9px 9px 0;font-size:calc(8.5px + var(--font-bump));color:#4d647b}.gap .control-move{border-left-color:var(--amber);background:#fffaf0}.hired .control-move{border-left-color:var(--green);background:#f5fcf8}.control-move b{color:var(--ink)}
+.evidence{margin-top:7px;padding:6px 7px;border-radius:9px;background:#fbfcfe;border:1px dashed #dbe4ee;font-size:calc(7.7px + var(--font-bump));color:#7f8fa1}.evidence b{color:#5e7288}.warning{margin-top:6px;color:#9d6b28;font-size:calc(7.8px + var(--font-bump))}.notes{margin-top:auto;padding-top:8px}.notes textarea{width:100%;min-height:48px;resize:vertical;border:1px solid var(--line);border-radius:9px;background:#fbfcfe;padding:7px 8px;font-size:calc(8.5px + var(--font-bump));color:#536579;outline:none}.notes textarea:focus{border-color:#b3d2f8;box-shadow:0 0 0 3px #edf5ff}.sq-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:7px}.time-chip{font-size:calc(7.5px + var(--font-bump));font-weight:800;color:var(--blue);background:var(--blueSoft);border-radius:999px;padding:4px 6px}.focus-btn{border:0;background:transparent;color:#8a9aab;font-size:calc(7.5px + var(--font-bump));font-weight:800}.focus-btn:hover{color:var(--blue)}
+.footer-bar{position:sticky;bottom:0;z-index:25;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px 14px;display:flex;align-items:center;gap:8px}.footer-bar .status{font-size:calc(8px + var(--font-bump));color:var(--muted);margin-right:auto}.footer-bar .status b{color:var(--ink)}
+.disclaimer{padding:10px 16px 18px;color:#97a5b5;font-size:calc(7.5px + var(--font-bump));text-align:center}
+@media(max-width:1120px){.control-dock{grid-template-columns:1fr 1fr}.context-strip{grid-template-columns:1fr 1fr}.board{grid-template-columns:1fr 1fr;grid-template-rows:none}.phase-labels{display:none}.square{min-height:310px}}
+@media(max-width:720px){body{background:#fff}.app{width:100%;margin:0}.shell{border-radius:0;box-shadow:none;border:0}.topbar{padding:11px 12px;flex-wrap:wrap}.brand{min-width:0;flex:1}.brand h1{font-size:calc(14px + var(--font-bump))}.top-actions{width:100%;margin-left:0}.font-tools{flex:1 1 100%;justify-content:center;order:-1}.top-actions .btn{flex:1}.control-dock{margin:8px 8px 0;grid-template-columns:1fr}.context-strip{padding:8px;grid-template-columns:1fr 1fr}.context-card:nth-child(4){grid-column:1/-1}.live-strip{margin:0 8px 8px;grid-template-columns:auto 1fr}.progress-dots{grid-column:1/-1;justify-content:center}.board-wrap{padding:0 8px 8px}.board{grid-template-columns:1fr;gap:8px}.square{min-height:0}.footer-bar{padding:8px}.footer-bar .status{display:none}.footer-bar .btn{flex:1}.disclaimer{padding-bottom:70px}}
+@media print{body{background:#fff}.app{width:100%;margin:0}.shell{box-shadow:none;border:0}.top-actions,.timer-box,.footer-bar,.focus-btn{display:none!important}.topbar,.live-strip{position:static}.control-dock{grid-template-columns:1fr 1fr 1fr}.board{gap:6px}.square{break-inside:avoid;min-height:280px}.notes textarea{border:1px solid #ddd;min-height:36px}.disclaimer{font-size:calc(7px + var(--font-bump))}}
+
+/* v3 · stronger 9-square visual hierarchy + session record controls */
+.control-dock{grid-template-columns:repeat(5,minmax(150px,1fr))}
+.session-profile{margin:10px 14px 0;padding:12px;border:1px solid #dfe8f2;border-radius:16px;background:#fbfcfe}
+.session-profile-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.session-profile-head h2{font-size:calc(11px + var(--font-bump));margin:0;color:var(--ink)}
+.session-profile-head p{font-size:calc(7.8px + var(--font-bump));margin:2px 0 0;color:var(--muted)}
+.session-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.session-fields .field{min-width:0}
+.record-bar{margin:9px 14px 0;padding:9px 11px;border:1px solid var(--line);border-radius:14px;background:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.record-bar .record-title{font-size:calc(8px + var(--font-bump));font-weight:800;color:var(--ink);margin-right:2px}
+.record-bar select{min-width:260px;max-width:460px;flex:1;border:1px solid var(--line);border-radius:10px;background:#fbfcfe;color:#4f6278;padding:8px 10px;font-size:calc(8px + var(--font-bump));outline:none}
+.record-meta{font-size:calc(7.5px + var(--font-bump));color:var(--muted);margin-left:auto}
+.square{border-width:2px;border-style:solid;box-shadow:0 5px 16px rgba(42,71,107,.035)}
+.square.lead{border-color:#b9d7fb}.square.gap{border-color:#f0cf7a}.square.hired{border-color:#9bdab8}
+.sq-head{margin:-12px -12px 9px;padding:10px 11px;align-items:center;border-bottom:1px solid rgba(0,0,0,.04)}
+.lead .sq-head{background:linear-gradient(135deg,#eaf3ff,#f7fbff)}
+.gap .sq-head{background:linear-gradient(135deg,#fff4d7,#fffaf0)}
+.hired .sq-head{background:linear-gradient(135deg,#eafaf1,#f6fcf8)}
+.square.active{border-color:var(--blue);box-shadow:0 0 0 3px #ddebff,0 12px 32px rgba(47,128,237,.12)}
+.square.completed{border-color:#62c994;box-shadow:0 0 0 2px #e7f8ef,0 8px 20px rgba(51,196,119,.09)}
+.square.completed .sq-head{background:linear-gradient(135deg,#def7e9,#effbf4)}
+.square.completed::before{content:'✓ Completed';position:absolute;right:10px;bottom:9px;font-size:calc(7px + var(--font-bump));font-weight:800;color:#278857;background:#e9f9f0;border:1px solid #cbeedb;border-radius:999px;padding:3px 7px;z-index:2}
+.step-check{margin-left:auto;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:calc(7.5px + var(--font-bump));font-weight:800;color:#5d7186;background:rgba(255,255,255,.78);border:1px solid rgba(139,162,185,.28);border-radius:999px;padding:4px 7px}
+.step-check input{width:16px;height:16px;accent-color:var(--green);margin:0}
+.step-check span{line-height:1}
+.sq-title{flex:1}.tone{margin-left:0}
+.phase-labels .phase-label:nth-child(1){background:#eef6ff;border-color:#cfe4ff}.phase-labels .phase-label:nth-child(2){background:#fff8e8;border-color:#f2dda2}.phase-labels .phase-label:nth-child(3){background:#eefaf3;border-color:#cfeeda}
+.progress-summary{font-size:calc(8px + var(--font-bump));font-weight:800;color:#4c6379;background:#f6f9fc;border:1px solid var(--line);padding:6px 9px;border-radius:999px;white-space:nowrap}
+.dot.done{background:var(--green)!important;border-color:var(--green)!important}.dot.done::after{content:'✓';font-size:7px;color:#fff;display:grid;place-items:center;height:100%}
+.btn.success{background:var(--green);border-color:var(--green);color:#fff}.btn.success:hover{filter:brightness(.98)}
+.save-state{font-size:calc(7.5px + var(--font-bump));font-weight:700;color:var(--green);min-width:80px;text-align:right}
+@media(max-width:1250px){.control-dock{grid-template-columns:repeat(3,1fr)}.session-fields{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.control-dock{grid-template-columns:1fr}.session-profile{margin:8px 8px 0}.session-fields{grid-template-columns:1fr}.record-bar{margin:8px 8px 0}.record-bar select{min-width:0;width:100%}.record-meta{width:100%;margin-left:0}.step-check{padding:5px 7px}.square.completed::before{display:none}.save-state{display:none}}
+@media print{.record-bar,.session-profile-head .profile-hint,.step-check input{display:none!important}.square.completed::before{display:block}}
+
+
+/* Full / Quick Reference tabs */
+.view-tabs{display:flex;gap:5px;margin:12px 14px 10px;padding:4px;background:#eef3f8;border:1px solid #dfe8f2;border-radius:13px;width:max-content;max-width:calc(100% - 28px)}
+.view-tab{border:0;background:transparent;color:#718398;border-radius:9px;padding:9px 13px;font-size:calc(9px + var(--font-bump));font-weight:800;min-height:38px;white-space:nowrap}
+.view-tab.active{background:#fff;color:var(--blue);box-shadow:0 4px 14px rgba(42,71,107,.09)}
+.coach-view{display:none}.coach-view.active{display:block}
+.quick-view{padding:0 14px 14px}
+.quick-hero{display:flex;justify-content:space-between;gap:16px;align-items:center;border:1px solid #dce9f8;background:linear-gradient(135deg,#f6faff,#fff);border-radius:15px;padding:12px 14px;margin-bottom:10px}
+.quick-kicker{display:block;font-size:calc(7px + var(--font-bump));font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--blue);margin-bottom:3px}.quick-hero h2{margin:0;color:var(--ink);font-size:calc(15px + var(--font-bump));letter-spacing:-.02em}.quick-hero p{margin:3px 0 0;color:#728499;font-size:calc(8.5px + var(--font-bump))}.quick-legend{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.quick-pill{padding:6px 8px;border-radius:999px;font-size:calc(7px + var(--font-bump));font-weight:800;border:1px solid var(--line);background:#fff;color:#65798e}.quick-pill.connect{color:var(--blue);background:var(--blueSoft);border-color:#d7e9ff}.quick-pill.diagnose{color:#936815;background:var(--amberSoft);border-color:#f1dfb6}.quick-pill.decide{color:#248a55;background:var(--greenSoft);border-color:#cfeeda}
+.quick-context-grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:8px;margin-bottom:10px}.quick-context{border:1px solid var(--line);border-radius:11px;padding:8px 10px;background:#fff;min-width:0}.quick-context span{display:block;font-size:calc(7px + var(--font-bump));text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#9aa8b7}.quick-context b{display:block;margin-top:2px;font-size:calc(8.5px + var(--font-bump));color:var(--ink);line-height:1.35}
+.quick-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.quick-card{border:2px solid #dbe7f5;border-radius:13px;background:#fff;overflow:hidden;min-width:0;transition:.15s}.quick-card.gap{border-color:#f0ddb0}.quick-card.hired{border-color:#ccebd9}.quick-card.active{box-shadow:0 0 0 3px #eaf3ff}.quick-card.completed{border-color:#86d6aa}.quick-head{display:flex;align-items:center;gap:7px;padding:8px 9px;background:#edf5ff;border-bottom:1px solid #d8e9fc}.quick-card.gap .quick-head{background:#fff6df;border-bottom-color:#f2dfb4}.quick-card.hired .quick-head{background:#eafaf1;border-bottom-color:#d2efdf}.quick-card.completed .quick-head{background:#eafaf1;border-bottom-color:#d2efdf}.quick-num{width:25px;height:25px;border-radius:7px;display:grid;place-items:center;background:#fff;color:var(--blue);font-size:calc(8px + var(--font-bump));font-weight:800;flex:0 0 auto}.quick-card.gap .quick-num{color:#946a18}.quick-card.hired .quick-num,.quick-card.completed .quick-num{color:#248a55}.quick-head-title{min-width:0}.quick-head-title b{display:block;color:var(--ink);font-size:calc(9.5px + var(--font-bump))}.quick-head-title span{display:block;color:#7f90a3;font-size:calc(7px + var(--font-bump));margin-top:1px}.quick-check{margin-left:auto;display:inline-flex;align-items:center;gap:4px;color:#718398;font-size:calc(7px + var(--font-bump));font-weight:800;white-space:nowrap}.quick-check input{accent-color:var(--green);width:15px;height:15px}
+.quick-body{padding:8px 9px}.quick-focus{font-size:calc(8px + var(--font-bump));font-weight:700;color:#53697f;line-height:1.35;margin-bottom:6px}.quick-label{font-size:calc(6.8px + var(--font-bump));font-weight:800;color:#98a5b5;text-transform:uppercase;letter-spacing:.08em;margin-top:5px}.quick-body ul{margin:3px 0 0;padding-left:15px}.quick-body li{font-size:calc(7.8px + var(--font-bump));line-height:1.33;color:#54697f;margin:2px 0}.quick-move{margin-top:7px;padding:6px 7px;border-radius:8px;background:#f7faff;color:#526b83;font-size:calc(7.8px + var(--font-bump));border-left:3px solid var(--blue)}.quick-card.gap .quick-move{background:#fffaf0;border-left-color:var(--amber)}.quick-card.hired .quick-move{background:#f5fcf8;border-left-color:var(--green)}.quick-footer{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:7px 9px;border-top:1px solid #edf1f5}.quick-time{font-size:calc(7px + var(--font-bump));font-weight:800;color:#6f8296}.quick-open{border:0;background:transparent;color:var(--blue);font-size:calc(7px + var(--font-bump));font-weight:800;padding:3px 0}.quick-memory{margin-top:10px;padding:9px 11px;border-radius:11px;border:1px solid #dfe8f2;background:#f8fafc;color:#65798e;font-size:calc(8px + var(--font-bump))}.quick-memory b{color:var(--ink)}
+@media(max-width:980px){.quick-board{grid-template-columns:1fr 1fr}.quick-context-grid{grid-template-columns:1fr 1fr}.quick-context:last-child{grid-column:1/-1}}
+@media(max-width:650px){.view-tabs{width:calc(100% - 28px)}.view-tab{flex:1}.quick-hero{display:block}.quick-legend{justify-content:flex-start;margin-top:9px}.quick-board{grid-template-columns:1fr}.quick-context-grid{grid-template-columns:1fr}.quick-context:last-child{grid-column:auto}.quick-card{border-width:2px}}
+@media print{.view-tabs{display:none!important}.coach-view{display:block!important}.quick-view{page-break-before:always}.quick-open,.quick-check{display:none!important}}
+
+
+/* Question guide + 9-square presentation mode */
+.question-guide{margin:0 14px 14px;border:1px solid #dce6f0;border-radius:17px;background:#fff;overflow:hidden;box-shadow:0 8px 24px rgba(42,71,107,.05)}
+.question-guide-head{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 14px;background:linear-gradient(135deg,#f7faff,#fff);border-bottom:1px solid #e6edf5;flex-wrap:wrap}
+.question-guide-title{min-width:0}.question-guide-kicker{display:block;font-size:calc(7px + var(--font-bump));font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:2px}.question-guide-title h2{margin:0;color:var(--ink);font-size:calc(14px + var(--font-bump));letter-spacing:-.02em}.question-guide-title p{margin:3px 0 0;color:#75879a;font-size:calc(8.5px + var(--font-bump));max-width:820px}
+.question-guide-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.q-stat{font-size:calc(8px + var(--font-bump));font-weight:800;color:#526a80;background:#f6f9fc;border:1px solid var(--line);border-radius:999px;padding:6px 9px;white-space:nowrap}.q-scope{border:1px solid var(--line);background:#fbfcfe;color:#53677d;border-radius:9px;padding:7px 9px;font-size:calc(8px + var(--font-bump));font-weight:700;min-height:36px}
+.question-summary{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:8px;padding:10px 14px;background:#fbfcfe;border-bottom:1px solid #edf1f5}.question-summary-card{border:1px solid var(--line);border-radius:11px;background:#fff;padding:8px 10px;min-width:0}.question-summary-card span{display:block;text-transform:uppercase;letter-spacing:.08em;color:#9ba8b7;font-size:calc(6.8px + var(--font-bump));font-weight:800}.question-summary-card b{display:block;color:var(--ink);font-size:calc(8.6px + var(--font-bump));margin-top:2px;line-height:1.35}
+.question-list{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:12px 14px}.question-row{display:grid;grid-template-columns:auto auto 1fr;align-items:flex-start;gap:7px;border:1px solid #e5ebf2;border-radius:11px;padding:8px 9px;background:#fff;min-width:0;transition:.15s}.question-row.core{border-color:#cfe3fb;background:#f8fbff}.question-row.asked{border-color:#bfe7d1;background:#f4fcf7}.question-row input{width:17px;height:17px;margin:2px 0 0;accent-color:var(--green)}.q-num{width:23px;height:23px;border-radius:7px;background:#eef3f8;color:#60758b;display:grid;place-items:center;font-size:calc(7px + var(--font-bump));font-weight:800;flex:0 0 auto}.question-row.core .q-num{background:var(--blueSoft);color:var(--blue)}.question-row.asked .q-num{background:var(--greenSoft);color:#278857}.q-copy{min-width:0}.q-copy b{display:inline-block;font-size:calc(6.5px + var(--font-bump));letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin:0 5px 2px 0}.q-copy span{font-size:calc(8.5px + var(--font-bump));color:#53687e;line-height:1.4}.question-hint{padding:0 14px 12px;color:#8292a4;font-size:calc(7.5px + var(--font-bump))}.question-hint b{color:#5a6f85}
+.q-jump{border:0;background:transparent;color:var(--blue);font-size:calc(7.5px + var(--font-bump));font-weight:800;padding:3px 0}.q-jump:hover{text-decoration:underline}
+
+.presentation-mode{display:none;position:fixed;inset:0;z-index:9999;background:#eef3f8;padding:10px;overflow:hidden}.presentation-mode.open{display:flex;flex-direction:column}.presentation-top{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #dce6f0;border-radius:14px;padding:8px 10px;margin-bottom:8px;box-shadow:0 8px 22px rgba(42,71,107,.08);min-width:0}.presentation-title{min-width:0;flex:1}.presentation-title b{display:block;color:var(--ink);font-size:calc(11px + var(--font-bump));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.presentation-title span{display:block;color:#8393a5;font-size:calc(7.5px + var(--font-bump));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.presentation-tools{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}.presentation-timer{font-size:calc(12px + var(--font-bump));font-weight:800;color:var(--ink);background:#f7f9fc;border:1px solid var(--line);border-radius:9px;padding:6px 9px;min-width:72px;text-align:center}.presentation-layout{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(340px,.75fr);gap:8px}.presentation-board{min-width:0;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:7px}.pres-card{border:2px solid #b9d7fb;border-radius:12px;background:#fff;overflow:hidden;display:flex;flex-direction:column;min-width:0;min-height:0;box-shadow:0 4px 14px rgba(42,71,107,.04)}.pres-card.gap{border-color:#f0cf7a}.pres-card.hired{border-color:#9bdab8}.pres-card.active{border-color:var(--blue);box-shadow:0 0 0 3px #ddebff}.pres-card.completed{border-color:#62c994}.pres-head{display:flex;align-items:center;gap:6px;padding:6px 7px;background:#edf5ff;border-bottom:1px solid #d8e9fc}.pres-card.gap .pres-head{background:#fff5dc;border-bottom-color:#f1dfb4}.pres-card.hired .pres-head,.pres-card.completed .pres-head{background:#eafaf1;border-bottom-color:#d2efdf}.pres-num{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:#fff;color:var(--blue);font-size:calc(7px + var(--font-bump));font-weight:800}.pres-card.gap .pres-num{color:#946a18}.pres-card.hired .pres-num,.pres-card.completed .pres-num{color:#278857}.pres-head b{font-size:calc(8.3px + var(--font-bump));color:var(--ink);min-width:0}.pres-done{margin-left:auto;display:flex;align-items:center;gap:3px;color:#718398;font-size:calc(6px + var(--font-bump));font-weight:800;white-space:nowrap}.pres-done input{width:14px;height:14px;accent-color:var(--green)}.pres-body{padding:6px 7px;overflow:auto;min-height:0;flex:1}.pres-objective{font-size:calc(7.3px + var(--font-bump));font-weight:700;line-height:1.3;color:#53687d}.pres-label{font-size:calc(5.8px + var(--font-bump));font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#99a6b5;margin-top:4px}.pres-body ul{padding-left:14px;margin:2px 0 0}.pres-body li{font-size:calc(6.7px + var(--font-bump));line-height:1.25;color:#586c81;margin:1px 0}.pres-foot{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:5px 7px;border-top:1px solid #edf1f5;background:#fff}.pres-foot span{font-size:calc(6.2px + var(--font-bump));font-weight:800;color:#718398}.pres-select{border:0;background:transparent;color:var(--blue);font-size:calc(6.3px + var(--font-bump));font-weight:800}
+.presentation-qpanel{min-width:0;min-height:0;border:1px solid #dce6f0;border-radius:13px;background:#fff;display:flex;flex-direction:column;overflow:hidden}.presentation-qhead{padding:9px 10px;background:linear-gradient(135deg,#f7faff,#fff);border-bottom:1px solid #e7edf4}.presentation-qhead span{display:block;font-size:calc(6.5px + var(--font-bump));font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--blue)}.presentation-qhead b{display:block;font-size:calc(10px + var(--font-bump));color:var(--ink);margin-top:2px}.presentation-qhead p{font-size:calc(7px + var(--font-bump));color:#74869a;margin:3px 0 0}.presentation-qlist{padding:7px;overflow:auto;min-height:0}.pres-qrow{display:grid;grid-template-columns:auto auto 1fr;gap:6px;align-items:flex-start;padding:6px;border-bottom:1px solid #edf1f5}.pres-qrow:last-child{border-bottom:0}.pres-qrow.core{background:#f8fbff;border-radius:8px}.pres-qrow.asked{background:#f3fbf6;border-radius:8px}.pres-qrow input{width:15px;height:15px;margin-top:1px;accent-color:var(--green)}.pres-qnum{font-size:calc(6px + var(--font-bump));font-weight:800;color:#8190a2;min-width:18px}.pres-qtext{font-size:calc(7.2px + var(--font-bump));line-height:1.32;color:#53677d}.pres-qtext b{color:var(--blue);font-size:calc(5.8px + var(--font-bump));text-transform:uppercase;letter-spacing:.07em;margin-right:4px}
+
+@media(max-width:980px){.question-list{grid-template-columns:1fr}.question-summary{grid-template-columns:1fr 1fr}.question-summary-card:first-child{grid-column:1/-1}.presentation-layout{grid-template-columns:1fr}.presentation-board{min-height:700px}.presentation-qpanel{max-height:430px}.presentation-mode{overflow:auto}.presentation-layout{overflow:visible}.presentation-board{grid-template-rows:repeat(3,minmax(210px,1fr))}}
+@media(max-width:650px){.question-guide{margin:0 8px 10px}.question-guide-head{align-items:flex-start}.question-guide-actions{width:100%}.q-scope{flex:1}.question-summary{grid-template-columns:1fr}.question-summary-card:first-child{grid-column:auto}.presentation-board{grid-template-columns:1fr;grid-template-rows:none}.presentation-mode{overflow:auto}.presentation-layout{display:block}.pres-card{min-height:180px;margin-bottom:7px}.presentation-qpanel{max-height:none}.presentation-top{align-items:flex-start;flex-wrap:wrap}.presentation-tools{width:100%;justify-content:flex-start}}
+@media print{.question-guide-actions,.presentation-mode{display:none!important}.question-list{grid-template-columns:1fr 1fr}.question-row input{display:none}}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">9S</div><div><h1>Nine-Square Conversation Coach</h1><p>Audience-first · Coaching · Consulting · Discovery · High-Ticket Conversations</p></div></div>
+      <div class="top-actions">
+        <div class="font-tools" role="group" aria-label="Font size controls" title="Adjust text size across the whole coach">
+          <button class="font-btn" id="fontDecrease" type="button" aria-label="Decrease font size">A−</button>
+          <span class="font-level" id="fontSizeLabel" aria-live="polite">100%</span>
+          <button class="font-btn" id="fontIncrease" type="button" aria-label="Increase font size">A+</button>
+          <button class="font-reset" id="fontReset" type="button" aria-label="Reset font size">Reset</button>
+        </div>
+        <button class="btn primary" id="fullScreenMode" type="button" title="Show all 9 squares in a presentation layout">⛶ 9-Square Full Screen</button>
+        <button class="btn success" id="saveSession">Save Session</button>
+        <button class="btn" id="copyNotes">Copy Session Notes</button>
+        <button class="btn" id="printPage">Print / Save PDF</button>
+        <button class="btn" id="clearNotes">Clear Notes</button>
+      </div>
+    </header>
+
+    <section class="control-dock">
+      <div class="field"><label>Conversation context</label><select id="contextSelect"></select></div>
+      <div class="field"><label>Audience / buyer profile</label><select id="segmentSelect"></select></div>
+      <div class="field"><label>Session type</label><select id="modeSelect"></select></div>
+      <div class="field"><label>Offer / Program (optional)</label><input id="offerName" placeholder="e.g. TwoLinesMethod, Leadership Program"></div>
+      <div class="field"><label>Session timer</label><div class="timer-box"><span class="timer" id="timer">60:00</span><div class="timer-actions"><button class="icon-btn" id="timerStart" title="Start/Pause">▶</button><button class="icon-btn" id="timerReset" title="Reset">↺</button></div></div></div>
+    </section>
+
+    <nav class="view-tabs" aria-label="Coach view">
+      <button class="view-tab active" id="tabFull" type="button" data-view="full" aria-selected="true">Full Coach</button>
+      <button class="view-tab" id="tabQuick" type="button" data-view="quick" aria-selected="false">Quick Reference</button>
+    </nav>
+
+    <div class="coach-view active" id="fullView">
+    <section class="session-profile" aria-label="Session details">
+      <div class="session-profile-head"><div><h2 id="profileTitle">Session Details</h2><p id="profileHint">Add only what helps you remember who you spoke with and why.</p></div><span class="save-state" id="saveState">Draft ready</span></div>
+      <div class="session-fields" id="sessionFields"></div>
+    </section>
+
+    <section class="record-bar" aria-label="Saved session records">
+      <span class="record-title">Saved sessions</span>
+      <select id="savedSessions"><option value="">No saved session selected</option></select>
+      <button class="btn" id="loadSession" type="button">Load</button>
+      <button class="btn" id="newSession" type="button">New</button>
+      <button class="btn" id="deleteSession" type="button">Delete</button>
+      <span class="record-meta" id="recordMeta">Local to this browser</span>
+    </section>
+
+    <section class="context-strip">
+      <div class="context-card blue"><span>Who is in front of you?</span><b id="ctxIdentity"></b></div>
+      <div class="context-card"><span>Primary gap</span><b id="ctxGap"></b></div>
+      <div class="context-card"><span>Desired identity</span><b id="ctxDesired"></b></div>
+      <div class="context-card amber"><span>Conversation rule</span><b id="ctxRule">Diagnose → Listen → Reflect → Clarify → Ask permission. Present an offer only after Square 9 earns the right.</b></div>
+    </section>
+
+    <section class="live-strip">
+      <div class="live-number" id="liveNumber">1</div>
+      <div class="live-copy"><b id="liveTitle">Rapport</b><p id="livePrompt">Start with the person, not your offer.</p></div>
+      <div class="progress-dots" id="progressDots"></div>
+    </section>
+
+    <section class="board-wrap">
+      <div class="phase-labels"><div class="phase-label"><b>20% Connect</b> · Rapport / Frame / Motive</div><div class="phase-label"><b>60% Diagnose</b> · Reality / Result / Roadblocks</div><div class="phase-label"><b>20% Decide</b> · Why not yet / Support / Next step</div></div>
+      <div class="board" id="board"></div>
+    </section>
+    </div>
+
+    <section class="coach-view quick-view" id="quickView" aria-label="Quick reference">
+      <div class="quick-hero">
+        <div><span class="quick-kicker">Live cheat sheet</span><h2 id="quickTitle">9 Squares · One Conversation</h2><p id="quickSubtitle">Use this condensed view when you already know the framework and only need prompts.</p></div>
+        <div class="quick-legend"><span class="quick-pill connect">1–3 Connect</span><span class="quick-pill diagnose">4–6 Diagnose</span><span class="quick-pill decide">7–9 Decide</span></div>
+      </div>
+      <div class="quick-context-grid">
+        <div class="quick-context"><span>Audience</span><b id="quickAudience">—</b></div>
+        <div class="quick-context"><span>Biggest gap</span><b id="quickGap">—</b></div>
+        <div class="quick-context"><span>Desired state</span><b id="quickDesired">—</b></div>
+      </div>
+      <div class="quick-board" id="quickBoard"></div>
+      <div class="quick-memory"><b>Memory line:</b> Connect first → diagnose reality → define the result → expose the gap → understand why it persists → let them define needed support → ask for the next step. <b>Do not pitch before permission.</b></div>
+    </section>
+
+    <section class="question-guide" id="questionGuide" aria-label="Selected square question guide">
+      <div class="question-guide-head">
+        <div class="question-guide-title"><span class="question-guide-kicker">20-question conversation bank</span><h2 id="questionGuideTitle">Square 1 · Rapport</h2><p id="questionGuideObjective">Select any square. The list below gives you 20 general-purpose questions for that exact stage of the conversation.</p></div>
+        <div class="question-guide-actions">
+          <span class="q-stat" id="askedCount">0 / 20 asked</span>
+          <select class="q-scope" id="questionScope" aria-label="Question scope"><option value="all">Show all 20</option><option value="core">Core 5 only</option><option value="optional">Optional 15 only</option></select>
+          <button class="btn" id="clearAsked" type="button">Clear Asked</button>
+        </div>
+      </div>
+      <div class="question-summary">
+        <div class="question-summary-card"><span>Purpose</span><b id="questionPurpose">Build comfort before diagnosis.</b></div>
+        <div class="question-summary-card"><span>Ask style</span><b id="questionTone">Open, curious and low-pressure.</b></div>
+        <div class="question-summary-card"><span>Move on when</span><b id="questionExitCue">The person is speaking freely and you understand their language.</b></div>
+      </div>
+      <div class="question-list" id="questionList"></div>
+      <div class="question-hint"><b>How to use:</b> the first 5 are the safest core questions. You do not need to ask all 20. Choose only what moves this square forward, listen to the answer, and follow the person's language rather than reading the list mechanically.</div>
+    </section>
+
+    <div class="footer-bar">
+      <div class="status">Current: <b id="statusText">Square 1 · Rapport</b></div><span class="progress-summary" id="progressSummary">0 / 9 complete</span>
+      <button class="btn" id="prevSquare">← Previous</button>
+      <button class="btn primary" id="nextSquare">Complete & Next →</button>
+    </div>
+
+    <div class="disclaimer">Conversation framework for ethical discovery and coaching. Diagnose before presenting. Use evidence to establish fit, never certainty; avoid pressure, invented urgency, or outcome guarantees. Trading-specific evidence cues are contextual only and never a promise of results.</div>
+  </main>
+</div>
+
+<section class="presentation-mode" id="presentationMode" aria-label="Nine-square full screen conversation board" aria-hidden="true">
+  <div class="presentation-top">
+    <div class="presentation-title"><b id="presentationTitle">9-Square Conversation Board</b><span id="presentationSubtitle">Select a square to see its 20-question guide.</span></div>
+    <div class="presentation-tools">
+      <span class="presentation-timer" id="presentationTimer">60:00</span>
+      <button class="btn" id="presFontDecrease" type="button">A−</button><button class="btn" id="presFontIncrease" type="button">A+</button>
+      <button class="btn success" id="presCompleteNext" type="button">Complete & Next →</button>
+      <button class="btn" id="exitPresentation" type="button">Exit Full Screen</button>
+    </div>
+  </div>
+  <div class="presentation-layout">
+    <div class="presentation-board" id="presentationBoard"></div>
+    <aside class="presentation-qpanel">
+      <div class="presentation-qhead"><span>Selected square · question bank</span><b id="presentationQTitle">1 · Rapport</b><p id="presentationQObjective">Use only the questions that naturally move the conversation forward.</p></div>
+      <div class="presentation-qlist" id="presentationQList"></div>
+    </aside>
+  </div>
+</section>
+
+<script type="application/json" id="coachData">{"contexts":{"generic":{"label":"Generic Coaching / Consulting","topic":"this goal or problem","proof":"Use case studies, demonstrations, baseline metrics, process evidence and transparent fit criteria. Avoid hype or outcome guarantees."},"trading":{"label":"Trading & Investing Coaching","topic":"your trading or investing decision process","proof":"When relevant, use the Indian Trader Pyramid as a diagnostic lens: preparedness, process maturity, risk governance, information quality and sustainability. Population statistics are context, never a guarantee about an individual."},"business":{"label":"Business / Entrepreneurship Coaching","topic":"your business growth or operating problem","proof":"Use baseline economics, conversion/retention data, operating metrics, examples and implementation evidence that match the client's stage."},"career":{"label":"Career / Leadership Coaching","topic":"your career, role or leadership goal","proof":"Use observable behaviors, role expectations, skill evidence, feedback patterns and milestone-based progress rather than vague transformation claims."},"fitness":{"label":"Fitness / Performance Coaching","topic":"your training or performance goal","proof":"Use adherence, training consistency and appropriate progress measures. Avoid medical promises or guaranteed body/health outcomes."},"education":{"label":"Education / Skill Program","topic":"the skill you want to learn or apply","proof":"Use demonstrations of competence, practice quality, completion, feedback and real application rather than certificate-only claims."},"consulting":{"label":"Consulting / Agency / Professional Service","topic":"the business problem you want solved","proof":"Use diagnosis, deliverables, implementation plan, case evidence, scope boundaries and measurable success criteria."}},"segments":{"curious":{"label":"Curious / Exploring","maturity":"Early awareness","identity":"Interested, but not yet committed to change","primaryGap":"Curiosity has not yet become a clearly defined problem","desired":"Clarity about what matters, what does not, and whether action is needed","motive":"clarity and confidence","realQs":["What are you currently trying to improve, solve or understand?","What have you noticed that made you start looking for answers?","How are you handling this today without changing anything?"],"resultQs":["If this became clearer, what would be different in the next 90 days?","What would a useful outcome from this conversation look like?","What would tell you this is worth acting on rather than just learning about?"],"roadblocks":["unclear priority","too many possible directions","low urgency","no decision criteria"],"whyNotYet":"You may not have acted because the problem, priority and desired outcome are still too loosely defined.","supportGap":"A clear diagnosis and decision criteria may be more useful than more information.","evidence":"Use simple proof that helps them understand the problem and process; avoid overwhelming an early-stage person with case studies or features.","avoid":"Do not manufacture urgency. Help them decide whether there is a real problem first."},"problemAware":{"label":"Problem-Aware / Frustrated","maturity":"Problem aware","identity":"Knows something is not working but may be treating symptoms","primaryGap":"The pain is visible; the root cause is not yet clear","desired":"A specific diagnosis and a believable path out of the recurring problem","motive":"relief and progress","realQs":["What is the problem costing you today—in time, money, energy or missed opportunity?","When does the problem show up most clearly?","What have you already changed, and what still keeps coming back?"],"resultQs":["What would have to improve for you to say this problem is genuinely under control?","What result matters most: speed, consistency, confidence, revenue, time or something else?","What would the new normal look like?"],"roadblocks":["symptom fixing","inconsistent execution","unclear root cause","short-term patches"],"whyNotYet":"You may have been solving visible symptoms instead of the system that keeps producing them.","supportGap":"A structured diagnosis, sequence and feedback loop can be more valuable than another isolated tactic.","evidence":"Use before/after process evidence, baseline metrics and relevant examples—not generic success claims.","avoid":"Do not intensify pain for effect. Clarify it accurately and let the person judge its importance."},"overwhelmed":{"label":"Overwhelmed / Too Much Information","maturity":"Solution overloaded","identity":"Has consumed many ideas but struggles to choose and execute","primaryGap":"Information volume is higher than decision clarity","desired":"A simpler path with fewer moving parts and clear priorities","motive":"simplicity and focus","realQs":["How many different approaches are you currently trying to combine?","What happens when two trusted sources tell you different things?","Which decisions take the most mental energy right now?"],"resultQs":["If you could remove 80% of the noise, what would you want left?","What three decisions would you want to become obvious?","Would fewer options feel limiting—or freeing—if the process worked better?"],"roadblocks":["information overload","constant switching","fear of choosing wrong","lack of prioritization"],"whyNotYet":"Learning more may be increasing optionality without improving execution.","supportGap":"A hierarchy, operating rhythm and clear decision rules may matter more than additional content.","evidence":"Show how the solution reduces decisions, complexity or handoffs. Demonstration is usually stronger than more explanation.","avoid":"Do not respond to overwhelm with a larger feature dump."},"diy":{"label":"DIY / Independent","maturity":"Self-directed","identity":"Capable and prefers to solve things independently","primaryGap":"Self-reliance may be limiting feedback, speed or blind-spot detection","desired":"Maintain ownership while gaining leverage where it actually helps","motive":"control without unnecessary dependence","realQs":["Which parts have you already solved on your own?","Where do you repeatedly lose time or certainty?","How do you currently challenge your own assumptions or spot blind spots?"],"resultQs":["What would support look like if it did not take control away from you?","Which part would you happily keep doing yourself, and which part would you outsource or systemize?","What would make outside input worth paying attention to?"],"roadblocks":["blind spots","slow iteration","reinventing the wheel","reluctance to ask for feedback"],"whyNotYet":"Doing it yourself can work, but it can also hide the cost of slower feedback and repeated reinvention.","supportGap":"The useful question is not 'do you need help?' but 'where would expert structure create leverage without reducing ownership?'.","evidence":"Offer transparent frameworks, templates, review mechanisms or implementation support that preserve autonomy.","avoid":"Never imply they are incapable. Respect competence and position support as leverage."},"skeptical":{"label":"Skeptical / Evidence-Seeking","maturity":"Trust evaluating","identity":"Cautious, analytical and unwilling to accept claims without proof","primaryGap":"Trust and fit must be established before enthusiasm matters","desired":"Enough credible evidence, boundaries and transparency to make a rational decision","motive":"certainty about fit, not certainty of outcome","realQs":["What would you need to verify before you would trust any solution in this space?","What claims or experiences have made you skeptical?","How do you normally decide whether something is credible?"],"resultQs":["What evidence would be sufficient for a next step—not a guarantee, just sufficient confidence?","Which risks or limitations would you want explained clearly?","What would a fair test of fit look like?"],"roadblocks":["low trust","past hype","unclear proof","fear of hidden limitations"],"whyNotYet":"You may have seen too many promises and too little transparent evidence.","supportGap":"The bridge is often proof, specificity, boundaries and the ability to say 'this is not for you' when appropriate.","evidence":"Use verifiable evidence, method transparency, limitations, samples, references and clear fit criteria. Avoid cherry-picked proof.","avoid":"Do not fight skepticism. Treat it as a request for better evidence."},"priceSensitive":{"label":"Price-Sensitive / ROI-Focused","maturity":"Value evaluating","identity":"Evaluates investment carefully and may anchor on price before value","primaryGap":"Price is being judged before value, alternatives and cost of inaction are fully understood","desired":"A rational value case with acceptable downside and clear priorities","motive":"economic justification","realQs":["When you say cost matters, what are you comparing it with?","What is the current problem already costing you?","Which outcome would make an investment feel worthwhile?"],"resultQs":["What would need to be true for this to create a sensible return on time, money or effort?","Which outcome has the highest economic value to you?","What would make you say 'not worth it' even if the price were lower?"],"roadblocks":["price anchoring","unclear ROI","uncertain priority","cash-flow timing"],"whyNotYet":"Without a quantified problem and desired result, any price can feel expensive.","supportGap":"A clear value equation, scope and decision criteria may be more useful than a discount.","evidence":"Use conservative value logic, transparent scope and trade-offs. Do not promise ROI that cannot be substantiated.","avoid":"Do not discount before understanding whether the offer is valuable at all."},"timePoor":{"label":"Busy / Time-Poor","maturity":"Capacity constrained","identity":"Motivated but short on attention, time or execution bandwidth","primaryGap":"The solution must reduce load, not become another project","desired":"Progress with a lighter operating burden and clear priorities","motive":"leverage and time recovery","realQs":["What is currently consuming the time that this problem needs?","Which part requires you personally and which part should not?","What tends to get dropped when the week becomes busy?"],"resultQs":["How little time would the ideal process require from you?","What could be standardized, delegated or automated?","What result would justify protecting time for this?"],"roadblocks":["capacity","context switching","lack of routine","solution complexity"],"whyNotYet":"The problem may not be motivation; it may be that every attempted solution adds more work.","supportGap":"A smaller number of high-leverage actions, templates and accountability may create more progress than more content.","evidence":"Demonstrate time saved, implementation effort, cadence and what the client does versus what the program/system does.","avoid":"Do not sell a time-poor person a heavy curriculum without explaining the operating burden."},"triedBefore":{"label":"Tried Other Solutions / Disappointed","maturity":"Experience shaped","identity":"Has invested before and is protecting against repeating a bad decision","primaryGap":"Past disappointment is shaping present trust and expectations","desired":"A clearly different mechanism, realistic expectations and visible fit","motive":"avoid repeating the same mistake","realQs":["What did you try before, and what specifically failed to work for you?","Was the problem the method, implementation, support, expectations or fit?","What would you refuse to repeat this time?"],"resultQs":["What would a genuinely different experience need to look like?","What early sign would tell you this is working better?","What support or accountability was missing previously?"],"roadblocks":["trust damage","solution hopping","poor implementation","unrealistic expectations"],"whyNotYet":"Prior attempts may have created knowledge without changing the mechanism that produces the outcome.","supportGap":"The next solution needs a clearly different mechanism or implementation model—not merely different branding.","evidence":"Compare mechanisms and implementation honestly. Make differences testable rather than claiming to be 'better'.","avoid":"Never attack previous providers. Diagnose why the fit or implementation failed."},"highIntent":{"label":"High-Intent / Ready to Decide","maturity":"Decision ready","identity":"Motivated and looking for the fastest path to a sound decision","primaryGap":"The person needs fit and decision clarity, not more persuasion","desired":"A confident yes, no, or not-yet decision based on clear criteria","motive":"decision confidence","realQs":["What have you already decided before this call?","What is the one thing you still need to know before moving forward?","What would make this clearly not a fit?"],"resultQs":["If fit is confirmed, what outcome are you prioritizing first?","What does success need to look like in the first milestone?","Who or what else is part of the decision?"],"roadblocks":["one unresolved objection","unclear scope","decision dependency","timing"],"whyNotYet":"The remaining gap may be one decision variable rather than lack of interest.","supportGap":"Resolve the real decision variable directly; do not restart the entire presentation.","evidence":"Use only the evidence needed to resolve the specific fit question.","avoid":"Do not slow a ready buyer with unnecessary education or artificial scarcity."},"advanced":{"label":"Experienced / Advanced","maturity":"Optimization","identity":"Already capable and looking for precision, leverage or a better operating system","primaryGap":"Generic education is below the level of the actual problem","desired":"Specific optimization, measurement, feedback and edge","motive":"precision and improvement","realQs":["What is already working reliably?","Where is performance plateauing or becoming inconsistent?","Which metric or behavior would you most like to improve?"],"resultQs":["What would a 10–20% improvement look like in practice?","Which part needs optimization rather than replacement?","What evidence would prove the change is real?"],"roadblocks":["plateau","measurement gaps","edge cases","advanced implementation"],"whyNotYet":"The problem may persist because beginner-level solutions do not address the bottleneck at your current level.","supportGap":"Advanced users usually need diagnostics, feedback, data and precise intervention—not more fundamentals.","evidence":"Use deeper methodology, instrumentation, peer benchmarks or expert review appropriate to their level.","avoid":"Do not force an advanced person through beginner content to justify the offer."},"warmReferral":{"label":"Warm Referral / Trust Transfer","maturity":"Warm awareness","identity":"Comes with borrowed trust from someone they already believe","primaryGap":"Trust is warmer, but personal fit is still unproven","desired":"Validate whether the recommendation applies to their own situation","motive":"fit validation","realQs":["What did the person who referred you say that caught your attention?","Which part of their experience feels similar to yours—and which part does not?","What would you like to validate for yourself?"],"resultQs":["If the referral proves relevant, what would you want to achieve?","What would make you confident this is not simply a good fit for someone else?","What would you want to experience differently?"],"roadblocks":["borrowed assumptions","insufficient personal diagnosis","social pressure","unclear expectations"],"whyNotYet":"A referral shortens trust-building, but it should not replace diagnosis.","supportGap":"Convert borrowed trust into personal evidence of fit.","evidence":"Reference the referral only as context; establish fit independently.","avoid":"Do not pressure them with 'your friend did it, so you should too'."},"returning":{"label":"Returning Lead / Previously Said No","maturity":"Re-evaluating","identity":"Interested before, but one or more conditions prevented action","primaryGap":"The unresolved condition needs to be identified—not re-pitched around","desired":"Determine what changed and whether the previous no still applies","motive":"reconsideration","realQs":["What made you decide not to move forward last time?","What has changed since then?","Is the original problem still important, more important, or less important now?"],"resultQs":["What would need to be different this time for the decision to change?","Which previous concern still matters?","What would a clean next step look like now?"],"roadblocks":["timing","trust","money","priority","fit"],"whyNotYet":"The previous decision was rational under the conditions at that time; the question is whether those conditions changed.","supportGap":"Address only the unresolved variable and re-check fit from the current situation.","evidence":"Use updated evidence only where the prior objection requires it.","avoid":"Never guilt someone for having said no before."},"existing":{"label":"Existing Client / Renewal / Upsell","maturity":"Delivery / expansion","identity":"Already trusted you once; now evaluating progress and the next level","primaryGap":"The conversation must be based on outcomes, adoption and next constraints","desired":"Protect what is working, fix what is not, and decide the next level logically","motive":"progress and continued value","realQs":["What has improved since we started?","What have you actually implemented versus only understood?","Where is progress slower than expected?"],"resultQs":["What is the next meaningful outcome from here?","What would make the next phase worth continuing or expanding?","Which support should increase, decrease or change?"],"roadblocks":["adoption","accountability","new bottleneck","unclear next milestone"],"whyNotYet":"The next result may require better implementation of what is already available, or a genuinely new capability.","supportGap":"Separate implementation gaps from new-scope needs before discussing renewal or expansion.","evidence":"Use the client's own baseline, progress, usage and outcomes as primary evidence.","avoid":"Do not turn a review into an upsell before acknowledging delivery reality."},"groupMixed":{"label":"Mixed Group / Mixed Awareness","maturity":"Mixed","identity":"Different people in the room are at different stages of awareness and readiness","primaryGap":"One session must create shared relevance without pretending everyone has the same problem","desired":"Audience self-segmentation and a clear next step for each readiness level","motive":"shared clarity","realQs":["How many of you are exploring, actively struggling, or already experienced?","Which of these challenges shows up for the largest number of people?","Where do your experiences differ most?"],"resultQs":["What would make this hour useful whether you are a beginner or experienced?","Which outcome would be universally valuable?","Who needs education, who needs diagnosis, and who needs a next-step decision?"],"roadblocks":["mixed maturity","low participation","generic messaging","one-size-fits-all examples"],"whyNotYet":"A group often stays passive when the presenter talks to an imaginary average person.","supportGap":"Use polls, examples and self-identification so each person can locate themselves in the conversation.","evidence":"Use broad patterns carefully, then invite people to identify whether the pattern actually applies to them.","avoid":"Do not diagnose an entire room as if everyone has the same problem."},"decisionMaker":{"label":"Business Decision Maker / Team Buyer","maturity":"Organizational decision","identity":"Evaluates value for a team, function or organization—not only for themselves","primaryGap":"Individual benefit must translate into business impact, adoption, stakeholders and risk","desired":"A defensible business case and implementation path","motive":"organizational value and risk control","realQs":["Who is affected by this problem and how?","What is the operational or commercial impact today?","Who must support the decision for implementation to work?"],"resultQs":["Which business metric or behavior should improve?","What would a successful pilot or first phase prove?","What adoption or governance conditions must be in place?"],"roadblocks":["stakeholder alignment","budget ownership","implementation risk","unclear business case"],"whyNotYet":"Even a good solution stalls when ownership, economics and adoption are not aligned.","supportGap":"A pilot, stakeholder map, implementation plan and measurable success criteria may matter more than persuasion.","evidence":"Use business cases, implementation proof, references, adoption metrics and risk controls relevant to the buying organization.","avoid":"Do not treat a business buyer like an individual consumer lead."}},"modes":{"group":{"label":"60-min Group Discovery Session","total":60,"times":[4,4,4,12,10,14,4,4,4],"opening":"Use polls, hands, quick reflection and audience examples. Keep the room participating.","close":"Invite each readiness level to choose its next step; do not pressure the whole room into one decision.","profileTitle":"Group / Batch Details","profileHint":"Capture enough context to remember the room and tailor examples.","fields":[{"key":"groupName","label":"Batch / Group name","placeholder":"e.g. Saturday Masterclass Batch"},{"key":"sessionTitle","label":"Session / Event name","placeholder":"e.g. Decision Clarity Workshop"},{"key":"audienceSize","label":"Approx. audience size","placeholder":"e.g. 25"},{"key":"audienceLevel","label":"Audience level","type":"select","options":["Mixed","Mostly new","Mostly experienced","Warm community","Cold audience"]}]},"oneToOne":{"label":"60-min 1:1 Discovery / Coaching","total":60,"times":[5,5,5,10,8,12,5,5,5],"opening":"Use the person's exact words. Go deeper rather than wider.","close":"Co-create one next step and ask permission before showing any framework or offer.","profileTitle":"1:1 Person Details","profileHint":"Use only details that improve continuity and follow-up.","fields":[{"key":"personName","label":"Person name","placeholder":"e.g. Priya"},{"key":"role","label":"Role / Profession","placeholder":"e.g. Founder, Manager, Trader"},{"key":"mainGoal","label":"Main goal","placeholder":"e.g. Build a repeatable process"},{"key":"leadSource","label":"How they came to you","placeholder":"e.g. Referral, YouTube, Webinar"}]},"highTicket":{"label":"45-min High-Ticket Fit Call","total":45,"times":[3,3,4,8,7,10,4,3,3],"opening":"Qualify fit, seriousness and the cost of the current problem. No feature dump.","close":"Only after fit is clear: ask permission to discuss solution, scope, investment and decision process.","profileTitle":"High-Ticket Lead Details","profileHint":"Capture decision context—not just contact information.","fields":[{"key":"personName","label":"Person / Lead name","placeholder":"e.g. Arjun Mehta"},{"key":"roleBusiness","label":"Role / Business","placeholder":"e.g. Founder, Professional"},{"key":"leadSource","label":"Lead source","placeholder":"e.g. Referral, Ad, Webinar"},{"key":"decisionTimeline","label":"Decision timeline","placeholder":"e.g. This week / 30 days"}]},"review":{"label":"45-min Existing Client Review","total":45,"times":[3,3,3,9,7,9,4,4,3],"opening":"Start with evidence from the client's recent behavior, implementation and outcomes.","close":"Agree on one behavior/process change, one metric and one review date before discussing expansion.","profileTitle":"Client Review Details","profileHint":"Anchor the review in delivery and progress evidence.","fields":[{"key":"clientName","label":"Client / Account name","placeholder":"e.g. Rahul / ABC Pvt Ltd"},{"key":"programName","label":"Program / Service","placeholder":"e.g. Leadership Coaching"},{"key":"reviewPeriod","label":"Review period","placeholder":"e.g. Aug–Sep 2026"},{"key":"successMetric","label":"Main metric / milestone","placeholder":"e.g. Adherence, Revenue, Completion"}]},"followUp":{"label":"30-min Follow-Up / Objection Call","total":30,"times":[2,2,3,5,5,5,3,3,2],"opening":"Do not re-pitch. Find what remains unresolved: trust, timing, fit, evidence, money or priority.","close":"Let the person choose: proceed, postpone with a clear condition/date, or decline cleanly.","profileTitle":"Follow-Up Details","profileHint":"Capture exactly what was unresolved last time.","fields":[{"key":"personName","label":"Person / Account","placeholder":"e.g. Neha"},{"key":"previousTouchpoint","label":"Previous touchpoint","placeholder":"e.g. Discovery call on 1 Sep"},{"key":"openConcern","label":"Open concern / objection","placeholder":"e.g. Timing, trust, price"},{"key":"nextDecision","label":"Expected decision point","placeholder":"e.g. After partner discussion"}]},"workshop":{"label":"90-min Workshop / Webinar","total":90,"times":[7,6,7,16,14,20,7,7,6],"opening":"Use interaction, examples and self-assessment. Teach through diagnosis instead of lecturing for 90 minutes.","close":"Give multiple next-step paths based on readiness: self-apply, follow-up diagnosis, or fit conversation.","profileTitle":"Workshop / Webinar Details","profileHint":"Capture event context so examples and CTA match the room.","fields":[{"key":"eventName","label":"Event / Workshop name","placeholder":"e.g. Growth Clarity Workshop"},{"key":"organizer","label":"Host / Organizer","placeholder":"e.g. Community / Company"},{"key":"audienceSize","label":"Approx. audience size","placeholder":"e.g. 80"},{"key":"sessionObjective","label":"Primary session objective","placeholder":"e.g. Awareness, diagnosis, qualified calls"}]}}}</script>
+<script>
+(function(){
+'use strict';
+const D=JSON.parse(document.getElementById('coachData').textContent);
+const segmentSelect=document.getElementById('segmentSelect');
+const modeSelect=document.getElementById('modeSelect');
+const contextSelect=document.getElementById('contextSelect');
+const board=document.getElementById('board');
+const quickBoard=document.getElementById('quickBoard');
+const questionList=document.getElementById('questionList');
+const questionScope=document.getElementById('questionScope');
+const presentationMode=document.getElementById('presentationMode');
+const presentationBoard=document.getElementById('presentationBoard');
+const presentationQList=document.getElementById('presentationQList');
+const offerName=document.getElementById('offerName');
+const sessionFields=document.getElementById('sessionFields');
+const savedSessions=document.getElementById('savedSessions');
+let state={context:'generic',segment:'curious',mode:'group',active:0,remaining:3600,running:false,timerId:null,draftId:'draft-'+Date.now(),details:{},completed:Array(9).fill(false),asked:Array.from({length:9},()=>Array(20).fill(false)),loadedRecordId:null};
+
+const FONT_STEPS=[0,1,2,3,4,5],FONT_LABELS=['80%','90%','100%','110%','120%','130%'];
+let fontStep=2;
+try{const saved=parseInt(localStorage.getItem('nineSquare:fontStep'),10);if(Number.isInteger(saved)&&saved>=0&&saved<FONT_STEPS.length)fontStep=saved}catch(_){}
+function applyFontSize(){document.documentElement.style.setProperty('--font-bump',FONT_STEPS[fontStep]+'px');const label=document.getElementById('fontSizeLabel');if(label)label.textContent=FONT_LABELS[fontStep];document.getElementById('fontDecrease').disabled=fontStep===0;document.getElementById('fontIncrease').disabled=fontStep===FONT_STEPS.length-1;safeSet('nineSquare:fontStep',String(fontStep))}
+function changeFont(delta){fontStep=Math.max(0,Math.min(FONT_STEPS.length-1,fontStep+delta));applyFontSize()}
+function resetFont(){fontStep=2;applyFontSize()}
+function safeGet(k,fallback=''){try{const v=localStorage.getItem(k);return v===null?fallback:v}catch(_){return fallback}}
+function safeSet(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+function safeRemove(k){try{localStorage.removeItem(k)}catch(_){}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+const squareMeta=[
+ {title:'Rapport',phase:'lead',tone:'Humble',objective:'Lower resistance. Make the person feel understood before you diagnose or advise.',control:'Reflect their language. Find common ground. Do not solve anything yet.'},
+ {title:'Agenda',phase:'lead',tone:'Confident',objective:'Create psychological safety and a clear frame for the conversation.',control:'Give control: no pressure, no forced decision, permission to challenge anything.'},
+ {title:'Decision',phase:'lead',tone:'Questioning',objective:'Find the real reason this conversation matters now.',control:'Do not accept the first surface answer. Ask why it matters and what changed.'},
+ {title:'Reality',phase:'gap',tone:'Humble',objective:'Describe the current situation using facts, behaviors and recent examples.',control:'Separate what is happening from interpretations about why it is happening.'},
+ {title:'Result',phase:'gap',tone:'Confident',objective:'Define the desired future state in observable terms.',control:'Translate vague goals into behavior, timing, economics, confidence, capacity or measurable progress.'},
+ {title:'Roadblocks',phase:'gap',tone:'Questioning',objective:'Let them identify what sits between current reality and desired result.',control:'Name the root constraint in their words. Do not label it for them too early.'},
+ {title:'Why Not Yet?',phase:'hired',tone:'Humble',objective:'Explore why effort, learning or previous attempts have not closed the gap.',control:'Respect effort. Find the missing mechanism, not someone to blame.'},
+ {title:'Why Not Alone?',phase:'hired',tone:'Confident',objective:'Let them decide whether structure, feedback, expertise, accountability or implementation support would help.',control:'Never say “you need me.” Ask what support would create leverage while preserving ownership.'},
+ {title:'Where From Here?',phase:'hired',tone:'Questioning',objective:'Convert insight into a self-chosen next step and ask permission before presenting an offer.',control:'A clean outcome is yes, no, or not-yet with a clear condition. Fit matters more than pressure.'}
+];
+
+
+const QUESTION_BANK=[["What brought you into this conversation today?","Before we talk about solutions, what would help me understand you or your situation better?","What is already going well that you would not want to lose?","What has been taking more of your attention lately?","What would make this conversation feel genuinely useful rather than just another discussion?","How would you describe where you are today in your own words?","How long has this goal, challenge or opportunity been on your mind?","What do you enjoy most about the way you currently approach it?","Which part has become frustrating, slow, expensive or confusing?","What have you already tried that you feel good about?","What do people usually misunderstand about your situation?","What would you want me to know before I offer any opinion?","How do you normally make decisions when something important is uncertain?","Who else, if anyone, is affected by what you are trying to improve?","What prompted you to speak with someone about it rather than keep thinking about it alone?","What do you definitely not want from this conversation?","What would make you feel that I have understood you correctly?","If there were no pressure to make a decision, what would you most want to explore openly?","What would be a useful place for us to start?","Is there anything important about your situation that I have not asked yet?"],["Would it be useful if we understand the situation first and discuss solutions only after that?","What would make the time we have together well spent for you?","Is it okay if I ask some direct questions and you correct me whenever something does not fit?","What would you most like to leave this conversation with: clarity, a decision, a plan, or something else?","At the end, can we agree on one clear next step even if that next step is to do nothing?","Is there anything you would prefer not to discuss today?","Would you rather I mostly ask questions, share examples, or balance both?","If I misunderstand something, will you stop me and tell me?","If I believe there is not a good fit, is it okay if I say that directly?","What would make this conversation feel too sales-oriented or unhelpful to you?","Does anyone else need to be considered before a meaningful decision can be made?","What background or context should we keep in mind while we talk?","How much time do we actually have available today?","What would disappoint you about this conversation?","Which topic should we make sure we do not leave unresolved?","Would you like us to capture a few decisions or observations as we go?","Are you looking mainly for diagnosis, a recommendation, or both?","What kind of evidence matters most to you when evaluating a recommendation?","Can we be completely transparent about what is working, what is not, and what we do not know?","Before we start, is there any expectation you want us to align on?"],["Why is this worth discussing now?","What changed recently that moved this higher on your priority list?","Why does solving or improving this matter to you personally?","If nothing changes, what is likely to happen next?","Why act now instead of six months from now?","Was there a particular event, result or frustration that triggered this conversation?","Who is most affected if the situation continues as it is?","What is the emotional reason this matters, beyond the practical reason?","What practical outcome are you hoping this decision will create?","On a scale of 1 to 10, how important is this right now?","Why did you choose that number rather than a lower one?","What opportunity becomes possible if this is handled well?","Is there a real deadline or only a preferred timeline?","Have you reached a point where your previous way of handling it is no longer enough?","Which concern gets bigger the longer you postpone it?","What would taking action allow you to do that you cannot comfortably do today?","What is the cost of staying with the current situation for another year?","Who else cares about the outcome and why?","What would make this suddenly become less important?","If we accomplish only one thing in this conversation, what decision or clarity should it create?"],["Walk me through how you handle this today from beginning to end.","What does a normal week or month look like around this issue or goal?","Where are your current results compared with what you expected?","Can you give me a recent real example rather than the general version?","What numbers, behaviors or facts best describe the current situation?","How often does the problem or inconsistency actually occur?","What is working reliably today?","Where does the process usually start to break down?","How do you currently measure whether things are improving?","Who or what is involved in the current process?","Which tools, routines or systems are you depending on today?","How much time, money or attention does the current approach consume?","What workaround have you created because the normal process does not work well enough?","What changes in your behavior when pressure, urgency or uncertainty increases?","How consistent are your results from one period to another?","What do you currently believe is the main cause of the problem?","What evidence might suggest that explanation is incomplete?","What have you become used to tolerating that you probably should not have to tolerate?","Which part of the current situation is hardest to explain clearly?","If an objective outsider observed you for a month, what would they see happening repeatedly?"],["If this worked the way you want, what would the outcome look like?","What specifically would be different in your day-to-day behavior or results?","How would you know that the problem is genuinely solved or under control?","By when would you ideally like to see meaningful progress?","Which one metric or observable sign would matter most?","How would you want to feel differently once this is handled well?","What is already good today that should remain unchanged?","What is the minimum acceptable result that would still make the effort worthwhile?","Which parts are must-have outcomes and which are simply nice to have?","What would success enable you to do next?","Who would notice the improvement first?","What is the financial or practical value of reaching that result?","What would the ideal process look like, not just the ideal outcome?","What would stop happening if the new state were working properly?","What capability do you want to have personally after this, rather than remain dependent on someone else for?","What level of risk, effort or change are you comfortable accepting to reach the result?","What result would still make you say the effort was not worth it?","Which part of the improvement needs to remain sustainable after the initial excitement is gone?","What would a meaningful 30-day or 90-day milestone look like?","If you had to describe the destination in one sentence, what would you say?"],["What is the biggest thing standing between where you are and where you want to be?","If you could fix only one obstacle and it would improve the others, which one would you choose?","Why does that obstacle keep returning?","Do you think that is the root problem or a symptom of something underneath it?","How much of the obstacle is within your control and how much is external?","Is the main constraint knowledge, process, time, confidence, resources, consistency, trust, or something else?","What have you already tried specifically to remove this obstacle?","What makes consistency difficult even when you know what should be done?","What usually happens immediately before things go off track?","Is there a hidden dependency that has to work before you can succeed?","Where do decisions get delayed, confused or reversed?","What fear or trade-off makes the current situation difficult to change?","Which resource or capability is missing at the moment?","What uncertainty keeps you from committing to one direction?","Is another person, stakeholder or team creating part of the constraint?","What belief or assumption might be keeping the current pattern alive?","Where would accountability make a difference, and where would it not?","What is the real cost of leaving this obstacle unresolved?","Which obstacle might actually be easier to solve than you currently believe?","If you ranked the top three roadblocks in order, what would they be?"],["What have you already tried to solve or improve this?","Which previous attempt worked for a while but did not last?","Why do you think the improvement did not stick?","What have those previous attempts taught you about the problem?","Where did implementation usually break down?","What did you expect the previous approach to solve that it did not solve?","What changed between the beginning of the attempt and the point where it stopped working?","Did the previous solution address the root cause or mainly the visible symptom?","What was missing from the previous attempt: clarity, structure, feedback, time, support, or something else?","What useful behavior did you stop doing even though you knew it was helping?","Why did you stop doing it?","Which part of the previous approach depended too much on motivation or willpower?","What kind of support or feedback was unavailable when you needed it?","If you could repeat your last attempt with what you know now, what would you do differently?","How much time, money or energy have you already invested in trying to solve this?","What lesson from previous attempts should we make sure not to repeat?","What do you understand now that you did not understand when you first started?","What kept pushing this problem back down the priority list?","Was there a condition—timing, confidence, money, authority, capacity—that prevented you from acting fully?","What has to be different this time for the next attempt to produce a different result?"],["If knowledge and effort alone were enough, what would already be solved by now?","Which part is hardest to see or correct while you are inside the situation yourself?","What kind of support would make the biggest difference: structure, expertise, feedback, accountability, tools, or implementation help?","Where would outside perspective create the most leverage?","Which parts do you definitely want to continue owning yourself?","What should never be outsourced or handed over to someone else?","How often would useful feedback need to happen for it to change behavior?","What qualities make you trust a coach, advisor, consultant or specialist?","Do you mainly need a better strategy, better implementation, or better consistency?","Would you benefit more from personalized support, group learning, a system, or a combination?","What feedback loop would help you notice problems before they become expensive?","What kind of support would feel intrusive or create unnecessary dependence?","Where could a proven structure save you the most time or repeated trial and error?","Which task or decision consumes more mental energy than it should?","Where do you repeatedly reinvent something that could probably be systemized?","Which risk could the right support reduce?","What would make accountability genuinely useful rather than annoying?","What would independence with support look like for you?","If you chose outside support, what would you want that person or system to help you do better?","What criteria would you use to decide whether any support option is actually a good fit?"],["Based on everything we discussed, what do you think the next step should be?","Does this need action now, or is more thinking genuinely useful first?","What realistic options do you see from here?","What evidence would you need before feeling comfortable making a decision?","What concern is still unresolved for you?","Who else, if anyone, needs to be involved before the next step is clear?","What is a realistic decision timeline?","Would you like me to show you a framework or approach specifically for the gap you identified?","If my approach is not the right fit, what alternative would you consider?","What would need to be true for you to say yes confidently?","What would need to be true for you to say no confidently?","If the answer is not yet, what exact condition needs to change first?","Is there a smaller next step that would give you useful evidence without overcommitting?","Would a pilot, trial, diagnostic or follow-up conversation be more appropriate than a full commitment?","If we do not decide today, when should this be reviewed again?","What do you need from me before you can decide responsibly?","Is there any reason you can see right now that we should not move forward?","On a scale of 1 to 10, how confident are you about the next step?","Why is that number not lower, and what would move it one point higher?","Can you summarize in your own words what you are choosing to do next?"]];
+if(QUESTION_BANK.length!==9||QUESTION_BANK.some(row=>row.length!==20))throw new Error('Question bank must contain exactly 20 questions for each of 9 squares.');
+
+function populate(){
+ Object.entries(D.contexts).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label;contextSelect.appendChild(o)});
+ Object.entries(D.segments).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label;segmentSelect.appendChild(o)});
+ Object.entries(D.modes).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label;modeSelect.appendChild(o)});
+}
+function pronoun(){return ['group','workshop'].includes(state.mode)?'you / the group':'you'}
+function subject(){return D.contexts[state.context].topic}
+function modeClosing(){return D.modes[state.mode].close}
+function profileName(){const m=D.modes[state.mode], first=m.fields?.[0]?.key;return (first&&state.details[first])||'Unnamed session'}
+function currentOffer(){return offerName.value.trim()||'your offer or framework'}
+
+function makeQuestions(i,p){
+ const who=pronoun(),topic=subject();
+ if(i===0)return [`How did ${who} first become interested in ${topic}?`,`What is already going well?`,`What has become frustrating, expensive, slow or confusing recently?`];
+ if(i===1)return [`Would it be useful if we spend this conversation understanding the situation before discussing solutions?`,`Is it okay if I ask direct questions and you correct anything that does not fit?`,`At the end, can we agree on one clear next step—even if that step is to do nothing?`];
+ if(i===2)return [`Why are ${who} looking at this now?`,`What changed recently that made this worth discussing today?`,`If this session is valuable, what do ${who} want to understand, improve or decide?`];
+ if(i===3)return p.realQs;
+ if(i===4)return p.resultQs;
+ if(i===5)return [`Which is creating the biggest drag right now: ${p.roadblocks.join(', ')}?`,`Why does that keep happening even when you know it is unhelpful?`,`What is the practical cost of leaving it unchanged for another six months?`];
+ if(i===6)return [`You have already spent time, attention or money on this. What has that still not solved?`,`Which problem keeps coming back even after you try something new?`,p.whyNotYet];
+ if(i===7)return [`If knowledge or effort alone were enough, what would already be solved?`,`Which part is hardest to see, correct or sustain while you are inside the problem?`,p.supportGap];
+ return [`Based on everything we discussed, what do you think your next step should be?`,`Would you like to see a framework specifically for the gap you just described?`,`Before you consider any solution, what evidence, condition or boundary would you need to feel it is a fit?`];
+}
+function listenFor(i,p){return [
+ ['their language about themselves','energy, humor, defensiveness, urgency','what feels safe to discuss'],
+ ['permission','expectations','what would make the conversation useful'],
+ ['real motive','trigger or timing','who else is affected'],
+ ['specific behavior or numbers','recent examples','what they do today'],
+ ['desired identity or operating state','measurable outcome','non-financial benefit'],
+ ['root cause vs symptom','repeated pattern','cost of inaction'],
+ ['what they already tried','where implementation broke','mismatch between knowledge and action'],
+ ['need for structure, expertise, feedback or accountability','whether support would create leverage','what they still want to own'],
+ ['their chosen next step','permission to present','fit and decision criteria']
+ ][i]}
+function objectiveText(i,p){
+ if(i===2)return `Understand why ${p.motive} matters now.`;
+ if(i===3)return `Diagnose how “${p.identity}” currently handles ${subject()}.`;
+ if(i===4)return `Let them define a future state: ${p.desired}.`;
+ if(i===5)return `Turn vague frustration into a named gap: ${p.primaryGap}.`;
+ if(i===7)return `Let them decide what external structure—if any—would help close “${p.primaryGap}”.`;
+ if(i===8)return `Convert insight into a self-chosen next step. ${modeClosing()}`;
+ return squareMeta[i].objective;
+}
+function controlText(i,p){
+ if(i===5)return 'Write the roadblocks in their exact words. Then ask: “Which one, if fixed, would change the others?”';
+ if(i===8)return `Do not jump into ${currentOffer()}. Wait for permission such as “How would you solve this?” Then connect only the relevant bridge.`;
+ return squareMeta[i].control;
+}
+function evidenceText(i,p){
+ if(i===3||i===5)return `${p.evidence} Context lens: ${D.contexts[state.context].proof}`;
+ if(i===8)return `Use evidence to establish fit, not certainty. ${D.contexts[state.context].proof}`;
+ return '';
+}
+function warningText(i,p){if(i===0)return p.avoid;if(i===8)return 'The cleanest close is a choice: proceed, continue thinking with a defined condition/date, or decline.';return ''}
+function phaseLabel(phase){return phase==='lead'?'Connect':phase==='gap'?'Diagnose':'Decide'}
+function quickMove(i,p){
+ const moves=[
+  'Reflect their words. Build comfort. Do not solve yet.',
+  'Set the rules: diagnosis first, no-pressure decision at the end.',
+  'Find the real “why now?” behind the conversation.',
+  'Get facts, behaviors, examples and numbers—not assumptions.',
+  'Make the desired outcome specific enough to recognize.',
+  `Name the root constraint in their words: ${p.primaryGap}`,
+  'Respect past effort. Find what the previous attempts still did not solve.',
+  'Let them define what kind of support would create leverage.',
+  'Ask for the next step. Present only after permission and only if fit is clear.'
+ ];
+ return moves[i];
+}
+function questionExitCue(i){return [
+ 'The person is speaking freely and you understand their language and basic context.',
+ 'Expectations, permission and the no-pressure frame are clear.',
+ 'You understand the real “why now?” and how important it actually is.',
+ 'You can describe the current situation with facts, examples and observable behavior.',
+ 'The desired state is specific enough that both sides would recognize success.',
+ 'The main root constraint has been named in the person’s own words.',
+ 'You understand what previous attempts failed to solve and why.',
+ 'The person has defined what kind of support—if any—would create leverage.',
+ 'A clear yes, no, or not-yet next step has been chosen.'
+][i]}
+function questionAskStyle(i){return [
+ 'Warm, human and low-pressure. Follow their language.',
+ 'Clear, confident and permission-based.',
+ 'Curious and layered. Ask “why” without interrogating.',
+ 'Specific and factual. Ask for examples, numbers and behavior.',
+ 'Future-focused. Turn vague wishes into observable outcomes.',
+ 'Diagnostic. Separate symptoms from root constraints.',
+ 'Respectful. Honor past effort and extract lessons without blame.',
+ 'Empowering. Explore leverage without creating dependence.',
+ 'Decision-oriented but pressure-free. Ask permission before presenting.'
+][i]}
+function renderQuestionRows(target,compact=false){
+ const i=state.active,questions=QUESTION_BANK[i],scope=questionScope?.value||'all';
+ const rows=questions.map((q,idx)=>({q,idx,core:idx<5})).filter(x=>scope==='all'||(scope==='core'&&x.core)||(scope==='optional'&&!x.core));
+ target.innerHTML=rows.map(x=>compact?`<label class="pres-qrow ${x.core?'core':''} ${state.asked[i][x.idx]?'asked':''}"><input type="checkbox" data-pres-question-asked="${x.idx}" ${state.asked[i][x.idx]?'checked':''}><span class="pres-qnum">${x.idx+1}</span><span class="pres-qtext">${x.core?'<b>Core</b>':''}${esc(x.q)}</span></label>`:`<label class="question-row ${x.core?'core':''} ${state.asked[i][x.idx]?'asked':''}"><input type="checkbox" data-question-asked="${x.idx}" ${state.asked[i][x.idx]?'checked':''}><span class="q-num">${x.idx+1}</span><span class="q-copy">${x.core?'<b>Core</b>':''}<span>${esc(x.q)}</span></span></label>`).join('');
+}
+function renderQuestionGuide(){
+ const sq=squareMeta[state.active],p=D.segments[state.segment];
+ document.getElementById('questionGuideTitle').textContent=`Square ${state.active+1} · ${sq.title} · 20 Questions`;
+ document.getElementById('questionGuideObjective').textContent=objectiveText(state.active,p);
+ document.getElementById('questionPurpose').textContent=objectiveText(state.active,p);
+ document.getElementById('questionTone').textContent=questionAskStyle(state.active);
+ document.getElementById('questionExitCue').textContent=questionExitCue(state.active);
+ const count=state.asked[state.active].filter(Boolean).length;document.getElementById('askedCount').textContent=`${count} / 20 asked`;
+ renderQuestionRows(questionList,false);
+}
+function setQuestionAsked(qIndex,val){state.asked[state.active][qIndex]=!!val;safeSet(draftKey('asked'),JSON.stringify(state.asked));renderQuestionGuide();if(presentationMode.classList.contains('open'))renderPresentationQuestions();saveDraftSoon()}
+function clearAskedForActive(){state.asked[state.active]=Array(20).fill(false);safeSet(draftKey('asked'),JSON.stringify(state.asked));renderQuestionGuide();if(presentationMode.classList.contains('open'))renderPresentationQuestions();setSaveState(`Square ${state.active+1} question checks cleared`)}
+function renderPresentationQuestions(){
+ const sq=squareMeta[state.active],p=D.segments[state.segment];
+ document.getElementById('presentationQTitle').textContent=`${state.active+1} · ${sq.title} · ${state.asked[state.active].filter(Boolean).length}/20 asked`;
+ document.getElementById('presentationQObjective').textContent=objectiveText(state.active,p);
+ renderQuestionRows(presentationQList,true);
+}
+function renderPresentation(){
+ if(!presentationMode.classList.contains('open'))return;
+ const p=D.segments[state.segment],m=D.modes[state.mode],c=D.contexts[state.context];
+ document.getElementById('presentationTitle').textContent=`${m.label} · ${c.label}`;
+ document.getElementById('presentationSubtitle').textContent=`${p.label} · Click any square to make it current. The right panel gives 20 questions for that stage.`;
+ document.getElementById('presentationTimer').textContent=document.getElementById('timer').textContent;
+ presentationBoard.innerHTML='';
+ squareMeta.forEach((sq,i)=>{const qs=QUESTION_BANK[i].slice(0,2);const card=document.createElement('article');card.className=`pres-card ${sq.phase} ${state.active===i?'active':''} ${state.completed[i]?'completed':''}`;card.dataset.presIndex=i;card.innerHTML=`<div class="pres-head"><div class="pres-num">${i+1}</div><b>${esc(sq.title)}</b><label class="pres-done"><input type="checkbox" data-pres-complete="${i}" ${state.completed[i]?'checked':''}>Done</label></div><div class="pres-body"><div class="pres-objective">${esc(objectiveText(i,p))}</div><div class="pres-label">Core questions</div><ul>${qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></div><div class="pres-foot"><span>${m.times[i]} min · ${state.asked[i].filter(Boolean).length}/20 asked</span><button class="pres-select" type="button" data-pres-focus="${i}">${state.active===i?'Selected':'Select'}</button></div>`;presentationBoard.appendChild(card)});
+ renderPresentationQuestions();
+}
+async function enterPresentation(){
+ presentationMode.classList.add('open');presentationMode.setAttribute('aria-hidden','false');renderPresentation();
+ try{if(presentationMode.requestFullscreen&&!document.fullscreenElement)await presentationMode.requestFullscreen()}catch(_){/* CSS full-view fallback remains active */}
+}
+function closePresentationVisual(){presentationMode.classList.remove('open');presentationMode.setAttribute('aria-hidden','true')}
+async function exitPresentation(){
+ closePresentationVisual();
+ try{if(document.fullscreenElement&&document.exitFullscreen)await document.exitFullscreen()}catch(_){}
+}
+
+function renderQuick(){
+ if(!quickBoard)return;
+ const p=D.segments[state.segment],m=D.modes[state.mode],c=D.contexts[state.context];
+ document.getElementById('quickTitle').textContent=`${m.label} · 9-Square Quick Reference`;
+ document.getElementById('quickSubtitle').textContent=`${c.label} · ${p.label}. Keep this view open while speaking; use the Full Coach only when you need deeper prompts or notes.`;
+ document.getElementById('quickAudience').textContent=p.identity;
+ document.getElementById('quickGap').textContent=p.primaryGap;
+ document.getElementById('quickDesired').textContent=p.desired;
+ quickBoard.innerHTML='';
+ squareMeta.forEach((sq,i)=>{
+  const qs=makeQuestions(i,p).slice(0,2),listens=listenFor(i,p).slice(0,2);
+  const card=document.createElement('article');
+  card.className=`quick-card ${sq.phase} ${state.active===i?'active':''} ${state.completed[i]?'completed':''}`;
+  card.dataset.quickIndex=i;
+  card.innerHTML=`
+    <div class="quick-head">
+      <div class="quick-num">${i+1}</div>
+      <div class="quick-head-title"><b>${esc(sq.title)}</b><span>${phaseLabel(sq.phase)} · ${sq.tone}</span></div>
+      <label class="quick-check"><input type="checkbox" data-quick-complete="${i}" ${state.completed[i]?'checked':''}><span>Done</span></label>
+    </div>
+    <div class="quick-body">
+      <div class="quick-focus">${esc(objectiveText(i,p))}</div>
+      <div class="quick-label">Ask</div><ul>${qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ul>
+      <div class="quick-label">Listen for</div><ul>${listens.map(q=>`<li>${esc(q)}</li>`).join('')}</ul>
+      <div class="quick-move"><b>Move:</b> ${esc(quickMove(i,p))}</div>
+    </div>
+    <div class="quick-footer"><span class="quick-time">${m.times[i]} min</span><span><button class="q-jump" type="button" data-quick-questions="${i}">20 Questions</button> · <button class="quick-open" type="button" data-quick-focus="${i}">Make current</button></span></div>`;
+  quickBoard.appendChild(card);
+ });
+}
+
+function render(){
+ const p=D.segments[state.segment],m=D.modes[state.mode];
+ document.getElementById('ctxIdentity').textContent=p.identity;
+ document.getElementById('ctxGap').textContent=p.primaryGap;
+ document.getElementById('ctxDesired').textContent=p.desired;
+ board.innerHTML='';
+ squareMeta.forEach((sq,i)=>{
+  const qs=makeQuestions(i,p),listens=listenFor(i,p),ev=evidenceText(i,p),warn=warningText(i,p);
+  const card=document.createElement('article');card.className=`square ${sq.phase} ${state.active===i?'active':''} ${state.completed[i]?'completed':''}`;card.dataset.index=i;
+  card.innerHTML=`
+   <div class="sq-head"><div class="sq-num">${i+1}</div><div class="sq-title"><h3>${sq.title}</h3><p>${phaseLabel(sq.phase)} phase</p></div><span class="tone">${sq.tone}</span><label class="step-check"><input type="checkbox" data-complete="${i}" ${state.completed[i]?'checked':''}><span>Done</span></label></div>
+   <div class="sq-objective"><b>Objective:</b> ${esc(objectiveText(i,p))}</div>
+   <div class="section-mini"><b>Ask</b><ul>${qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></div>
+   <div class="section-mini"><b>Listen for</b><ul>${listens.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></div>
+   <div class="control-move"><b>Control move:</b> ${esc(controlText(i,p))}</div>
+   ${ev?`<div class="evidence"><b>Proof / evidence cue · use only if relevant:</b> ${esc(ev)}</div>`:''}
+   ${warn?`<div class="warning">⚠ ${esc(warn)}</div>`:''}
+   <div class="notes"><textarea data-note="${i}" placeholder="Live notes / exact words / objections / commitments…">${esc(loadNote(i))}</textarea></div>
+   <div class="sq-foot"><span class="time-chip">${m.times[i]} min</span><span><button class="q-jump" type="button" data-questions="${i}">20 Questions</button> · <button class="focus-btn" type="button" data-focus="${i}">Focus</button></span></div>`;
+  board.appendChild(card);
+ });
+ renderQuick();bindNotes();updateLive();renderQuestionGuide();saveDraftSoon();
+}
+function draftKey(part){return `nineSquare:draft:${state.draftId}:${part}`}
+function loadNote(i){return safeGet(draftKey('note:'+i),'')}
+function bindNotes(){document.querySelectorAll('[data-note]').forEach(t=>t.addEventListener('input',e=>{safeSet(draftKey('note:'+e.target.dataset.note),e.target.value);setSaveState('Draft updated')}))}
+function setCompleted(i,val){state.completed[i]=!!val;safeSet(draftKey('completed'),JSON.stringify(state.completed));const card=document.querySelector(`.square[data-index="${i}"]`);if(card)card.classList.toggle('completed',state.completed[i]);updateLive();setSaveState(state.completed[i]?`Square ${i+1} completed`:`Square ${i+1} reopened`)}
+function updateLive(){
+ const sq=squareMeta[state.active],p=D.segments[state.segment],done=state.completed.filter(Boolean).length;
+ document.getElementById('liveNumber').textContent=state.active+1;document.getElementById('liveTitle').textContent=sq.title;document.getElementById('livePrompt').textContent=objectiveText(state.active,p);
+ document.getElementById('statusText').textContent=`Square ${state.active+1} · ${sq.title}`;document.getElementById('progressSummary').textContent=`${done} / 9 complete`;
+ document.querySelectorAll('.square').forEach((c,i)=>{c.classList.toggle('active',i===state.active);c.classList.toggle('completed',state.completed[i])});
+ document.querySelectorAll('.quick-card').forEach((c,i)=>{c.classList.toggle('active',i===state.active);c.classList.toggle('completed',state.completed[i]);const cb=c.querySelector('[data-quick-complete]');if(cb)cb.checked=state.completed[i]});
+ document.getElementById('progressDots').innerHTML=squareMeta.map((_,i)=>`<span class="dot ${state.completed[i]?'done':i===state.active?'active':''}"></span>`).join('');
+ renderQuestionGuide();if(presentationMode.classList.contains('open'))renderPresentation();
+  const active=document.querySelector(`.square[data-index="${state.active}"]`);if(active&&window.innerWidth<721)active.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function setActive(n){state.active=Math.max(0,Math.min(8,n));updateLive();saveDraftSoon()}
+
+function renderSessionFields(){
+ const m=D.modes[state.mode];document.getElementById('profileTitle').textContent=m.profileTitle;document.getElementById('profileHint').textContent=m.profileHint;sessionFields.innerHTML='';
+ m.fields.forEach(f=>{const wrap=document.createElement('div');wrap.className='field';const label=document.createElement('label');label.textContent=f.label;wrap.appendChild(label);let el;
+  if(f.type==='select'){el=document.createElement('select');(f.options||[]).forEach(opt=>{const o=document.createElement('option');o.value=opt;o.textContent=opt;el.appendChild(o)})}else{el=document.createElement('input');el.type='text';el.placeholder=f.placeholder||''}
+  el.dataset.detail=f.key;el.value=state.details[f.key]||'';el.addEventListener('input',()=>{state.details[f.key]=el.value;saveDraftSoon();setSaveState('Draft updated')});el.addEventListener('change',()=>{state.details[f.key]=el.value;saveDraftSoon()});wrap.appendChild(el);sessionFields.appendChild(wrap)
+ });
+}
+function captureCurrentDetails(){document.querySelectorAll('[data-detail]').forEach(el=>state.details[el.dataset.detail]=el.value)}
+function saveDraftSoon(){captureCurrentDetails();const draft={context:state.context,segment:state.segment,mode:state.mode,active:state.active,details:state.details,completed:state.completed,asked:state.asked,offer:offerName.value};safeSet(draftKey('state'),JSON.stringify(draft))}
+function setSaveState(msg){const el=document.getElementById('saveState');el.textContent=msg;clearTimeout(setSaveState.t);setSaveState.t=setTimeout(()=>el.textContent='Draft autosaved',1200)}
+
+function setView(view){
+ const chosen=view==='quick'?'quick':'full';
+ document.getElementById('fullView').classList.toggle('active',chosen==='full');
+ document.getElementById('quickView').classList.toggle('active',chosen==='quick');
+ document.getElementById('tabFull').classList.toggle('active',chosen==='full');
+ document.getElementById('tabQuick').classList.toggle('active',chosen==='quick');
+ document.getElementById('tabFull').setAttribute('aria-selected',String(chosen==='full'));
+ document.getElementById('tabQuick').setAttribute('aria-selected',String(chosen==='quick'));
+ safeSet('nineSquare:view',chosen);
+ if(chosen==='quick')renderQuick();
+}
+
+function resetTimer(){stopTimer();state.remaining=D.modes[state.mode].total*60;paintTimer()}
+function stopTimer(){if(state.timerId){clearInterval(state.timerId);state.timerId=null}state.running=false;document.getElementById('timerStart').textContent='▶'}
+function startPause(){if(state.running){stopTimer();return}state.running=true;document.getElementById('timerStart').textContent='Ⅱ';state.timerId=setInterval(()=>{state.remaining=Math.max(0,state.remaining-1);paintTimer();if(state.remaining===0)stopTimer()},1000)}
+function paintTimer(){const min=Math.floor(state.remaining/60),sec=state.remaining%60;const val=`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;document.getElementById('timer').textContent=val;const pt=document.getElementById('presentationTimer');if(pt)pt.textContent=val}
+
+function getSavedRecords(){try{return JSON.parse(safeGet('nineSquare:savedSessions','[]'))||[]}catch(_){return []}}
+function putSavedRecords(records){safeSet('nineSquare:savedSessions',JSON.stringify(records))}
+function buildRecord(){captureCurrentDetails();return {id:state.loadedRecordId||('session-'+Date.now()),savedAt:new Date().toISOString(),context:state.context,segment:state.segment,mode:state.mode,offer:offerName.value.trim(),details:{...state.details},completed:[...state.completed],asked:state.asked.map(row=>[...row]),notes:squareMeta.map((_,i)=>loadNote(i))}}
+function refreshSavedSessions(selectId){const records=getSavedRecords().sort((a,b)=>String(b.savedAt).localeCompare(String(a.savedAt)));savedSessions.innerHTML='<option value="">Choose a saved session…</option>';records.forEach(r=>{const o=document.createElement('option');o.value=r.id;const d=new Date(r.savedAt);const name=(r.details&&Object.values(r.details).find(Boolean))||'Unnamed';o.textContent=`${name} · ${D.modes[r.mode]?.label||r.mode} · ${d.toLocaleDateString()}`;savedSessions.appendChild(o)});if(selectId)savedSessions.value=selectId;document.getElementById('recordMeta').textContent=`${records.length} saved · local to this browser`}
+function saveSession(){const rec=buildRecord(),records=getSavedRecords(),idx=records.findIndex(r=>r.id===rec.id);if(idx>=0)records[idx]=rec;else records.push(rec);putSavedRecords(records);state.loadedRecordId=rec.id;refreshSavedSessions(rec.id);setSaveState('Session saved ✓');flash('Session saved for reference')}
+function loadSession(){const id=savedSessions.value;if(!id){flash('Choose a saved session first');return}const rec=getSavedRecords().find(r=>r.id===id);if(!rec)return;newDraft(false);state.loadedRecordId=rec.id;state.context=rec.context||'generic';state.segment=rec.segment||'curious';state.mode=rec.mode||'group';state.details={...(rec.details||{})};state.completed=Array.isArray(rec.completed)?rec.completed.slice(0,9).concat(Array(9).fill(false)).slice(0,9):Array(9).fill(false);state.asked=Array.isArray(rec.asked)?Array.from({length:9},(_,i)=>Array.isArray(rec.asked[i])?rec.asked[i].slice(0,20).concat(Array(20).fill(false)).slice(0,20):Array(20).fill(false)):Array.from({length:9},()=>Array(20).fill(false));contextSelect.value=state.context;segmentSelect.value=state.segment;modeSelect.value=state.mode;offerName.value=rec.offer||'';renderSessionFields();(rec.notes||[]).forEach((n,i)=>safeSet(draftKey('note:'+i),n||''));safeSet(draftKey('completed'),JSON.stringify(state.completed));safeSet(draftKey('asked'),JSON.stringify(state.asked));resetTimer();render();refreshSavedSessions(rec.id);flash('Saved session loaded')}
+function deleteSession(){const id=savedSessions.value;if(!id){flash('Choose a saved session first');return}if(!confirm('Delete this saved session record?'))return;putSavedRecords(getSavedRecords().filter(r=>r.id!==id));if(state.loadedRecordId===id)state.loadedRecordId=null;refreshSavedSessions();flash('Saved session deleted')}
+function clearDraftStorage(){for(let i=0;i<9;i++)safeRemove(draftKey('note:'+i));safeRemove(draftKey('completed'));safeRemove(draftKey('asked'));safeRemove(draftKey('state'))}
+function newDraft(confirmFirst=true){if(confirmFirst&&!confirm('Start a new session? Current unsaved draft notes will be cleared.'))return false;clearDraftStorage();state.draftId='draft-'+Date.now();state.details={};state.completed=Array(9).fill(false);state.asked=Array.from({length:9},()=>Array(20).fill(false));state.active=0;state.loadedRecordId=null;offerName.value='';renderSessionFields();resetTimer();render();refreshSavedSessions();setSaveState('New draft');return true}
+
+function sessionDetailsText(){const m=D.modes[state.mode];return m.fields.map(f=>`${f.label}: ${state.details[f.key]||'—'}`).join('\n')}
+function copyNotes(){captureCurrentDetails();const p=D.segments[state.segment],m=D.modes[state.mode],c=D.contexts[state.context];let text=`Nine-Square Session Record
+Context: ${c.label}
+Audience profile: ${p.label}
+Session type: ${m.label}
+Offer/Program: ${offerName.value||'—'}
+${sessionDetailsText()}
+Primary gap: ${p.primaryGap}
+Desired state: ${p.desired}
+Completed: ${state.completed.filter(Boolean).length}/9
+Questions marked asked: ${state.asked.flat().filter(Boolean).length}/180
+
+`;squareMeta.forEach((s,i)=>{text+=`${state.completed[i]?'✓':'□'} ${i+1}. ${s.title} (${m.times[i]} min) · ${state.asked[i].filter(Boolean).length}/20 questions asked
+${loadNote(i)||'—'}
+
+`});navigator.clipboard?.writeText(text).then(()=>flash('Session record copied')).catch(()=>fallbackCopy(text))}
+function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();flash('Session record copied')}
+function flash(msg){const old=document.getElementById('statusText').textContent;document.getElementById('statusText').textContent=msg;setTimeout(()=>document.getElementById('statusText').textContent=old,1600)}
+function clearNotes(){if(!confirm('Clear notes and completion checks for this draft?'))return;for(let i=0;i<9;i++)safeRemove(draftKey('note:'+i));state.completed=Array(9).fill(false);state.asked=Array.from({length:9},()=>Array(20).fill(false));safeSet(draftKey('completed'),JSON.stringify(state.completed));safeSet(draftKey('asked'),JSON.stringify(state.asked));render();flash('Draft notes and question checks cleared')}
+
+applyFontSize();populate();contextSelect.value=state.context;segmentSelect.value=state.segment;modeSelect.value=state.mode;renderSessionFields();resetTimer();render();refreshSavedSessions();setView(safeGet('nineSquare:view','full'));
+contextSelect.addEventListener('change',e=>{state.context=e.target.value;state.active=0;render()});
+segmentSelect.addEventListener('change',e=>{state.segment=e.target.value;state.active=0;render()});
+modeSelect.addEventListener('change',e=>{state.mode=e.target.value;state.active=0;state.details={};renderSessionFields();resetTimer();render()});
+offerName.addEventListener('input',()=>{saveDraftSoon();setSaveState('Draft updated');render()});
+board.addEventListener('click',e=>{const q=e.target.closest('[data-questions]');if(q){setActive(+q.dataset.questions);document.getElementById('questionGuide').scrollIntoView({behavior:'smooth',block:'start'});return}const b=e.target.closest('[data-focus]');if(b)setActive(+b.dataset.focus)});
+board.addEventListener('change',e=>{if(e.target.matches('[data-complete]'))setCompleted(+e.target.dataset.complete,e.target.checked)});
+quickBoard.addEventListener('click',e=>{const q=e.target.closest('[data-quick-questions]');if(q){setActive(+q.dataset.quickQuestions);document.getElementById('questionGuide').scrollIntoView({behavior:'smooth',block:'start'});return}const b=e.target.closest('[data-quick-focus]');if(b)setActive(+b.dataset.quickFocus)});
+quickBoard.addEventListener('change',e=>{if(e.target.matches('[data-quick-complete]'))setCompleted(+e.target.dataset.quickComplete,e.target.checked)});
+questionList.addEventListener('change',e=>{if(e.target.matches('[data-question-asked]'))setQuestionAsked(+e.target.dataset.questionAsked,e.target.checked)});
+presentationQList.addEventListener('change',e=>{if(e.target.matches('[data-pres-question-asked]'))setQuestionAsked(+e.target.dataset.presQuestionAsked,e.target.checked)});
+questionScope.addEventListener('change',()=>{renderQuestionGuide();if(presentationMode.classList.contains('open'))renderPresentationQuestions()});
+document.getElementById('clearAsked').addEventListener('click',clearAskedForActive);
+document.getElementById('fullScreenMode').addEventListener('click',enterPresentation);
+document.getElementById('exitPresentation').addEventListener('click',exitPresentation);
+document.getElementById('presFontDecrease').addEventListener('click',()=>changeFont(-1));document.getElementById('presFontIncrease').addEventListener('click',()=>changeFont(1));
+document.getElementById('presCompleteNext').addEventListener('click',()=>{setCompleted(state.active,true);if(state.active<8)setActive(state.active+1)});
+presentationBoard.addEventListener('click',e=>{const b=e.target.closest('[data-pres-focus]');if(b)setActive(+b.dataset.presFocus)});
+presentationBoard.addEventListener('change',e=>{if(e.target.matches('[data-pres-complete]'))setCompleted(+e.target.dataset.presComplete,e.target.checked)});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&presentationMode.classList.contains('open'))closePresentationVisual()});
+document.getElementById('tabFull').addEventListener('click',()=>setView('full'));document.getElementById('tabQuick').addEventListener('click',()=>setView('quick'));
+document.getElementById('nextSquare').addEventListener('click',()=>{setCompleted(state.active,true);if(state.active<8)setActive(state.active+1)});
+document.getElementById('prevSquare').addEventListener('click',()=>setActive(state.active-1));
+document.getElementById('timerStart').addEventListener('click',startPause);document.getElementById('timerReset').addEventListener('click',resetTimer);
+document.getElementById('fontDecrease').addEventListener('click',()=>changeFont(-1));document.getElementById('fontIncrease').addEventListener('click',()=>changeFont(1));document.getElementById('fontReset').addEventListener('click',resetFont);
+document.getElementById('saveSession').addEventListener('click',saveSession);document.getElementById('copyNotes').addEventListener('click',copyNotes);document.getElementById('clearNotes').addEventListener('click',clearNotes);document.getElementById('printPage').addEventListener('click',()=>window.print());
+document.getElementById('loadSession').addEventListener('click',loadSession);document.getElementById('newSession').addEventListener('click',()=>newDraft(true));document.getElementById('deleteSession').addEventListener('click',deleteSession);
+window.addEventListener('keydown',e=>{const editing=['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);if(e.key==='Escape'&&presentationMode.classList.contains('open')){exitPresentation();return}if(e.key==='ArrowRight'&&!editing){setCompleted(state.active,true);if(state.active<8)setActive(state.active+1)}if(e.key==='ArrowLeft'&&!editing)setActive(state.active-1);if((e.ctrlKey||e.metaKey)&&!editing&&(e.key==='+'||e.key==='=')){e.preventDefault();changeFont(1)}if((e.ctrlKey||e.metaKey)&&!editing&&e.key==='-'){e.preventDefault();changeFont(-1)}if((e.ctrlKey||e.metaKey)&&!editing&&e.key==='0'){e.preventDefault();resetFont()}});
+})();
+</script>
+</body>
+</html>
