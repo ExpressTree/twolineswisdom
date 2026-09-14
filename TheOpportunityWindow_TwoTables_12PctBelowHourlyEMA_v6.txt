@@ -1,0 +1,579 @@
+//@version=6
+// ══════════════════════════════════════════════════════════
+// TheOpportunityWindow 1.0(TwoLinesClub)
+// ══════════════════════════════════════════════════════════
+// Author:  Sanjay Kadam | TwoLinesClub
+// Version: 1.2.0
+
+indicator(
+     title             = "TheOpportunityWindow 1.0(TwoLinesClub)",
+     shorttitle        = "TheOpportunityWindow",
+     overlay           = true,
+     max_lines_count   = 500,
+     max_labels_count  = 500,
+     max_boxes_count   = 500,
+     max_bars_back     = 5000,
+     dynamic_requests  = true)
+
+// ══════════════════════════════════════
+// INPUT GROUPS
+// ══════════════════════════════════════
+string GRP_MAIN  = "⚙️ Opportunity Window"
+string GRP_SCAN  = "🪟 Opportunity Rank Table"
+string GRP_SHORT = "⭐ 1H Shortlisted Stocks Table"
+
+// ══════════════════════════════════════
+// ORIGINAL OPPORTUNITY WINDOW INPUTS
+// ══════════════════════════════════════
+capital         = input.float(100000, title = "Total Capital (₹)", group = GRP_MAIN)
+riskPerTrade    = input.float(5000, title = "Amount to Risk per Trade (₹)", group = GRP_MAIN)
+useCustomPeriod = input.bool(false, title = "Override Default Period?", group = GRP_MAIN)
+customPeriod    = input.int(100, title = "Custom EMA/RSI Period", minval = 1, maxval = 500, group = GRP_MAIN)
+showEmaLine      = input.bool(true, title = "Show EMA Line", group = GRP_MAIN)
+showTrendLabel   = input.bool(true, title = "Show Trend Label", group = GRP_MAIN)
+showRiskLabel    = input.bool(true, title = "Show Position Sizing Label", group = GRP_MAIN)
+colorCandles     = input.bool(true, title = "Color Candles Based on Trend", group = GRP_MAIN)
+
+// ══════════════════════════════════════
+// RANK TABLE INPUTS
+// ══════════════════════════════════════
+showOppTable       = input.bool(true, "Show Opportunity Rank Table", group = GRP_SCAN)
+scanRiskAmount     = input.float(5000.0, "Risk Amount (₹)", minval = 1.0, step = 100.0, group = GRP_SCAN)
+scanTfInput        = input.timeframe("", "Scanner Timeframe (blank = chart)", group = GRP_SCAN)
+scanUseCustom      = input.bool(false, "Override Scanner EMA/RSI Period?", group = GRP_SCAN)
+scanCustomPeriod   = input.int(100, "Scanner Custom / Fallback Period", minval = 1, maxval = 500, group = GRP_SCAN)
+defaultExchange    = input.string("NSE", "Default Exchange for Bare Tickers", group = GRP_SCAN)
+pasteStockList     = input.text_area("", "Paste Stock List", group = GRP_SCAN, tooltip = "Paste comma-separated or line-separated stock symbols. Example: RELIANCE, TCS, NSE:HDFCBANK. If blank, the current chart instrument is used.")
+startAtStock       = input.int(0, "Start at Stock #", minval = 0, step = 10, group = GRP_SCAN)
+rowsToShowInput    = input.int(19, "Rows to Show", minval = 1, maxval = 38, group = GRP_SCAN, tooltip = "Pagination control. When both tables are enabled, the script auto-splits TradingView request slots between the two tables.")
+showQualifiedOnly  = input.bool(false, "Show Qualified Only", group = GRP_SCAN, tooltip = "OFF = show every symbol on the selected page. ON = show only qualified long stocks where RSI > 51, LTP > EMA, and position size from EMA SL is positive.")
+scannerTableSize   = input.string("Small", "Scanner Table Size", options = ["Tiny", "Small", "Normal", "Large", "Huge", "Auto"], group = GRP_SCAN)
+scannerTableY      = input.string("Middle", "Scanner Table Vertical", options = ["Top", "Middle", "Bottom"], group = GRP_SCAN)
+scannerTableX      = input.string("Right", "Scanner Table Horizontal", options = ["Left", "Center", "Right"], group = GRP_SCAN)
+
+// ══════════════════════════════════════
+// 1H SHORTLIST INPUTS
+// ══════════════════════════════════════
+showShortTable      = input.bool(true, "Show 1H Shortlist Table", group = GRP_SHORT)
+shortRiskAmount     = input.float(5000.0, "Risk Amount (₹)", minval = 1.0, step = 100.0, group = GRP_SHORT)
+shortPasteStockList = input.text_area("", "Paste Shortlisted Stock List", group = GRP_SHORT, tooltip = "Paste shortlisted stock names in the exact sequence you want to see. This table always calculates on 1H timeframe with Period 137 and SL 12%.")
+shortStartAtStock   = input.int(0, "Shortlist Start at Stock #", minval = 0, step = 10, group = GRP_SHORT)
+shortRowsToShow     = input.int(19, "Shortlist Rows to Show", minval = 1, maxval = 38, group = GRP_SHORT, tooltip = "Pagination control for shortlisted list. This table keeps the input sequence and does not sort by rank.")
+shortDefaultExchange = input.string("NSE", "Shortlist Default Exchange", group = GRP_SHORT)
+shortTableSize      = input.string("Small", "Shortlist Table Size", options = ["Tiny", "Small", "Normal", "Large", "Huge", "Auto"], group = GRP_SHORT)
+shortTableY         = input.string("Bottom", "Shortlist Table Vertical", options = ["Top", "Middle", "Bottom"], group = GRP_SHORT)
+shortTableX         = input.string("Right", "Shortlist Table Horizontal", options = ["Left", "Center", "Right"], group = GRP_SHORT)
+
+// ══════════════════════════════════════
+// TIMEFRAME SETTINGS FOR CURRENT CHART
+// ══════════════════════════════════════
+periodMap = useCustomPeriod ? customPeriod :
+     timeframe.period == "5"  ? 75  :
+     timeframe.period == "15" ? 125 :
+     timeframe.period == "60" ? 137 :
+     timeframe.period == "D" or timeframe.period == "1D" ? 88  :
+     timeframe.period == "W" or timeframe.period == "1W" ? 208 :
+     100
+
+slPercent = useCustomPeriod ? 0.02 :
+     timeframe.period == "5"  ? 0.01 :
+     timeframe.period == "15" ? 0.03 :
+     timeframe.period == "60" ? 0.12 :
+     timeframe.period == "D" or timeframe.period == "1D" ? 0.75 :
+     timeframe.period == "W" or timeframe.period == "1W" ? 0.75 :
+     0.02
+
+// ══════════════════════════════════════
+// CURRENT CHART CALCULATIONS
+// ══════════════════════════════════════
+ema = ta.ema(close, periodMap)
+rsi = ta.rsi(close, periodMap)
+
+trendColor = color.gray
+trendText  = "⏸️ No Trend"
+isUptrend   = rsi > 51
+isDowntrend = rsi < 49
+
+if isUptrend
+    trendColor := color.green
+    trendText  := "🔼 Uptrend"
+else if isDowntrend
+    trendColor := color.red
+    trendText  := "🔽 Downtrend"
+
+stopLoss = isUptrend ? ema * (1 - slPercent) : isDowntrend ? ema * (1 + slPercent) : na
+priceDiff = math.abs(close - stopLoss)
+affordableQty = priceDiff > 0 ? math.floor(riskPerTrade / priceDiff) : na
+requiredInvestment = affordableQty * close
+
+plot(showEmaLine ? ema : na, title = "EMA", color = trendColor, linewidth = 2, display = display.price_scale)
+barcolor(colorCandles ? trendColor : na)
+
+priceOffset = math.max(high - low, syminfo.mintick) * 0.10
+
+var label trendLbl = label.new(x = na, y = na, text = "", style = label.style_label_left, yloc = yloc.price, size = size.small, textcolor = color.black, color = color.new(color.gray, 85))
+if showTrendLabel
+    label.set_xy(trendLbl, bar_index, close + priceOffset)
+    label.set_text(trendLbl, "📊 " + trendText + ", TF: " + timeframe.period + ", Period: " + str.tostring(periodMap))
+    label.set_color(trendLbl, color.new(trendColor, 85))
+else
+    label.set_text(trendLbl, "")
+
+var label riskProLbl = label.new(x = na, y = na, text = "", style = label.style_label_left, yloc = yloc.price, size = size.large, color = color.new(color.white, 0), textcolor = color.black)
+if showRiskLabel
+    label.set_xy(riskProLbl, bar_index, high + priceOffset * 3)
+    if not na(affordableQty)
+        label.set_text(riskProLbl, "🧮 Position Sizing Summary\n" + "-------------------------------\n" + "🔸 Qty: " + str.tostring(affordableQty, "#") + " units\n" + "🔸 CMP: ₹" + str.tostring(close, "#.##") + "\n" + "🔸 SL: ₹" + str.tostring(stopLoss, "#.##") + "\n" + "🔸 Risk: ₹" + str.tostring(riskPerTrade, "#.##") + "\n" + "🔸 Required Capital: ₹" + str.tostring(requiredInvestment, "#.##") + "\n" + "-------------------------------")
+    else
+        label.set_text(riskProLbl, "⛔ Not enough data for sizing")
+else
+    label.set_text(riskProLbl, "")
+
+// ══════════════════════════════════════
+// HELPER FUNCTIONS
+// ══════════════════════════════════════
+toSize(string s) =>
+    switch s
+        "Tiny"   => size.tiny
+        "Small"  => size.small
+        "Normal" => size.normal
+        "Large"  => size.large
+        "Huge"   => size.huge
+        => size.auto
+
+parseSymbols(string raw, string exch) =>
+    string norm = str.replace_all(raw, "\n", ",")
+    norm := str.replace_all(norm, "\r", ",")
+    norm := str.replace_all(norm, ";", ",")
+    array<string> out = array.new<string>()
+    array<string> toks = str.split(norm, ",")
+    for i = 0 to array.size(toks) - 1
+        string tk = str.trim(array.get(toks, i))
+        if tk != "" and not str.startswith(tk, "###")
+            array.push(out, str.contains(tk, ":") ? tk : exch + ":" + tk)
+    out
+
+oppCalc75() =>
+    [close, ta.ema(close, 75), ta.rsi(close, 75)]
+
+oppCalc125() =>
+    [close, ta.ema(close, 125), ta.rsi(close, 125)]
+
+oppCalc137() =>
+    [close, ta.ema(close, 137), ta.rsi(close, 137)]
+
+oppCalc88() =>
+    [close, ta.ema(close, 88), ta.rsi(close, 88)]
+
+oppCalc208() =>
+    [close, ta.ema(close, 208), ta.rsi(close, 208)]
+
+oppCalcCustom(simple int len) =>
+    [close, ta.ema(close, len), ta.rsi(close, len)]
+
+fmtPrice(float v) =>
+    na(v) ? "–" : str.tostring(v, "#.##")
+
+fmtRsi(float v) =>
+    na(v) ? "–" : str.tostring(v, "#.##")
+
+fmtQty(float v) =>
+    na(v) or v <= 0 ? "–" : str.tostring(v, "#")
+
+fmtMoney(float v) =>
+    na(v) or v <= 0 ? "–" : "₹" + str.tostring(v, "#")
+
+fmtPct(float v) =>
+    na(v) ? "–" : str.tostring(v, "#.##") + "%"
+
+fmtDelta(float d, float p) =>
+    na(d) or na(p) ? "–" : str.tostring(d, "#.##") + " / " + fmtPct(p)
+
+// ══════════════════════════════════════
+// SCANNER TIMEFRAME / PERIOD RESOLUTION
+// ══════════════════════════════════════
+string scanTfResolved = scanTfInput == "" ? timeframe.period : scanTfInput
+
+int scanPeriodDisplay = scanUseCustom ? scanCustomPeriod :
+     scanTfResolved == "5"  ? 75  :
+     scanTfResolved == "15" ? 125 :
+     scanTfResolved == "60" ? 137 :
+     (scanTfResolved == "D" or scanTfResolved == "1D") ? 88  :
+     (scanTfResolved == "W" or scanTfResolved == "1W") ? 208 :
+     scanCustomPeriod
+
+// Scanner SL% uses the same relative timeframe mapping as the original OpportunityWindow sizing formula.
+float scanSlPercent = scanUseCustom ? 0.02 :
+     scanTfResolved == "5"  ? 0.01 :
+     scanTfResolved == "15" ? 0.03 :
+     scanTfResolved == "60" ? 0.12 :
+     (scanTfResolved == "D" or scanTfResolved == "1D") ? 0.75 :
+     (scanTfResolved == "W" or scanTfResolved == "1W") ? 0.75 :
+     0.02
+
+// Shortlist table is fixed on 1 Hour with OpportunityWindow 1H parameters.
+string shortTfResolved = "60"
+int shortPeriodDisplay = 137
+float shortSlPercent = 0.12
+
+// ══════════════════════════════════════
+// SYMBOL LISTS + REQUEST SLOT ALLOCATION
+// ══════════════════════════════════════
+var array<string> ALL_SYMBOLS = array.new<string>()
+var array<string> SHORT_SYMBOLS = array.new<string>()
+var bool usingChartSymbolFallback = false
+
+if barstate.isfirst
+    ALL_SYMBOLS := parseSymbols(pasteStockList, defaultExchange)
+    if array.size(ALL_SYMBOLS) == 0
+        array.push(ALL_SYMBOLS, syminfo.tickerid)
+        usingChartSymbolFallback := true
+    SHORT_SYMBOLS := parseSymbols(shortPasteStockList, shortDefaultExchange)
+
+int MAX_TOTAL_REQUESTS = 38
+int effectiveStartAtStock = usingChartSymbolFallback ? 0 : startAtStock
+int totalSymbols = array.size(ALL_SYMBOLS)
+int availableSymbols = math.max(0, totalSymbols - effectiveStartAtStock)
+
+int shortTotalSymbols = array.size(SHORT_SYMBOLS)
+int shortAvailableSymbols = math.max(0, shortTotalSymbols - shortStartAtStock)
+
+bool bothTablesNeedData = showOppTable and showShortTable and availableSymbols > 0 and shortAvailableSymbols > 0
+int baseMainCap = bothTablesNeedData ? 19 : MAX_TOTAL_REQUESTS
+int baseShortCap = bothTablesNeedData ? 19 : MAX_TOTAL_REQUESTS
+int preMainSlots = math.min(math.min(availableSymbols, rowsToShowInput), baseMainCap)
+int preShortSlots = math.min(math.min(shortAvailableSymbols, shortRowsToShow), baseShortCap)
+int mainCapWithUnused = bothTablesNeedData ? baseMainCap + math.max(0, baseShortCap - preShortSlots) : MAX_TOTAL_REQUESTS
+int shortCapWithUnused = bothTablesNeedData ? baseShortCap + math.max(0, baseMainCap - preMainSlots) : MAX_TOTAL_REQUESTS
+
+int scanSlots = showOppTable ? math.min(math.min(availableSymbols, rowsToShowInput), mainCapWithUnused) : 0
+int shortSlots = showShortTable ? math.min(math.min(shortAvailableSymbols, shortRowsToShow), shortCapWithUnused) : 0
+
+// ══════════════════════════════════════
+// MAIN RANK TABLE DATA COLLECTION
+// ══════════════════════════════════════
+array<string> namesArr       = array.new<string>()
+array<float>  ltpArr         = array.new<float>()
+array<float>  emaArr         = array.new<float>()
+array<float>  rsiArr         = array.new<float>()
+array<float>  slPctArr       = array.new<float>()
+array<float>  slPriceArr     = array.new<float>()
+array<float>  deltaArr       = array.new<float>()
+array<float>  deltaPctArr    = array.new<float>()
+array<float>  riskDeltaPctArr = array.new<float>()
+array<float>  qtyArr         = array.new<float>()
+array<float>  investArr      = array.new<float>()
+array<bool>   validArr       = array.new<bool>()
+
+if scanSlots > 0
+    for i = 0 to scanSlots - 1
+        string sym = array.get(ALL_SYMBOLS, effectiveStartAtStock + i)
+        float oLtp = na
+        float oEma = na
+        float oRsi = na
+
+        if scanUseCustom
+            [ltpC, emaC, rsiC] = request.security(sym, scanTfResolved, oppCalcCustom(scanCustomPeriod), ignore_invalid_symbol = true)
+            oLtp := ltpC
+            oEma := emaC
+            oRsi := rsiC
+        else if scanTfResolved == "5"
+            [ltp5, ema5, rsi5] = request.security(sym, scanTfResolved, oppCalc75(), ignore_invalid_symbol = true)
+            oLtp := ltp5
+            oEma := ema5
+            oRsi := rsi5
+        else if scanTfResolved == "15"
+            [ltp15, ema15, rsi15] = request.security(sym, scanTfResolved, oppCalc125(), ignore_invalid_symbol = true)
+            oLtp := ltp15
+            oEma := ema15
+            oRsi := rsi15
+        else if scanTfResolved == "60"
+            [ltp60, ema60, rsi60] = request.security(sym, scanTfResolved, oppCalc137(), ignore_invalid_symbol = true)
+            oLtp := ltp60
+            oEma := ema60
+            oRsi := rsi60
+        else if scanTfResolved == "D" or scanTfResolved == "1D"
+            [ltpD, emaD, rsiD] = request.security(sym, scanTfResolved, oppCalc88(), ignore_invalid_symbol = true)
+            oLtp := ltpD
+            oEma := emaD
+            oRsi := rsiD
+        else if scanTfResolved == "W" or scanTfResolved == "1W"
+            [ltpW, emaW, rsiW] = request.security(sym, scanTfResolved, oppCalc208(), ignore_invalid_symbol = true)
+            oLtp := ltpW
+            oEma := emaW
+            oRsi := rsiW
+        else
+            [ltpF, emaF, rsiF] = request.security(sym, scanTfResolved, oppCalcCustom(scanCustomPeriod), ignore_invalid_symbol = true)
+            oLtp := ltpF
+            oEma := emaF
+            oRsi := rsiF
+
+        float oDelta = oLtp - oEma
+        float oDeltaPct = not na(oEma) and oEma != 0 ? oDelta / oEma * 100.0 : na
+        float oRiskDeltaPct = not na(oDeltaPct) ? (scanSlPercent * 100.0) + oDeltaPct : na
+
+        // Long-side OpportunityWindow SL: selected TF SL% below selected TF EMA.
+        // This gives the real risk from CMP/LTP to EMA-based SL.
+        float oStopLoss = not na(oEma) ? oEma * (1 - scanSlPercent) : na
+        float oRiskDistance = not na(oLtp) and not na(oStopLoss) ? math.abs(oLtp - oStopLoss) : na
+
+        bool oBaseOk = not na(oLtp) and not na(oEma) and not na(oRsi) and oRsi > 51 and oDelta > 0
+        bool oSizingOk = oBaseOk and not na(oRiskDistance) and oRiskDistance > 0
+        float oQty = oSizingOk ? math.floor(scanRiskAmount / oRiskDistance) : na
+        float oInvest = oSizingOk and oQty > 0 ? oQty * oLtp : na
+        bool oValid = oBaseOk and oQty > 0 and oInvest > 0
+
+        array.push(namesArr, sym)
+        array.push(ltpArr, oLtp)
+        array.push(emaArr, oEma)
+        array.push(rsiArr, oRsi)
+        array.push(slPctArr, scanSlPercent * 100.0)
+        array.push(slPriceArr, oStopLoss)
+        array.push(deltaArr, oDelta)
+        array.push(deltaPctArr, oDeltaPct)
+        array.push(riskDeltaPctArr, oRiskDeltaPct)
+        array.push(qtyArr, oQty)
+        array.push(investArr, oInvest)
+        array.push(validArr, oValid)
+
+// ══════════════════════════════════════
+// RANKING LOGIC
+// Score = Investment Rank + RSI Closeness Rank + SL-Risk Delta % Rank
+// Lesser score = better opportunity rank.
+// Delta Rank % = selected TF SL% + ((LTP - EMA) / EMA × 100), so SL risk is included.
+// ══════════════════════════════════════
+array<int> idxArr = array.new<int>()
+for i = 0 to array.size(namesArr) - 1
+    bool isValid = array.get(validArr, i)
+    if isValid or not showQualifiedOnly
+        array.push(idxArr, i)
+
+int eligibleCount = array.size(idxArr)
+array<int> invRankArr   = array.new<int>(array.size(namesArr), 9999)
+array<int> rsiRankArr   = array.new<int>(array.size(namesArr), 9999)
+array<int> deltaRankArr = array.new<int>(array.size(namesArr), 9999)
+array<float> scoreArr   = array.new<float>(array.size(namesArr), 999999.0)
+
+if eligibleCount > 0
+    for a = 0 to eligibleCount - 1
+        int ia = array.get(idxArr, a)
+        bool va = array.get(validArr, ia)
+        if va
+            float invA = array.get(investArr, ia)
+            float rsiDistA = array.get(rsiArr, ia) - 51.0
+            float deltaPctA = array.get(riskDeltaPctArr, ia)
+            int invRank = 1
+            int rsiRank = 1
+            int delRank = 1
+            for b = 0 to eligibleCount - 1
+                int ib = array.get(idxArr, b)
+                bool vb = array.get(validArr, ib)
+                if vb and ib != ia
+                    float invB = array.get(investArr, ib)
+                    float rsiDistB = array.get(rsiArr, ib) - 51.0
+                    float deltaPctB = array.get(riskDeltaPctArr, ib)
+                    if invB < invA
+                        invRank += 1
+                    if rsiDistB < rsiDistA
+                        rsiRank += 1
+                    if deltaPctB < deltaPctA
+                        delRank += 1
+            array.set(invRankArr, ia, invRank)
+            array.set(rsiRankArr, ia, rsiRank)
+            array.set(deltaRankArr, ia, delRank)
+            array.set(scoreArr, ia, float(invRank + rsiRank + delRank))
+
+array<int> displayIdxArr = array.copy(idxArr)
+if eligibleCount > 1
+    for a = 0 to eligibleCount - 2
+        for b = a + 1 to eligibleCount - 1
+            int ia = array.get(displayIdxArr, a)
+            int ib = array.get(displayIdxArr, b)
+            float scoreA = array.get(scoreArr, ia)
+            float scoreB = array.get(scoreArr, ib)
+            float investA = nz(array.get(investArr, ia), 1e18)
+            float investB = nz(array.get(investArr, ib), 1e18)
+            float deltaA = nz(array.get(riskDeltaPctArr, ia), 1e18)
+            float deltaB = nz(array.get(riskDeltaPctArr, ib), 1e18)
+            bool doSwap = scoreB < scoreA or (scoreB == scoreA and investB < investA) or (scoreB == scoreA and investB == investA and deltaB < deltaA)
+            if doSwap
+                int tmp = array.get(displayIdxArr, a)
+                array.set(displayIdxArr, a, array.get(displayIdxArr, b))
+                array.set(displayIdxArr, b, tmp)
+
+// ══════════════════════════════════════
+// 1H SHORTLIST DATA COLLECTION — KEEPS INPUT SEQUENCE
+// ══════════════════════════════════════
+array<string> shortNamesArr       = array.new<string>()
+array<float>  shortLtpArr         = array.new<float>()
+array<float>  shortEmaArr         = array.new<float>()
+array<float>  shortRsiArr         = array.new<float>()
+array<float>  shortSlPctArr       = array.new<float>()
+array<float>  shortSlPriceArr     = array.new<float>()
+array<float>  shortDeltaArr       = array.new<float>()
+array<float>  shortRiskDeltaPctArr = array.new<float>()
+array<float>  shortQtyArr         = array.new<float>()
+array<float>  shortInvestArr      = array.new<float>()
+array<bool>   shortValidArr       = array.new<bool>()
+
+if shortSlots > 0
+    for i = 0 to shortSlots - 1
+        string sym = array.get(SHORT_SYMBOLS, shortStartAtStock + i)
+        [sLtp, sEma, sRsi] = request.security(sym, shortTfResolved, oppCalc137(), ignore_invalid_symbol = true)
+
+        float sDelta = sLtp - sEma
+        float sDeltaPct = not na(sEma) and sEma != 0 ? sDelta / sEma * 100.0 : na
+        float sRiskDeltaPct = not na(sDeltaPct) ? (shortSlPercent * 100.0) + sDeltaPct : na
+
+        // Fixed shortlist SL: always 12% below the 1H EMA.
+        float sStopLoss = not na(sEma) ? sEma * (1 - shortSlPercent) : na
+        float sRiskDistance = not na(sLtp) and not na(sStopLoss) ? math.abs(sLtp - sStopLoss) : na
+        bool sBaseOk = not na(sLtp) and not na(sEma) and not na(sRsi) and sRsi > 51 and sDelta > 0
+        bool sSizingOk = sBaseOk and not na(sRiskDistance) and sRiskDistance > 0
+        float sQty = sSizingOk ? math.floor(shortRiskAmount / sRiskDistance) : na
+        float sInvest = sSizingOk and sQty > 0 ? sQty * sLtp : na
+        bool sValid = sBaseOk and sQty > 0 and sInvest > 0
+
+        array.push(shortNamesArr, sym)
+        array.push(shortLtpArr, sLtp)
+        array.push(shortEmaArr, sEma)
+        array.push(shortRsiArr, sRsi)
+        array.push(shortSlPctArr, shortSlPercent * 100.0)
+        array.push(shortSlPriceArr, sStopLoss)
+        array.push(shortDeltaArr, sDelta)
+        array.push(shortRiskDeltaPctArr, sRiskDeltaPct)
+        array.push(shortQtyArr, sQty)
+        array.push(shortInvestArr, sInvest)
+        array.push(shortValidArr, sValid)
+
+// ══════════════════════════════════════
+// TABLE POSITION / COLORS
+// ══════════════════════════════════════
+oppTablePos = scannerTableY == "Top" ? (scannerTableX == "Left" ? position.top_left : scannerTableX == "Center" ? position.top_center : position.top_right) : scannerTableY == "Middle" ? (scannerTableX == "Left" ? position.middle_left : scannerTableX == "Center" ? position.middle_center : position.middle_right) : (scannerTableX == "Left" ? position.bottom_left : scannerTableX == "Center" ? position.bottom_center : position.bottom_right)
+shortTablePos = shortTableY == "Top" ? (shortTableX == "Left" ? position.top_left : shortTableX == "Center" ? position.top_center : position.top_right) : shortTableY == "Middle" ? (shortTableX == "Left" ? position.middle_left : shortTableX == "Center" ? position.middle_center : position.middle_right) : (shortTableX == "Left" ? position.bottom_left : shortTableX == "Center" ? position.bottom_center : position.bottom_right)
+
+OPP_SIZE = toSize(scannerTableSize)
+SHORT_SIZE = toSize(shortTableSize)
+color HEADER_BG = color.new(#2962FF, 0)
+color HEADER_TX = color.white
+color TEXT_TX   = color.black
+color MUTED_TX  = color.gray
+color ROW_ALT   = color.new(#EEF2F7, 0)
+color ROW_BG    = color.new(color.white, 0)
+color POS_TX    = color.new(#00C853, 0)
+color NEG_TX    = color.new(#D50000, 0)
+color BORDER    = color.new(color.gray, 55)
+
+var table oppTable = table.new(oppTablePos, 11, 40, bgcolor = color.white, border_color = BORDER, border_width = 1, frame_color = BORDER, frame_width = 1)
+var table shortTable = table.new(shortTablePos, 11, 40, bgcolor = color.white, border_color = BORDER, border_width = 1, frame_color = BORDER, frame_width = 1)
+
+if barstate.islast
+    table.clear(oppTable, 0, 0, 10, 39)
+    if showOppTable
+        int pageFrom = totalSymbols == 0 ? 0 : effectiveStartAtStock + 1
+        int pageTo = math.min(totalSymbols, effectiveStartAtStock + scanSlots)
+        string fallbackInfo = usingChartSymbolFallback ? " | Chart Symbol" : ""
+        string pageInfo = " | Showing " + str.tostring(pageFrom) + "-" + str.tostring(pageTo) + " of " + str.tostring(totalSymbols) + fallbackInfo
+        table.cell(oppTable, 0, 0, "Opportunity Window Rank | TF " + scanTfResolved + " | Period " + str.tostring(scanPeriodDisplay) + " | SL " + str.tostring(scanSlPercent * 100, "#.##") + "% Below EMA" + pageInfo, text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.merge_cells(oppTable, 0, 0, 10, 0)
+
+        table.cell(oppTable, 0, 1, "Rank",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 1, 1, "Symbol",    text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 2, 1, "LTP",       text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 3, 1, "RSI",       text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 4, 1, "EMA",       text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 5, 1, "SL%",       text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 6, 1, "SL Price",  text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 7, 1, "Risk Δ%",   text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 8, 1, "Qty",       text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 9, 1, "Invest",    text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+        table.cell(oppTable, 10, 1, "Score",    text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = OPP_SIZE, text_halign = text.align_center)
+
+        if totalSymbols == 0
+            table.cell(oppTable, 0, 2, "Paste symbols in Settings → Opportunity Rank Table → Paste Stock List", text_color = TEXT_TX, bgcolor = ROW_ALT, text_size = OPP_SIZE, text_halign = text.align_center)
+            table.merge_cells(oppTable, 0, 2, 10, 2)
+        else if scanSlots == 0
+            table.cell(oppTable, 0, 2, "No request slots available for this page. Reduce rows in the other table or use pagination.", text_color = MUTED_TX, bgcolor = ROW_ALT, text_size = OPP_SIZE, text_halign = text.align_center)
+            table.merge_cells(oppTable, 0, 2, 10, 2)
+        else if eligibleCount == 0
+            table.cell(oppTable, 0, 2, "No qualified stocks found. Qualified = RSI > 51, LTP > EMA and Qty > 0 based on EMA SL formula.", text_color = MUTED_TX, bgcolor = ROW_ALT, text_size = OPP_SIZE, text_halign = text.align_center)
+            table.merge_cells(oppTable, 0, 2, 10, 2)
+        else
+            int rowsToDraw = math.min(eligibleCount, 38)
+            for r = 0 to rowsToDraw - 1
+                int i = array.get(displayIdxArr, r)
+                string fullName = array.get(namesArr, i)
+                array<string> parts = str.split(fullName, ":")
+                string displayName = array.size(parts) > 1 ? array.get(parts, 1) : fullName
+                bool valid = array.get(validArr, i)
+                float rsiVal = array.get(rsiArr, i)
+                float scoreVal = array.get(scoreArr, i)
+                color rowColor = r % 2 == 0 ? ROW_BG : ROW_ALT
+                color rsiColor = na(rsiVal) ? MUTED_TX : rsiVal > 51 ? POS_TX : NEG_TX
+                color deltaColor = valid ? POS_TX : MUTED_TX
+                color rankColor = valid ? POS_TX : MUTED_TX
+                int finalRank = valid ? r + 1 : 0
+
+                table.cell(oppTable, 0, r + 2, valid ? str.tostring(finalRank) : "–", text_color = rankColor, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 1, r + 2, displayName, text_color = TEXT_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 2, r + 2, fmtPrice(array.get(ltpArr, i)), text_color = TEXT_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 3, r + 2, fmtRsi(rsiVal), text_color = rsiColor, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 4, r + 2, fmtPrice(array.get(emaArr, i)), text_color = TEXT_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 5, r + 2, fmtPct(array.get(slPctArr, i)), text_color = TEXT_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 6, r + 2, fmtPrice(array.get(slPriceArr, i)), text_color = valid ? NEG_TX : MUTED_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 7, r + 2, fmtDelta(array.get(deltaArr, i), array.get(riskDeltaPctArr, i)), text_color = deltaColor, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 8, r + 2, fmtQty(array.get(qtyArr, i)), text_color = valid ? TEXT_TX : MUTED_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 9, r + 2, fmtMoney(array.get(investArr, i)), text_color = valid ? TEXT_TX : MUTED_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+                table.cell(oppTable, 10, r + 2, valid ? str.tostring(scoreVal, "#") + " (" + str.tostring(array.get(invRankArr, i)) + "/" + str.tostring(array.get(rsiRankArr, i)) + "/" + str.tostring(array.get(deltaRankArr, i)) + ")" : "–", text_color = valid ? TEXT_TX : MUTED_TX, bgcolor = rowColor, text_size = OPP_SIZE, text_halign = text.align_center)
+
+    table.clear(shortTable, 0, 0, 10, 39)
+    if showShortTable
+        int shortPageFrom = shortTotalSymbols == 0 ? 0 : shortStartAtStock + 1
+        int shortPageTo = math.min(shortTotalSymbols, shortStartAtStock + shortSlots)
+        string shortPageInfo = " | Showing " + str.tostring(shortPageFrom) + "-" + str.tostring(shortPageTo) + " of " + str.tostring(shortTotalSymbols)
+        table.cell(shortTable, 0, 0, "1H Shortlisted Stocks | Fixed TF 60 | Period 137 | SL 12% Below Hourly EMA" + shortPageInfo, text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.merge_cells(shortTable, 0, 0, 10, 0)
+
+        table.cell(shortTable, 0, 1, "Seq",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 1, 1, "Symbol",   text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 2, 1, "LTP",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 3, 1, "RSI",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 4, 1, "EMA",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 5, 1, "SL%",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 6, 1, "SL Price", text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 7, 1, "Risk Δ%",  text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 8, 1, "Qty",      text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 9, 1, "Invest",   text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+        table.cell(shortTable, 10, 1, "Status",  text_color = HEADER_TX, bgcolor = HEADER_BG, text_size = SHORT_SIZE, text_halign = text.align_center)
+
+        if shortTotalSymbols == 0
+            table.cell(shortTable, 0, 2, "Paste symbols in Settings → 1H Shortlisted Stocks Table → Paste Shortlisted Stock List", text_color = TEXT_TX, bgcolor = ROW_ALT, text_size = SHORT_SIZE, text_halign = text.align_center)
+            table.merge_cells(shortTable, 0, 2, 10, 2)
+        else if shortSlots == 0
+            table.cell(shortTable, 0, 2, "No request slots available for this page. Reduce rows in the rank table or use pagination.", text_color = MUTED_TX, bgcolor = ROW_ALT, text_size = SHORT_SIZE, text_halign = text.align_center)
+            table.merge_cells(shortTable, 0, 2, 10, 2)
+        else
+            int shortRowsToDraw = math.min(array.size(shortNamesArr), 38)
+            for r = 0 to shortRowsToDraw - 1
+                string fullName = array.get(shortNamesArr, r)
+                array<string> parts = str.split(fullName, ":")
+                string displayName = array.size(parts) > 1 ? array.get(parts, 1) : fullName
+                bool valid = array.get(shortValidArr, r)
+                float rsiVal = array.get(shortRsiArr, r)
+                color rowColor = r % 2 == 0 ? ROW_BG : ROW_ALT
+                color rsiColor = na(rsiVal) ? MUTED_TX : rsiVal > 51 ? POS_TX : NEG_TX
+                color statusColor = valid ? POS_TX : MUTED_TX
+                string statusText = valid ? "OK" : "Watch"
+                int seqNo = shortStartAtStock + r + 1
+
+                table.cell(shortTable, 0, r + 2, str.tostring(seqNo), text_color = TEXT_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 1, r + 2, displayName, text_color = TEXT_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 2, r + 2, fmtPrice(array.get(shortLtpArr, r)), text_color = TEXT_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 3, r + 2, fmtRsi(rsiVal), text_color = rsiColor, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 4, r + 2, fmtPrice(array.get(shortEmaArr, r)), text_color = TEXT_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 5, r + 2, fmtPct(array.get(shortSlPctArr, r)), text_color = TEXT_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 6, r + 2, fmtPrice(array.get(shortSlPriceArr, r)), text_color = valid ? NEG_TX : MUTED_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 7, r + 2, fmtDelta(array.get(shortDeltaArr, r), array.get(shortRiskDeltaPctArr, r)), text_color = valid ? POS_TX : MUTED_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 8, r + 2, fmtQty(array.get(shortQtyArr, r)), text_color = valid ? TEXT_TX : MUTED_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 9, r + 2, fmtMoney(array.get(shortInvestArr, r)), text_color = valid ? TEXT_TX : MUTED_TX, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
+                table.cell(shortTable, 10, r + 2, statusText, text_color = statusColor, bgcolor = rowColor, text_size = SHORT_SIZE, text_halign = text.align_center)
