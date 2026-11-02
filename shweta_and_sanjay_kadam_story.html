@@ -380,7 +380,7 @@ a{
 <header><div class="header-inner"><div class="kicker">सत्यघटनेवर आधारित आत्मकथन • २०११ ते २०२६</div><h1>एका आंतरजातीय विवाहाचा संघर्ष — आणि परिवर्तनाची ११ वर्षांची कहाणी</h1><div class="subtitle">संजय सोमा कदम यांचा सामाजिक बहिष्काराविरुद्धचा प्रवास, अंनिसची साथ आणि धैर्याने घडलेला बदल.</div></div></header>
 <main>
 <section class="guide"><strong>कसे वापरायचे?</strong><br>खाली <strong>सविस्तर लेख</strong> किंवा <strong>१०० ओळींचा सारांश</strong> निवडा. मजकूर पाठवायचा असल्यास निळे <strong>“संपूर्ण लेख कॉपी करा”</strong> बटण दाबा. “मजकूर कॉपी झाला” असा संदेश दिसल्यानंतर ईमेल किंवा WhatsApp उघडा, मजकूर लिहायच्या जागेवर बोट दाबून ठेवा आणि <strong>Paste / पेस्ट</strong> निवडा.</section>
-<div class="tabs"><button class="tab active" id="tabD" onclick="showPanel('d')">सविस्तर लेख</button><button class="tab" id="tabS" onclick="showPanel('s')">१०० ओळींचा सारांश</button></div>
+<div class="tabs"><button class="tab active" id="tabD" role="tab" aria-selected="true" type="button" onclick="showPanel('d')">सविस्तर लेख</button><button class="tab" id="tabS" role="tab" aria-selected="false" type="button" onclick="showPanel('s')">१०० ओळींचा सारांश</button></div>
 <section id="d" class="panel active"><div class="article-tools"><span class="copy-wrap"><button class="copy-btn" onclick="copyCurrent()">📋 <span><small class="tap-label">कॉपी करण्यासाठी टॅप करा</small>संपूर्ण लेख कॉपी करा</span></button></span><span class="hint">वरील निळे बटण दाबल्यावर संपूर्ण सविस्तर लेख कॉपी होईल.</span></div><article class="card" id="dText">
 <div class="byline">संजय सोमा कदम, डोंबिवली</div>
 <blockquote>“२०१५ मध्ये मी माझ्या गावाविरुद्ध आवाज उठवला, तो गावाशी वैर करण्यासाठी नव्हता. माझ्यासारख्या दुसऱ्या कोणत्याही कुटुंबाला जातीय बहिष्काराची शिक्षा भोगावी लागू नये, यासाठी होता. माझी लढाई माणसांविरुद्ध नव्हती; ती चुकीच्या मानसिकतेविरुद्ध होती. आणि या लढाईत महाराष्ट्र अंधश्रद्धा निर्मूलन समितीचे कृष्णा चांदगुडे सर माझ्या पाठीशी उभे राहिले, म्हणूनच मला शेवटपर्यंत लढण्याचे बळ मिळाले.”</blockquote>
@@ -459,21 +459,103 @@ a{
 </main>
 <div class="bottom-copy"><span class="copy-wrap"><button class="copy-btn" id="mobileCopy" onclick="copyCurrent()">📋 <span><small class="tap-label">कॉपी करण्यासाठी टॅप करा</small>संपूर्ण लेख कॉपी करा</span></button></span></div>
 <div class="toast" id="toast">मजकूर कॉपी झाला. आता ईमेल किंवा WhatsApp मध्ये पेस्ट करू शकता.</div>
+
 <script>
-let current='d';
-function showPanel(x){
-current=x;
-document.getElementById('d').classList.toggle('active',x==='d');
-document.getElementById('s').classList.toggle('active',x==='s');
-document.getElementById('tabD').classList.toggle('active',x==='d');
-document.getElementById('tabS').classList.toggle('active',x==='s');
-document.getElementById('mobileCopy').innerHTML=x==='d'
-? "📋 <span><small class='tap-label'>कॉपी करण्यासाठी टॅप करा</small>संपूर्ण लेख कॉपी करा</span>"
-: "📋 <span><small class='tap-label'>कॉपी करण्यासाठी टॅप करा</small>संपूर्ण सारांश कॉपी करा</span>";
-window.scrollTo({top:document.querySelector('.tabs').offsetTop,behavior:'smooth'});
-});}
-function text(){return document.getElementById(current==='d'?'dText':'sText').innerText.trim()}
-async function copyCurrent(){let ok=false,t=text();try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(t);ok=true}}catch(e){}if(!ok){const a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,a.value.length);try{ok=document.execCommand('copy')}catch(e){ok=false}document.body.removeChild(a)}toast(ok?'मजकूर कॉपी झाला. आता ईमेल किंवा WhatsApp मध्ये पेस्ट करू शकता.':'कॉपी करता आली नाही. लेखावर बोट दाबून ठेवा, Select All निवडा आणि Copy करा.');}
-function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove('show'),3300)}
+let currentPanel = 'd';
+
+function showPanel(which) {
+  currentPanel = which;
+
+  const detailed = document.getElementById('d');
+  const summary = document.getElementById('s');
+  const tabD = document.getElementById('tabD');
+  const tabS = document.getElementById('tabS');
+  const mobileCopy = document.getElementById('mobileCopy');
+
+  detailed.classList.toggle('active', which === 'd');
+  summary.classList.toggle('active', which === 's');
+
+  tabD.classList.toggle('active', which === 'd');
+  tabS.classList.toggle('active', which === 's');
+
+  tabD.setAttribute('aria-selected', which === 'd' ? 'true' : 'false');
+  tabS.setAttribute('aria-selected', which === 's' ? 'true' : 'false');
+
+  if (mobileCopy) {
+    mobileCopy.innerHTML = which === 'd'
+      ? "📋 <span><small class='tap-label'>कॉपी करण्यासाठी टॅप करा</small>संपूर्ण लेख कॉपी करा</span>"
+      : "📋 <span><small class='tap-label'>कॉपी करण्यासाठी टॅप करा</small>संपूर्ण सारांश कॉपी करा</span>";
+  }
+
+  const tabs = document.querySelector('.tabs');
+  if (tabs) {
+    const y = tabs.getBoundingClientRect().top + window.pageYOffset - 8;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
+function getCurrentText() {
+  const id = currentPanel === 'd' ? 'dText' : 'sText';
+  const el = document.getElementById(id);
+  return el ? el.innerText.trim() : '';
+}
+
+async function copyCurrentArticle() {
+  const textToCopy = getCurrentText();
+  if (!textToCopy) {
+    showToast('कॉपी करण्यासाठी मजकूर सापडला नाही.');
+    return;
+  }
+
+  let copied = false;
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(textToCopy);
+      copied = true;
+    }
+  } catch (e) {}
+
+  if (!copied) {
+    const ta = document.createElement('textarea');
+    ta.value = textToCopy;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+
+    try {
+      copied = document.execCommand('copy');
+    } catch (e) {
+      copied = false;
+    }
+
+    document.body.removeChild(ta);
+  }
+
+  showToast(
+    copied
+      ? 'मजकूर कॉपी झाला. आता ईमेल किंवा WhatsApp मध्ये पेस्ट करू शकता.'
+      : 'कॉपी करता आली नाही. मजकूरावर बोट दाबून Select All आणि Copy निवडा.'
+  );
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
+}
 </script>
+
 </body></html>
